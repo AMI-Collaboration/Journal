@@ -92,12 +92,36 @@ journal_co/
     "type": "object_at",
     "object_synonyms": ["mug", "cup", "waterbottle", "bottle", "glass"],
     "location": "living_room"
+  },
+  "S3_wiping_object_ready": {
+    "weight": 20,
+    "type": "object_at",
+    "object_synonyms": ["handtowel", "towel", "cloth", "napkin", "dishsponge", "bathmat"],
+    "location": "living_room"
+  },
+  "S4_lighting_on": {
+    "weight": 15,
+    "type": "unary",
+    "predicate": "is-on",
+    "object_synonyms": ["floorlamp", "lamp", "light"]
+  },
+  "S5_floor_clutter_cleared": {
+    "weight": 15,
+    "type": "unary_or_relocated",
+    "predicate": "is-clean",
+    "object_synonyms": ["pillow", "box", "item", "floor", "sofa"],
+    "relocated_to_synonyms": ["storage", "shelf", "closet", "cabinet"]
   }
 }
 ```
+(위는 task6 확정본입니다. 새 task를 만들 땐 이 구조를 참고해 목표 개수·가중치만 조정합니다.)
 
 - `type: "unary"` → `(predicate 물체)` 형태 목표 (예: `is-clean coffeetable`)
 - `type: "object_at"` → `(object-at 물체 위치)` 형태 목표
+- `type: "unary_or_relocated"` → `(predicate 물체)` 또는 `(object-at 물체 storage류)` 둘 중 하나만
+  만족해도 인정 (예: "치워짐"을 "is-clean"으로 표현하든 "storage로 옮김"으로 표현하든 동일하게 봄)
+- `passed`/`received` 같은 **과정(process) predicate는 목표로 쓰지 않습니다.** relay가 일어났는지는
+  "어떻게 했는가"이지 "무엇을 만들었는가"가 아니므로, goal_states.json에는 최종 상태만 적습니다.
 - `weight`의 합이 100이 되도록 맞춥니다.
 - `object_synonyms`에 최대한 많은 후보를 넣어야, 방법마다 다른 이름을 써도 공정하게 채점됩니다.
 
@@ -290,8 +314,30 @@ cat task6/results/summary_table.md      # 표 형태 (사람이 읽기용)
   실패합니다. `LaMMA-P/data/aithor_connect/aithor_connect.py`에서 `height=300, width=300`으로 낮춰두었습니다.
 - **JSON의 Python `None`**: 데이터 파일에 `None`이 들어가면 JSON 파싱 에러가 납니다. `null`로 써야 합니다.
 - **LaMMA-P PDDL 어휘 비일관성**: GPT-4o가 predicate 이름(`object-at`/`at-location`)과 타입 이름
-  (`- item`/`- object`)을 실행마다 다르게 씁니다. `aggregate_results.py`에 동의어 정규화 레이어
-  (`PREDICATE_SYNONYMS`, `TYPE_SYNONYMS`)가 있어 어느 정도 흡수하지만, 완전하지 않을 수 있습니다.
-- **모호한 태스크 문구 위험**: LaMMA-P에게 추상적 지시("공간 비우고 세팅해줘")를 주면 씬에
-  없는 물체(YogaMat, Dumbbells 등)를 상상해 목표로 삼는 환각이 관찰되었습니다. 가능한 한
-  구체적인 문구를 쓰는 것을 권장합니다.
+  (`- item`/`- object`)을 실행마다 자유롭게 바꿔 씁니다. **동일한 로봇 구성·태스크 문구로 여러 번
+  돌려도 predicate 어휘 자체가 매번 달라지는 것이 실제로 관측됐습니다** (로봇 수와는 무관한 현상).
+  `aggregate_results.py`에 동의어 정규화 레이어가 있어 이를 일부 흡수합니다:
+  ```python
+  PREDICATE_SYNONYMS = {
+      "at-location": "object-at", "located-at": "object-at", "is-at": "object-at",
+      "in-location": "object-at", "switch-on": "is-on", "turned-on": "is-on",
+      "powered-on": "is-on", "cleaned": "is-clean", "clean": "is-clean",
+      "tidy": "is-clean", "clear": "is-clean",
+  }
+  TYPE_SYNONYMS = {"object": "item", "obj": "item", "thing": "item"}
+  ```
+  새로운 어휘 변형이 발견되면 이 딕셔너리에 추가하면 됩니다. 완전하지 않을 수 있으니,
+  평가 후 GC/IC가 예상과 다르게 낮으면 `task6/results/lamma_p/lamma_p_pddl.txt`를 직접 열어
+  predicate 이름이 무엇인지 먼저 확인하세요.
+
+- **모호한 태스크 문구 위험**: LaMMA-P에게 추상적 지시("20분 뒤 홈트레이닝, 공간 비우고
+  세팅해줘"처럼 목적만 있고 대상 물체가 안 나온 문구)를 주면, 실행마다 완전히 다른 방식으로
+  태스크를 해석하는 현상이 실제로 관측됐습니다. 동일 조건(로봇 4대, 같은 추상적 문구)으로
+  반복 실행한 예:
+  - 1회차: Chair 4개를 창고로 옮기는 것으로 해석
+  - 2회차: 씬에 존재하지도 않는 YogaMat/Dumbbells/ResistanceBands를 상상해 목표로 설정
+  반면 태스크 문구를 구체적으로 쓰면("Push the CoffeeTable...", "Clear the living room,
+  move pillows and items off the coffee table and sofa") 실제 씬의 물체(CoffeeTable, Pillow,
+  Sofa)를 정확히 참조했습니다. **재현성이 필요하면 반드시 구체적인 태스크 문구를 사용하세요.**
+  이 자체도 "모호한 지시에서 LLM 플래너가 씬 그라운딩에 실패한다"는 유의미한 관찰 결과이므로,
+  일부러 추상적 문구로 실험해 이 현상을 리포트에 활용할 수도 있습니다.
