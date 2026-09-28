@@ -17,10 +17,11 @@ MASTER_LIST_PATH = BASE / "common" / "object_lists" / "master_object_list.json"
 
 client = OpenAI(api_key=open(BASE.parent / "LaMMA-P" / "api_key.txt").read().strip())
 
-METHODS = ["ours", "lamma_p", "central", "independent"]
-METHOD_NAMES = {"ours": "Ours (P2P)", "lamma_p": "LaMMA-P", "central": "Centralized", "independent": "Independent"}
+METHODS = ["ours", "lamma_p", "central", "independent", "smart_llm"]
+METHOD_NAMES = {"ours": "Ours (P2P)", "lamma_p": "LaMMA-P", "central": "Centralized", "independent": "Independent", "smart_llm": "SMART-LLM"}
 
 # 실험 설계: PDDL 평가(Track B/D) 대상 방법. 파일 존재 여부가 아니라 실험 설계로 고정.
+# SMART-LLM은 Pythonic 코드만 생성하고 PDDL을 만들지 않는 방법론이라 Central/Independent와 같은 카테고리.
 PDDL_EVAL_METHODS = {"ours", "lamma_p"}
 
 TASK6_FLOORPLANS = {"kitchen": "4", "living_room": "4", "bedroom": "4", "bathroom": "4"}

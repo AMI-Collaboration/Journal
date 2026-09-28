@@ -8,6 +8,7 @@
 | LaMMA-P | 6 | 7 | 8 | 9 | 7.2 |
 | Centralized | 8 | 9 | 9 | 9 | 8.65 |
 | Independent | 5 | 4 | 7 | 6 | 5.4 |
+| SMART-LLM | 7 | 6 | 8 | 9 | 7.3 |
 
 ## Track B — GT 비교 (PDDL 평가 대상만: Ours, LaMMA-P)
 
@@ -17,6 +18,7 @@
 | LaMMA-P | 0.0 | 0 |
 | Centralized | N/A (설계상 제외) | N/A (설계상 제외) |
 | Independent | N/A (설계상 제외) | N/A (설계상 제외) |
+| SMART-LLM | N/A (설계상 제외) | N/A (설계상 제외) |
 
 ## Track B 상세 — 목표상태 달성 여부
 
@@ -26,6 +28,7 @@
 | LaMMA-P | ❌ | ❌ | ❌ | ❌ | ❌ |
 | Centralized | N/A | N/A | N/A | N/A | N/A |
 | Independent | N/A | N/A | N/A | N/A | N/A |
+| SMART-LLM | N/A | N/A | N/A | N/A | N/A |
 
 ## Track D — Scene 일치도 IC (PDDL 평가 대상만: Ours, LaMMA-P)
 
@@ -35,3 +38,4 @@
 | LaMMA-P | 0.667 | 2/3 |
 | Centralized | N/A (설계상 제외) | N/A (설계상 제외) |
 | Independent | N/A (설계상 제외) | N/A (설계상 제외) |
+| SMART-LLM | N/A (설계상 제외) | N/A (설계상 제외) |
