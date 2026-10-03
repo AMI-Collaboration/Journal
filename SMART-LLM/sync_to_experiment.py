@@ -1,11 +1,11 @@
-"""
-최신 SMART-LLM 실행 결과에서 NL 플랜만 추출해 task6/results/smart_llm/에 저장
-(SMART-LLM은 PDDL을 생성하지 않으므로 NL만 처리)
-"""
-import os, glob
+import os, glob, argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--task", required=True, help="예: task6")
+args = parser.parse_args()
 
 LOGS_DIR = "logs"
-DEST_DIR = "../experiment/task6/results/smart_llm"
+DEST_DIR = f"../experiment/{args.task}/results/smart_llm"
 
 log_dirs = sorted(glob.glob(f"{LOGS_DIR}/*"), key=os.path.getmtime, reverse=True)
 if not log_dirs:

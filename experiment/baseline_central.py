@@ -1,46 +1,81 @@
-import os, json
+# baseline_central.py
+import os, json, argparse
+from pathlib import Path
 from openai import OpenAI
 
+parser = argparse.ArgumentParser()
+parser.add_argument("--task", required=True, help="예: task6")
+parser.add_argument("--gpt-version", default="gpt-4o")
+args = parser.parse_args()
+
+TASK_DIR = Path(args.task)
+COMMON_DIR = Path("common")
 client = OpenAI(api_key=open('../LaMMA-P/api_key.txt').read().strip())
 
-TASK_DIR = "task6"
+# 데이터 로드
+with open(TASK_DIR / "input/scene/task.json") as f:
+    task_info = json.load(f)
+with open(TASK_DIR / "input/scene/scene.json") as f:
+    scene = json.load(f)
+with open(TASK_DIR / "input/scene/invisible_objects.json") as f:
+    invisible = json.load(f)
+with open(COMMON_DIR / "robot_configs.json") as f:
+    robot_configs = json.load(f)
+with open(COMMON_DIR / "robot_types.json") as f:
+    robot_types = json.load(f)
 
-with open(f'{TASK_DIR}/task_scene/task.json') as f:
-    TASK = json.load(f)['command_kr']
+TASK = task_info["command_en"]
+config_key = task_info["config"]
+config = robot_configs[config_key]
 
-with open(f'{TASK_DIR}/task_scene/scene/scene.json') as f:
-    SCENE_JSON = json.load(f)
+# agent 정보 자동 생성
+# room -> [robot_type, ...] 매핑에서 agent 번호 순서대로 배정
+agents = {}  # agent_id -> {room, type, capabilities}
+agent_counter = 1
+ROOM_ORDER = ["kitchen", "living_room", "bedroom", "bathroom"]
+for room in ROOM_ORDER:
+    if room not in config:
+        continue
+    for robot_type in config[room]:
+        agent_id = f"r{agent_counter}"
+        agents[agent_id] = {
+            "room": room,
+            "type": robot_type,
+            "caps": robot_types[robot_type]
+        }
+        agent_counter += 1
 
-with open(f'{TASK_DIR}/task_scene/images/input_image/invisible_objects.json') as f:
-    INVISIBLE = json.load(f)
-
-def parse_scene(scene_json, invisible):
-    lines = ['## Scene Information (물체명은 AI2-THOR 기준)']
-    for room, data in scene_json.items():
-        agent = data.get('agent', '?')
-        lines.append(f'\n### {room} — agent: {agent}')
-        visible_objs = [o for o in data.get('objects', []) if o not in invisible.get(room, [])]
-        lines.append(f"  visible objects: {', '.join(visible_objs) if visible_objs else '(none visible in screenshot)'}")
+# scene info 생성
+def parse_scene(scene, invisible):
+    lines = ["## Scene Information"]
+    for room, data in scene.items():
+        agent_id = data.get("agent", "?")
+        if agent_id in agents:
+            rtype = agents[agent_id]["type"]
+        else:
+            rtype = "?"
+        lines.append(f"\n### {room} — {agent_id} ({rtype})")
+        visible = [o for o in data.get("objects", []) if o not in invisible.get(room, [])]
+        lines.append(f"  visible: {', '.join(visible) if visible else '(none)'}")
         if invisible.get(room):
-            lines.append(f"  NOT visible in screenshot (but may exist): {', '.join(invisible[room])}")
-    return '\n'.join(lines)
+            lines.append(f"  not visible (may exist): {', '.join(invisible[room])}")
+    return "\n".join(lines)
 
-SCENE_INFO = parse_scene(SCENE_JSON, INVISIBLE)
+# agent info 생성
+def parse_agents(agents, robot_types):
+    lines = ["## Agent Configuration"]
+    for aid, info in agents.items():
+        caps = info["caps"]
+        cap_str = ", ".join(k for k, v in caps.items() if v is True)
+        lines.append(f"- {aid.upper()}: {info['room']} / {info['type']} — {cap_str}")
+    return "\n".join(lines)
 
-AGENT_INFO = """
-## Agent Configuration
-- R1: kitchen / Gripper / FIXED (cannot move)
-- R2: living_room / Mobile Heavy (can move, push furniture, carry heavy/light objects)
-- R3: bedroom / Mobile Light (can move, carry light objects)
-- R4: bathroom / Mobile Light (can move, carry light objects)
-"""
+SCENE_INFO = parse_scene(scene, invisible)
+AGENT_INFO = parse_agents(agents, robot_types)
 
-prompt = f'''
+prompt = f"""
 You are a centralized planner with FULL visibility of ALL rooms and ALL agents.
 Generate a coordinated natural language plan for ALL agents to complete the task.
-Note: some objects are known to exist (from a master object list) but were not
-visible in the agent's own screenshot — you may still use them if the task requires it,
-since the object list is ground truth about what exists in the room.
 
 ## Task
 {TASK}
@@ -50,21 +85,24 @@ since the object list is ground truth about what exists in the room.
 {AGENT_INFO}
 
 ## Output Format
-[R<id> - <room> / <type>]
+[<agent_id> - <room> / <type>]
 1. action
 2. action
 
 Consider collaboration between agents (passing objects between rooms via doors).
-'''
+"""
 
-print('🔄 Centralized 플랜 생성 중...')
-response = client.chat.completions.create(model='gpt-4o', temperature=0.0,
-    messages=[{'role': 'user', 'content': prompt}])
-NL_PLAN_CENTRALIZED = response.choices[0].message.content.strip()
-print('✅ 완료\n')
-print(NL_PLAN_CENTRALIZED)
+print("🔄 Centralized 플랜 생성 중...")
+response = client.chat.completions.create(
+    model=args.gpt_version, temperature=0.0,
+    messages=[{"role": "user", "content": prompt}]
+)
+result = response.choices[0].message.content.strip()
+print("✅ 완료\n")
+print(result)
 
-os.makedirs(f'{TASK_DIR}/results/central', exist_ok=True)
-with open(f'{TASK_DIR}/results/central/central_nl.txt', 'w') as f:
-    f.write(NL_PLAN_CENTRALIZED)
-print(f'\n✅ 저장: {TASK_DIR}/results/central/central_nl.txt')
+out_dir = TASK_DIR / "results/central"
+os.makedirs(out_dir, exist_ok=True)
+with open(out_dir / "central_nl.txt", "w") as f:
+    f.write(result)
+print(f"\n✅ 저장: {out_dir}/central_nl.txt")

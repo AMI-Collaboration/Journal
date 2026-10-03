@@ -15,7 +15,7 @@ TASK_DIR = Path(args.task)
 LAMMA_P_DIR = Path("../LaMMA-P")
 
 # 1) task.json에서 main_room 읽기
-with open(TASK_DIR / "task_scene" / "task.json") as f:
+with open(TASK_DIR / "input" / "scene" / "task.json") as f:
     task_info = json.load(f)
 
 main_room = task_info["main_room"]

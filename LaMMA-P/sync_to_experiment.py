@@ -1,12 +1,11 @@
-"""
-최신 LaMMA-P 실행 결과에서 평가에 필요한 것만 추출해 task6/results/lamma_p/에 저장
-- NL 플랜 텍스트 (combined_plan.py 내용)
-- PDDL 텍스트 (validated_subtask의 각 로봇 problem 파일 내용)
-"""
-import os, glob
+import os, glob, argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--task", required=True, help="예: task6")
+args = parser.parse_args()
 
 LOGS_DIR = "logs"
-DEST_DIR = "../experiment/task6/results/lamma_p"
+DEST_DIR = f"../experiment/{args.task}/results/lamma_p"
 
 log_dirs = sorted(glob.glob(f"{LOGS_DIR}/*"), key=os.path.getmtime, reverse=True)
 if not log_dirs:
@@ -16,14 +15,13 @@ if not log_dirs:
 latest = log_dirs[0]
 os.makedirs(DEST_DIR, exist_ok=True)
 
-# NL 결과 텍스트만 저장
 nl_path = os.path.join(latest, "combined_plan.py")
 nl_text = open(nl_path).read() if os.path.exists(nl_path) else ""
 with open(os.path.join(DEST_DIR, "lamma_p_nl.txt"), "w") as f:
     f.write(nl_text)
 
-# PDDL 결과 텍스트만 저장 (로봇별 problem 파일 내용 이어붙임)
-pddl_files = sorted(glob.glob(os.path.join(latest, "validated_subtask", "*_problem.pddl")))
+pddl_files = sorted(glob.glob(os.path.join(latest, "validated_subtask", "*.pddl")))
+pddl_files = [f for f in pddl_files if not f.endswith("_plan.txt")]
 pddl_text = "\n\n".join(open(p).read() for p in pddl_files)
 with open(os.path.join(DEST_DIR, "lamma_p_pddl.txt"), "w") as f:
     f.write(pddl_text)

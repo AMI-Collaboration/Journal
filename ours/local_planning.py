@@ -114,6 +114,250 @@ and:
 
 `target` is only a preferred target.
 It is NOT a final assignment.
+
+---
+
+ADDITIONAL EXAMPLES (requesting robot's perspective):
+
+Example A - requesting something for the GLOBAL TASK, not just your
+own later step:
+
+Shared TASK:
+"Clear the living room and turn on the floor lamp for a home workout."
+
+Your capability:
+"Mobile robot in the living room. Can carry light objects but
+cannot move heavy furniture."
+
+Your own room contains:
+- coffee table (heavy)
+- floor lamp
+
+Since the shared TASK explicitly requires the floor lamp to be on
+and the room cleared, and clearing/lighting THIS room is part of
+your own contribution, you may request help even when the blocking
+object is in your OWN room:
+
+{
+  "type": "ASK_HELP",
+  "action": "Move the heavy coffee table to clear the room",
+  "kind": "task",
+  "item": null,
+  "target": null
+}
+
+Example B - do NOT request something that is simply "someone else's
+job", even if the global task mentions it:
+
+Shared TASK:
+"Clear the living room and turn on the floor lamp for a home workout."
+
+Your capability:
+"Mobile robot in the bedroom. Can carry light objects."
+
+Your own room contains:
+- basketball
+- pillow
+
+Nothing in the shared TASK depends on this robot's bedroom
+contribution being blocked by another robot. Requesting help with
+the living room's coffee table here would be invalid -- that is not
+this robot's own room or own contribution.
+
+KEY DISTINCTION:
+- Request when the task's OWN target area is YOUR OWN room and you
+  are physically unable to complete part of it.
+- Do NOT request just because the global task text mentions an
+  object or action that lives in a different room from you.
+
+---
+
+CRITICAL SUMMARY -- READ BEFORE WRITING ASK_HELP / HELP
+(this ties together every rule above into one check)
+
+Two roles must NEVER be confused:
+
+  ASK_HELP = "MY OWN required contribution is blocked, so I request help."
+  HELP     = "ANOTHER robot's broadcast need matches what I can do, so I volunteer."
+
+A very common mistake is this:
+
+  WRONG: Robot X reads another robot's broadcast OFFER `needs`
+  (e.g. agent_2 needs the living-room coffee table moved), and
+  because Robot X also cannot move heavy furniture, Robot X ALSO
+  writes its own ASK_HELP for "move the living-room coffee table."
+
+  This is WRONG even though Robot X genuinely cannot push furniture.
+  The reason: that need belongs to agent_2's own contribution (the
+  living room), not to Robot X's own contribution (Robot X's own
+  room). Robot X copying another robot's need as its own ASK_HELP
+  creates a duplicate, spurious request for something Robot X was
+  never responsible for.
+
+BEFORE writing ANY ASK_HELP, ask yourself:
+  1. Is the blocked action part of MY OWN room / MY OWN required
+     contribution to the shared TASK? (Not just "the shared TASK
+     mentions this room" -- literally your own assigned room.)
+  2. If the answer is NO -- if this is really another robot's own
+     room/contribution -- do NOT write ASK_HELP for it. That other
+     robot already owns this request; duplicating it is invalid.
+
+BEFORE setting `target` on ASK_HELP, ask yourself:
+  3. Does the candidate robot's OWN broadcast CAPABILITY / CAN list
+     actually support this action? Never target a robot whose
+     CANNOT list (or capability description) rules this out (e.g.
+     never target a Gripper, which cannot navigate or push
+     furniture, for a "move heavy furniture" request). If unsure,
+     leave `target` as null rather than guessing.
+
+BEFORE writing ANY HELP, ask yourself:
+  4. Check YOUR OWN CANNOT_DO list first. If the action you are
+     about to volunteer for (or any close variant of it, e.g.
+     "move furniture" vs "push furniture") appears in YOUR OWN
+     CANNOT_DO, you must NOT write HELP for it -- no matter who the
+     `target` is, and even if you privately intend the target robot
+     to actually be the one who does it. HELP always means "I will
+     personally perform this," so if you cannot, you must not write
+     it, full stop. Setting `target` to a more capable robot does
+     NOT excuse writing a HELP step you cannot fulfill.
+
+     Common failure to avoid: you have "CANNOT: push furniture" and
+     the request is "move heavy furniture in the living room." You
+     might think "I can't do it myself, but agent_4 can, so I'll
+     write HELP with target=agent_4 as a hint." This is WRONG. If
+     you cannot perform it, write NOTHING for this request -- let
+     the robot that CAN perform it (agent_4) write its own HELP
+     directly, using the same OFFER-needs mechanism described above.
+
+---
+
+FULL WORKED EXAMPLE (different scenario, showing movement + relay):
+
+Shared TASK:
+"Prepare drinks and snacks for guests arriving soon."
+
+Robots:
+- agent_1: Gripper in the kitchen. Cannot navigate (fixed in place).
+- agent_2: Mobile_Light in the dining room. Can navigate, carry light items.
+
+agent_1's own room (kitchen) has:
+- a tray of snacks
+- a jug of water
+
+agent_1's OFFER (own, private) shows:
+- can_provide: [{{"type": "item", "object": "snack tray"}}, {{"type": "item", "object": "water jug"}}]
+- cannot_do: [{{"action": "navigate", "reason": "fixed gripper"}}]
+
+agent_2's broadcast OFFER shows:
+- needs: [{{"kind": "item", "object": "snack tray", "location": "kitchen"}}]
+
+VALID plan for agent_1 (the fixed Gripper -- it never "moves to" anywhere,
+it only hands items across when another robot comes to it):
+
+{{
+  "steps": [
+    {{
+      "type": "PASS",
+      "action": "Hand the snack tray to agent_2 at the kitchen doorway",
+      "kind": "item", "item": "snack tray", "target": "agent_2"
+    }},
+    {{
+      "type": "PASS",
+      "action": "Hand the water jug to agent_2 at the kitchen doorway",
+      "kind": "item", "item": "water jug", "target": "agent_2"
+    }}
+  ]
+}}
+
+VALID plan for agent_2 (mobile -- movement between rooms is written as
+a LOCAL step naming the two rooms, e.g. "Go from X to Y"):
+
+{{
+  "steps": [
+    {{
+      "type": "LOCAL",
+      "action": "Go from the dining room to the kitchen",
+      "kind": null, "item": null, "target": null
+    }},
+    {{
+      "type": "RECEIVE",
+      "action": "Receive the snack tray",
+      "kind": "item", "item": "snack tray", "target": "agent_1"
+    }},
+    {{
+      "type": "RECEIVE",
+      "action": "Receive the water jug",
+      "kind": "item", "item": "water jug", "target": "agent_1"
+    }},
+    {{
+      "type": "LOCAL",
+      "action": "Go from the kitchen back to the dining room",
+      "kind": null, "item": null, "target": null
+    }},
+    {{
+      "type": "LOCAL",
+      "action": "Arrange the snack tray and water jug on the dining table",
+      "kind": null, "item": null, "target": null
+    }}
+  ]
+}}
+
+WHY THIS IS THE RIGHT PATTERN:
+- A robot that CANNOT navigate never writes "go to another room" --
+  it stays put and only PASSes/HELPs across whatever boundary it can
+  reach (e.g. a doorway), exactly matching its CANNOT_DO.
+- A robot that CAN navigate writes its own room-to-room movement as
+  a plain LOCAL step: "Go from <room A> to <room B>". This makes the
+  physical relay of items across rooms visible in the plan instead of
+  being silently skipped.
+- The relay item names (snack tray, water jug) are copied verbatim
+  from the OFFER fields, never generalized to vague terms like
+  "supplies".
+
+CRITICAL BOUNDARY -- when is moving to another room valid?
+
+Movement to another room (a LOCAL "Go from X to Y" step) is valid
+ONLY in these two cases:
+
+  (1) You are RECEIVING something there because YOUR OWN required
+      contribution (in your own room) genuinely depends on that
+      item -- exactly like agent_2 fetching the snack tray above.
+
+  (2) You are the HELP/PASS PROVIDER for another robot's need, and
+      you are physically capable of it (see rule 6 above) -- e.g. a
+      Mobile_Heavy robot navigating into the living room specifically
+      to perform the HELP it volunteered for.
+
+Movement is NEVER valid merely to go create an ASK_HELP or otherwise
+comment on another room's objects/furniture. If the task you are
+thinking about belongs to another room and you are not the one
+volunteering to physically HELP with it, do not move there and do
+not write an ASK_HELP about it -- that is not your own room's
+responsibility (see Example B above). Owning a room means you only
+ASK_HELP for blockers inside THAT room; you do not travel elsewhere
+to raise requests on another robot's behalf.
+
+---
+
+ROOM OWNERSHIP RULES (ASK_HELP vs PASS) -- FINAL CHECK
+
+1. ASK_HELP about a room's state belongs ONLY to that room's robot.
+
+   An ASK_HELP about the condition of a room (clearing it, preparing
+   it, tidying it, etc.) may ONLY be written by the robot that is
+   actually located in that room. A robot in a DIFFERENT room may
+   NEVER write this ASK_HELP on that room's behalf -- not even if it
+   shares the exact same limitation (e.g. it also cannot move heavy
+   furniture). If you are not in that room, this ASK_HELP is not
+   yours to make; leave it to the robot who is actually there.
+
+2. PASS (physical item delivery) is NOT restricted by room ownership.
+
+   Unlike ASK_HELP, a PASS step may be written by ANY robot, in ANY
+   room, as long as the item is genuinely relevant to the shared
+   TASK. You do not need to be in the task's target room to offer an
+   item you have -- proactively PASS it if it could help, regardless
+   of whose room the task is mainly about.
 """
 
 
@@ -143,9 +387,15 @@ described in that robot's broadcast OFFER.
 
 # OUTPUT FORMAT
 
-Return ONE JSON object and NOTHING ELSE:
+Return ONE JSON object and NOTHING ELSE. Include a top-level
+"reasoning" field (1-3 sentences) explaining your overall plan
+strategy -- e.g. why you did or didn't request help, why you
+targeted a specific robot, why you did or didn't volunteer a
+HELP/PASS. This is for debugging/transparency only; it does not
+affect scoring.
 
 {{
+  "reasoning": "string",
   "steps": [
     {{
       "type": "LOCAL" | "ASK_HELP" | "HELP" | "RECEIVE" | "PASS",
@@ -273,7 +523,13 @@ RECEIVE <-> PASS
 
 Follow these rules in order.
 
-1. First understand the SHARED TASK.
+1. First understand the SHARED TASK. Re-read it carefully and
+   identify EVERY distinct sub-goal it describes -- a shared TASK
+   sentence can describe more than one thing that needs to happen.
+   Do not let one sub-goal (e.g. clearing or tidying something)
+   crowd out the others just because it is the easiest or most
+   literal reading of the sentence. Check your own room against
+   EACH sub-goal you found, not just the first one.
 
 2. Only generate actions that directly contribute to the SHARED TASK.
 
@@ -285,8 +541,28 @@ Follow these rules in order.
 5. If your capability cannot perform a task required by the shared TASK,
    create ASK_HELP rather than pretending to perform it.
 
-6. If another robot has a relevant need and you can perform it,
-   create HELP.
+6. If another robot's broadcast OFFER `needs` names a task that is
+   (a) relevant to the SHARED TASK, and
+   (b) something YOUR capability can physically perform (check CAN list),
+   you SHOULD create a HELP step for it, even if the task is not in
+   your own room and even if it has nothing to do with your own
+   room's objects. This is exactly how cross-room collaboration is
+   supposed to happen: a robot with the right capability volunteers
+   for a need it saw in another robot's broadcast OFFER.
+
+   Example: another robot's OFFER needs = [{{"kind": "task", "object":
+   "CoffeeTable", "location": "living_room", "action": "move"}}], and
+   your own CAN list includes PushFurniture / PickupHeavyObject.
+   -> You SHOULD add:
+      {{"type": "HELP", "action": "Move the CoffeeTable in living_room",
+       "kind": "task", "item": null, "target": "<that robot's id>"}}
+   even though the CoffeeTable is not in your own room.
+
+   IMPORTANT: when writing the HELP action, copy the specific object
+   name from that need's `object` field verbatim (e.g. "CoffeeTable"),
+   never generalize it to a vague phrase like "heavy objects" or
+   "furniture". The action must name the exact object so downstream
+   matching and rendering stay precise.
 
 7. A robot's OFFER `needs` does NOT automatically become a task.
    Only use it when that need is relevant to the SHARED TASK.
@@ -802,6 +1078,9 @@ async def make_local_plan(
         parse,
         banner_label="LOCAL PLAN RAW",
     )
+
+    if agent.verbose and agent.plan.reasoning:
+        print(f"  [PLAN REASONING] {agent.id}: {agent.plan.reasoning}")
 
     # ---------------------------------------------------------------
     # Consistency checks

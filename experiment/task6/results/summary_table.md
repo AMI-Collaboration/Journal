@@ -4,18 +4,18 @@
 
 | 방법 | TF | PF | OC | SC | Final |
 |---|---|---|---|---|---|
-| Ours (P2P) | 7 | 8 | 9 | 9 | 8.05 |
-| LaMMA-P | 6 | 7 | 8 | 9 | 7.2 |
-| Centralized | 8 | 9 | 9 | 9 | 8.65 |
-| Independent | 5 | 4 | 7 | 6 | 5.4 |
-| SMART-LLM | 7 | 6 | 8 | 9 | 7.3 |
+| Ours (P2P) | 6 | 7 | 9 | 8 | 7.3 |
+| LaMMA-P | 5 | 4 | 3 | 6 | 4.4 |
+| Centralized | 8 | 7 | 9 | 9 | 8.15 |
+| Independent | 6 | 7 | 9 | 8 | 7.3 |
+| SMART-LLM | 6 | 4 | 5 | 7 | 5.4 |
 
 ## Track B — GT 비교 (PDDL 평가 대상만: Ours, LaMMA-P)
 
 | 방법 | GC(가중) | SG |
 |---|---|---|
 | Ours (P2P) | 0.85 | 0.0 |
-| LaMMA-P | 0.0 | 0 |
+| LaMMA-P | 0.0 | 1.0 |
 | Centralized | N/A (설계상 제외) | N/A (설계상 제외) |
 | Independent | N/A (설계상 제외) | N/A (설계상 제외) |
 | SMART-LLM | N/A (설계상 제외) | N/A (설계상 제외) |
@@ -35,7 +35,7 @@
 | 방법 | IC | matched/mentioned |
 |---|---|---|
 | Ours (P2P) | 1.0 | 4/4 |
-| LaMMA-P | 0.667 | 2/3 |
+| LaMMA-P | 0.0 | 0/4 |
 | Centralized | N/A (설계상 제외) | N/A (설계상 제외) |
 | Independent | N/A (설계상 제외) | N/A (설계상 제외) |
 | SMART-LLM | N/A (설계상 제외) | N/A (설계상 제외) |

@@ -1,18 +1,76 @@
-(define (problem move_pillow_problem)
+(define (problem clearspace_problem_robot1)
+   (:domain robot1)
+   (:objects
+     robot1 - robot
+     chair3 - object
+     chair4 - object
+     coffeetable2 - object
+     storageArea2 - object 
+   )
+   (:init 
+      (at-location chair3 storageArea2)
+      (at-location chair4 storageArea2)
+      (at-location coffeetable2 storageArea2)
+      (inaction robot1)
+   ) 
+   (:goal 
+      (and 
+        (cleaned robot1 chair3)
+        (cleaned robot1 chair4)
+        (cleaned robot1 coffeetable2)
+      )
+   ) 
+)
+
+(define (problem clearspace_problem_robot2)
+   (:domain robot2)
+   (:objects
+     robot2- robot
+     chair1- object
+     chair2- object
+     coffeetable- object
+     storageArea- object
+   )
+   (:init
+     ;; Initial conditions go here. Example:
+     (at-location chair1- storageArea-)
+     (at-location chair2- storageArea-)
+     (at-location coffeetable- storageArea-)
+     (inaction robot2-) ;; Assuming robot starts in an inactive state.
+   )
+   (:goal
+     ;; Goal conditions go here. Example:
+     (and 
+       (cleaned robot2- chair1-) 
+       (cleaned robot2- chair2-) 
+       (cleaned robot2- coffeetable-) 
+       ;; Add more goals as needed.
+     )
+   )
+)
+
+(define (problem ensure_safety_problem)
   (:domain robot2)
   (:objects
     robot2 - robot
-    pillow - object
-    sofa - object
-    storage_area - object
+    ArmChair - object
+    Desk - object
+    Sofa - object
+    Floor - object
   )
   (:init
-    (at robot2 sofa)
-    (at-location pillow sofa)
+    (at robot2 Floor)
+    (at-location ArmChair Floor)
+    (at-location Desk Floor)
+    (at-location Sofa Floor)
+    ; Removed (inaction robot2) to allow actions to be executed.
   )
   (:goal
     (and
-      (at-location pillow storage_area)
+      ; Adjusted goal conditions to use existing predicates.
+      (cleaned robot2 ArmChair)
+      (cleaned robot2 Desk)
+      (cleaned robot2 Sofa)
     )
   )
 )

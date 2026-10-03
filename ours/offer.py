@@ -176,6 +176,51 @@ BAD:
 
 Reason:
 Moving heavy furniture is not part of this robot's own contribution.
+
+---
+
+CONTRASTING GOOD EXAMPLE (when a NEED IS valid):
+
+Global task:
+"Clear and prepare the living room for a home workout."
+
+Robot capability:
+"Mobile robot in the living room. Can move light objects but
+cannot move heavy furniture."
+
+Observed room:
+- coffee table (heavy)
+- floor lamp
+- pillows
+
+This robot's own contribution IS clearing/preparing the living room
+(the task explicitly targets this robot's own room).
+The heavy coffee table blocks that contribution, and this robot
+cannot move it.
+
+VALID NEED:
+
+{
+  "kind": "task",
+  "object": "coffee table",
+  "location": "living_room",
+  "action": "move"
+}
+
+Reason:
+Unlike the earlier BAD example, here the robot's own room IS the
+target of the task, and the robot's own required contribution
+(clearing the room) is directly blocked by something it cannot do
+itself. This is a genuine dependency, not an unrelated request.
+
+KEY DISTINCTION:
+- BAD example: robot in bathroom, task in living room -> unrelated, no NEED.
+- GOOD example: robot in living room, task in living room -> directly
+  blocked, NEED is valid.
+
+Always check: is the blocking object in MY OWN observed room, and is
+clearing/using it part of MY OWN required contribution? Only then is
+a NEED valid.
 """
 
 
@@ -207,12 +252,18 @@ When uncertain whether something is relevant, OMIT it.
 
 {_OFFER_EXAMPLE}
 
-Return exactly ONE JSON object.
+Return exactly ONE JSON object. Include a short "reasoning" field
+(1-3 sentences) explaining WHY you included what you included -- e.g.
+why a NEED is genuine, why a CANNOT_DO is listed, why a CAN_PROVIDE
+was or wasn't added. This is for debugging/transparency only; it does
+not affect scoring.
 
 JSON format:
 
 {{
   "capability": "...",
+
+  "reasoning": "...",
 
   "obs_scope": [
     {{
@@ -272,7 +323,20 @@ RULES
 - Never invent unseen objects.
 - OBS_SCOPE is an observation list, not a task list.
 
-3. GLOBAL TASK RELEVANCE — CRITICAL
+3. DO NOT FIXATE ON A SINGLE SUB-GOAL
+
+A shared TASK sentence may describe more than one thing that needs
+to happen, not just one. Before writing your OFFER, re-read the
+TASK sentence carefully and identify EVERY distinct sub-goal it
+describes, not just the first or most obvious one.
+
+For each sub-goal you identify, separately ask whether your own
+room contains anything relevant to it (an object you could provide,
+or a capability you could use). Do not let one sub-goal (e.g.
+clearing/tidying something) crowd out the others just because it is
+the easiest or most literal reading of the sentence.
+
+3b. GLOBAL TASK RELEVANCE — CRITICAL
 
 Before adding ANY CAN_DO, CANNOT_DO, CAN_PROVIDE, or NEED, ask:
 
@@ -311,7 +375,54 @@ BAD:
 GOOD:
 "pick up the bath mat"
 
-5. CANNOT_DO
+5. GROUNDING RULE (applies to CANNOT_DO and NEEDS about OBJECTS)
+
+This rule applies ONLY to limitations about a SPECIFIC OBJECT. It
+does NOT apply to your embodiment's fixed physical capabilities
+(see 5b below, which is mandatory regardless of what you observe).
+
+Every object-specific CANNOT_DO entry and every NEED must reference
+a specific object that YOU actually observed in YOUR OWN room
+(present in your OBS_SCOPE or HIDDEN INFO).
+
+Do NOT invent a CANNOT_DO about an object that does not exist in
+your own room.
+
+BAD (invents a nonexistent object):
+{{"action": "move", "object": "piano", "reason": "too heavy"}}
+-> invalid if no piano was observed in this robot's own room.
+
+GOOD (grounded in an observed object):
+{{"action": "move", "object": "coffee table", "reason": "too heavy, observed in own room"}}
+
+5b. MANDATORY EMBODIMENT LIMITS (always include, independent of 5)
+
+Your CAPABILITY text states fixed physical limits of your own body
+(e.g. "CANNOT: PushFurniture" or "CANNOT: can_navigate"). These are
+NOT grounded in any single observed object -- they describe what your
+embodiment can NEVER do, anywhere, regardless of your own room's
+contents.
+
+You MUST always include these embodiment-level limits in CANNOT_DO,
+even if:
+- your own room has no object that triggers them right now
+- the limitation seems irrelevant to your own room's contribution
+
+This is because OTHER robots read your broadcast OFFER and need to
+know your hard physical limits before assigning you any HELP/PASS
+role during Local Planning and Auction -- if you omit them here,
+another robot may (incorrectly) expect you to volunteer for a task
+you can never actually perform.
+
+Example: your CAPABILITY says "CANNOT: PushFurniture, can_navigate".
+Even if your own room (e.g. kitchen) has no furniture to push, you
+MUST still include:
+{{"action": "push furniture", "reason": "embodiment cannot push furniture (fixed physical limit)"}}
+{{"action": "navigate between rooms", "reason": "embodiment is fixed in place"}}
+
+Do NOT omit these just because your own room does not need them.
+
+6. CANNOT_DO
 
 List ONLY task-relevant actions that would otherwise matter to
 THIS ROBOT'S contribution but that YOU cannot perform.
@@ -338,6 +449,40 @@ Therefore:
   capability profile.
 
 6. CAN_PROVIDE
+
+IMPORTANT: CAN_PROVIDE is what YOU can offer to the WHOLE TEAM, not
+just what your own room currently needs. List a task-relevant
+capability here even if nothing in your own room requires it --
+another robot's request may depend on it.
+
+MULTIPLE EXAMPLES (different rooms, same principle):
+
+Example A:
+  Robot: Mobile_Heavy in the bathroom.
+  Own room needs no furniture moved.
+  -> STILL list: {{"type": "task", "action": "move", "object": "heavy furniture"}}
+     because this robot's embodiment can do it, and some other room's
+     request may need exactly this.
+
+Example B:
+  Robot: Gripper in the kitchen.
+  Own room needs no items passed to the living room.
+  -> STILL list: {{"type": "item", "object": "mug", "location": "kitchen", "action": "hand over"}}
+     if the mug is relevant to the GLOBAL TASK, even though this
+     robot has no reason yet to think anyone needs it.
+
+Example C (do NOT do this):
+  Robot: Mobile_Heavy in the bathroom, reasoning:
+  "My own room has no heavy furniture, so I have nothing to
+   CAN_PROVIDE about moving heavy furniture."
+  -> WRONG. This suppresses a real team-wide capability just because
+     it is not needed in this robot's own room. CAN_PROVIDE describes
+     capability, not local relevance.
+
+RULE OF THUMB:
+- CANNOT_DO / NEEDS -> must be grounded in YOUR OWN room / own contribution.
+- CAN_PROVIDE -> must be grounded in YOUR OWN capability, but its
+  USE may be in ANY room. Do not filter it by "does my room need this."
 
 There are two forms.
 
@@ -639,6 +784,9 @@ async def make_offer(agent: Agent) -> Offer:
         agent=agent.id,
         **raw.model_dump(),
     )
+
+    if agent.verbose and agent.offer.reasoning:
+        print(f"  [OFFER REASONING] {agent.id}: {agent.offer.reasoning}")
 
     if agent.verbose:
         print(

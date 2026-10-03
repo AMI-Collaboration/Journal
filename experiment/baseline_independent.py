@@ -1,63 +1,103 @@
-import os, json
+# baseline_independent.py
+import os, json, argparse
+from pathlib import Path
 from openai import OpenAI
 
+parser = argparse.ArgumentParser()
+parser.add_argument("--task", required=True, help="예: task6")
+parser.add_argument("--gpt-version", default="gpt-4o")
+args = parser.parse_args()
+
+TASK_DIR = Path(args.task)
+COMMON_DIR = Path("common")
 client = OpenAI(api_key=open('../LaMMA-P/api_key.txt').read().strip())
 
-TASK_DIR = "task6"
+# 데이터 로드
+with open(TASK_DIR / "input/scene/task.json") as f:
+    task_info = json.load(f)
+with open(TASK_DIR / "input/scene/scene.json") as f:
+    scene = json.load(f)
+with open(TASK_DIR / "input/scene/invisible_objects.json") as f:
+    invisible = json.load(f)
+with open(COMMON_DIR / "robot_configs.json") as f:
+    robot_configs = json.load(f)
+with open(COMMON_DIR / "robot_types.json") as f:
+    robot_types = json.load(f)
 
-with open(f'{TASK_DIR}/task_scene/task.json') as f:
-    TASK = json.load(f)['command_kr']
+TASK = task_info["command_en"]
+config_key = task_info["config"]
+config = robot_configs[config_key]
 
-with open(f'{TASK_DIR}/task_scene/scene/scene.json') as f:
-    SCENE_JSON = json.load(f)
+# agent 정보 자동 생성
+agents = {}
+agent_counter = 1
+ROOM_ORDER = ["kitchen", "living_room", "bedroom", "bathroom"]
+for room in ROOM_ORDER:
+    if room not in config:
+        continue
+    for robot_type in config[room]:
+        agent_id = f"r{agent_counter}"
+        agents[agent_id] = {
+            "room": room,
+            "type": robot_type,
+            "caps": robot_types[robot_type]
+        }
+        agent_counter += 1
 
-with open(f'{TASK_DIR}/task_scene/images/input_image/invisible_objects.json') as f:
-    INVISIBLE = json.load(f)
+# scene에서 agent_id로 room 데이터 찾기
+room_by_agent = {data["agent"]: (room, data) for room, data in scene.items()}
 
-def generate_independent_plan(room, data, invisible, task):
-    agent = data.get('agent', '?')
-    visible_objs = [o for o in data.get('objects', []) if o not in invisible.get(room, [])]
-    local_scene = f"### {room} — {agent}\n  visible objects (from your camera): {', '.join(visible_objs) if visible_objs else '(none)'}\n"
+def generate_independent_plan(agent_id, agent_info):
+    room = agent_info["room"]
+    rtype = agent_info["type"]
+    caps = agent_info["caps"]
 
-    prompt = f'''
-You are agent {agent} in a {room}.
-You can ONLY see your own room, and only what your camera shows you below.
-You do NOT know what other agents are doing or seeing.
+    # scene에서 해당 방 오브젝트 가져오기
+    scene_data = scene.get(room, {})
+    visible = [o for o in scene_data.get("objects", []) if o not in invisible.get(room, [])]
+    invis = invisible.get(room, [])
+
+    cap_str = "\n".join(f"  - {k}: {v}" for k, v in caps.items())
+
+    prompt = f"""
+You are agent {agent_id} ({rtype}) located in the {room}.
+You can ONLY see your own room. You do NOT know what other agents are doing or seeing.
 
 ## Task
-{task}
+{TASK}
 
-## Your Room
-{local_scene}
+## Your Room: {room}
+  visible objects (from your camera): {', '.join(visible) if visible else '(none)'}
+  not visible in screenshot (but may exist): {', '.join(invis) if invis else '(none)'}
 
 ## Your Capabilities
-- Gripper: FIXED (cannot move). Can toggle/open/close/pick-up objects in own room.
-- Mobile Light: Can move between rooms, carry light objects, pass/receive at door.
-- Mobile Heavy: Can move between rooms, push furniture, carry heavy/light objects.
+{cap_str}
 
 ## Output Format
-[{agent} - {room}]
+[{agent_id} - {room} / {rtype}]
 1. action
 2. action
 
-If nothing relevant in your room, output: [No action needed]
-'''
-    response = client.chat.completions.create(model='gpt-4o', temperature=0.0,
-        messages=[{'role': 'user', 'content': prompt}])
+If nothing relevant in your room, output: [{agent_id} - No action needed]
+"""
+    response = client.chat.completions.create(
+        model=args.gpt_version, temperature=0.0,
+        messages=[{"role": "user", "content": prompt}]
+    )
     return response.choices[0].message.content.strip()
 
-print('🔄 Independent 플랜 생성 중...')
+print("🔄 Independent 플랜 생성 중...")
 plans = {}
-for room, data in SCENE_JSON.items():
-    agent = data.get('agent', '?')
-    print(f'  - {agent} ({room})...')
-    plans[agent] = generate_independent_plan(room, data, INVISIBLE, TASK)
+for agent_id, agent_info in agents.items():
+    print(f"  - {agent_id} ({agent_info['room']} / {agent_info['type']})...")
+    plans[agent_id] = generate_independent_plan(agent_id, agent_info)
 
-NL_PLAN_INDEPENDENT = '\n\n'.join(plans.values())
-print('\n✅ 완료\n')
-print(NL_PLAN_INDEPENDENT)
+result = "\n\n".join(plans.values())
+print("\n✅ 완료\n")
+print(result)
 
-os.makedirs(f'{TASK_DIR}/results/independent', exist_ok=True)
-with open(f'{TASK_DIR}/results/independent/independent_nl.txt', 'w') as f:
-    f.write(NL_PLAN_INDEPENDENT)
-print(f'\n✅ 저장: {TASK_DIR}/results/independent/independent_nl.txt')
+out_dir = TASK_DIR / "results/independent"
+os.makedirs(out_dir, exist_ok=True)
+with open(out_dir / "independent_nl.txt", "w") as f:
+    f.write(result)
+print(f"\n✅ 저장: {out_dir}/independent_nl.txt")
