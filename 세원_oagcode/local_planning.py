@@ -238,6 +238,82 @@ If YES -> LOCAL.
 If NO because of my embodiment/capability -> ASK_HELP.
 
 ==================================================
+GLOBAL-SUBGOAL OBJECT CHECKLIST
+==================================================
+
+Before returning the final plan, perform this checklist internally.
+
+1. Read the SHARED TASK and identify the concrete actions or subgoals
+   that are actually required.
+
+2. Inspect YOUR OWN OBSERVATION / HIDDEN INFO and identify EVERY
+   concrete observed object that is relevant to those required actions.
+
+3. For EACH relevant observed object, explicitly decide:
+   - If I can perform the required action with my capability:
+       -> create a LOCAL step.
+   - If the required action is relevant but my embodiment/capability
+     prevents me from performing it:
+       -> create an ASK_HELP step with purpose beginning
+          "[GLOBAL_SUBGOAL]".
+   - If the object is not relevant to the shared task:
+       -> do not include it.
+
+4. Do NOT silently omit a relevant observed object merely because
+   another observed object was easier to plan.
+
+5. For a fixed gripper robot:
+   - Local manipulation at its current location is allowed.
+   - If a relevant observed object must be transported to another
+     room/location and the gripper cannot do that:
+       -> ASK_HELP for that concrete object and movement.
+   - Do NOT create a generic request such as "move light objects"
+     when a concrete observed object is available.
+
+6. Do NOT invent objects that are absent from YOUR observation.
+   The checklist applies only to objects actually observed by you.
+
+7. Do not create ASK_HELP merely because another robot can perform
+   an action. The action must be required by the shared task and
+   grounded in YOUR OWN observation.
+
+FINAL SELF-CHECK:
+For every relevant object in YOUR observation, there must be a clear
+reason why it is LOCAL, ASK_HELP, or intentionally omitted as
+irrelevant. Do not silently leave a relevant object unaccounted for.
+
+==================================================
+GRIPPER / FIXED-BASE ROBOT RULE
+==================================================
+
+If YOUR CAPABILITY describes you as a gripper, fixed-base gripper,
+stationary gripper, or fixed-base arm:
+
+- You CANNOT move yourself between rooms or locations.
+- You CANNOT carry, transport, bring, deliver, or move an object
+  from one location to another.
+- You MAY pick up an object at your current location.
+- You MAY put down or place an object at your current location.
+- You MAY manipulate an object locally without changing location.
+
+VALID:
+- Pick up the plate.
+- Pick up the towel.
+- Put the plate in the sink.
+- Place the object on the counter.
+
+INVALID:
+- Move the plate to the kitchen.
+- Carry the towel to the bedroom.
+- Bring the object to the living room.
+- Transport the object to another room.
+- Move the chair to another location.
+
+Never generate a LOCAL movement or transport action for a gripper robot.
+If the shared task requires an object to be moved to another location
+and you are a gripper, use ASK_HELP only when the object and required
+movement are grounded in YOUR OWN observation.
+==================================================
 LOCAL RULES
 ==================================================
 
@@ -433,15 +509,153 @@ def _overlap(a: str, b: str) -> float:
 
     return len(aa & bb) / max(1, min(len(aa), len(bb)))
 
+# ---------------------------------------------------------------------------
+# Embodiment constraints
+# ---------------------------------------------------------------------------
 
+def _is_gripper_robot(agent: Agent) -> bool:
+    """
+    Detect a fixed/non-mobile gripper robot.
+
+    A gripper robot can manipulate objects at its current location,
+    but cannot navigate or transport objects between locations.
+    """
+    capability = (agent.inp.capability or "").lower()
+
+    gripper_keywords = (
+        "gripper",
+        "fixed-base gripper",
+        "fixed base gripper",
+        "stationary gripper",
+        "fixed manipulator",
+        "fixed-base arm",
+        "fixed base arm",
+    )
+
+    return any(k in capability for k in gripper_keywords)
+
+
+def _requires_robot_movement(action: str) -> bool:
+    """
+    Check whether an action requires robot/object movement or transport.
+    """
+    text = action.lower()
+
+    movement_words = (
+        "move",
+        "carry",
+        "transport",
+        "bring",
+        "deliver",
+        "transfer",
+        "go to",
+        "walk to",
+        "navigate to",
+        "travel to",
+    )
+
+    return any(word in text for word in movement_words)
+
+def _can_move_heavy(agent: Agent) -> bool:
+    """
+    Return True only for a robot whose capability explicitly indicates
+    that it can move heavy objects/furniture.
+    """
+    capability = (agent.inp.capability or "").lower()
+
+    heavy_capability_keywords = (
+        "mobile heavy robot",
+        "heavy-duty mobile robot",
+        "heavy duty mobile robot",
+        "heavy-duty",
+        "heavy duty",
+        "can move heavy",
+        "move heavy objects",
+        "move heavy furniture",
+    )
+
+    return any(
+        keyword in capability
+        for keyword in heavy_capability_keywords
+    )
+def _requires_heavy_movement(action: str) -> bool:
+    """
+    Detect whether an action moves a heavy object or furniture.
+    """
+    text = action.lower()
+
+    heavy_words = (
+        "heavy",
+        "furniture",
+        "armchair",
+        "sofa",
+        "couch",
+        "tvstand",
+        "tv stand",
+        "bunk bed",
+        "bed",
+        "cabinet",
+        "table",
+    )
+
+    movement_words = (
+        "move",
+        "carry",
+        "transport",
+        "bring",
+        "deliver",
+        "transfer",
+    )
+
+    return (
+        any(m in text for m in movement_words)
+        and any(h in text for h in heavy_words)
+    )
 # ---------------------------------------------------------------------------
 # Structural validation (violations trigger an LLM retry)
 # ---------------------------------------------------------------------------
 
-def _validate_plan_structure(steps: list[dict]) -> None:
+def _validate_plan_structure(
+    agent: Agent,
+    steps: list[dict],
+) -> None:
     """Hard rules that the LLM must satisfy; a ValueError triggers a retry."""
 
     for i, step in enumerate(steps):
+
+                # ---------------------------------------------------------------
+        # HARD EMBODIMENT CONSTRAINT
+        # ---------------------------------------------------------------
+        # A gripper/fixed-base robot cannot move or transport objects.
+        # It may only manipulate objects at its current location.
+        if (
+            step["type"] == "LOCAL"
+            and _is_gripper_robot(agent)
+            and _requires_robot_movement(step["action"])
+        ):
+            raise ValueError(
+                f"step {i + 1}: gripper robot cannot perform "
+                f"movement/transport action: {step['action']!r}. "
+                "A gripper can pick up or place objects at its fixed "
+                "location, but cannot move/carry/transport objects."
+            )
+        # ---------------------------------------------------------------
+        # HEAVY OBJECT EMBODIMENT CONSTRAINT
+        # ---------------------------------------------------------------
+        # Only a robot explicitly capable of moving heavy objects
+        # may perform a LOCAL heavy-object movement.
+        if (
+            step["type"] == "LOCAL"
+            and _requires_heavy_movement(step["action"])
+            and not _can_move_heavy(agent)
+        ):
+            raise ValueError(
+                f"step {i + 1}: robot cannot perform heavy-object "
+                f"movement: {step['action']!r}. "
+                "Only a robot capable of moving heavy "
+                "objects/furniture may perform this LOCAL action."
+            )
+
 
         step_type = step["type"]
 
@@ -519,7 +733,10 @@ def _normalize_step(step: dict) -> None:
             raise ValueError("RECEIVE requires an `item` field.")
 
 
-def _salvage_steps(raw: dict | None) -> tuple[list[dict], list[dict]]:
+def _salvage_steps(
+    agent: Agent,
+    raw: dict | None,
+) -> tuple[list[dict], list[dict]]:
     """Fallback after the last retry: keep every valid step, drop only the
     ones that break the rules. Returns (kept, dropped-with-reason)."""
 
@@ -547,6 +764,34 @@ def _salvage_steps(raw: dict | None) -> tuple[list[dict], list[dict]]:
 
     for i, step in enumerate(usable):
 
+        # ---------------------------------------------------------------
+        # EMBODIMENT CONSTRAINTS DURING FALLBACK
+        # ---------------------------------------------------------------
+
+        # Gripper/fixed-base robot cannot move or transport objects.
+        if (
+            step["type"] == "LOCAL"
+            and _is_gripper_robot(agent)
+            and _requires_robot_movement(step["action"])
+        ):
+            dropped.append({
+                "step": step["action"],
+                "why": "gripper robot cannot perform movement/transport",
+            })
+            continue
+
+        # Only heavy-capable robots can move heavy objects/furniture.
+        if (
+            step["type"] == "LOCAL"
+            and _requires_heavy_movement(step["action"])
+            and not _can_move_heavy(agent)
+        ):
+            dropped.append({
+                "step": step["action"],
+                "why": "robot cannot move heavy objects/furniture",
+            })
+            continue
+
         if step["type"] in REQUEST_TYPES:
 
             later_local = next(
@@ -560,7 +805,10 @@ def _salvage_steps(raw: dict | None) -> tuple[list[dict], list[dict]]:
             )
 
             if later_local is None and not is_global_delegation:
-                dropped.append({"step": step["action"], "why": "request with no own later step"})
+                dropped.append({
+                    "step": step["action"],
+                    "why": "request with no own later step",
+                })
                 continue
 
             # Missing purpose is repaired only for dependency requests.
@@ -570,7 +818,6 @@ def _salvage_steps(raw: dict | None) -> tuple[list[dict], list[dict]]:
         kept.append(step)
 
     return kept, dropped
-
 
 # ---------------------------------------------------------------------------
 # Consistency checks (warnings only)
@@ -652,7 +899,7 @@ async def make_local_plan(
         for step in steps:
             _normalize_step(step)
 
-        _validate_plan_structure(steps)
+        _validate_plan_structure(agent,steps)
 
         return LocalPlan.from_raw(
             agent.id,
@@ -661,7 +908,7 @@ async def make_local_plan(
         )
 
     def fallback(raw: dict | None) -> LocalPlan:
-        kept, dropped = _salvage_steps(raw)
+        kept, dropped = _salvage_steps(agent,raw)
 
         agent.log.log(
             "plan",

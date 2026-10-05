@@ -158,9 +158,7 @@ def _derived_task_provides(raw: RawOffer) -> list[CanProvide]:
 
     capability = (raw.capability or "").lower()
 
-    if "mobile heavy robot" in capability or (
-        "mobile" in capability and "heavy" in capability
-    ):
+    if "mobile heavy robot" in capability:
         add(object_="heavy objects", location=None, action="move")
 
     if "mobile light robot" in capability or (
