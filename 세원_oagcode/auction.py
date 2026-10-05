@@ -249,6 +249,21 @@ async def propose_responses(
 
             for j, off in enumerate(offerings):
 
+                # -------------------------------------------------------
+                # EMBODIMENT GUARD
+                # -------------------------------------------------------
+                # Only propose HELP when this robot's physical
+                # capability can actually execute the requested action.
+                if (
+                    req.type == "ASK_HELP"
+                    and not _provider_can_execute_request(
+                        req,
+                        agent,
+                        off,
+                    )
+                ):
+                    continue
+
                 if req.type == "RECEIVE":
                     if off.type != "item":
                         continue
@@ -419,6 +434,7 @@ def _category_tags(text: str) -> set[str]:
         "book", "cd", "cellphone", "credit", "card", "pen", "pencil",
         "keychain", "towel", "handtowel", "soap", "spraybottle",
         "brush", "tomato", "lettuce", "egg", "pan", "potato",
+        "cabbage",
     }
 
     if tokens & heavy_furniture:
@@ -440,6 +456,153 @@ def _category_tags(text: str) -> set[str]:
             tags.add("light")
 
     return tags
+
+
+def _provider_capability_class(agent: Agent) -> str:
+    """
+    Return the robot's movement capability class.
+
+    fixed_gripper : fixed gripper / stationary gripper
+    light         : mobile light robot
+    heavy         : mobile heavy robot
+    unknown       : capability cannot be classified
+    """
+    capability = (agent.inp.capability or "").lower()
+
+    gripper_keywords = (
+        "gripper",
+        "fixed-base gripper",
+        "fixed base gripper",
+        "stationary gripper",
+        "fixed manipulator",
+        "fixed-base arm",
+        "fixed base arm",
+    )
+
+    if any(k in capability for k in gripper_keywords):
+        return "fixed_gripper"
+
+    heavy_keywords = (
+        "mobile heavy robot",
+        "heavy-duty mobile robot",
+        "heavy duty mobile robot",
+        "heavy-duty",
+        "heavy duty",
+        "can move heavy",
+        "move heavy objects",
+        "move heavy furniture",
+    )
+
+    if any(k in capability for k in heavy_keywords):
+        return "heavy"
+
+    light_keywords = (
+        "mobile light robot",
+        "light-duty mobile robot",
+        "light duty mobile robot",
+        "mobile robot",
+        "light-duty",
+        "light duty",
+    )
+
+    if any(k in capability for k in light_keywords):
+        return "light"
+
+    return "unknown"
+
+
+def _request_requires_movement(request: Step) -> bool:
+    text = " ".join(
+        x
+        for x in (
+            request.action,
+            request.item,
+            request.purpose,
+        )
+        if x
+    ).lower()
+
+    movement_words = (
+        "move",
+        "carry",
+        "transport",
+        "bring",
+        "deliver",
+        "transfer",
+        "navigate",
+        "walk to",
+        "go to",
+        "travel to",
+    )
+
+    return any(word in text for word in movement_words)
+
+
+def _request_is_heavy(request: Step) -> bool:
+    text = " ".join(
+        x
+        for x in (
+            request.action,
+            request.item,
+            request.purpose,
+        )
+        if x
+    ).lower()
+
+    heavy_words = (
+        "heavy",
+        "furniture",
+        "armchair",
+        "sofa",
+        "couch",
+        "tvstand",
+        "tv stand",
+        "bunk bed",
+        "bed",
+        "cabinet",
+        "table",
+    )
+
+    return any(word in text for word in heavy_words)
+
+
+def _provider_can_execute_request(
+    request: Step,
+    provider: Agent,
+    offering: CanProvide,
+) -> bool:
+    """
+    Embodiment-level guard for Auction proposals.
+
+    This is intentionally checked AFTER the normal CAN_PROVIDE matching
+    logic, so an LLM cannot create an invalid HELP proposal merely by
+    publishing an overly broad offer.
+    """
+
+    capability_class = _provider_capability_class(provider)
+
+    # Unknown capability -> do not invent physical abilities.
+    if capability_class == "unknown":
+        return False
+
+    # Fixed gripper cannot move between locations or transport objects.
+    if (
+        capability_class == "fixed_gripper"
+        and _request_requires_movement(request)
+    ):
+        return False
+
+    # Light mobile robots cannot perform heavy-object/furniture movement.
+    if (
+        capability_class == "light"
+        and _request_requires_movement(request)
+        and _request_is_heavy(request)
+    ):
+        return False
+
+    # Heavy mobile robots can perform both light and heavy movement.
+    # Fixed gripper has already been filtered above.
+    return True
 
 
 def _object_match_score(request: Step, offering: CanProvide) -> float:
