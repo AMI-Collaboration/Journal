@@ -13,6 +13,11 @@ import shutil
 import sys
 from typing import List, Dict, Tuple, Optional, Union, Any
 
+import types
+for _mod in ("tty", "termios", "fcntl"):
+    if _mod not in sys.modules:
+        sys.modules[_mod] = types.ModuleType(_mod)
+
 import openai
 import ai2thor.controller
 
@@ -678,13 +683,17 @@ class LLMHandler:
                     )
                     return response, response.choices[0].text.strip()
                 else:
-                    response = openai.chat.completions.create(
-                        model=gpt_version, 
-                        messages=prompt, 
-                        max_tokens=max_tokens, 
-                        temperature=temperature, 
-                        frequency_penalty=frequency_penalty
+                    kwargs = dict(
+                        model=gpt_version,
+                        messages=prompt,
                     )
+                    if "gpt-5" in gpt_version:
+                        kwargs["max_completion_tokens"] = max_tokens
+                    else:
+                        kwargs["max_tokens"] = max_tokens
+                        kwargs["temperature"] = temperature
+                        kwargs["frequency_penalty"] = frequency_penalty
+                    response = openai.chat.completions.create(**kwargs)
                     return response, response.choices[0].message.content.strip()
                     
             except openai.RateLimitError:
@@ -1971,7 +1980,7 @@ def parse_arguments() -> argparse.Namespace:
         "--gpt-version",
         type=str,
         default="gpt-4o",
-        choices=['gpt-3.5-turbo', 'gpt-4o', 'gpt-3.5-turbo-16k']
+        choices=['gpt-3.5-turbo', 'gpt-4o', 'gpt-3.5-turbo-16k', 'gpt-5.6-sol']
     )
     parser.add_argument(
         "--prompt-decompse-set",

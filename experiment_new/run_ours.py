@@ -15,7 +15,7 @@ OURS_NEW_DIR = os.path.join(HERE, "..", "ours_new")
 sys.path.insert(0, OURS_NEW_DIR)
 sys.path.insert(0, HERE)
 
-from loader import load_all, build_agent_inputs  # noqa: E402
+from loader import load_all, build_agent_inputs, log_usage_from_metrics  # noqa: E402
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--task", required=True, help="예: task1_abstract")
@@ -89,5 +89,7 @@ result_record = {
 out_path = os.path.join(results_dir, f"{args.task}_result.json")
 with open(out_path, "w", encoding="utf-8") as f:
     json.dump(result_record, f, ensure_ascii=False, indent=2)
+
+log_usage_from_metrics("ours", args.task, result["metrics"])
 
 print(f"\n📁 저장: {out_path}")
