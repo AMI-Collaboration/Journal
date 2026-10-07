@@ -1,6 +1,7 @@
 """
-experiment_new 구조를 사용해 Central(중앙집중형) 베이스라인을 실행.
-중앙 LLM이 모든 로봇의 room 이미지를 한 번에 보고, 각 로봇에게 내릴 명령을 생성한다.
+Central(중앙집중형 멀티에이전트) 베이스라인.
+1단계: 중앙 LLM이 전체 상황을 보고 각 로봇에게 간단한 지시(명령)를 내림.
+2단계: 각 로봇(에이전트)이 자기 몫의 지시 + 자기 방 이미지를 보고 구체적 계획을 세움.
 
 사용법:
     python run_central.py --task task1_abstract
@@ -10,6 +11,7 @@ import base64
 import io
 import json
 import os
+import re
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -48,54 +50,93 @@ def encode_image(path, max_side=512, quality=70):
     return f"data:image/jpeg;base64,{b64}"
 
 
-# 전체 agent 정보 + 이미지를 한 번에 프롬프트에 담음 (중앙집중형)
+# ──────────────────────────────────────────
+# STEP 1: 중앙 LLM이 로봇별 간단 지시를 생성
+# ──────────────────────────────────────────
 agent_lines = []
-image_blocks = []
 for label, info in agents.items():
     agent_lines.append(f"- {label} ({info['room_type']}): {info['capability']}")
-    if info["hidden_info"]:
-        agent_lines.append(f"  (not visible in screenshot, may exist: {', '.join(info['hidden_info'])})")
-    agent_lines.append(f"  (see attached image(s) labeled [{label}] below for this robot's room)")
-
-    for img_path in info["images"]:
-        if os.path.exists(img_path):
-            image_blocks.append({"type": "text", "text": f"[{label} room image]"})
-            image_blocks.append({"type": "image_url", "image_url": {"url": encode_image(img_path)}})
 
 AGENT_INFO = "\n".join(agent_lines)
 
-prompt_text = f"""
-You are a centralized planner with FULL visibility of ALL rooms and ALL agents.
-You can see every robot's room through the attached images below.
-Generate a coordinated natural language plan for ALL agents to complete the task,
-grounding every action in objects you can actually SEE in the images -- do not
-invent or guess at objects that might be needed; only use what is visible.
+central_prompt = f"""
+You are a centralized dispatcher for a team of robots.
 
 ## Task
 {task_text}
 
-## Agents
+## Robots
 {AGENT_INFO}
 
-## Output Format
-[<agent_id> - <room> / <type>]
-1. action (name a concrete object you actually saw in that robot's image)
-2. action
+Give each robot a short, one-to-two sentence instruction describing its
+role in completing the task, based on its room and capability. Keep each
+instruction simple and high-level -- the robot itself will figure out the
+specific actions.
 
-Consider collaboration between agents (passing objects between rooms via doors).
+Return JSON only:
+{{"R1": "instruction", "R2": "instruction", ...}}
 """
 
-content_blocks = [{"type": "text", "text": prompt_text}] + image_blocks
-
-print(f"📋 Task: {args.task}  (robots: {len(agents)}, mode: {args.mode}, images: {len(image_blocks)//2})")
-print("🔄 Centralized 플랜 생성 중...")
+print(f"📋 Task: {args.task}  (robots: {len(agents)}, mode: {args.mode})")
+print("🔄 [1/2] 중앙 LLM이 로봇별 지시 생성 중...")
 
 response = client.chat.completions.create(
     model=args.gpt_version, temperature=0.0,
-    messages=[{"role": "user", "content": content_blocks}],
+    messages=[{"role": "user", "content": central_prompt}],
 )
 log_usage("central", args.task, response)
-result = response.choices[0].message.content.strip()
+raw = re.sub(r"```(json)?", "", response.choices[0].message.content.strip()).strip()
+instructions = json.loads(raw)
+
+print("\n중앙 지시:")
+for label, instr in instructions.items():
+    print(f"  [{label}] {instr}")
+
+# ──────────────────────────────────────────
+# STEP 2: 각 로봇이 자기 지시 + 이미지를 보고 계획 수립
+# ──────────────────────────────────────────
+print("\n🔄 [2/2] 각 로봇이 자기 계획 수립 중...")
+
+plans = {}
+for label, info in agents.items():
+    instruction = instructions.get(label, "No specific instruction given.")
+
+    hidden_note = ""
+    if info["hidden_info"]:
+        hidden_note = f"\n(not visible in image but may exist: {', '.join(info['hidden_info'])})"
+
+    agent_prompt = f"""
+You are robot {label} in the {info['room_type']}.
+Your capability: {info['capability']}
+
+## Instruction from central dispatcher
+{instruction}
+
+## Your Room
+Look at the attached image(s) of your room.{hidden_note}
+
+Write a short concrete plan (2-5 steps) to carry out your instruction,
+using only objects you can actually see or that are listed above.
+
+Output format:
+[{label}]
+1. action
+2. action
+"""
+    content_blocks = [{"type": "text", "text": agent_prompt}]
+    for img_path in info["images"]:
+        if os.path.exists(img_path):
+            content_blocks.append({"type": "image_url", "image_url": {"url": encode_image(img_path)}})
+
+    r = client.chat.completions.create(
+        model=args.gpt_version, temperature=0.0,
+        messages=[{"role": "user", "content": content_blocks}],
+    )
+    log_usage("central", args.task, r)
+    plans[label] = r.choices[0].message.content.strip()
+    print(f"  - {label} 완료")
+
+result = "\n\n".join(plans.values())
 
 print("\n✅ 완료\n")
 print(result)
@@ -109,6 +150,8 @@ with open(out_path, "w", encoding="utf-8") as f:
         "method": "central",
         "mode": args.mode,
         "task_text": task_text,
+        "central_instructions": instructions,
+        "agent_plans": plans,
         "joint_plan_text": result,
     }, f, ensure_ascii=False, indent=2)
 
