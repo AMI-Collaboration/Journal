@@ -5,10 +5,10 @@
 | 방법 | TF | PF | OC | SC | Final |
 |---|---|---|---|---|---|
 | Ours (P2P) | - | - | - | - | N/A |
-| Centralized | 4 | 7 | 3 | 5 | 4.4 |
-| Independent | 4 | 5 | 3 | 4 | 3.85 |
+| Centralized | 5 | 6 | 3 | 4 | 4.35 |
+| Independent | 5 | 6 | 3 | 4 | 4.35 |
 | LaMMA-P | 6 | 7 | 4 | 5 | 5.35 |
-| SMART-LLM | 6 | 7 | 4 | 5 | 5.35 |
+| SMART-LLM | 5 | 4 | 3 | 4 | 3.95 |
 
 ## Track B — GC (ours, LaMMA-P만)
 
@@ -25,7 +25,7 @@
 | 방법 | Grounding Rate | Hallucinated |
 |---|---|---|
 | Ours (P2P) | N/A | N/A |
-| Centralized | 0.714 | pen, trash bin |
-| Independent | 0.857 | couch |
-| LaMMA-P | 0.125 | clutter, computer, light switch, storage, lights, webcam, door |
+| Centralized | 0.538 | item, couch, pen, phone, bed, window |
+| Independent | 0.714 | mobile light, pen |
+| LaMMA-P | 0.0 | clutter, light, computer, door, window, camera, microphone |
 | SMART-LLM | 0.667 | clutter, window |

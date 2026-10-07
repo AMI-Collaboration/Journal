@@ -5,10 +5,10 @@
 | 방법 | TF | PF | OC | SC | Final |
 |---|---|---|---|---|---|
 | Ours (P2P) | - | - | - | - | N/A |
-| Centralized | 3 | 7 | 4 | 5 | 4.45 |
-| Independent | 4 | 7 | 5 | 6 | 5.25 |
-| LaMMA-P | 4 | 3 | 5 | 4 | 4.15 |
-| SMART-LLM | 6 | 8 | 4 | 7 | 5.85 |
+| Centralized | 4 | 7 | 3 | 5 | 4.4 |
+| Independent | 5 | 7 | 3 | 6 | 4.85 |
+| LaMMA-P | 6 | 7 | 4 | 5 | 5.35 |
+| SMART-LLM | 6 | 5 | 3 | 7 | 4.9 |
 
 ## Track B — GC (ours, LaMMA-P만)
 
@@ -25,7 +25,7 @@
 | 방법 | Grounding Rate | Hallucinated |
 |---|---|---|
 | Ours (P2P) | N/A | N/A |
-| Centralized | 0.538 | container, door, fruit, jug, glass, couch |
-| Independent | 0.875 | tv |
-| LaMMA-P | 0.286 | outfit, clothes, essential, lunch, device |
-| SMART-LLM | 0.571 | closet, clothes, bed, wallet, phone, door |
+| Centralized | 0.562 | fruit, drink, container, keys, wallet, phone, door |
+| Independent | 0.929 | tv |
+| LaMMA-P | 0.312 | ingredient, sandwich, cereal, utensil, coffeeground, item, workbag, clothing, device, wallet, phone |
+| SMART-LLM | 0.438 | countertop, wardrobe, clothes, bed, wallet, phone, door, window, umbrella |

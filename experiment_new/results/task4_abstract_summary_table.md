@@ -5,10 +5,10 @@
 | 방법 | TF | PF | OC | SC | Final |
 |---|---|---|---|---|---|
 | Ours (P2P) | - | - | - | - | N/A |
-| Centralized | 5 | 8 | 6 | 7 | 6.25 |
-| Independent | 4 | 3 | 5 | 4 | 4.15 |
-| LaMMA-P | 5 | 6 | 3 | 4 | 4.35 |
-| SMART-LLM | 5 | 6 | 3 | 4 | 4.35 |
+| Centralized | 6 | 8 | 5 | 7 | 6.2 |
+| Independent | 5 | 6 | 3 | 4 | 4.35 |
+| LaMMA-P | 4 | 6 | 3 | 5 | 4.2 |
+| SMART-LLM | 3 | 5 | 2 | 4 | 3.2 |
 
 ## Track B — GC (ours, LaMMA-P만)
 
@@ -25,7 +25,7 @@
 | 방법 | Grounding Rate | Hallucinated |
 |---|---|---|
 | Ours (P2P) | N/A | N/A |
-| Centralized | 0.533 | snack, drink, bed, blanket, teddy bear, counter, trash can |
-| Independent | 0.714 | bed, trash can |
-| LaMMA-P | 0.429 | surface, item, light, music |
-| SMART-LLM | 0.417 | clutter, cushion, light, storage, snack, drink, countertop |
+| Centralized | 0.7 | item, trash bin, furniture |
+| Independent | 0.714 | mobile light, bed, blanket, countertop |
+| LaMMA-P | 0.4 | clutter, item, dishwasher, surface, countertop, bed, cutlery, glass, light |
+| SMART-LLM | 0.9 | lightswitch |

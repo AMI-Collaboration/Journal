@@ -109,6 +109,9 @@ for label, info in agents.items():
 You are robot {label} in the {info['room_type']}.
 Your capability: {info['capability']}
 
+## Task
+{task_text}
+
 ## Instruction from central dispatcher
 {instruction}
 
@@ -118,11 +121,19 @@ Look at the attached image(s) of your room.{hidden_note}
 Write a short concrete plan (2-5 steps) to carry out your instruction,
 using only objects you can actually see or that are listed above.
 
-Output format:
-[{label}]
-1. action
-2. action
+## Output Format
+If task has a time limit, use blocks spanning the FULL duration (e.g. 30 min
+task -> [0-5 min]...[25-30 min], not just the first 10 min). Otherwise use
+[Step N].
+
+[0-5 min]  (or [Step 1])
+- R<n> <action>  (r<n>_s<step>)
+
+Rules:
+- Step number resets per robot, starting at 1
+- No tags like [LOCAL]/[PASS]/[HELP]
 """
+        
     content_blocks = [{"type": "text", "text": agent_prompt}]
     for img_path in info["images"]:
         if os.path.exists(img_path):

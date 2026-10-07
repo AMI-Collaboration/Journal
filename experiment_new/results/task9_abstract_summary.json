@@ -14,62 +14,72 @@
   "central": {
     "name": "Centralized",
     "track_a_llm_judge": {
-      "TF": 5,
-      "TF_reason": "The plan partially achieves the task's goal of getting the house ready for bedtime. However, it lacks specific actions related to typical bedtime preparations such as turning off lights, locking doors, or ensuring all rooms are tidy. The actions described are more focused on moving objects rather than preparing the house for bedtime.",
+      "TF": 4,
+      "TF_reason": "The plan does not fully achieve the task's goal of getting the house ready for bedtime. The actions are fragmented and do not cover essential bedtime preparations such as turning off lights, locking doors, or ensuring all rooms are tidy. Additionally, some actions, like slicing apples and lettuce, do not directly contribute to the task of preparing the house for bedtime.",
       "PF": 7,
-      "PF_reason": "Most actions are executable given the agents' capabilities. However, there are some issues, such as R2's task to open the door, which is not within its capabilities. Additionally, R3's task to pour liquid from the teapot assumes the presence of liquid without confirmation.",
-      "OC": 4,
-      "OC_reason": "The plan does not fully respect the distributed nature of the system. For example, R2 is expected to receive objects from R3 without any explicit communication or request, and R3 assumes R4 will arrive in the living room without any coordination. This implies a centralized knowledge that is not consistent with a distributed setting.",
-      "SC": 6,
-      "SC_reason": "The step ordering is mostly logical, but there are unresolved actions, such as R2's task to transport objects without a clear destination or purpose. Additionally, R3's task to pass the teapot to R4 lacks confirmation of R4's arrival, leaving the action hanging.",
-      "final_score": 5.2
+      "PF_reason": "Most actions are executable given the agents' capabilities, but there are issues with the timing and sequence of actions. For example, R2's actions extend beyond the 15-minute timeframe, and R3's actions are conditional on the presence of items that are not confirmed to exist.",
+      "OC": 3,
+      "OC_reason": "The plan does not respect the information constraints of a distributed system. It assumes knowledge of objects and tasks across different rooms without explicit communication between agents. There is no evidence of coordination or message passing between agents, which is necessary for a true distributed setting.",
+      "SC": 5,
+      "SC_reason": "The step ordering is partially coherent, but there are unresolved actions and timing issues. R2's actions extend beyond the 15-minute limit, and R3's actions are based on assumptions rather than concrete tasks. The plan lacks a clear conclusion, as it does not ensure all necessary bedtime preparations are completed.",
+      "final_score": 4.4
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
     "object_grounding": {
       "mentioned_objects": [
         "apple",
-        "kettle",
+        "lettuce",
         "cup",
-        "door",
-        "teapot",
+        "shelf",
         "table",
-        "bed",
-        "chair",
-        "desk",
-        "bathtub",
-        "countertop"
+        "book",
+        "decoration",
+        "trash can",
+        "desk chair",
+        "cardboard box",
+        "toothbrush",
+        "toothpaste",
+        "laundry basket",
+        "hamper",
+        "towel",
+        "shower curtain"
       ],
       "grounded_objects": [
         "apple",
-        "kettle",
+        "lettuce",
         "cup",
-        "teapot",
+        "shelf",
         "table",
-        "bed",
-        "chair",
-        "desk",
-        "bathtub",
-        "countertop"
+        "book",
+        "desk chair",
+        "cardboard box",
+        "hamper",
+        "towel",
+        "shower curtain"
       ],
       "hallucinated_objects": [
-        "door"
+        "decoration",
+        "trash can",
+        "toothbrush",
+        "toothpaste",
+        "laundry basket"
       ],
-      "grounding_rate": 0.909
+      "grounding_rate": 0.688
     }
   },
   "independent": {
     "name": "Independent",
     "track_a_llm_judge": {
       "TF": 6,
-      "TF_reason": "The plan addresses turning off lights and closing curtains/blinds, which are typical bedtime preparations. However, it does not cover other potential bedtime tasks such as locking doors or setting alarms. The plan assumes the presence of specific objects (e.g., lamps, curtains) without explicit confirmation of their existence in each room.",
+      "TF_reason": "The plan addresses several tasks related to preparing the house for bedtime, such as turning off lights and appliances, closing curtains, and tidying up. However, it lacks specificity in some actions, such as 'ensures all appliances are turned off' and 'tidy the desk by organizing items', which are vague and do not specify which appliances or items are involved. Additionally, the plan does not cover all potential bedtime preparations, such as locking doors or setting alarms.",
       "PF": 5,
-      "PF_reason": "The plan includes actions like turning off appliances and closing curtains, which are not explicitly supported by the agents' capabilities. The agents can pick up objects and navigate, but there is no mention of their ability to interact with switches or curtains.",
-      "OC": 8,
-      "OC_reason": "The plan is divided by room, with each agent assigned tasks within a specific room, suggesting a distributed approach. There is no indication of cross-room knowledge or coordination, which aligns with a distributed system. However, the lack of explicit communication between agents slightly reduces the score.",
+      "PF_reason": "The plan assigns tasks to agents that are not always aligned with their capabilities. For example, R1 is tasked with turning off the coffee maker, stove, and closing the microwave door, but it is unclear if these tasks involve light objects that R1 can handle. Similarly, R5 is tasked with tidying the desk, which may involve organizing items that are not specified as light objects. The plan does not fully utilize the capabilities of mobile agents for navigation and heavy object handling.",
+      "OC": 3,
+      "OC_reason": "The plan appears to be centrally coordinated, with no explicit communication or coordination between agents. Each agent seems to have knowledge of tasks in different rooms without any information exchange, which violates the distributed setting constraint. There are no ASK_HELP/HELP/PASS/RECEIVE-style requests, indicating a lack of adherence to the information constraint of a distributed system.",
       "SC": 7,
-      "SC_reason": "The steps within each room are logically ordered, with actions like turning off lights and closing curtains following a coherent sequence. However, the plan does not address potential dependencies or interactions between agents, such as ensuring all tasks are completed before bedtime.",
-      "final_score": 6.65
+      "SC_reason": "The plan is sequentially coherent, with tasks assigned in a logical order and within the given time frame. Each agent has a clear set of tasks to complete within specific time intervals. However, the lack of specificity in some tasks and the absence of explicit coordination between agents leave some actions unresolved, such as ensuring all appliances are turned off without knowing which ones are involved.",
+      "final_score": 4.9
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -77,44 +87,64 @@
       "mentioned_objects": [
         "coffeemaker",
         "stove",
+        "microwave",
+        "door",
         "light",
-        "cabinet door",
-        "ceiling light",
-        "floor lamp",
-        "lamp",
+        "cabinet",
+        "ceilinglight",
+        "floorlamp",
+        "laptop",
+        "table",
+        "tv",
+        "tablelamp",
         "curtain",
-        "window blind",
-        "shower curtain"
+        "lamp",
+        "dresser",
+        "windowblind",
+        "desk",
+        "bathroomlight",
+        "showercurtain",
+        "towel"
       ],
       "grounded_objects": [
-        "cabinet door",
-        "floor lamp",
-        "lamp",
+        "microwave",
+        "cabinet",
+        "floorlamp",
+        "laptop",
+        "table",
         "curtain",
-        "shower curtain"
+        "lamp",
+        "dresser",
+        "desk",
+        "showercurtain",
+        "towel"
       ],
       "hallucinated_objects": [
         "coffeemaker",
         "stove",
+        "door",
         "light",
-        "ceiling light",
-        "window blind"
+        "ceilinglight",
+        "tv",
+        "tablelamp",
+        "windowblind",
+        "bathroomlight"
       ],
-      "grounding_rate": 0.5
+      "grounding_rate": 0.55
     }
   },
   "lamma_p": {
     "name": "LaMMA-P",
     "track_a_llm_judge": {
-      "TF": 5,
-      "TF_reason": "The plan partially achieves the task's goal by addressing lighting, curtains, doors, and thermostat settings. However, it lacks details on other potential bedtime preparations such as securing windows, ensuring appliances are off, or preparing bedrooms.",
-      "PF": 8,
-      "PF_reason": "The actions are feasible given the agents' capabilities. R4 and R6 can navigate and perform the tasks assigned to them. However, the plan does not utilize all available agents, which could improve efficiency.",
-      "OC": 4,
-      "OC_reason": "The plan does not demonstrate observability consistency as it assumes R4 and R6 have knowledge of all lights, curtains, doors, and the thermostat without explicit communication or requests for information from other agents. This suggests a centralized knowledge rather than a distributed system.",
-      "SC": 6,
-      "SC_reason": "The step ordering is logically correct, with actions that follow a reasonable sequence for preparing a house for bedtime. However, the plan lacks a fully resolved conclusion as it does not cover all aspects of bedtime preparation, leaving potential tasks unaddressed.",
-      "final_score": 5.4
+      "TF": 4,
+      "TF_reason": "The plan attempts to achieve the task of getting the house ready for bedtime by switching off lights, closing windows and curtains, locking doors, and organizing items. However, it lacks specificity regarding which items are being handled and their locations. Additionally, the plan does not clearly state if all necessary actions for bedtime preparation are covered, such as ensuring all rooms are secure and lights are off.",
+      "PF": 5,
+      "PF_reason": "The plan assigns tasks to agents based on their capabilities, but there are issues with feasibility. For example, R4 and R6 are tasked with switching off lights and locking doors, but it is unclear if they have the capability to perform these specific actions. Additionally, the plan does not account for potential conflicts or dependencies between agents' actions.",
+      "OC": 3,
+      "OC_reason": "The plan does not reflect a true distributed setting. It lacks explicit communication or coordination between agents, which is necessary for a distributed system where each agent only knows its own room. The plan appears to be centrally coordinated, with actions that imply full visibility into all rooms.",
+      "SC": 4,
+      "SC_reason": "The step ordering is somewhat logical, but there are issues with sequential coherence. The plan does not clearly resolve all actions, such as ensuring all items are put in place or all lights are switched off. Additionally, the plan lacks specificity in object references, making it difficult to determine if all necessary actions are completed.",
+      "final_score": 3.85
     },
     "track_b_gc": 0.0,
     "track_b_state_detail": {
@@ -125,34 +155,42 @@
     },
     "object_grounding": {
       "mentioned_objects": [
+        "light switch",
         "light",
+        "window",
         "curtain",
         "door",
-        "thermostat"
+        "item",
+        "bed",
+        "bedroom light"
       ],
       "grounded_objects": [
-        "curtain"
+        "curtain",
+        "bed",
+        "bedroom light"
       ],
       "hallucinated_objects": [
+        "light switch",
         "light",
+        "window",
         "door",
-        "thermostat"
+        "item"
       ],
-      "grounding_rate": 0.25
+      "grounding_rate": 0.375
     }
   },
   "smart_llm": {
     "name": "SMART-LLM",
     "track_a_llm_judge": {
-      "TF": 5,
-      "TF_reason": "The plan partially achieves the task's goal of getting the house ready for bedtime by turning off lights, locking doors, and closing windows. However, it lacks actions related to other typical bedtime preparations such as ensuring all rooms are tidy or setting alarms.",
-      "PF": 6,
-      "PF_reason": "The plan is mostly executable given the agents' capabilities, but there are some actions like turning off lights and locking doors that are not explicitly supported by the capabilities listed for the agents. Additionally, R4 and R6 are performing actions that may not be feasible without specific capabilities.",
-      "OC": 3,
-      "OC_reason": "The plan does not reflect a true distributed setting. It assumes centralized knowledge of the entire house, as R4 and R6 perform actions in multiple rooms without any communication or coordination between agents. There are no explicit messages or requests between robots.",
-      "SC": 4,
-      "SC_reason": "The step ordering is somewhat logical, but the plan lacks coherence in terms of resolving all necessary actions for bedtime preparation. There are no unresolved requests, but the plan does not cover all aspects of the task comprehensively, and some actions are not clearly linked to specific objects or locations.",
-      "final_score": 4.35
+      "TF": 7,
+      "TF_reason": "The plan covers most tasks needed to get the house ready for bedtime, such as turning off lights, closing windows and curtains, locking doors, and setting the alarm clock. However, it does not address tasks like ensuring all appliances are off or checking other security measures, which might be part of a comprehensive bedtime routine.",
+      "PF": 8,
+      "PF_reason": "The plan is mostly feasible given the agents' capabilities. R4 and R6, both Mobile_Light and Mobile_Heavy agents, are appropriately assigned tasks involving navigation and light object manipulation. However, the plan assumes R4 and R6 can switch off lights and lock doors, which are not explicitly listed in their capabilities.",
+      "OC": 4,
+      "OC_reason": "The plan does not reflect a true distributed setting. It appears to be centrally coordinated, with R4 and R6 executing tasks across multiple rooms without any explicit communication or coordination between them. There are no ASK_HELP/HELP/PASS/RECEIVE-style requests, indicating a lack of adherence to information constraints typical of a distributed system.",
+      "SC": 6,
+      "SC_reason": "The step ordering is mostly logical, with tasks grouped by location and type. However, the plan lacks explicit resolution of tasks that might require coordination, such as ensuring all windows and doors are secured. The plan assumes all objects and tasks are available and executable without verification or communication between agents.",
+      "final_score": 6.0
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -160,34 +198,32 @@
       "mentioned_objects": [
         "livingroomlight",
         "kitchenlight",
-        "television",
-        "desklamp",
+        "bathroomlight",
         "livingroomwindow",
         "bedroomwindow",
-        "curtains",
+        "livingroomcurtains",
+        "bedroomcurtains",
         "frontdoor",
         "backdoor",
-        "book",
-        "sidetable",
-        "remotecontrol"
+        "bed",
+        "alarmclock"
       ],
       "grounded_objects": [
-        "television",
-        "desklamp",
         "bedroomwindow",
-        "curtains",
-        "book",
-        "sidetable",
-        "remotecontrol"
+        "livingroomcurtains",
+        "bedroomcurtains",
+        "bed",
+        "alarmclock"
       ],
       "hallucinated_objects": [
         "livingroomlight",
         "kitchenlight",
+        "bathroomlight",
         "livingroomwindow",
         "frontdoor",
         "backdoor"
       ],
-      "grounding_rate": 0.583
+      "grounding_rate": 0.455
     }
   }
 }

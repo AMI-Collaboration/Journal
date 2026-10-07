@@ -15,15 +15,62 @@
   "central": {
     "name": "Centralized",
     "track_a_llm_judge": {
-      "TF": 7,
-      "TF_reason": "The plan generally achieves the task's goal of gathering dishes and bringing them to the kitchen. However, it lacks specificity in some areas, such as the exact number of dishes and their locations, which could lead to incomplete task fulfillment.",
-      "PF": 9,
-      "PF_reason": "The plan is executable given each agent's capabilities. Each robot's actions align with their abilities, such as navigation and object handling. The use of PassReceiveObject is consistent with the agents' configurations.",
+      "TF": 4,
+      "TF_reason": "The plan does not fully achieve the task's goal of doing the dishes and cleaning up the kitchen. While there are actions related to moving objects, there is no explicit mention of washing dishes or ensuring the kitchen is cleaned. The plan focuses more on moving objects between rooms rather than cleaning or organizing the kitchen.",
+      "PF": 7,
+      "PF_reason": "The plan is mostly executable given each agent's capabilities. However, there are some issues, such as R2's actions of moving objects to the table, which do not directly contribute to cleaning the kitchen. Additionally, the plan does not specify how R6 and R8 will pass collected items to the kitchen, which could be problematic.",
       "OC": 5,
-      "OC_reason": "The plan assumes some level of centralized knowledge, as robots are aware of each other's locations and actions without explicit communication. This reduces the observability consistency in a distributed setting.",
-      "SC": 8,
-      "SC_reason": "The step ordering is mostly coherent, with logical sequences of actions. However, there are some assumptions about object locations and robot interactions that are not fully resolved, such as waiting for other robots without explicit communication.",
-      "final_score": 6.85
+      "OC_reason": "The plan lacks explicit communication between agents about the state of different rooms. Actions are taken based on assumptions about object locations without clear communication or requests for information, suggesting a centralized knowledge rather than a distributed system.",
+      "SC": 6,
+      "SC_reason": "The step ordering is mostly logical, but the plan does not reach a fully resolved conclusion. There are unresolved actions, such as R6 and R8's collection of items without clear instructions on how these items are integrated into the kitchen cleanup. The plan lacks a clear endpoint where the task of cleaning the kitchen is completed.",
+      "final_score": 5.25
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": {
+      "mentioned_objects": [
+        "fork",
+        "spoon",
+        "tomato",
+        "potato",
+        "paper",
+        "box",
+        "magazine",
+        "bowl",
+        "remote",
+        "soap",
+        "spray bottle"
+      ],
+      "grounded_objects": [
+        "fork",
+        "spoon",
+        "tomato",
+        "potato",
+        "paper",
+        "box",
+        "bowl",
+        "remote",
+        "soap",
+        "spray bottle"
+      ],
+      "hallucinated_objects": [
+        "magazine"
+      ],
+      "grounding_rate": 0.909
+    }
+  },
+  "independent": {
+    "name": "Independent",
+    "track_a_llm_judge": {
+      "TF": 5,
+      "TF_reason": "The plan partially achieves the task's goal of doing the dishes and cleaning the kitchen. However, there is redundancy in actions (e.g., R1 and R2 both handling dishes) and some actions are vague or incomplete (e.g., R4's actions lack specificity). The plan does not clearly address bringing back items that belong in the kitchen.",
+      "PF": 7,
+      "PF_reason": "Most actions are executable given the agents' capabilities. However, there are some ambiguities, such as R5's action of passing a bowl without a clear recipient, and R4's vague actions. The plan assumes certain objects are available without evidence.",
+      "OC": 4,
+      "OC_reason": "The plan does not respect the distributed nature of the system. It appears to be centrally planned with full visibility, as there are no explicit communication or coordination steps between agents, and actions are taken based on assumed knowledge of other rooms.",
+      "SC": 6,
+      "SC_reason": "The step ordering is mostly logical, but there are unresolved actions, such as R5's passing action without a recipient and R4's vague actions. The plan lacks explicit coordination, leading to potential conflicts or inefficiencies.",
+      "final_score": 5.2
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -31,76 +78,52 @@
       "mentioned_objects": [
         "dish",
         "counter",
+        "sink",
+        "dishsoap",
+        "trashcan",
+        "paper",
         "table",
+        "box",
+        "shelf",
+        "item",
+        "floor",
         "bowl",
-        "desk",
-        "sink"
+        "plate",
+        "spraybottle"
       ],
       "grounded_objects": [
         "dish",
+        "sink",
+        "paper",
         "table",
+        "box",
+        "shelf",
+        "floor",
         "bowl",
-        "desk",
-        "sink"
+        "plate",
+        "spraybottle"
       ],
       "hallucinated_objects": [
-        "counter"
+        "counter",
+        "dishsoap",
+        "trashcan",
+        "item"
       ],
-      "grounding_rate": 0.833
-    }
-  },
-  "independent": {
-    "name": "Independent",
-    "track_a_llm_judge": {
-      "TF": 5,
-      "TF_reason": "The plan partially achieves the task's goal by gathering some dishes, but it does not ensure all dishes scattered around the house are collected and brought to the kitchen. R3's action is incomplete as it waits for another robot to collect the box, and R5 only picks up a bowl without further action.",
-      "PF": 8,
-      "PF_reason": "The plan is mostly executable given the agents' capabilities. However, R3's action of passing the box is not completed, and R5 does not specify what to do with the bowl after picking it up.",
-      "OC": 4,
-      "OC_reason": "The plan does not reflect a true distributed setting. There is no explicit communication or coordination between robots, and R3's action implies a centralized knowledge of another robot coming to collect the box.",
-      "SC": 6,
-      "SC_reason": "The step ordering is mostly logical, but the plan does not reach a fully resolved conclusion. R3's action is left hanging without a receiving robot, and R5's action is incomplete as it does not specify the next step after picking up the bowl.",
-      "final_score": 5.4
-    },
-    "track_b_gc": "N/A (설계상 제외)",
-    "track_b_state_detail": "N/A (설계상 제외)",
-    "object_grounding": {
-      "mentioned_objects": [
-        "mug",
-        "pot",
-        "dish",
-        "sink",
-        "box",
-        "coffeecup",
-        "plate",
-        "bowl"
-      ],
-      "grounded_objects": [
-        "mug",
-        "pot",
-        "dish",
-        "sink",
-        "box",
-        "coffeecup",
-        "plate",
-        "bowl"
-      ],
-      "hallucinated_objects": [],
-      "grounding_rate": 1.0
+      "grounding_rate": 0.714
     }
   },
   "lamma_p": {
     "name": "LaMMA-P",
     "track_a_llm_judge": {
-      "TF": 5,
-      "TF_reason": "The plan partially achieves the task's goal by collecting and bringing dishes to the kitchen. However, it lacks specificity in identifying which dishes are in which rooms and does not ensure all dishes are gathered within the 15-minute timeframe.",
-      "PF": 7,
-      "PF_reason": "The plan is mostly executable given the agents' capabilities, but it assumes R3, R4, and R6 can identify and locate dishes without explicit navigation or communication steps, which may not be feasible.",
-      "OC": 4,
-      "OC_reason": "The plan does not reflect a true distributed setting as it lacks explicit communication or coordination between agents. It assumes agents can identify and locate dishes without sharing information or requests.",
-      "SC": 6,
-      "SC_reason": "The step ordering is mostly logical, but the plan does not fully resolve as it lacks explicit communication or coordination steps to ensure all dishes are collected and placed in the kitchen. The conclusion is not fully resolved as it assumes R3 can place all dishes without receiving them from R4 and R6.",
-      "final_score": 5.2
+      "TF": 6,
+      "TF_reason": "The plan partially achieves the task's goal. While it includes cleaning the kitchen and returning items, it does not specify which items are being returned or how the dishes are being done. The plan lacks detail on the specific objects involved, which affects task fulfillment.",
+      "PF": 8,
+      "PF_reason": "The plan is mostly executable given the agents' capabilities. R4 and R6 can navigate and pick up objects, and R3 can clean surfaces and appliances. However, R6 doing the dishes might be challenging without specifying how it handles the task, given its capabilities.",
+      "OC": 5,
+      "OC_reason": "The plan does not explicitly show communication or coordination between agents, which is necessary for a distributed setting. It assumes R4 and R6 can identify and gather items without any communication or information sharing, which is inconsistent with a true distributed system.",
+      "SC": 7,
+      "SC_reason": "The step ordering is mostly logical, with identification, gathering, and returning of items in sequence. However, the plan lacks specific details on the items and their locations, leading to potential unresolved actions. The conclusion is not fully resolved due to the lack of detail on the dishwashing process.",
+      "final_score": 6.2
     },
     "track_b_gc": 0.0,
     "track_b_state_detail": {
@@ -112,33 +135,34 @@
     },
     "object_grounding": {
       "mentioned_objects": [
-        "dish",
-        "plate",
-        "fork",
-        "spoon"
+        "item",
+        "surface",
+        "appliance",
+        "dish"
       ],
       "grounded_objects": [
-        "dish",
-        "plate",
-        "fork",
-        "spoon"
+        "dish"
       ],
-      "hallucinated_objects": [],
-      "grounding_rate": 1.0
+      "hallucinated_objects": [
+        "item",
+        "surface",
+        "appliance"
+      ],
+      "grounding_rate": 0.25
     }
   },
   "smart_llm": {
     "name": "SMART-LLM",
     "track_a_llm_judge": {
-      "TF": 6,
-      "TF_reason": "The plan partially fulfills the task by gathering some dishes and bringing them to the kitchen. However, it does not specify gathering all dishes scattered around the house, as only a plate, cup, bowl, and mug are mentioned. There is no indication that these are all the dishes present.",
-      "PF": 9,
-      "PF_reason": "The plan is feasible given the agents' capabilities. R4 and R6 are mobile and can navigate to pick up light objects, while R3 can also pick up light objects. The actions are within the capabilities of the assigned agents.",
+      "TF": 7,
+      "TF_reason": "The plan addresses the task of doing the dishes and cleaning up the kitchen by collecting, washing, drying, and storing dishes. However, it does not explicitly mention bringing back items that belong in the kitchen, which is part of the task goal.",
+      "PF": 8,
+      "PF_reason": "The plan is mostly feasible given the agents' capabilities. R6, a Mobile_Heavy agent, is used for washing dishes, which is not explicitly listed in its capabilities, but it can handle heavy objects, implying it might manage washing. The rest of the tasks align well with the agents' capabilities.",
       "OC": 4,
-      "OC_reason": "The plan does not reflect a true distributed setting. There is no evidence of communication or coordination between agents, and it seems to assume centralized knowledge of object locations without explicit information sharing.",
-      "SC": 7,
-      "SC_reason": "The step ordering is logically correct, and each action follows a coherent sequence. However, the plan does not reach a fully resolved conclusion as it does not confirm that all dishes have been gathered, leaving the task potentially incomplete.",
-      "final_score": 6.05
+      "OC_reason": "The plan does not reflect a distributed setting as it lacks explicit communication or coordination between agents. It assumes centralized knowledge of tasks and object locations, which violates the information constraint of a distributed system.",
+      "SC": 6,
+      "SC_reason": "The step ordering is mostly logical, with collection, washing, and storing in sequence. However, the plan has overlapping time slots (10-15 min) for different tasks, which could lead to confusion. Additionally, the plan does not explicitly resolve the task of returning items to the kitchen.",
+      "final_score": 6.0
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -146,20 +170,27 @@
       "mentioned_objects": [
         "plate",
         "cup",
-        "countertop",
         "bowl",
-        "mug"
+        "sink",
+        "cabinet",
+        "fork",
+        "drawer",
+        "knife",
+        "spoon"
       ],
       "grounded_objects": [
         "plate",
         "cup",
         "bowl",
-        "mug"
+        "sink",
+        "cabinet",
+        "fork",
+        "drawer",
+        "knife",
+        "spoon"
       ],
-      "hallucinated_objects": [
-        "countertop"
-      ],
-      "grounding_rate": 0.8
+      "hallucinated_objects": [],
+      "grounding_rate": 1.0
     }
   }
 }

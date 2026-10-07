@@ -5,10 +5,10 @@
 | 방법 | TF | PF | OC | SC | Final |
 |---|---|---|---|---|---|
 | Ours (P2P) | - | - | - | - | N/A |
-| Centralized | 3 | 5 | 4 | 4 | 3.9 |
-| Independent | 5 | 4 | 3 | 6 | 4.25 |
-| LaMMA-P | 6 | 8 | 5 | 7 | 6.2 |
-| SMART-LLM | 5 | 8 | 4 | 6 | 5.4 |
+| Centralized | 3 | 6 | 4 | 5 | 4.25 |
+| Independent | 6 | 8 | 4 | 7 | 5.85 |
+| LaMMA-P | 5 | 7 | 3 | 4 | 4.55 |
+| SMART-LLM | 5 | 7 | 3 | 6 | 4.85 |
 
 ## Track B — GC (ours, LaMMA-P만)
 
@@ -25,7 +25,7 @@
 | 방법 | Grounding Rate | Hallucinated |
 |---|---|---|
 | Ours (P2P) | N/A | N/A |
-| Centralized | 0.5 | object, metal rack, trash bin |
-| Independent | 0.5 | window, dishwasher, window blind, light |
-| LaMMA-P | 0.0 | window, loose object, light object, door, heavy object |
-| SMART-LLM | 0.0 | window, door |
+| Centralized | 1.0 | 없음 |
+| Independent | 0.25 | window, cabinet door, window blind |
+| LaMMA-P | 0.0 | window, door, object, appliance |
+| SMART-LLM | 0.0 | window, frontdoor, backdoor, sidedoor, vent, skylight |

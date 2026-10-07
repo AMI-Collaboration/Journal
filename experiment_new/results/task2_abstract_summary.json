@@ -14,51 +14,14 @@
   "central": {
     "name": "Centralized",
     "track_a_llm_judge": {
-      "TF": 4,
-      "TF_reason": "The plan does not fully achieve the task's goal of getting the bathroom ready for a shower. It lacks specific actions to ensure all necessary items for a shower are present, such as towels, shampoo, or ensuring the water is at the right temperature. The plan also assumes the presence of a mug as a necessary item without justification.",
-      "PF": 7,
-      "PF_reason": "The plan is mostly executable given the agents' capabilities, but there are some issues. R1's action of picking up a mug from the desk is not clearly linked to the task of preparing the bathroom for a shower. The plan does not specify how R2 assists in setting up the bathroom, which could lead to execution issues.",
-      "OC": 5,
-      "OC_reason": "The plan partially respects the distributed setting. R1 and R2 have a clear interaction, but R3's actions assume knowledge of the bathroom's state without explicit communication. R4's actions also assume knowledge of heavy objects without prior information.",
-      "SC": 6,
-      "SC_reason": "The step ordering is mostly logical, but there are unresolved actions. R2's role in setting up the bathroom is vague, and R3's assistance to R4 is not clearly defined. The plan does not conclude with a clear indication that the bathroom is ready for a shower.",
-      "final_score": 5.25
-    },
-    "track_b_gc": "N/A (설계상 제외)",
-    "track_b_state_detail": "N/A (설계상 제외)",
-    "object_grounding": {
-      "mentioned_objects": [
-        "mug",
-        "desk",
-        "sink",
-        "soap bottle",
-        "bath mat",
-        "bathtub"
-      ],
-      "grounded_objects": [
-        "mug",
-        "desk",
-        "sink",
-        "soap bottle"
-      ],
-      "hallucinated_objects": [
-        "bath mat",
-        "bathtub"
-      ],
-      "grounding_rate": 0.667
-    }
-  },
-  "independent": {
-    "name": "Independent",
-    "track_a_llm_judge": {
       "TF": 5,
-      "TF_reason": "The plan partially achieves the task's goal. The shower is turned on, and the bath mat is placed, but there is no confirmation that the towel reaches the bathroom. R1's action of passing the towel is contingent on another robot coming to the bedroom, which is not guaranteed.",
+      "TF_reason": "The plan partially achieves the task's goal by preparing the bathroom with towels, soap, and shampoo. However, there are redundancies and potential misplacements, such as R2 and R3 both handling towels without clear necessity, and R4's actions overlap with R3's without clear coordination.",
       "PF": 7,
-      "PF_reason": "The plan is mostly executable given the agents' capabilities. However, R2's action of turning off the bedroom light is not aligned with the task of preparing the bathroom for a shower. R1's action of passing the towel is feasible but depends on coordination not explicitly stated.",
+      "PF_reason": "The plan is mostly executable given the agents' capabilities, but there are issues such as R1 passing a towel to R2 without a clear need, and R4's actions could be redundant with R3's. The capabilities of each robot are respected, but the plan could be optimized.",
       "OC": 4,
-      "OC_reason": "The plan lacks explicit communication between robots, especially for the towel transfer. R1 assumes another robot will come to the bedroom without any communication or request, indicating a centralized knowledge assumption.",
+      "OC_reason": "The plan lacks explicit communication between agents, leading to potential overlaps and inefficiencies. R2 and R3 both handle towels without coordination, and R4's actions seem to assume knowledge of other agents' actions without explicit communication.",
       "SC": 6,
-      "SC_reason": "The step ordering is mostly logical, but the plan does not reach a fully resolved conclusion. The towel transfer is left unresolved, and R2's action is unrelated to the task. There is no explicit coordination or confirmation of task completion.",
+      "SC_reason": "The step ordering is mostly logical, but there are redundancies and potential conflicts, such as multiple agents handling towels and soap without clear coordination. The plan reaches a conclusion, but with inefficiencies and potential overlaps in actions.",
       "final_score": 5.2
     },
     "track_b_gc": "N/A (설계상 제외)",
@@ -66,39 +29,90 @@
     "object_grounding": {
       "mentioned_objects": [
         "towel",
+        "shelf",
         "desk",
-        "light",
-        "shower",
-        "curtain",
-        "mat",
-        "tub"
+        "bathtub",
+        "rack",
+        "sink",
+        "soap",
+        "shampoo",
+        "mat"
       ],
       "grounded_objects": [
         "towel",
         "desk",
-        "shower",
-        "curtain"
+        "sink",
+        "soap"
       ],
       "hallucinated_objects": [
-        "light",
-        "mat",
-        "tub"
+        "shelf",
+        "bathtub",
+        "rack",
+        "shampoo",
+        "mat"
       ],
-      "grounding_rate": 0.571
+      "grounding_rate": 0.444
+    }
+  },
+  "independent": {
+    "name": "Independent",
+    "track_a_llm_judge": {
+      "TF": 5,
+      "TF_reason": "The plan partially achieves the task's goal. It includes actions to prepare the bathroom, such as filling the tub, placing the bath mat, and ensuring soap and shampoo are accessible. However, there is redundancy in actions (e.g., multiple agents handling the towel and bath mat) and no clear resolution on which agent successfully completes each task.",
+      "PF": 4,
+      "PF_reason": "The plan is not fully executable given the agents' capabilities. R1 and R2 both attempt to pick up the towel, which is unnecessary and inefficient. R3 and R4 have overlapping tasks, such as placing the bath mat and ensuring soap and shampoo accessibility, which could lead to conflicts.",
+      "OC": 3,
+      "OC_reason": "The plan does not reflect a true distributed setting. There is no evidence of communication or coordination between agents, and actions are taken without explicit knowledge sharing. The plan assumes centralized knowledge of the environment.",
+      "SC": 4,
+      "SC_reason": "The step ordering lacks coherence due to redundant and conflicting actions. There is no clear resolution of tasks, such as which agent successfully places the bath mat or handles the towel. The plan does not ensure all tasks are completed without overlap or conflict.",
+      "final_score": 3.95
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": {
+      "mentioned_objects": [
+        "towel",
+        "chair",
+        "bathtub",
+        "faucet",
+        "tub",
+        "bathmat",
+        "soap",
+        "shampoo",
+        "sink",
+        "showercurtain",
+        "shelf"
+      ],
+      "grounded_objects": [
+        "towel",
+        "chair",
+        "faucet",
+        "soap",
+        "sink",
+        "showercurtain"
+      ],
+      "hallucinated_objects": [
+        "bathtub",
+        "tub",
+        "bathmat",
+        "shampoo",
+        "shelf"
+      ],
+      "grounding_rate": 0.545
     }
   },
   "lamma_p": {
     "name": "LaMMA-P",
     "track_a_llm_judge": {
-      "TF": 4,
-      "TF_reason": "The plan partially achieves the task's goal. It involves turning on the shower and placing a towel on the rack, but it does not ensure soap and shampoo are available in the bathroom. Additionally, the plan does not address the need for other shower essentials like a bath mat or ensuring the water temperature is appropriate.",
-      "PF": 6,
-      "PF_reason": "The plan is mostly executable given the agents' capabilities, but there are issues. R3 is tasked with turning on the shower and checking soap and shampoo availability, which is feasible. However, R4's task of cleaning the bathroom floor is not within its listed capabilities. Additionally, R3's actions in Step 1 are contradictory as it cannot be in two places at once.",
-      "OC": 3,
-      "OC_reason": "The plan does not reflect a true distributed setting. There is no evidence of communication or coordination between agents, and actions are taken without explicit requests or messages. The plan assumes centralized knowledge of the environment, which violates the information constraint of a distributed system.",
+      "TF": 6,
+      "TF_reason": "The plan partially fulfills the task by preparing the bathroom with a clean bathtub, running water, and providing a towel and soap. However, it lacks details on ensuring the water temperature is appropriate and does not mention any personal items like shampoo or a bath mat.",
+      "PF": 7,
+      "PF_reason": "The plan is mostly feasible given the agents' capabilities. R4 can handle the bathtub tasks, and R3 can transport light objects like towels and soap. However, R1's task of lighting candles is not feasible as it lacks the capability to light objects.",
+      "OC": 4,
+      "OC_reason": "The plan does not reflect a true distributed setting. There is no evidence of communication or coordination between agents, and actions are taken without explicit knowledge sharing, such as R3 knowing where the towel and soap are located.",
       "SC": 5,
-      "SC_reason": "The step ordering is mostly logical, but there are unresolved issues. R3's simultaneous actions in Step 1 are not coherent, and the plan does not conclude with a fully prepared bathroom. The absence of explicit communication between agents leaves potential dependencies unresolved.",
-      "final_score": 4.2
+      "SC_reason": "The sequence of actions is mostly coherent, but there are unresolved issues such as R1's inability to light candles and the lack of communication between agents. The plan does not fully resolve the task as it leaves out important details like water temperature and additional bathing items.",
+      "final_score": 5.35
     },
     "track_b_gc": 0.0,
     "track_b_state_detail": {
@@ -109,61 +123,57 @@
     },
     "object_grounding": {
       "mentioned_objects": [
-        "shower",
+        "bathtub",
+        "faucet",
         "towel",
         "soap",
-        "shampoo",
-        "floor",
-        "rack"
+        "light switch",
+        "candle"
       ],
       "grounded_objects": [
-        "shower",
+        "faucet",
         "towel",
-        "soap"
+        "soap",
+        "candle"
       ],
       "hallucinated_objects": [
-        "shampoo",
-        "floor",
-        "rack"
+        "bathtub",
+        "light switch"
       ],
-      "grounding_rate": 0.5
+      "grounding_rate": 0.667
     }
   },
   "smart_llm": {
     "name": "SMART-LLM",
     "track_a_llm_judge": {
-      "TF": 4,
-      "TF_reason": "The plan partially achieves the task's goal by preparing the shower and checking for necessary items. However, it does not ensure the availability of soap, shampoo, and towel if they are missing, nor does it involve any agent in fetching these items if needed.",
-      "PF": 6,
-      "PF_reason": "The plan is mostly executable given R3's capabilities, but it does not utilize the other agents (R1, R2, R4) who could assist in fetching or moving items if they are not available in the bathroom.",
-      "OC": 3,
-      "OC_reason": "The plan assumes R3 has full knowledge of the bathroom's contents without any communication or coordination with other agents, which violates the distributed setting constraint.",
-      "SC": 5,
-      "SC_reason": "The steps are logically ordered, but the plan does not resolve the potential issue of missing items. It ends without ensuring all necessary items are present and ready for use.",
-      "final_score": 4.2
+      "TF": 7,
+      "TF_reason": "The plan achieves the task's goal of preparing the bathroom for a bath by filling the bathtub and providing soap and a towel. However, it does not specify if the water temperature is adjusted, which might be necessary for a complete task fulfillment.",
+      "PF": 8,
+      "PF_reason": "The plan is mostly executable given the agents' capabilities. R4 can handle the faucet operations, and R3 can navigate and handle light objects like soap and a towel. However, R4's ability to 'open' and 'switch on' the faucet is assumed without explicit capability details.",
+      "OC": 5,
+      "OC_reason": "The plan does not explicitly show communication or coordination between agents, which is necessary in a distributed setting. It assumes centralized knowledge of object locations and tasks without explicit messaging or requests between agents.",
+      "SC": 8,
+      "SC_reason": "The step ordering is logically correct, and the plan reaches a resolved conclusion with all necessary items placed near the bathtub. However, the plan could be improved by ensuring all actions are explicitly linked to the task's completion, such as confirming the water temperature.",
+      "final_score": 6.65
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
     "object_grounding": {
       "mentioned_objects": [
-        "shower curtain",
-        "shower",
-        "soap",
-        "shampoo",
-        "towel",
-        "light"
+        "bathtub",
+        "faucet",
+        "soap bar",
+        "towel"
       ],
       "grounded_objects": [
-        "shower curtain",
-        "shower",
-        "soap",
+        "faucet",
+        "soap bar",
         "towel"
       ],
       "hallucinated_objects": [
-        "shampoo",
-        "light"
+        "bathtub"
       ],
-      "grounding_rate": 0.667
+      "grounding_rate": 0.75
     }
   }
 }

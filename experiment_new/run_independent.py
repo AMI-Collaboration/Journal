@@ -80,11 +80,16 @@ capability:
   image and concluded there is truly nothing relevant to the task.
 
 ## Output Format
-[{label} - {info['room_type']}]
-1. action (name a concrete object you can see in the image)
-2. action
+If task has a time limit, use blocks spanning the FULL duration (e.g. 30 min
+task -> [0-5 min]...[25-30 min], not just the first 10 min). Otherwise use
+[Step N].
 
-Only output "[{label} - No action needed]" if truly nothing applies.
+[0-5 min]  (or [Step 1])
+- R<n> <action>  (r<n>_s<step>)
+
+Rules:
+- Step number resets per robot, starting at 1
+- No tags like [LOCAL]/[PASS]/[HELP]
 """
     content_blocks = [{"type": "text", "text": prompt_text}]
     for img_path in info["images"]:

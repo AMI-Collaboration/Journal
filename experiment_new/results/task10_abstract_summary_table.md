@@ -5,10 +5,10 @@
 | 방법 | TF | PF | OC | SC | Final |
 |---|---|---|---|---|---|
 | Ours (P2P) | - | - | - | - | N/A |
-| Centralized | 7 | 9 | 5 | 8 | 6.85 |
-| Independent | 5 | 8 | 4 | 6 | 5.4 |
-| LaMMA-P | 5 | 7 | 4 | 6 | 5.2 |
-| SMART-LLM | 6 | 9 | 4 | 7 | 6.05 |
+| Centralized | 4 | 7 | 5 | 6 | 5.25 |
+| Independent | 5 | 7 | 4 | 6 | 5.2 |
+| LaMMA-P | 6 | 8 | 5 | 7 | 6.2 |
+| SMART-LLM | 7 | 8 | 4 | 6 | 6.0 |
 
 ## Track B — GC (ours, LaMMA-P만)
 
@@ -25,7 +25,7 @@
 | 방법 | Grounding Rate | Hallucinated |
 |---|---|---|
 | Ours (P2P) | N/A | N/A |
-| Centralized | 0.833 | counter |
-| Independent | 1.0 | 없음 |
-| LaMMA-P | 1.0 | 없음 |
-| SMART-LLM | 0.8 | countertop |
+| Centralized | 0.909 | magazine |
+| Independent | 0.714 | counter, dishsoap, trashcan, item |
+| LaMMA-P | 0.25 | item, surface, appliance |
+| SMART-LLM | 1.0 | 없음 |

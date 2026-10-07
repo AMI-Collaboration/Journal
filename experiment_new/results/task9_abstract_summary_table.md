@@ -5,10 +5,10 @@
 | 방법 | TF | PF | OC | SC | Final |
 |---|---|---|---|---|---|
 | Ours (P2P) | - | - | - | - | N/A |
-| Centralized | 5 | 7 | 4 | 6 | 5.2 |
-| Independent | 6 | 5 | 8 | 7 | 6.65 |
-| LaMMA-P | 5 | 8 | 4 | 6 | 5.4 |
-| SMART-LLM | 5 | 6 | 3 | 4 | 4.35 |
+| Centralized | 4 | 7 | 3 | 5 | 4.4 |
+| Independent | 6 | 5 | 3 | 7 | 4.9 |
+| LaMMA-P | 4 | 5 | 3 | 4 | 3.85 |
+| SMART-LLM | 7 | 8 | 4 | 6 | 6.0 |
 
 ## Track B — GC (ours, LaMMA-P만)
 
@@ -25,7 +25,7 @@
 | 방법 | Grounding Rate | Hallucinated |
 |---|---|---|
 | Ours (P2P) | N/A | N/A |
-| Centralized | 0.909 | door |
-| Independent | 0.5 | coffeemaker, stove, light, ceiling light, window blind |
-| LaMMA-P | 0.25 | light, door, thermostat |
-| SMART-LLM | 0.583 | livingroomlight, kitchenlight, livingroomwindow, frontdoor, backdoor |
+| Centralized | 0.688 | decoration, trash can, toothbrush, toothpaste, laundry basket |
+| Independent | 0.55 | coffeemaker, stove, door, light, ceilinglight, tv, tablelamp, windowblind, bathroomlight |
+| LaMMA-P | 0.375 | light switch, light, window, door, item |
+| SMART-LLM | 0.455 | livingroomlight, kitchenlight, bathroomlight, livingroomwindow, frontdoor, backdoor |

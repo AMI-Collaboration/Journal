@@ -57,28 +57,20 @@ You are converting a multi-robot task plan into a clean, human-readable Joint Pl
 ## Original Allocation (robot assignment)
 {allocated}
 
-## Your Job
-Rewrite the above into a clean natural-language Joint Plan using EXACTLY this format:
+## Output Format
+If task has a time limit, use blocks spanning the FULL duration (e.g. 30 min
+task -> [0-5 min]...[25-30 min], not just the first 10 min). Otherwise use
+[Step N].
 
-### Joint Plan
-
-[Step 1]
-- [R<n>] [LOCAL or PASS or HELP] <short action description>
-- [R<n>] [LOCAL or PASS or HELP] <short action description>
-
-[Step 2]
-- ...
+[0-5 min]  (or [Step 1])
+- R<n> <action>  (r<n>_s<step>)
 
 Rules:
-- Use robot labels as R1, R2, R3... matching the robot numbering implied by the allocation
-  (robot1 -> R1, robot2 -> R2, etc.)
-- [LOCAL] for actions a robot does by itself in its own room
-- [PASS] for handing an item to another robot
-- [HELP] for assisting another robot with a task (e.g. pushing furniture together)
-- Group actions that happen at the same time into the same [Step N]
-- Keep descriptions short and in plain English (not code, not PDDL)
-- Do not add any explanation outside the Joint Plan format
-- Output ONLY the Joint Plan, starting with "### Joint Plan"
+- Use robot labels R1, R2, R3... matching the allocation (robot1 -> R1, etc.)
+- Step number resets per robot, starting at 1
+- No tags like [LOCAL]/[PASS]/[HELP]
+- Keep descriptions short, plain English (not code/PDDL)
+- Output ONLY the plan, starting with "### Joint Plan"
 """
 
 print(f"Task: {args.task} (method={args.method})")
