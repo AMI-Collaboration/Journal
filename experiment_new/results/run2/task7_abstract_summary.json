@@ -1,0 +1,207 @@
+{
+  "ours_final": {
+    "name": "Ours (CDA)",
+    "track_a_llm_judge": {
+      "TF": 1,
+      "TF_reason": "The plan completely fails to achieve the goal. The 10-minute deadline was missed, and multiple critical openings (kitchen exterior window, large glazed opening, curtain-covered glazed opening, white hinged door) were left unsealed and unlatched.",
+      "PF": 3,
+      "PF_reason": "Mobile_Heavy agents (R5, R6) are assigned fine manipulation tasks such as latching windows and packing towels into gaps, which require capabilities they do not possess. Additionally, the plan relies on requests that were declined.",
+      "OC": 7,
+      "OC_reason": "The plan demonstrates an attempt at distributed coordination through explicit ASK_HELP and RECEIVE requests between agents in different rooms, respecting observability constraints, even though the coordination ultimately failed.",
+      "SC": 2,
+      "SC_reason": "The plan is highly incoherent sequentially. It leaves numerous unresolved requests hanging, results in a cascade of blocked actions, and fails to complete within the required time limit.",
+      "final_score": 3.65
+    },
+    "track_b_gc": 0.0,
+    "track_b_state_detail": {
+      "A1_windows_closed": false,
+      "A2_doors_closed": false,
+      "A3_curtains_closed": false,
+      "A4_outdoor_items_secured": false
+    },
+    "object_grounding": {
+      "mentioned_objects": [
+        "knife",
+        "potted plant",
+        "window",
+        "blanket",
+        "towel",
+        "blind",
+        "cloth",
+        "bottle",
+        "cart",
+        "dish towel",
+        "mat",
+        "curtain",
+        "sheet",
+        "pillow",
+        "door"
+      ],
+      "grounded_objects": [
+        "knife",
+        "potted plant",
+        "towel",
+        "cloth",
+        "bottle",
+        "dish towel",
+        "mat",
+        "curtain",
+        "pillow"
+      ],
+      "hallucinated_objects": [
+        "window",
+        "blanket",
+        "blind",
+        "cart",
+        "sheet",
+        "door"
+      ],
+      "grounding_rate": 0.6
+    }
+  },
+  "central": {
+    "name": "Centralized",
+    "track_a_llm_judge": {
+      "TF": 2,
+      "TF_reason": "The plan fails to complete the task within the 10-minute time limit, with several agents (R2, R5) scheduling actions up to 25 minutes. Additionally, using items like a cup, laptop, or dish sponge to 'seal' a house is nonsensical.",
+      "PF": 2,
+      "PF_reason": "There are multiple feasibility issues: R1 and R3 attempt to pass objects to R2 and R4, but R2 and R4 never execute corresponding receive actions. Furthermore, agents attempt to use 'PassReceiveObject' or 'PickupLightObject' as generic 'seal' actions, which does not align with their actual capabilities.",
+      "OC": 3,
+      "OC_reason": "Agents attempt to interact (e.g., R1 passing to R2, R3 passing to R4) without any prior communication or coordination to establish locations or readiness, violating distributed observability constraints.",
+      "SC": 2,
+      "SC_reason": "The plan suffers from severe scheduling conflicts (e.g., R1 passes to R2 at 5-10 mins, but R2 is busy picking up a sponge during that exact time), unresolved pass actions, and blatant disregard for the 10-minute deadline.",
+      "final_score": 2.35
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": {
+      "mentioned_objects": [
+        "cup",
+        "dish sponge",
+        "laptop",
+        "cushion",
+        "dresser",
+        "bed",
+        "towel rack"
+      ],
+      "grounded_objects": [
+        "cup",
+        "dish sponge",
+        "laptop",
+        "dresser",
+        "bed",
+        "towel rack"
+      ],
+      "hallucinated_objects": [
+        "cushion"
+      ],
+      "grounding_rate": 0.857
+    }
+  },
+  "independent": {
+    "name": "Independent",
+    "track_a_llm_judge": {
+      "TF": 2,
+      "TF_reason": "The plan attempts to address the task by closing windows and curtains, but it relies on vague, high-level instructions ('Close all windows in the kitchen') rather than specific, actionable steps on concrete objects.",
+      "PF": 1,
+      "PF_reason": "None of the agents possess the capability to close windows or curtains (e.g., CloseObject, ToggleObject, PullObject). Furthermore, R1 and R3 are stationary grippers without navigation capabilities, making it impossible for them to move to windows or curtains to interact with them.",
+      "OC": 2,
+      "OC_reason": "The plan is written from a centralized perspective, assigning tasks to all robots across different rooms simultaneously without any explicit communication or discovery.",
+      "SC": 2,
+      "SC_reason": "The plan is merely a list of simultaneous, impossible actions with no logical sequencing, coordination, or detailed execution steps.",
+      "final_score": 1.8
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": {
+      "mentioned_objects": [
+        "window",
+        "light",
+        "curtain",
+        "blind"
+      ],
+      "grounded_objects": [
+        "curtain"
+      ],
+      "hallucinated_objects": [
+        "window",
+        "light",
+        "blind"
+      ],
+      "grounding_rate": 0.25
+    }
+  },
+  "lamma_p": {
+    "name": "LaMMA-P",
+    "track_a_llm_judge": {
+      "TF": 2,
+      "TF_reason": "The plan fails to meet the strict 10-minute deadline, extending to 20 minutes. It also relies entirely on vague, generic references ('a window', 'a loose object') rather than specific objects in the environment.",
+      "PF": 1,
+      "PF_reason": "R3 is a Gripper agent without navigation capabilities ('can_navigate' is missing), yet it is assigned multiple 'goes to' actions which it cannot execute.",
+      "OC": 2,
+      "OC_reason": "The plan is written by a centralized planner with assumed omniscient knowledge of the environment. There is no communication, exploration, or passing of information between agents.",
+      "SC": 1,
+      "SC_reason": "The step ordering is illogical. For example, R4 and R6 go to a window, then go to a door in the first 5 minutes, but then attempt to close the window in the next 5 minutes while presumably standing at the door.",
+      "final_score": 1.65
+    },
+    "track_b_gc": 0.0,
+    "track_b_state_detail": {
+      "A1_windows_closed": false,
+      "A2_doors_closed": false,
+      "A3_curtains_closed": false,
+      "A4_outdoor_items_secured": false
+    },
+    "object_grounding": {
+      "mentioned_objects": [
+        "window",
+        "object",
+        "door",
+        "appliance"
+      ],
+      "grounded_objects": [],
+      "hallucinated_objects": [
+        "window",
+        "object",
+        "door",
+        "appliance"
+      ],
+      "grounding_rate": 0.0
+    }
+  },
+  "smart_llm": {
+    "name": "SMART-LLM",
+    "track_a_llm_judge": {
+      "TF": 5,
+      "TF_reason": "The plan attempts to seal the house by closing and locking all doors, windows, vents, and skylights, which aligns with the goal, but it will fail due to feasibility issues.",
+      "PF": 1,
+      "PF_reason": "R3 is a Gripper agent without the 'can_navigate' capability, so it cannot 'go to' the Vent or Skylight. Additionally, the plan assumes the existence of specific doors and windows without prior exploration.",
+      "OC": 2,
+      "OC_reason": "The plan is highly centralized, assigning specific windows, doors, and vents to robots without any prior exploration or communication to discover these objects.",
+      "SC": 3,
+      "SC_reason": "While the steps are ordered logically for each robot, the inclusion of navigation actions for a stationary Gripper (R3) breaks the sequential coherence and execution of the plan.",
+      "final_score": 2.85
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": {
+      "mentioned_objects": [
+        "window",
+        "frontdoor",
+        "backdoor",
+        "sidedoor",
+        "vent",
+        "skylight"
+      ],
+      "grounded_objects": [],
+      "hallucinated_objects": [
+        "window",
+        "frontdoor",
+        "backdoor",
+        "sidedoor",
+        "vent",
+        "skylight"
+      ],
+      "grounding_rate": 0.0
+    }
+  }
+}

@@ -36,6 +36,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--task", required=True, help="예: task1_abstract")
 parser.add_argument("--gpt-version", default="gpt-4o")
 parser.add_argument("--skip-grounding", action="store_true", help="Object Grounding 검증 생략(비용 절감)")
+parser.add_argument("--run", type=int, default=1, help="실험 반복 회차")
 args = parser.parse_args()
 
 data = load_all()
@@ -56,7 +57,7 @@ judge_client = OpenAI(
     base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
 )
 
-results_dir = os.path.join(HERE, "results")
+results_dir = os.path.join(HERE, "results", f"run{args.run}")
 
 
 def load_result(method):

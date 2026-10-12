@@ -1,0 +1,239 @@
+{
+  "ours_final": {
+    "name": "Ours (CDA)",
+    "track_a_llm_judge": {
+      "TF": 1,
+      "TF_reason": "The plan completely fails to fulfill the task. The 5-minute deadline is missed (taking 15 minutes), the bathtub is never filled with water, and essential preparations like arranging the shower curtain and placing towels are blocked or unresolved.",
+      "PF": 3,
+      "PF_reason": "The plan is poorly aligned with agent capabilities. R3 and R4 attempt to initiate tasks requiring a gripper (like operating bathtub controls) and fail to successfully coordinate with R1, which actually has the Gripper capability but declines the request.",
+      "OC": 7,
+      "OC_reason": "The plan demonstrates an attempt at distributed coordination through explicit ASK_HELP and RECEIVE requests between agents, respecting observability constraints, even though the communication ultimately fails to produce a working plan.",
+      "SC": 1,
+      "SC_reason": "The sequential coherence is extremely poor. The plan is riddled with unresolved requests, blocked actions, and dropped steps, leaving the task in an incomplete and broken state.",
+      "final_score": 3.5
+    },
+    "track_b_gc": 0.0,
+    "track_b_state_detail": {
+      "A1_shower_area_ready": false,
+      "A2_towel_ready": false,
+      "A3_toiletries_ready": false,
+      "A4_bathroom_accessible": false
+    },
+    "object_grounding": {
+      "mentioned_objects": [
+        "bathmat",
+        "wastebasket",
+        "toilet-cleaning tool",
+        "holder",
+        "towel",
+        "soap",
+        "toiletry bottle",
+        "toiletry container",
+        "bathtub",
+        "drain",
+        "controls",
+        "towel or cloth",
+        "appliance",
+        "shower curtain",
+        "towel",
+        "soap dispenser",
+        "sink"
+      ],
+      "grounded_objects": [
+        "toilet-cleaning tool",
+        "towel",
+        "soap",
+        "toiletry bottle",
+        "toiletry container",
+        "towel or cloth",
+        "shower curtain",
+        "towel",
+        "soap dispenser",
+        "sink"
+      ],
+      "hallucinated_objects": [
+        "bathmat",
+        "wastebasket",
+        "holder",
+        "bathtub",
+        "drain",
+        "controls",
+        "appliance"
+      ],
+      "grounding_rate": 0.588
+    }
+  },
+  "central": {
+    "name": "Centralized",
+    "track_a_llm_judge": {
+      "TF": 4,
+      "TF_reason": "The plan attempts to prepare the bathroom by bringing a towel and placing soap/shampoo, but it includes irrelevant actions (like R1 picking up a mug) and relies heavily on vague 'ensure' actions rather than concrete task execution.",
+      "PF": 2,
+      "PF_reason": "The plan fails on feasibility: R2 passes an object to an 'area' rather than an agent, R3 and R4 navigate to specific objects rather than rooms, and many actions ('ensure shower curtain is open/closed', 'adjust bath mat') are not within the agents' defined capabilities.",
+      "OC": 3,
+      "OC_reason": "There is no explicit communication or coordination between the agents. R1 passes a mug to R2, but R2 never acknowledges receiving it and instead picks up a towel. The agents seem to operate with a centralized, omniscient view of the environment.",
+      "SC": 2,
+      "SC_reason": "The sequence is highly incoherent. R1 passes a mug to R2, but R2's steps do not include receiving it. R3 and R4 perform conflicting actions simultaneously (R3 opens the shower curtain while R4 closes it). R2 passes a towel to a room instead of another agent, leaving the action unresolved.",
+      "final_score": 2.95
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": {
+      "mentioned_objects": [
+        "mug",
+        "desk",
+        "towel",
+        "deskchair",
+        "bathtub",
+        "showercurtain",
+        "sink",
+        "soap",
+        "towelrack",
+        "bathmat",
+        "shampoo",
+        "shelf"
+      ],
+      "grounded_objects": [
+        "mug",
+        "desk",
+        "towel",
+        "deskchair",
+        "showercurtain",
+        "sink",
+        "soap",
+        "towelrack"
+      ],
+      "hallucinated_objects": [
+        "bathtub",
+        "bathmat",
+        "shampoo",
+        "shelf"
+      ],
+      "grounding_rate": 0.667
+    }
+  },
+  "independent": {
+    "name": "Independent",
+    "track_a_llm_judge": {
+      "TF": 2,
+      "TF_reason": "The plan attempts to prepare the bathroom, but it relies heavily on vague actions ('ensures', 'checks') and overlapping tasks between agents, failing to concretely achieve the goal.",
+      "PF": 2,
+      "PF_reason": "Multiple actions are physically impossible given the agents' capabilities. R3 attempts to turn on a faucet, but lacks the ToggleObject capability. R4 attempts to pull a shower curtain open, but lacks OpenObject or ToggleObject capabilities.",
+      "OC": 2,
+      "OC_reason": "The plan shows a centralized perspective where all robots simultaneously act on the bathroom without any explicit communication or discovery of the room's state.",
+      "SC": 2,
+      "SC_reason": "The step ordering is highly flawed. R3 and R4 are assigned to do the exact same tasks (placing the bath mat, ensuring soap/shampoo are accessible) simultaneously in the same time block, showing a lack of logical coherence and coordination.",
+      "final_score": 2.0
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": {
+      "mentioned_objects": [
+        "towel",
+        "chair",
+        "desk",
+        "bathtub",
+        "faucet",
+        "tub",
+        "bathmat",
+        "soap",
+        "shampoo",
+        "sink",
+        "showercurtain",
+        "shelf"
+      ],
+      "grounded_objects": [
+        "towel",
+        "chair",
+        "desk",
+        "faucet",
+        "soap",
+        "sink",
+        "showercurtain"
+      ],
+      "hallucinated_objects": [
+        "bathtub",
+        "tub",
+        "bathmat",
+        "shampoo",
+        "shelf"
+      ],
+      "grounding_rate": 0.583
+    }
+  },
+  "lamma_p": {
+    "name": "LaMMA-P",
+    "track_a_llm_judge": {
+      "TF": 8,
+      "TF_reason": "The plan successfully addresses the user's request by preparing the bathtub, providing necessary items like a towel and soap, and setting up the environment (lights and music).",
+      "PF": 2,
+      "PF_reason": "R1 is a Gripper agent without the 'can_navigate' capability, making its assigned actions to go to the light switch and music player physically impossible. Additionally, R3 picks up two objects consecutively (towel and soap) without placing the first one down, which typically violates the carrying capacity of a standard mobile light robot.",
+      "OC": 2,
+      "OC_reason": "The plan is written from a centralized perspective with perfect knowledge of all items and locations. There is no communication or coordination (e.g., messages or requests) between the agents, violating the distributed information constraint.",
+      "SC": 6,
+      "SC_reason": "The sequence of actions is mostly logical, but R4 turns the water faucet on and off in immediate succession, which doesn't allow time for the bathtub to actually fill. R3's sequence of picking up multiple items before dropping them off also presents a logical flaw regarding carrying capacity.",
+      "final_score": 4.4
+    },
+    "track_b_gc": 0.0,
+    "track_b_state_detail": {
+      "A1_shower_area_ready": false,
+      "A2_towel_ready": false,
+      "A3_toiletries_ready": false,
+      "A4_bathroom_accessible": false
+    },
+    "object_grounding": {
+      "mentioned_objects": [
+        "bathtub",
+        "water faucet",
+        "towel",
+        "soap",
+        "light switch",
+        "music player"
+      ],
+      "grounded_objects": [
+        "water faucet",
+        "towel",
+        "soap"
+      ],
+      "hallucinated_objects": [
+        "bathtub",
+        "light switch",
+        "music player"
+      ],
+      "grounding_rate": 0.5
+    }
+  },
+  "smart_llm": {
+    "name": "SMART-LLM",
+    "track_a_llm_judge": {
+      "TF": 9,
+      "TF_reason": "The plan successfully addresses the task by filling the bathtub and gathering necessary bathing items like a soap bar and a towel.",
+      "PF": 2,
+      "PF_reason": "R2 is assigned to open and switch on/off the faucet, but it lacks the ToggleObject or OpenObject capabilities required to perform these actions.",
+      "OC": 2,
+      "OC_reason": "The plan is written from a centralized perspective where robots inherently know the locations of objects and coordinate without any explicit communication or information sharing.",
+      "SC": 9,
+      "SC_reason": "The sequence of actions is logical and well-ordered, with R2 handling the water and R4 gathering the items concurrently.",
+      "final_score": 5.15
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": {
+      "mentioned_objects": [
+        "bathtub",
+        "faucet",
+        "soap bar",
+        "towel"
+      ],
+      "grounded_objects": [
+        "faucet",
+        "soap bar",
+        "towel"
+      ],
+      "hallucinated_objects": [
+        "bathtub"
+      ],
+      "grounding_rate": 0.75
+    }
+  }
+}

@@ -1,0 +1,284 @@
+{
+  "ours_final": {
+    "name": "Ours (CDA)",
+    "track_a_llm_judge": {
+      "TF": 2,
+      "TF_reason": "The plan missed the 20-minute deadline, taking 35 minutes to complete. Additionally, it failed to secure essential isolation room items such as drinking water, disinfectant, and masks due to declined requests.",
+      "PF": 9,
+      "PF_reason": "The agents perform actions that align with their configured capabilities. For example, R5 (Mobile_Heavy) correctly handles heavy objects like dumbbells and pushes furniture.",
+      "OC": 8,
+      "OC_reason": "The plan respects the distributed nature of the system by using explicit PASS, RECEIVE, and ASK_HELP messages to coordinate between agents in different rooms, rather than assuming centralized knowledge.",
+      "SC": 3,
+      "SC_reason": "The sequential coherence is poor. There is a massive synchronization gap where R6 passes items in the 0-5 minute window, but R5 does not receive them until the 25-30 minute window. The plan also ends with several unresolved and blocked requests.",
+      "final_score": 5.65
+    },
+    "track_b_gc": 0.0,
+    "track_b_state_detail": {
+      "A1_isolation_room_clean": false,
+      "A2_bed_ready": false,
+      "A3_hygiene_items_ready": false,
+      "A4_water_ready": false
+    },
+    "object_grounding": {
+      "mentioned_objects": [
+        "dumbbell",
+        "paper towel roll",
+        "pump bottle",
+        "guitar",
+        "floor item",
+        "cardboard box",
+        "fabric item",
+        "shelving cabinet",
+        "chair",
+        "desk",
+        "laptop computer",
+        "desk item",
+        "drawer pedestal",
+        "mattress",
+        "sheet",
+        "pillow",
+        "blanket",
+        "garment",
+        "tissue box",
+        "waste bin",
+        "desk lamp",
+        "mug"
+      ],
+      "grounded_objects": [
+        "dumbbell",
+        "paper towel roll",
+        "cardboard box",
+        "shelving cabinet",
+        "chair",
+        "desk",
+        "laptop computer",
+        "desk item",
+        "drawer pedestal",
+        "pillow",
+        "tissue box",
+        "desk lamp",
+        "mug"
+      ],
+      "hallucinated_objects": [
+        "pump bottle",
+        "guitar",
+        "floor item",
+        "fabric item",
+        "mattress",
+        "sheet",
+        "blanket",
+        "garment",
+        "waste bin"
+      ],
+      "grounding_rate": 0.591
+    }
+  },
+  "central": {
+    "name": "Centralized",
+    "track_a_llm_judge": {
+      "TF": 2,
+      "TF_reason": "The plan fails to logically prepare an isolation room, moving irrelevant objects like a tomato, pan, and vase. It also exceeds the 20-minute time limit (R4 goes up to 30 minutes) and relies heavily on vague, non-committal actions (e.g., R3's 'If there are any objects', R6's 'assist as needed').",
+      "PF": 3,
+      "PF_reason": "There are multiple execution failures. R1 attempts to pass objects to R2, but R2 is busy placing a mug in the isolation room and does not have a receive action. Similarly, R3 attempts to pass to R4, but R4 is navigating elsewhere. Grippers (R1, R3) are assumed to have multiple specific objects within reach without any navigation capabilities.",
+      "OC": 2,
+      "OC_reason": "The plan shows no explicit communication or discovery between agents. Agents magically know the locations of objects and rooms, indicating a centralized planner with full visibility rather than a distributed system.",
+      "SC": 2,
+      "SC_reason": "The sequence is incoherent due to unresolved PassReceiveObject actions (R1 to R2, R3 to R4), exceeding the strict 20-minute time limit, and the inclusion of vague, conditional steps that do not commit to concrete actions.",
+      "final_score": 2.2
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": {
+      "mentioned_objects": [
+        "mug",
+        "pan",
+        "tomato",
+        "blanket",
+        "pillow",
+        "medical supply",
+        "tape",
+        "cloth",
+        "container",
+        "coffee table",
+        "laptop",
+        "dining table",
+        "vase",
+        "bed",
+        "desk",
+        "paper towel roll",
+        "trash bin"
+      ],
+      "grounded_objects": [
+        "mug",
+        "pan",
+        "tomato",
+        "pillow",
+        "cloth",
+        "coffee table",
+        "laptop",
+        "dining table",
+        "vase",
+        "bed",
+        "desk",
+        "paper towel roll"
+      ],
+      "hallucinated_objects": [
+        "blanket",
+        "medical supply",
+        "tape",
+        "container",
+        "trash bin"
+      ],
+      "grounding_rate": 0.706
+    }
+  },
+  "independent": {
+    "name": "Independent",
+    "track_a_llm_judge": {
+      "TF": 1,
+      "TF_reason": "The plan fails to achieve the task. It contains conversational filler indicating the model could not see the environment, leading to completely hallucinated and vague actions ('ensure the kitchen counter is tidy', 'check that the sink area is clear') rather than concrete steps to prepare an isolation room.",
+      "PF": 1,
+      "PF_reason": "The plan assigns numerous actions that are outside the agents' capabilities. For example, Mobile_Light agents (R2, R4) are tasked with turning off lights, turning off the TV, and closing curtains. Gripper agents (R1, R3) are assigned tasks assuming they can reach multiple areas despite lacking navigation capabilities. Mobile_Heavy agents (R5, R6) are tasked with closing windows and wiping down counters.",
+      "OC": 1,
+      "OC_reason": "The plan does not reflect a distributed setting. The model explicitly states it cannot see the images and proceeds to hallucinate objects and layouts for all rooms from a centralized, albeit blind, perspective. There is no communication or coordination between the agents.",
+      "SC": 1,
+      "SC_reason": "The sequential coherence is completely broken by the inclusion of conversational filler ('I'm sorry, but I cannot see the attached image...') in the middle of the plan. Furthermore, the steps are filled with vague, non-committal language ('potential use', 'ensure', 'check') rather than a logical sequence of resolved actions.",
+      "final_score": 1.0
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": {
+      "mentioned_objects": [
+        "kettle",
+        "tomato",
+        "mug",
+        "machine",
+        "bread",
+        "bowl",
+        "sink",
+        "light",
+        "fan",
+        "air conditioning",
+        "magazine",
+        "remote control",
+        "fruit",
+        "glass",
+        "bottle",
+        "tv",
+        "lamp",
+        "curtain",
+        "coffeetable",
+        "bed",
+        "window",
+        "paper towel roll",
+        "counter",
+        "trash bin",
+        "toilet",
+        "toilet paper"
+      ],
+      "grounded_objects": [
+        "kettle",
+        "tomato",
+        "mug",
+        "machine",
+        "bread",
+        "bowl",
+        "sink",
+        "remote control",
+        "glass",
+        "bottle",
+        "lamp",
+        "coffeetable",
+        "bed",
+        "window",
+        "paper towel roll",
+        "toilet",
+        "toilet paper"
+      ],
+      "hallucinated_objects": [
+        "light",
+        "fan",
+        "air conditioning",
+        "magazine",
+        "fruit",
+        "tv",
+        "curtain",
+        "counter",
+        "trash bin"
+      ],
+      "grounding_rate": 0.654
+    }
+  },
+  "lamma_p": {
+    "name": "LaMMA-P",
+    "track_a_llm_judge": {
+      "TF": 2,
+      "TF_reason": "The plan fails to meet the strict 20-minute time constraint, taking 45 minutes instead. Additionally, the plan relies on invalid actions that prevent the goal from being achieved.",
+      "PF": 1,
+      "PF_reason": "R3 is a Gripper without the 'can_navigate' capability, yet it is instructed to move between rooms. R4 is a Mobile_Light robot with limited manipulation capabilities, but it is tasked with complex actions like cleaning, turning on an air purifier, and opening/closing doors.",
+      "OC": 3,
+      "OC_reason": "The plan is written from a centralized perspective with no explicit communication or coordination (e.g., passing messages) between the agents.",
+      "SC": 3,
+      "SC_reason": "While the sequence of steps follows a basic logical progression for preparing a room, it completely ignores the time constraint and assigns impossible tasks to the agents, breaking the coherence of the execution.",
+      "final_score": 2.3
+    },
+    "track_b_gc": 0.0,
+    "track_b_state_detail": {
+      "A1_isolation_room_clean": false,
+      "A2_bed_ready": false,
+      "A3_hygiene_items_ready": false,
+      "A4_water_ready": false
+    },
+    "object_grounding": {
+      "mentioned_objects": [
+        "cleaning supply",
+        "medical supply",
+        "air purifier",
+        "room door"
+      ],
+      "grounded_objects": [],
+      "hallucinated_objects": [
+        "cleaning supply",
+        "medical supply",
+        "air purifier",
+        "room door"
+      ],
+      "grounding_rate": 0.0
+    }
+  },
+  "smart_llm": {
+    "name": "SMART-LLM",
+    "track_a_llm_judge": {
+      "TF": 4,
+      "TF_reason": "The plan addresses the goal of preparing an isolation room by gathering supplies and turning on ventilation, but relies heavily on abstract actions that do not map to the robots' actual capabilities.",
+      "PF": 2,
+      "PF_reason": "The plan includes several actions that are outside the agents' capabilities, such as 'clean the room', 'switch on the ventilation', and 'make the bed'. R4 and R6 do not have capabilities for these specific interactions.",
+      "OC": 3,
+      "OC_reason": "The plan is written from a centralized perspective with full knowledge of the environment and tasks, lacking any explicit communication or coordination between the agents.",
+      "SC": 2,
+      "SC_reason": "The sequential coherence is very poor in the [15-20 min] block, where R6 is assigned 10 distinct actions (including multiple navigations and object manipulations) to complete within a 5-minute window, which is physically impossible.",
+      "final_score": 2.95
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": {
+      "mentioned_objects": [
+        "ventilation",
+        "medicalsupply",
+        "linen",
+        "bed",
+        "communicationdevice"
+      ],
+      "grounded_objects": [
+        "bed"
+      ],
+      "hallucinated_objects": [
+        "ventilation",
+        "medicalsupply",
+        "linen",
+        "communicationdevice"
+      ],
+      "grounding_rate": 0.2
+    }
+  }
+}

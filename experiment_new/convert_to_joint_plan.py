@@ -21,6 +21,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--task", required=True, help="예: task1_abstract")
 parser.add_argument("--method", required=True, choices=["lamma_p", "smart_llm"])
 parser.add_argument("--gpt-version", default="gpt-4o")
+parser.add_argument("--run", type=int, default=1, help="실험 반복 회차")
 args = parser.parse_args()
 
 data = load_all()
@@ -29,7 +30,7 @@ if args.task not in data["tasks"]:
 
 task_text = data["tasks"][args.task]["task"]
 
-result_path = os.path.join(HERE, "results", f"{args.task}_{args.method}_result.json")
+result_path = os.path.join(HERE, "results", f"run{args.run}", f"{args.task}_{args.method}_result.json")
 if not os.path.exists(result_path):
     raise SystemExit(f"{args.method} 결과 파일이 없습니다: {result_path}")
 

@@ -1,0 +1,259 @@
+{
+  "ours_final": {
+    "name": "Ours (CDA)",
+    "track_a_llm_judge": {
+      "TF": 8,
+      "TF_reason": "The plan successfully addresses the task by preparing a snack (sliced bread), clearing a side table, arranging cushions, and setting up a blanket for a comfortable movie experience.",
+      "PF": 7,
+      "PF_reason": "Most actions are feasible. However, 'folding' a blanket and 'arranging' cushions are complex manipulations that go slightly beyond basic 'PickupLightObject' and 'Place' capabilities, though they can be approximated by picking and placing.",
+      "OC": 4,
+      "OC_reason": "There is no explicit communication or request phase where R2 asks for a snack or R1 offers one. The agents act with implicit shared knowledge of the overall plan and each other's states, violating strict distributed observability constraints.",
+      "SC": 5,
+      "SC_reason": "There is a synchronization issue: R1 executes the PASS action in the [0-5 min] block, but R2 does not execute the RECEIVE action until the [5-10 min] block. Since R1 cannot navigate, R2 must be present for the handoff, meaning R1 would be stuck waiting or the pass would fail. Additionally, the 'Not covered' section contradicts the plan by claiming the books were not moved, even though r2_s1 explicitly moves them.",
+      "final_score": 5.95
+    },
+    "track_b_gc": 0.0,
+    "track_b_state_detail": {
+      "A1_tv_ready": false,
+      "A2_seating_ready": false,
+      "A3_movie_area_clean": false,
+      "A4_remote_ready": false
+    },
+    "object_grounding": {
+      "mentioned_objects": [
+        "bread",
+        "knife",
+        "book",
+        "paper",
+        "table",
+        "desk",
+        "cabinet",
+        "sofa",
+        "cushion",
+        "pillow",
+        "blanket"
+      ],
+      "grounded_objects": [
+        "bread",
+        "knife",
+        "book",
+        "paper",
+        "table",
+        "desk",
+        "cabinet",
+        "sofa",
+        "pillow"
+      ],
+      "hallucinated_objects": [
+        "cushion",
+        "blanket"
+      ],
+      "grounding_rate": 0.818
+    }
+  },
+  "central": {
+    "name": "Centralized",
+    "track_a_llm_judge": {
+      "TF": 4,
+      "TF_reason": "The plan attempts to set up for a movie by preparing snacks and drinks and rearranging furniture. However, it includes many vague, non-committal actions ('assist further if needed', 'standby mode') and irrelevant tasks (R3 organizing a bedroom).",
+      "PF": 2,
+      "PF_reason": "Several actions violate agent capabilities. R2 attempts to 'place' objects but lacks a PlaceObject capability. R3 attempts complex manipulations ('straighten blankets', 'organize') but only has PickupLightObject. R4 uses invalid actions like 'assess' and 'ensure stable'.",
+      "OC": 3,
+      "OC_reason": "The plan exhibits centralized knowledge. R2 knows to go to the kitchen to receive snacks from R1 without any explicit communication or request being sent. R4's narration acknowledges a lack of visibility but still acts on centralized instructions.",
+      "SC": 2,
+      "SC_reason": "There is a severe temporal mismatch: R1 passes the objects to R2 at 15-20 minutes, but R2 receives them at 5-10 minutes. Additionally, the plan is padded with vague, unresolved steps like 'standby mode' and 'assist if needed'.",
+      "final_score": 2.95
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": {
+      "mentioned_objects": [
+        "tomato",
+        "drink",
+        "coffeemachine",
+        "cup",
+        "snack",
+        "table",
+        "bed",
+        "blanket",
+        "desk",
+        "paper",
+        "item",
+        "trashbin",
+        "door",
+        "furniture"
+      ],
+      "grounded_objects": [
+        "tomato",
+        "coffeemachine",
+        "cup",
+        "table",
+        "bed",
+        "desk",
+        "paper"
+      ],
+      "hallucinated_objects": [
+        "drink",
+        "snack",
+        "blanket",
+        "item",
+        "trashbin",
+        "door",
+        "furniture"
+      ],
+      "grounding_rate": 0.5
+    }
+  },
+  "independent": {
+    "name": "Independent",
+    "track_a_llm_judge": {
+      "TF": 3,
+      "TF_reason": "The plan attempts to set up for a movie by preparing drinks and adjusting the environment, but it relies heavily on vague, non-committal actions ('ensures appliances are off', 'tidies clutter', 'ensures trash bin is not overflowing') rather than concrete, verifiable steps.",
+      "PF": 1,
+      "PF_reason": "The plan completely ignores the agents' actual capabilities. None of the agents have the 'ToggleObject' capability, yet they are instructed to turn on/off TVs, lights, computers, and coffee makers. R1 is a stationary Gripper but is tasked with cleaning the sink area and moving items around the counter.",
+      "OC": 2,
+      "OC_reason": "The plan is written by a centralized planner with omniscient knowledge of the environment. There is no exploration, no communication between agents, and it assumes the exact locations of objects (TV, curtains, coffee maker, lemon) across different rooms without any prior discovery.",
+      "SC": 2,
+      "SC_reason": "The sequence is just a list of independent, often vague actions padded into 5-minute time blocks. There is no logical dependency or coordination between the agents, and many steps are not actionable commands.",
+      "final_score": 2.1
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": {
+      "mentioned_objects": [
+        "coffeemaker",
+        "lemon",
+        "counter",
+        "sink",
+        "dish sponge",
+        "glass",
+        "appliance",
+        "tv",
+        "curtain",
+        "seating area",
+        "lighting",
+        "remote control",
+        "coffeetable",
+        "mobile light",
+        "bed cover",
+        "window",
+        "computer",
+        "chair",
+        "trash bin",
+        "bathroom light"
+      ],
+      "grounded_objects": [
+        "counter",
+        "sink",
+        "dish sponge",
+        "curtain",
+        "remote control",
+        "bed cover",
+        "chair"
+      ],
+      "hallucinated_objects": [
+        "coffeemaker",
+        "lemon",
+        "glass",
+        "appliance",
+        "tv",
+        "seating area",
+        "lighting",
+        "coffeetable",
+        "mobile light",
+        "window",
+        "computer",
+        "trash bin",
+        "bathroom light"
+      ],
+      "grounding_rate": 0.35
+    }
+  },
+  "lamma_p": {
+    "name": "LaMMA-P",
+    "track_a_llm_judge": {
+      "TF": 5,
+      "TF_reason": "The plan conceptually addresses the task by preparing snacks, arranging seating, turning on the TV, and dimming the lights. However, it fails to actually achieve the goal because it relies on impossible actions for the assigned agents.",
+      "PF": 1,
+      "PF_reason": "R1 is a stationary Gripper without the 'can_navigate' capability, yet it is instructed to go to the kitchen and the living room. Additionally, R3 is instructed to turn on the TV, sound system, and lights, but lacks any capability to toggle or manipulate complex electronics (only has PickupLightObject and PassReceiveObject).",
+      "OC": 1,
+      "OC_reason": "The plan is written from a centralized perspective with perfect global knowledge. The agents instantly know the locations of the TV, snacks, remote, and light switch without any exploration, and there is no communication or message passing between them.",
+      "SC": 4,
+      "SC_reason": "While the chronological order of setting up a movie (cleaning, snacks, TV, lights) makes logical sense, there are spatial inconsistencies. For example, R4 goes to the living room in the first step, remains there to clean and arrange seating, but then 'goes to the living room' again at the end for a final check.",
+      "final_score": 2.65
+    },
+    "track_b_gc": 0.0,
+    "track_b_state_detail": {
+      "A1_tv_ready": false,
+      "A2_seating_ready": false,
+      "A3_movie_area_clean": false,
+      "A4_remote_ready": false
+    },
+    "object_grounding": {
+      "mentioned_objects": [
+        "television",
+        "snack",
+        "seating",
+        "remote control",
+        "sound system",
+        "table",
+        "light switch",
+        "light"
+      ],
+      "grounded_objects": [
+        "television",
+        "remote control",
+        "table"
+      ],
+      "hallucinated_objects": [
+        "snack",
+        "seating",
+        "sound system",
+        "light switch",
+        "light"
+      ],
+      "grounding_rate": 0.375
+    }
+  },
+  "smart_llm": {
+    "name": "SMART-LLM",
+    "track_a_llm_judge": {
+      "TF": 3,
+      "TF_reason": "The plan attempts to set up for a movie by turning on the TV, moving the remote, and preparing popcorn and drinks. However, the popcorn and drinks are left on the kitchen countertop instead of being brought to the movie area, leaving the setup incomplete.",
+      "PF": 1,
+      "PF_reason": "The plan fails feasibility on multiple fronts: R1 is a Gripper without navigation capabilities but is instructed to move around the kitchen; R1 is also instructed to open, close, and switch on the microwave, which requires OpenObject, CloseObject, and ToggleObject capabilities it lacks. R4 is instructed to switch on the television, but it lacks the ToggleObject capability.",
+      "OC": 2,
+      "OC_reason": "The plan is written from a centralized perspective with full visibility of all rooms and objects. There is no communication or message passing between the agents to coordinate their actions across different rooms.",
+      "SC": 2,
+      "SC_reason": "The sequence contains nonsensical steps, such as R3 being instructed to 'navigate to movie' (which is not a valid location). Furthermore, the plan ends with the snacks left in the kitchen, failing to resolve the overall goal of setting up the movie area.",
+      "final_score": 2.1
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": {
+      "mentioned_objects": [
+        "television",
+        "sofa",
+        "remotecontrol",
+        "sidetable",
+        "popcorn",
+        "microwave",
+        "countertop",
+        "drink"
+      ],
+      "grounded_objects": [
+        "television",
+        "sofa",
+        "remotecontrol",
+        "sidetable",
+        "microwave",
+        "countertop"
+      ],
+      "hallucinated_objects": [
+        "popcorn",
+        "drink"
+      ],
+      "grounding_rate": 0.75
+    }
+  }
+}

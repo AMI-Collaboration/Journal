@@ -1,0 +1,252 @@
+{
+  "ours_final": {
+    "name": "Ours (CDA)",
+    "track_a_llm_judge": {
+      "TF": 2,
+      "TF_reason": "The plan completely misses the 15-minute deadline (taking 25 minutes). Furthermore, the primary goal of washing the dishes is not achieved because the request to wash them was declined and blocked. Several items were also left not covered.",
+      "PF": 4,
+      "PF_reason": "R1 is a Gripper without the 'can_navigate' capability, yet it is assigned to move objects between distant locations like the island, dining table, stove, and sink. R2 (Mobile_Light) is assigned to move potentially heavy 'frying pan and cookware'.",
+      "OC": 8,
+      "OC_reason": "The plan demonstrates good observability consistency by using explicit PASS, RECEIVE, and ASK_HELP messages to coordinate between agents in different rooms, respecting the distributed information constraint.",
+      "SC": 2,
+      "SC_reason": "Sequential coherence is very poor. The plan leaves unresolved requests and blocked steps. Most egregiously, R1 proceeds to place 'cleaned' dishes and cups even though the step to actually wash them was declined and blocked, breaking logical causality.",
+      "final_score": 4.5
+    },
+    "track_b_gc": 0.0,
+    "track_b_state_detail": {
+      "A1_plates_in_kitchen": false,
+      "A2_bowls_in_kitchen": false,
+      "A3_cups_in_kitchen": false,
+      "A4_forks_and_spoons_in_kitchen": false,
+      "A5_dishes_area_cleared": false
+    },
+    "object_grounding": {
+      "mentioned_objects": [
+        "mug",
+        "plate",
+        "dish",
+        "bowl",
+        "cup",
+        "saucer",
+        "utensil",
+        "bottle",
+        "pan",
+        "cookware",
+        "loaf",
+        "board",
+        "fruit",
+        "cloth",
+        "napkin",
+        "plant",
+        "bag",
+        "item",
+        "shaker"
+      ],
+      "grounded_objects": [
+        "mug",
+        "plate",
+        "dish",
+        "bowl",
+        "cup",
+        "bottle",
+        "pan",
+        "cloth",
+        "plant",
+        "bag",
+        "shaker"
+      ],
+      "hallucinated_objects": [
+        "saucer",
+        "utensil",
+        "cookware",
+        "loaf",
+        "board",
+        "fruit",
+        "napkin",
+        "item"
+      ],
+      "grounding_rate": 0.579
+    }
+  },
+  "central": {
+    "name": "Centralized",
+    "track_a_llm_judge": {
+      "TF": 2,
+      "TF_reason": "The plan fails to address the main goal of doing the dishes. Instead, robots perform unrelated tasks like slicing an apple, picking up papers, and moving random objects. The plan also relies heavily on vague instructions like 'pickup any light objects' rather than interacting with specific items.",
+      "PF": 2,
+      "PF_reason": "Several actions are invalid or impossible. R7 uses a non-existent 'PrepareObject' action. Mobile robots (R4, R6, R8) are instructed to 'pickup any light objects' without specifying valid targets. Furthermore, pass/receive actions are completely mismatched between agents.",
+      "OC": 2,
+      "OC_reason": "The plan shows no evidence of distributed information gathering or communication. Robots act on assumed knowledge of objects (like apples, papers, and spray bottles) and use vague catch-all phrases ('any kitchen items') which violates the requirement for specific, observable interactions.",
+      "SC": 2,
+      "SC_reason": "The sequence is highly incoherent. Pass/Receive actions are entirely uncoordinated (e.g., R2 passes to R1, but R1 is slicing an apple; R3 passes to R4, but R4 is navigating). Additionally, R3's plan extends to 20 minutes, violating the strict 15-minute time limit.",
+      "final_score": 2.0
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": {
+      "mentioned_objects": [
+        "apple",
+        "plate",
+        "bowl",
+        "spoon",
+        "tomato",
+        "paper",
+        "box",
+        "coffeetable",
+        "cup",
+        "dish",
+        "spray bottle"
+      ],
+      "grounded_objects": [
+        "apple",
+        "plate",
+        "bowl",
+        "spoon",
+        "tomato",
+        "paper",
+        "box",
+        "coffeetable",
+        "cup",
+        "dish",
+        "spray bottle"
+      ],
+      "hallucinated_objects": [],
+      "grounding_rate": 1.0
+    }
+  },
+  "independent": {
+    "name": "Independent",
+    "track_a_llm_judge": {
+      "TF": 3,
+      "TF_reason": "The plan attempts to address the task by having R1 and R2 do the dishes and other robots bring items to the kitchen. However, it fails to effectively coordinate bringing items back, and many actions are vague or unresolved.",
+      "PF": 2,
+      "PF_reason": "The plan includes numerous invalid actions that do not map to the agents' capabilities, such as 'wash the dishes', 'tidies up', 'checks the trash can', 'ensure it is filled', and 'Check for any towels'. Additionally, R4's action 'PickupLightObject' does not specify an object.",
+      "OC": 2,
+      "OC_reason": "There is no explicit communication or coordination between the agents. R7 waits to pass an object 'if they come', and R5 prepares to pass an object without any coordinated receiver. The plan does not reflect a true distributed system.",
+      "SC": 2,
+      "SC_reason": "The sequence is highly incoherent. R1 and R2 conflict by attempting to do the exact same task at the same time (picking up dishes from the counter). R3 picks up cups but never passes them (as a Gripper, it cannot navigate). R5 and R7 initiate passes that are never received. Many steps are vague or unresolved.",
+      "final_score": 2.3
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": {
+      "mentioned_objects": [
+        "dish",
+        "counter",
+        "sink",
+        "dishsoap",
+        "trashcan",
+        "paper",
+        "coffeetable",
+        "cup",
+        "bowl",
+        "desk",
+        "recyclingbin",
+        "spraybottle",
+        "toothbrush",
+        "holder",
+        "soapdispenser",
+        "towel",
+        "cloth"
+      ],
+      "grounded_objects": [
+        "dish",
+        "sink",
+        "paper",
+        "coffeetable",
+        "cup",
+        "bowl",
+        "desk",
+        "spraybottle",
+        "soapdispenser",
+        "towel",
+        "cloth"
+      ],
+      "hallucinated_objects": [
+        "counter",
+        "dishsoap",
+        "trashcan",
+        "recyclingbin",
+        "toothbrush",
+        "holder"
+      ],
+      "grounding_rate": 0.647
+    }
+  },
+  "lamma_p": {
+    "name": "LaMMA-P",
+    "track_a_llm_judge": {
+      "TF": 2,
+      "TF_reason": "The plan is extremely vague, failing to mention any specific objects or locations. It relies on generic actions like 'gather items' and 'clean countertops' without detailing what is being gathered or cleaned.",
+      "PF": 2,
+      "PF_reason": "The plan assigns tasks to agents that lack the necessary capabilities. R5 is a Gripper (cannot navigate) but is assigned to clean the floor, countertops, and appliances, which would require moving around the room. R4 is a Mobile_Light agent (lacks complex manipulation capabilities) but is assigned to 'do the dishes'.",
+      "OC": 2,
+      "OC_reason": "The plan is written from a centralized perspective with no explicit communication, coordination, or information sharing between the agents.",
+      "SC": 2,
+      "SC_reason": "The step ordering is logically structured in time blocks, but the complete lack of specific objects, vague action descriptions, and missing handoffs between mobile and gripper agents makes it incoherent as an executable sequence.",
+      "final_score": 2.0
+    },
+    "track_b_gc": 0.0,
+    "track_b_state_detail": {
+      "A1_plates_in_kitchen": false,
+      "A2_bowls_in_kitchen": false,
+      "A3_cups_in_kitchen": false,
+      "A4_forks_and_spoons_in_kitchen": false,
+      "A5_dishes_area_cleared": false
+    },
+    "object_grounding": {
+      "mentioned_objects": [
+        "item",
+        "countertop",
+        "appliance",
+        "dish",
+        "floor"
+      ],
+      "grounded_objects": [
+        "dish",
+        "floor"
+      ],
+      "hallucinated_objects": [
+        "item",
+        "countertop",
+        "appliance"
+      ],
+      "grounding_rate": 0.4
+    }
+  },
+  "smart_llm": {
+    "name": "SMART-LLM",
+    "track_a_llm_judge": {
+      "TF": 2,
+      "TF_reason": "The plan uses highly abstract and vague actions ('collect dirty dishes', 'wash dishes', 'organize misplaced items') rather than interacting with specific objects, failing to concretely fulfill the task.",
+      "PF": 1,
+      "PF_reason": "R3 is a Gripper agent and lacks the 'can_navigate' capability, making 'go to Sink' impossible. Furthermore, actions like 'wash dishes' and 'clean CounterTop' are not valid primitive actions for these robots.",
+      "OC": 2,
+      "OC_reason": "The plan is written from a centralized perspective with full visibility of all dirty dishes and misplaced items, without any communication or discovery between agents.",
+      "SC": 2,
+      "SC_reason": "The sequence is broken because R3 cannot navigate to the sink. Additionally, R6 collects dishes but never explicitly passes them to R3, and the plan relies on vague, non-committal steps rather than a logical sequence of concrete actions.",
+      "final_score": 1.8
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": {
+      "mentioned_objects": [
+        "diningtable",
+        "dish",
+        "countertop",
+        "sink",
+        "item"
+      ],
+      "grounded_objects": [
+        "diningtable",
+        "dish",
+        "sink"
+      ],
+      "hallucinated_objects": [
+        "countertop",
+        "item"
+      ],
+      "grounding_rate": 0.6
+    }
+  }
+}

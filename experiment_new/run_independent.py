@@ -22,6 +22,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--task", required=True, help="예: task1_abstract")
 parser.add_argument("--mode", default="multi_room", choices=["multi_room", "single_room"])
 parser.add_argument("--gpt-version", default="gpt-4o")
+parser.add_argument("--run", type=int, default=1, help="실험 반복 회차")
 args = parser.parse_args()
 
 data = load_all()
@@ -117,7 +118,7 @@ result = "\n\n".join(plans.values())
 print("\n✅ 완료\n")
 print(result)
 
-results_dir = os.path.join(HERE, "results")
+results_dir = os.path.join(HERE, "results", f"run{args.run}")
 os.makedirs(results_dir, exist_ok=True)
 out_path = os.path.join(results_dir, f"{args.task}_independent_result.json")
 with open(out_path, "w", encoding="utf-8") as f:

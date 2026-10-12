@@ -1,0 +1,292 @@
+{
+  "ours_final": {
+    "name": "Ours (CDA)",
+    "track_a_llm_judge": {
+      "TF": 4,
+      "TF_reason": "The plan misses the 15-minute deadline, taking about 20 minutes. Additionally, it fails to provide a drink for the guest due to a declined request, and leaves at least one item not covered.",
+      "PF": 9,
+      "PF_reason": "The actions assigned to each robot align with their capabilities. R1 (Gripper) performs manipulation tasks in its local area, while the mobile robots handle tasks in their respective rooms.",
+      "OC": 8,
+      "OC_reason": "The plan reflects a distributed setting where robots work within their own rooms and attempt to coordinate via requests (e.g., R2 requesting a Mug from R1), respecting observability constraints.",
+      "SC": 3,
+      "SC_reason": "The plan lacks sequential coherence as it ends with unresolved requests, blocked actions, and dropped actions due to a failed coordination attempt between R1 and R2.",
+      "final_score": 6.25
+    },
+    "track_b_gc": 0.0,
+    "track_b_state_detail": {
+      "A1_living_room_clean": false,
+      "A2_guest_seating_ready": false,
+      "A3_guest_bathroom_ready": false,
+      "A4_guest_entrance_clear": false
+    },
+    "object_grounding": {
+      "mentioned_objects": [
+        "sponge",
+        "cardboard box",
+        "bedcover",
+        "mattress",
+        "toilet lid",
+        "spray bottle",
+        "item",
+        "plate",
+        "remote control",
+        "pillow",
+        "toilet brush",
+        "plunger",
+        "tomato",
+        "slipper",
+        "lettuce leaf",
+        "sofa cushion",
+        "waste bin",
+        "hamper",
+        "plate",
+        "cutting board",
+        "knife",
+        "utensil",
+        "laptop computer",
+        "bottle",
+        "book",
+        "notebook",
+        "container",
+        "tray",
+        "saucepan",
+        "frying pan",
+        "cookware lid",
+        "table lamp",
+        "alarm clock",
+        "mug",
+        "coffeemaker"
+      ],
+      "grounded_objects": [
+        "sponge",
+        "cardboard box",
+        "toilet lid",
+        "spray bottle",
+        "plate",
+        "remote control",
+        "pillow",
+        "toilet brush",
+        "plunger",
+        "tomato",
+        "lettuce leaf",
+        "sofa cushion",
+        "plate",
+        "knife",
+        "laptop computer",
+        "bottle",
+        "saucepan",
+        "frying pan",
+        "mug"
+      ],
+      "hallucinated_objects": [
+        "bedcover",
+        "mattress",
+        "item",
+        "slipper",
+        "waste bin",
+        "hamper",
+        "cutting board",
+        "utensil",
+        "book",
+        "notebook",
+        "container",
+        "tray",
+        "cookware lid",
+        "table lamp",
+        "alarm clock",
+        "coffeemaker"
+      ],
+      "grounding_rate": 0.543
+    }
+  },
+  "central": {
+    "name": "Centralized",
+    "track_a_llm_judge": {
+      "TF": 3,
+      "TF_reason": "The plan fails to meet the 15-minute deadline, as R2 and R4 have actions scheduled for the 15-20 minute window. Additionally, many actions are vague ('ensure pillows are neatly arranged', 'check for any clutter') rather than concrete task executions.",
+      "PF": 2,
+      "PF_reason": "Several actions are infeasible given the agents' capabilities. R2 attempts to place an object but lacks a PutObject primitive. R3 attempts to arrange pillows and organize items without the necessary manipulation capabilities. R4 attempts to organize items without specific primitives for it.",
+      "OC": 2,
+      "OC_reason": "The plan exhibits centralized knowledge, with robots inherently knowing the locations of rooms (kitchen, living room, bathroom, bedroom) and objects without any prior exploration or explicit communication.",
+      "SC": 2,
+      "SC_reason": "There is a severe temporal mismatch: R1 passes the tomato to R2 in the 10-15 minute window, but R2 attempts to receive it in the 5-10 minute window. The plan also extends beyond the required time limit.",
+      "final_score": 2.3
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": {
+      "mentioned_objects": [
+        "tomato",
+        "snack",
+        "table",
+        "pillow",
+        "dresser",
+        "item",
+        "trashbin",
+        "sink",
+        "shower"
+      ],
+      "grounded_objects": [
+        "tomato",
+        "table",
+        "pillow",
+        "dresser",
+        "sink",
+        "shower"
+      ],
+      "hallucinated_objects": [
+        "snack",
+        "item",
+        "trashbin"
+      ],
+      "grounding_rate": 0.667
+    }
+  },
+  "independent": {
+    "name": "Independent",
+    "track_a_llm_judge": {
+      "TF": 4,
+      "TF_reason": "The plan attempts to prepare the house for a guest by assigning various cleaning and prep tasks, but it relies heavily on vague, non-primitive actions like 'Tidy countertops' or 'Tidy the bed' without specifying concrete object interactions.",
+      "PF": 2,
+      "PF_reason": "The plan assigns multiple actions that the agents are not capable of performing. None of the mobile agents (R2, R3, R4) have the 'ToggleObject' or 'Open/Close' capabilities required to turn on lamps, open curtains, or close doors. Additionally, R1 is a stationary gripper but is assigned a broad 'Tidy countertops' task.",
+      "OC": 2,
+      "OC_reason": "The plan is written from a centralized perspective with full visibility of all rooms and objects. There is no communication, message passing, or coordination between the agents to share information about their respective environments.",
+      "SC": 4,
+      "SC_reason": "While the plan is divided into chronological time blocks, the steps are completely independent and lack logical progression or concrete resolution due to the vague nature of the tasks assigned.",
+      "final_score": 2.9
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": {
+      "mentioned_objects": [
+        "lettuce",
+        "mug",
+        "countertop",
+        "floor lamp",
+        "coffeetable",
+        "curtain",
+        "lamp",
+        "bed",
+        "pillow",
+        "sheet",
+        "dresser",
+        "sink",
+        "shower door",
+        "toilet lid"
+      ],
+      "grounded_objects": [
+        "lettuce",
+        "mug",
+        "floor lamp",
+        "coffeetable",
+        "curtain",
+        "lamp",
+        "pillow",
+        "dresser",
+        "sink",
+        "shower door",
+        "toilet lid"
+      ],
+      "hallucinated_objects": [
+        "countertop",
+        "bed",
+        "sheet"
+      ],
+      "grounding_rate": 0.786
+    }
+  },
+  "lamma_p": {
+    "name": "LaMMA-P",
+    "track_a_llm_judge": {
+      "TF": 3,
+      "TF_reason": "The plan attempts to prepare the house for the guest but schedules tasks up to 20 minutes, missing the 15-minute deadline. It also relies heavily on impossible actions.",
+      "PF": 1,
+      "PF_reason": "R1 is a Gripper without navigation capabilities but is assigned to move to the dining area and bathroom. R2 is assigned to pour a beverage, which it lacks the capability to do. R3 and R4 are assigned to wipe surfaces and make beds, which are not supported by their action space.",
+      "OC": 1,
+      "OC_reason": "The plan is entirely centralized, assigning tasks across multiple rooms simultaneously with full knowledge of the house state and no inter-robot communication or discovery.",
+      "SC": 1,
+      "SC_reason": "The step ordering is physically impossible, as it assigns individual robots (R1, R2, and R4) to be in multiple different rooms simultaneously within the same time blocks.",
+      "final_score": 1.6
+    },
+    "track_b_gc": 0.0,
+    "track_b_state_detail": {
+      "A1_living_room_clean": false,
+      "A2_guest_seating_ready": false,
+      "A3_guest_bathroom_ready": false,
+      "A4_guest_entrance_clear": false
+    },
+    "object_grounding": {
+      "mentioned_objects": [
+        "clutter",
+        "dish",
+        "item",
+        "plate",
+        "cutlery",
+        "glass",
+        "light switch",
+        "thermostat",
+        "beverage",
+        "dishwasher",
+        "sink",
+        "table",
+        "tray",
+        "surface",
+        "countertop",
+        "stove",
+        "bed"
+      ],
+      "grounded_objects": [
+        "dish",
+        "plate",
+        "sink",
+        "table",
+        "stove"
+      ],
+      "hallucinated_objects": [
+        "clutter",
+        "item",
+        "cutlery",
+        "glass",
+        "light switch",
+        "thermostat",
+        "beverage",
+        "dishwasher",
+        "tray",
+        "surface",
+        "countertop",
+        "bed"
+      ],
+      "grounding_rate": 0.294
+    }
+  },
+  "smart_llm": {
+    "name": "SMART-LLM",
+    "track_a_llm_judge": {
+      "TF": 2,
+      "TF_reason": "The plan attempts to address the task but relies on non-existent agents and vague actions like 'prepare refreshments' without specifying objects.",
+      "PF": 1,
+      "PF_reason": "The plan assigns tasks to agents R5 and R6, which do not exist in the configuration. Furthermore, R1 lacks the capability to toggle lights (only PickupLightObject, SliceObject, PourObject, PassReceiveObject), and R4 lacks the manipulation capabilities to 'prepare refreshments' (no slice or pour).",
+      "OC": 2,
+      "OC_reason": "The plan is completely centralized, assigning tasks to all agents simultaneously without any communication or discovery.",
+      "SC": 2,
+      "SC_reason": "The plan is extremely brief, lacks detailed sequential steps, and includes hallucinated agents, making it incoherent as a multi-agent plan.",
+      "final_score": 1.8
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": {
+      "mentioned_objects": [
+        "light",
+        "refreshment",
+        "temperature"
+      ],
+      "grounded_objects": [],
+      "hallucinated_objects": [
+        "light",
+        "refreshment",
+        "temperature"
+      ],
+      "grounding_rate": 0.0
+    }
+  }
+}

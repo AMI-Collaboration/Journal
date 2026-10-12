@@ -136,7 +136,7 @@ def build_cda_task_config(task_n: str, data: dict, mode: str = "multi_room"):
 
 async def run_one(task_n: str, model: str, mode: str, use_edge_proposal: bool,
                   use_graph_llm: bool, max_graph_rounds: int, out_dir: str,
-                  mock_script: str | None = None):
+                  run_n: int = 1, mock_script: str | None = None):
     data = load_all()
     cfg = build_cda_task_config(task_n, data, mode=mode)
 
@@ -159,7 +159,7 @@ async def run_one(task_n: str, model: str, mode: str, use_edge_proposal: bool,
     if not mock_script:
         log_usage_dict("ours_final", task_n, llm.usage())
 
-    results_dir = os.path.join(EXPERIMENT_NEW, "results")
+    results_dir = os.path.join(EXPERIMENT_NEW, "results", f"run{run_n}")
     os.makedirs(results_dir, exist_ok=True)
     out_path = os.path.join(results_dir, f"{task_n}_ours_final_result.json")
 
@@ -195,15 +195,17 @@ def main() -> None:
     ap.add_argument("--no-graph-llm", action="store_true", help="ablation: Stage4를 규칙만으로")
     ap.add_argument("--rounds", type=int, default=2)
     ap.add_argument("--mock", default=None, help="API 호출 없이 테스트할 mock_script.json 경로")
+    ap.add_argument("--run", type=int, default=1, help="실험 반복 회차 (results/run{N}/에 저장)")
     args = ap.parse_args()
 
-    out_dir = os.path.join(EXPERIMENT_NEW, "results", "ours_final_runs", args.task)
+    out_dir = os.path.join(EXPERIMENT_NEW, "results", f"run{args.run}", "ours_final_runs", args.task)
     asyncio.run(run_one(
         args.task, args.model, args.mode,
         use_edge_proposal=not args.no_proposal,
         use_graph_llm=not args.no_graph_llm,
         max_graph_rounds=args.rounds,
         out_dir=out_dir,
+        run_n=args.run,
         mock_script=args.mock,
     ))
 
