@@ -1,7 +1,17 @@
 {
-  "ours": {
-    "name": "Ours (P2P)",
-    "track_a_llm_judge": "N/A",
+  "ours_final": {
+    "name": "Ours (CDA)",
+    "track_a_llm_judge": {
+      "TF": 2,
+      "TF_reason": "The plan completely misses the 10-minute deadline, taking 20 minutes instead. Furthermore, it fails to complete key tasks like pouring coffee (which was dropped) and leaves the user without a fully prepared morning routine.",
+      "PF": 4,
+      "PF_reason": "R3 is a Gripper without navigation capabilities; while it could theoretically place items on an adjacent coffee table, the plan assumes it can handle multiple items over a wide area. Additionally, R2 passes a Cup to R1, but R1 never receives it, making the execution break down.",
+      "OC": 5,
+      "OC_reason": "The plan attempts to use distributed communication (PASS/RECEIVE, ASK_HELP), but many of these messages are malformed, withdrawn, or ignored (e.g., R1's offers to R2, R2's withdrawn ASK_HELP), showing poor coordination despite the distributed framework.",
+      "SC": 3,
+      "SC_reason": "The sequence is highly disjointed. R1 passes a Cup to R2, only for R2 to pass it back to R1 later without R1 ever receiving it. The timeline is unnecessarily stretched, and there are unresolved handoffs.",
+      "final_score": 3.6
+    },
     "track_b_gc": 0.0,
     "track_b_state_detail": {
       "A1_work_clothes_ready": false,
@@ -9,20 +19,58 @@
       "A3_essential_items_ready": false,
       "A4_exit_area_ready": false
     },
-    "object_grounding": "N/A"
+    "object_grounding": {
+      "mentioned_objects": [
+        "bread",
+        "banana",
+        "laptop",
+        "coffeetable",
+        "cushion",
+        "sofa",
+        "cup",
+        "orange",
+        "vase",
+        "decorative statue",
+        "shelf",
+        "lamp",
+        "side table",
+        "coffee maker",
+        "egg"
+      ],
+      "grounded_objects": [
+        "bread",
+        "laptop",
+        "coffeetable",
+        "sofa",
+        "cup",
+        "vase",
+        "decorative statue",
+        "shelf",
+        "lamp",
+        "side table",
+        "egg"
+      ],
+      "hallucinated_objects": [
+        "banana",
+        "cushion",
+        "orange",
+        "coffee maker"
+      ],
+      "grounding_rate": 0.733
+    }
   },
   "central": {
     "name": "Centralized",
     "track_a_llm_judge": {
-      "TF": 4,
-      "TF_reason": "The plan does not fully achieve the task's goal of getting everything ready for the user to leave for work in 10 minutes. While some tasks like preparing food and gathering items are addressed, there is no mention of essential tasks such as ensuring the user is dressed or has necessary work items like a laptop or documents. Additionally, the plan exceeds the 10-minute time limit.",
-      "PF": 7,
-      "PF_reason": "Most actions are executable given each agent's capabilities. However, R2's actions exceed the 10-minute limit, and R3's tasks are vague, assuming the presence of objects without evidence. R4's tasks are feasible but assume the presence of specific objects without confirmation.",
-      "OC": 3,
-      "OC_reason": "The plan does not reflect a true distributed setting. There is no explicit communication or coordination between agents, and actions are based on assumptions about object locations without inter-agent messaging or confirmation.",
-      "SC": 5,
-      "SC_reason": "The step ordering is mostly logical, but the plan does not reach a fully resolved conclusion within the given time frame. R2's tasks extend beyond the 10-minute limit, and R3's actions are vague and unresolved. There is no clear conclusion or confirmation that all necessary tasks for the user to leave for work are completed.",
-      "final_score": 4.4
+      "TF": 3,
+      "TF_reason": "The plan attempts to prepare breakfast and gather items for work, but it relies heavily on vague, non-committal language ('if present', 'any fruit available', 'any available container'). Furthermore, R2's plan extends to 12 minutes, violating the strict 10-minute deadline specified in the prompt.",
+      "PF": 2,
+      "PF_reason": "R1 and R3 are Gripper agents without navigation capabilities ('can_navigate'). However, R3 is tasked with picking up a newspaper from the couch and then slicing fruit on a table, which requires moving between locations. R1 also interacts with multiple objects (bread, tomato, cup, plate) that would likely require navigation to reach.",
+      "OC": 2,
+      "OC_reason": "There is no explicit communication or message passing between the robots. The plan relies on a centralized perspective, guessing object locations with 'if present' rather than having agents explore or communicate findings.",
+      "SC": 2,
+      "SC_reason": "The plan suffers from inconsistent formatting (R3 uses 'Step X' while others use time blocks), exceeds the time constraint (R2 goes up to 12 minutes), and includes vague, unresolved actions that do not reference specific, confirmed objects.",
+      "final_score": 2.3
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -71,15 +119,15 @@
   "independent": {
     "name": "Independent",
     "track_a_llm_judge": {
-      "TF": 5,
-      "TF_reason": "The plan partially achieves the task's goal by preparing breakfast items and tidying up. However, it lacks explicit steps for ensuring the person is ready to leave for work, such as preparing clothes or packing a bag.",
-      "PF": 7,
-      "PF_reason": "Most actions are feasible given the agents' capabilities. However, R1's task of frying an egg and turning off the stove may require more complex actions than described. Additionally, R3 and R4's actions are not clearly linked to their capabilities.",
-      "OC": 3,
-      "OC_reason": "The plan does not demonstrate a distributed setting. There is no evidence of communication or coordination between agents, and actions are assigned without considering the information constraints of a distributed system.",
-      "SC": 6,
-      "SC_reason": "The step ordering is mostly logical, but the plan lacks a fully resolved conclusion. It does not address all necessary preparations for leaving for work, and there are no explicit transitions or dependencies between agents' actions.",
-      "final_score": 4.85
+      "TF": 7,
+      "TF_reason": "The plan addresses the user's request to get ready for work by preparing a quick breakfast (sandwich, coffee, apple) and doing some basic tidying up within the 10-minute timeframe.",
+      "PF": 2,
+      "PF_reason": "The plan fails significantly on feasibility. R1 attempts to fry an egg and turn off the stove, but lacks the ToggleObject or CookObject capabilities. R3 attempts to turn on a lamp and close a laptop, but lacks ToggleObject and CloseObject capabilities. R4 attempts to turn off a TV, lacking ToggleObject. Additionally, R2 picks up two objects (apple and cup) simultaneously, which typically violates single-arm capacity constraints.",
+      "OC": 2,
+      "OC_reason": "The plan is written from a centralized perspective with full visibility of all rooms and objects. There is no explicit communication, discovery, or passing of information between the robots, violating the distributed knowledge constraint.",
+      "SC": 3,
+      "SC_reason": "The sequence has logical flaws. R1 pours coffee into a cup, and R2 picks up a cup from the counter, but there is no explicit coordination or handoff (PassReceiveObject) between the fixed Gripper (R1) and the mobile robot (R2). Furthermore, R4's action to 'tidy the coffee table by arranging items' is vague and not mapped to concrete robotic primitives.",
+      "final_score": 3.65
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -97,6 +145,7 @@
         "table",
         "lamp",
         "laptop",
+        "couch",
         "tv",
         "coffeetable"
       ],
@@ -116,23 +165,24 @@
         "coffeetable"
       ],
       "hallucinated_objects": [
+        "couch",
         "tv"
       ],
-      "grounding_rate": 0.929
+      "grounding_rate": 0.867
     }
   },
   "lamma_p": {
     "name": "LaMMA-P",
     "track_a_llm_judge": {
-      "TF": 6,
-      "TF_reason": "The plan addresses the main tasks of preparing breakfast, gathering work items, and checking weather/traffic. However, it lacks specificity in some areas, such as the exact breakfast ingredients and work items, and assumes the availability of certain objects without evidence.",
-      "PF": 7,
-      "PF_reason": "Most actions are feasible given the agents' capabilities. However, R4 wearing clothing is not feasible as it lacks the capability to do so. Additionally, R2's actions are heavily loaded, which might not be feasible within the given time frame.",
-      "OC": 4,
-      "OC_reason": "The plan does not reflect a true distributed setting. It assumes centralized knowledge, such as R4 knowing where the work bag and wardrobe are without explicit communication. There are no explicit messages or requests between robots.",
-      "SC": 5,
-      "SC_reason": "The sequence is mostly logical, but there are issues such as R4 wearing clothing, which is not possible. The plan does not clearly resolve the gathering of personal items, leaving it vague and unresolved.",
-      "final_score": 5.35
+      "TF": 3,
+      "TF_reason": "The plan attempts to address the user's needs (breakfast, coffee, work bag, clothes, weather, personal items), but fails to fulfill the task effectively because it relies on vague assignments ('R1 or R3', 'Any available robot') and assigns impossible actions to the robots.",
+      "PF": 1,
+      "PF_reason": "The plan contains multiple severe capability violations. R2 is assigned to 'slice bread' and 'pour coffee', but it lacks SliceObject and PourObject capabilities. R1 and R3 are assigned to 'go to device', but they are Grippers without the can_navigate capability. Additionally, R4 is assigned to 'wear clothing', which is not a valid robot action.",
+      "OC": 1,
+      "OC_reason": "The plan is written from a completely centralized perspective with full global knowledge. There is no communication or message passing between agents, and the use of 'R1 or R3' and 'Any available robot' implies a single mind orchestrating the entire scene rather than distributed agents acting on local knowledge.",
+      "SC": 2,
+      "SC_reason": "The sequential coherence is very poor due to the use of non-committal, vague assignments ('R1 or R3', 'Any available robot'). A valid plan must assign specific actions to specific agents. Furthermore, the plan does not account for how stationary robots (R1, R3) would access items without mobile robots bringing them.",
+      "final_score": 1.75
     },
     "track_b_gc": 0.0,
     "track_b_state_detail": {
@@ -186,15 +236,15 @@
   "smart_llm": {
     "name": "SMART-LLM",
     "track_a_llm_judge": {
-      "TF": 6,
-      "TF_reason": "The plan covers several key tasks such as preparing toast, gathering personal items, and checking the weather. However, it does not explicitly mention preparing a beverage or ensuring the user is dressed, which are typically part of getting ready for work. Additionally, the plan assumes the presence of objects like the toaster and umbrella without confirming their existence.",
-      "PF": 5,
-      "PF_reason": "The plan assigns multiple tasks to R4 that could be distributed among other agents, potentially overloading R4. R4 is tasked with actions like switching on the toaster and checking the weather, which may not be feasible given its capabilities. The plan does not utilize R1 and R2, which could assist in task distribution.",
-      "OC": 3,
-      "OC_reason": "The plan appears to be centrally coordinated, with R4 performing tasks across multiple locations without explicit communication or coordination with other agents. There is no evidence of distributed decision-making or inter-agent communication, which violates the observability constraint.",
-      "SC": 7,
-      "SC_reason": "The sequence of actions is mostly logical, with tasks like picking up items and placing them in appropriate locations. However, the plan includes conditional steps (e.g., checking the weather and possibly retrieving an umbrella) that are not fully resolved, and it lacks explicit confirmation of task completion.",
-      "final_score": 4.9
+      "TF": 4,
+      "TF_reason": "The plan attempts to fulfill the task by preparing breakfast, lunch, clothes, and daily essentials. However, it includes vague, non-committal language ('if needed') for the umbrella, which reduces its effectiveness.",
+      "PF": 1,
+      "PF_reason": "The plan is highly infeasible. R3 is a Gripper without the 'can_navigate' capability, yet it is instructed to 'Go to Wardrobe' and 'Go to Bed'. Additionally, R4 is scheduled to perform three entirely different sequences of actions simultaneously in the same [0-5 min] time block.",
+      "OC": 2,
+      "OC_reason": "The plan exhibits centralized planning with full visibility. There is no communication or information sharing between the agents, yet they act with perfect knowledge of the environment and task requirements.",
+      "SC": 2,
+      "SC_reason": "Sequential coherence is very poor. R4 is assigned multiple conflicting tasks in the exact same time window ([0-5 min]). Furthermore, the plan relies on conditional, vague steps ('if needed') rather than concrete actions.",
+      "final_score": 2.4
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",

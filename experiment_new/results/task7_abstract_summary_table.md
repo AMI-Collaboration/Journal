@@ -4,17 +4,17 @@
 
 | 방법 | TF | PF | OC | SC | Final |
 |---|---|---|---|---|---|
-| Ours (P2P) | - | - | - | - | N/A |
-| Centralized | 3 | 6 | 4 | 5 | 4.25 |
-| Independent | 6 | 8 | 4 | 7 | 5.85 |
-| LaMMA-P | 5 | 7 | 3 | 4 | 4.55 |
-| SMART-LLM | 5 | 7 | 3 | 6 | 4.85 |
+| Ours (CDA) | 1 | 5 | 7 | 1 | 3.9 |
+| Centralized | 1 | 3 | 2 | 2 | 1.9 |
+| Independent | 1 | 1 | 1 | 2 | 1.15 |
+| LaMMA-P | 2 | 1 | 2 | 2 | 1.8 |
+| SMART-LLM | 5 | 2 | 1 | 3 | 2.7 |
 
 ## Track B — GC (ours, LaMMA-P만)
 
 | 방법 | GC |
 |---|---|
-| Ours (P2P) | 0.0 |
+| Ours (CDA) | 0.0 |
 | Centralized | N/A (설계상 제외) |
 | Independent | N/A (설계상 제외) |
 | LaMMA-P | 0.0 |
@@ -24,8 +24,8 @@
 
 | 방법 | Grounding Rate | Hallucinated |
 |---|---|---|
-| Ours (P2P) | N/A | N/A |
-| Centralized | 1.0 | 없음 |
+| Ours (CDA) | 0.5 | window, latch, metal rolling storage cart, window blind, range-exhaust damper, kitchen vent, door, metal tray, drying rack, clear plastic ruler, strip, small red object, console table |
+| Centralized | 0.667 | counter, window, door |
 | Independent | 0.25 | window, cabinet door, window blind |
 | LaMMA-P | 0.0 | window, door, object, appliance |
 | SMART-LLM | 0.0 | window, frontdoor, backdoor, sidedoor, vent, skylight |

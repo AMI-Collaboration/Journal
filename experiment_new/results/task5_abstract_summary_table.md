@@ -4,17 +4,17 @@
 
 | 방법 | TF | PF | OC | SC | Final |
 |---|---|---|---|---|---|
-| Ours (P2P) | - | - | - | - | N/A |
-| Centralized | 5 | 8 | 6 | 6 | 6.1 |
-| Independent | 5 | 6 | 3 | 4 | 4.35 |
-| LaMMA-P | 7 | 8 | 4 | 6 | 6.0 |
-| SMART-LLM | 6 | 7 | 3 | 5 | 5.0 |
+| Ours (CDA) | 9 | 9 | 7 | 7 | 8.0 |
+| Centralized | 3 | 3 | 2 | 1 | 2.35 |
+| Independent | 2 | 1 | 1 | 1 | 1.3 |
+| LaMMA-P | 6 | 1 | 1 | 2 | 2.65 |
+| SMART-LLM | 4 | 2 | 2 | 5 | 3.05 |
 
 ## Track B — GC (ours, LaMMA-P만)
 
 | 방법 | GC |
 |---|---|
-| Ours (P2P) | 0.0 |
+| Ours (CDA) | 0.0 |
 | Centralized | N/A (설계상 제외) |
 | Independent | N/A (설계상 제외) |
 | LaMMA-P | 0.0 |
@@ -24,8 +24,8 @@
 
 | 방법 | Grounding Rate | Hallucinated |
 |---|---|---|
-| Ours (P2P) | N/A | N/A |
-| Centralized | 0.333 | drink, snack, item, seating, lighting, furniture |
+| Ours (CDA) | 0.556 | cushion, pear, magazine, device |
+| Centralized | 0.333 | drink, snack, item, seating, light, furniture |
 | Independent | 0.438 | lemon, glass, stove, tv, seatingarea, lighting, lightswitch, mobile_light, bathroomlight |
 | LaMMA-P | 0.4 | light switch, media player, snack, ambient lighting, coffee table, drink |
 | SMART-LLM | 0.625 | popcorn, drinks, lightswitch |

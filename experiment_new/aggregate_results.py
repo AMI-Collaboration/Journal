@@ -22,15 +22,15 @@ from loader import load_all, log_usage  # noqa: E402
 
 from openai import OpenAI  # noqa: E402
 
-METHODS = ["ours", "central", "independent", "lamma_p", "smart_llm"]
+METHODS = ["ours_final", "central", "independent", "lamma_p", "smart_llm"]
 METHOD_NAMES = {
-    "ours": "Ours (P2P)",
+    "ours_final": "Ours (CDA)",
     "central": "Centralized",
     "independent": "Independent",
     "lamma_p": "LaMMA-P",
     "smart_llm": "SMART-LLM",
 }
-GC_SG_METHODS = {"ours", "lamma_p"}
+GC_SG_METHODS = {"ours_final", "lamma_p"}
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--task", required=True, help="예: task1_abstract")
@@ -48,6 +48,13 @@ goal_states = data["goal_states"].get(args.task, {})
 
 api_key_path = os.path.join(HERE, "..", "LaMMA-P", "api_key.txt")
 client = OpenAI(api_key=open(api_key_path).read().strip())
+# LLM Judge 전용: Gemini (OpenAI 호환 엔드포인트)
+gemini_api_key_path = os.path.join(HERE, "..", "LaMMA-P", "gemini_api_key.txt")
+GEMINI_MODEL = "gemini-3.1-pro-preview"
+judge_client = OpenAI(
+    api_key=open(gemini_api_key_path).read().strip(),
+    base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
+)
 
 results_dir = os.path.join(HERE, "results")
 
@@ -153,9 +160,10 @@ Output JSON only:
 {{"TF":<1-10>,"TF_reason":"...","PF":<1-10>,"PF_reason":"...",
   "OC":<1-10>,"OC_reason":"...","SC":<1-10>,"SC_reason":"..."}}
 """
-    response = client.chat.completions.create(
-        model=args.gpt_version, temperature=0.0,
+    response = judge_client.chat.completions.create(
+        model=GEMINI_MODEL, temperature=0.0,
         messages=[{"role": "system", "content": JUDGE_SYSTEM}, {"role": "user", "content": prompt}],
+        response_format={"type": "json_object"},
     )
     log_usage("judge", args.task, response)
     raw = re.sub(r"```(json)?", "", response.choices[0].message.content.strip()).strip()
@@ -218,6 +226,12 @@ def get_pddl_for_method(method, result):
             with open(pddl_eval_path, encoding="utf-8") as f:
                 return json.load(f).get("pddl_problem", "")
         return ""
+    elif method == "ours_final":
+        pddl_eval_path = os.path.join(results_dir, f"{args.task}_ours_final_pddl_eval.json")
+        if os.path.exists(pddl_eval_path):
+            with open(pddl_eval_path, encoding="utf-8") as f:
+                return json.load(f).get("pddl_problem", "")
+        return ""  # 아직 변환 스크립트 없음 -> GC는 N/A로 처리됨
     elif method == "lamma_p":
         return result.get("code_planpddl_py", "") if result else ""
     return ""

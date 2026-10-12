@@ -1,7 +1,17 @@
 {
-  "ours": {
-    "name": "Ours (P2P)",
-    "track_a_llm_judge": "N/A",
+  "ours_final": {
+    "name": "Ours (CDA)",
+    "track_a_llm_judge": {
+      "TF": 3,
+      "TF_reason": "The plan misses the 20-minute deadline (taking 25 minutes) and drops the preparation of drinking water, which is a standard part of making sure 'everything else is ready'.",
+      "PF": 4,
+      "PF_reason": "While the agents use skills they possess, the execution of the PASS/RECEIVE action is broken. R4 initiates a PASS in the 0-5 minute block, but R2 does not RECEIVE it until the 20-25 minute block. R4 cannot perform other actions (like moving heavy furniture) while stuck in a pending PASS action.",
+      "OC": 4,
+      "OC_reason": "There are observability issues: R4 starts helping with the living room furniture in the 5-10 and 10-15 minute blocks before R2 actually asks for help in the 15-20 minute block, implying R4 had centralized knowledge of the living room's needs before being communicated with.",
+      "SC": 2,
+      "SC_reason": "The sequential ordering is highly illogical. R4 performs actions (moving the rug and right chair) in the 5-15 minute window, but R2 only waits/asks for those actions in the 15-20 minute window. Furthermore, the massive time gap between R4 passing the towel (0-5 min) and R2 receiving it (20-25 min) while R4 does other tasks in between breaks the mechanics of joint actions.",
+      "final_score": 3.4
+    },
     "track_b_gc": 0.0,
     "track_b_state_detail": {
       "S1_workout_space_cleared": false,
@@ -10,20 +20,48 @@
       "S4_lighting_on": false,
       "S5_floor_clutter_cleared": false
     },
-    "object_grounding": "N/A"
+    "object_grounding": {
+      "mentioned_objects": [
+        "bag",
+        "coffeetable",
+        "desk",
+        "towel",
+        "bottle",
+        "container",
+        "rug",
+        "chair",
+        "hazard",
+        "cup"
+      ],
+      "grounded_objects": [
+        "bag",
+        "coffeetable",
+        "desk",
+        "towel",
+        "bottle",
+        "chair",
+        "cup"
+      ],
+      "hallucinated_objects": [
+        "container",
+        "rug",
+        "hazard"
+      ],
+      "grounding_rate": 0.7
+    }
   },
   "central": {
     "name": "Centralized",
     "track_a_llm_judge": {
-      "TF": 5,
-      "TF_reason": "The plan partially achieves the task's goal of preparing the living room for a workout by clearing space and moving objects. However, it lacks specificity in some actions, such as R2's task of moving 'light objects' without specifying what they are or where they are stored. Additionally, R1's actions of picking up a cup, plate, and knife seem unrelated to clearing the living room for a workout.",
-      "PF": 8,
-      "PF_reason": "The plan is mostly executable given the agents' capabilities. Each robot performs actions within its defined abilities, such as R4 pushing furniture and R2 navigating and picking up light objects. However, R1's actions of picking up kitchen items do not align with the task of preparing the living room.",
-      "OC": 6,
-      "OC_reason": "The plan does not fully respect the distributed setting. While there is some coordination, such as R1 passing items to R2, the plan assumes knowledge of object locations without explicit communication between agents. R3's actions imply knowledge of light objects in the bedroom without prior information.",
-      "SC": 7,
-      "SC_reason": "The step ordering is mostly logical, with each agent performing tasks in a sequence that contributes to clearing the living room. However, the plan does not fully resolve the task, as R1's actions are unrelated to the goal, and there is no clear conclusion on whether the living room is fully prepared for the workout.",
-      "final_score": 6.25
+      "TF": 2,
+      "TF_reason": "The plan relies heavily on vague, non-specific language ('any light objects', 'bottles, magazines', 'any heavy furniture') rather than interacting with specific objects in a scene. Furthermore, R3 brings objects from the bedroom into the living room, which actively contradicts the goal of clearing the living room space.",
+      "PF": 3,
+      "PF_reason": "R1 is a stationary Gripper but picks up three objects (Cup, Plate, Knife) consecutively without putting them down, which exceeds typical gripper capacity. Additionally, R1 plans to pass these items to R2, but R2 never navigates to R1's location to receive them.",
+      "OC": 2,
+      "OC_reason": "There is no explicit communication or message passing between the agents. The agents act with centralized knowledge of the plan, and R1 and R2 coordinate a handoff without ever communicating their locations or intentions.",
+      "SC": 2,
+      "SC_reason": "The sequence contains illogical steps (R3 cluttering the room that needs to be cleared) and unresolved spatial constraints (R1 and R2 attempting a handoff without being in the same location). The plan is also padded with vague, non-committal actions like 'ensure the space is clear'.",
+      "final_score": 2.2
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -52,15 +90,15 @@
   "independent": {
     "name": "Independent",
     "track_a_llm_judge": {
-      "TF": 4,
-      "TF_reason": "The plan does not fully achieve the task's goal of preparing the living room for a workout. Many actions are unrelated to the living room, such as tidying the bedroom and bathroom. The plan lacks specific actions to clear the living room space, such as moving furniture or ensuring workout equipment is available in the living room.",
-      "PF": 6,
-      "PF_reason": "The plan is partially executable given the agents' capabilities. However, R1's actions like slicing lettuce and pouring water are irrelevant to the task. R4's actions in the bathroom do not contribute to preparing the living room. The plan does not utilize R4's ability to push furniture, which would be crucial for clearing space.",
-      "OC": 3,
-      "OC_reason": "The plan does not reflect a true distributed setting. It assumes knowledge of tasks and objects in rooms that the agents are not explicitly informed about. There is no communication or coordination between agents, which is necessary for a distributed system.",
-      "SC": 5,
-      "SC_reason": "The step ordering is somewhat logical within each agent's sequence, but the overall plan lacks coherence in achieving the task goal. Many actions are unrelated to the task, and there is no resolution or confirmation that the living room is prepared for a workout. The plan does not address the need for coordination or communication between agents.",
-      "final_score": 4.2
+      "TF": 2,
+      "TF_reason": "The plan fails to achieve the main goal of clearing the living room space for a workout. R4, the only agent capable of pushing furniture (PushFurniture), is assigned to the bathroom performing irrelevant and invalid actions instead of clearing the living room.",
+      "PF": 1,
+      "PF_reason": "The plan contains numerous invalid actions that do not match the agents' capabilities. Examples include R1 'Ensuring appliances are turned off', R3 'Checking for items' and 'Final check', and R4 'Closing shower curtain', 'Emptying trash can', and 'Turning off lights'.",
+      "OC": 2,
+      "OC_reason": "The plan shows signs of an AI language model hallucinating its environment ('I'm unable to view images...'). The agents assume the existence of objects and rooms without any observation or communication, violating the distributed observability constraint.",
+      "SC": 1,
+      "SC_reason": "The sequence is incoherent because it relies heavily on vague, non-committal actions ('Ensure', 'Check', 'Final check') and hallucinates objects and tasks that are not grounded in the environment or the action space.",
+      "final_score": 1.65
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -75,7 +113,13 @@
         "corner",
         "floor",
         "lamp",
+        "clothes",
+        "book",
+        "surface",
         "mobile_light",
+        "yoga mat",
+        "resistance band",
+        "door",
         "shower curtain",
         "toiletry",
         "shelf",
@@ -88,6 +132,7 @@
         "coffeetable",
         "floor",
         "lamp",
+        "clothes",
         "shower curtain",
         "toiletry",
         "shelf"
@@ -97,25 +142,30 @@
         "appliance",
         "item",
         "corner",
+        "book",
+        "surface",
         "mobile_light",
+        "yoga mat",
+        "resistance band",
+        "door",
         "trash can",
         "light"
       ],
-      "grounding_rate": 0.533
+      "grounding_rate": 0.429
     }
   },
   "lamma_p": {
     "name": "LaMMA-P",
     "track_a_llm_judge": {
-      "TF": 5,
-      "TF_reason": "The plan partially achieves the task's goal by clearing space and setting up some workout elements. However, it lacks specificity in certain actions, such as 'continue clearing space if needed' and 'assist with any remaining equipment setup', which are vague and do not guarantee task completion.",
-      "PF": 7,
-      "PF_reason": "The plan is mostly executable given the agents' capabilities. R4 can move objects and push furniture, and R1 can handle lighter objects. However, R3's tasks of adjusting lighting and setting up music or a timer are not clearly within its capabilities, as these actions are not listed in its abilities.",
-      "OC": 4,
-      "OC_reason": "The plan does not reflect a true distributed setting. There is no evidence of communication or coordination between agents, and the plan seems to assume centralized knowledge of the environment, which violates the information constraint of a distributed system.",
-      "SC": 6,
-      "SC_reason": "The step ordering is mostly logical, but the plan includes vague actions that do not resolve to specific outcomes. The plan ends with setting up lighting and music, but it does not confirm that the space is fully prepared for a workout, leaving some actions unresolved.",
-      "final_score": 5.2
+      "TF": 3,
+      "TF_reason": "The plan uses vague, non-committal language ('if needed', 'assist with any remaining') and does not explicitly clear large furniture, which is typically required for a home workout space.",
+      "PF": 2,
+      "PF_reason": "R1 is a Gripper without the 'can_navigate' capability, making it impossible for it to gather and place equipment around the room. Additionally, R3 is tasked with adjusting lighting and setting up music, which are not supported by its capabilities (it can only navigate, pick up light objects, and pass/receive).",
+      "OC": 2,
+      "OC_reason": "The plan is written from a centralized perspective with full visibility of the room and tasks, showing no explicit communication or coordination between the agents.",
+      "SC": 3,
+      "SC_reason": "The sequence includes vague, hedging steps ('continue clearing space if needed') rather than concrete, resolved actions, leading to poor sequential coherence.",
+      "final_score": 2.45
     },
     "track_b_gc": 0.0,
     "track_b_state_detail": {
@@ -153,14 +203,14 @@
     "name": "SMART-LLM",
     "track_a_llm_judge": {
       "TF": 4,
-      "TF_reason": "The plan partially achieves the task's goal of preparing the living room for a workout by clearing space and bringing necessary items like a yoga mat and dumbbells. However, it does not address the need to clear other potential obstacles or ensure the entire space is ready for a workout. Additionally, the plan does not specify if the light and speaker are necessary for the workout, which could be considered part of 'everything else' being ready.",
-      "PF": 5,
-      "PF_reason": "The plan is partially feasible given the agents' capabilities. R1 is tasked with moving furniture, which it cannot do as it lacks the capability to PushFurniture. R4, which can push furniture, is not utilized. The other tasks like bringing the yoga mat and dumbbells are feasible for R3. However, R1's actions to switch on the light and speaker are not within its capabilities.",
-      "OC": 3,
-      "OC_reason": "The plan does not reflect a true distributed setting. There is no evidence of communication or coordination between agents, and the plan seems to assume centralized knowledge of the room's layout and objects. The plan lacks explicit communication or coordination steps, such as requests or messages between robots.",
+      "TF_reason": "The plan addresses the task requirements by clearing space and bringing workout equipment, but relies on impossible actions for the assigned agents.",
+      "PF": 1,
+      "PF_reason": "R1 is a stationary Gripper without navigation, PickupHeavyObject, or PushFurniture capabilities, so it cannot move a chair or a coffee table to a corner, nor can it navigate to switch on lights and speakers. R4 should have been used for heavy furniture.",
+      "OC": 2,
+      "OC_reason": "The plan is written from a centralized perspective with no explicit communication or coordination between the agents.",
       "SC": 4,
-      "SC_reason": "The step ordering is somewhat logical, but the plan does not reach a fully resolved conclusion. There are unresolved issues, such as R1's inability to perform certain tasks and the lack of coordination between agents. The plan does not ensure that all necessary preparations for the workout are completed, and it does not address potential obstacles or the final state of the room.",
-      "final_score": 3.85
+      "SC_reason": "While the chronological order of clearing space before bringing equipment makes sense, the assignment of tasks to incapable agents breaks the logical coherence of the plan.",
+      "final_score": 2.7
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",

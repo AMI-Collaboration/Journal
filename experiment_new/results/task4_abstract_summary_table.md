@@ -4,17 +4,17 @@
 
 | 방법 | TF | PF | OC | SC | Final |
 |---|---|---|---|---|---|
-| Ours (P2P) | - | - | - | - | N/A |
-| Centralized | 6 | 8 | 5 | 7 | 6.2 |
-| Independent | 5 | 6 | 3 | 4 | 4.35 |
-| LaMMA-P | 4 | 6 | 3 | 5 | 4.2 |
-| SMART-LLM | 3 | 5 | 2 | 4 | 3.2 |
+| Ours (CDA) | 7 | 9 | 9 | 5 | 7.8 |
+| Centralized | 2 | 2 | 2 | 2 | 2.0 |
+| Independent | 3 | 1 | 5 | 2 | 3.15 |
+| LaMMA-P | 2 | 1 | 2 | 1 | 1.65 |
+| SMART-LLM | 2 | 1 | 2 | 1 | 1.65 |
 
 ## Track B — GC (ours, LaMMA-P만)
 
 | 방법 | GC |
 |---|---|
-| Ours (P2P) | 0.0 |
+| Ours (CDA) | 0.0 |
 | Centralized | N/A (설계상 제외) |
 | Independent | N/A (설계상 제외) |
 | LaMMA-P | 0.0 |
@@ -24,8 +24,8 @@
 
 | 방법 | Grounding Rate | Hallucinated |
 |---|---|---|
-| Ours (P2P) | N/A | N/A |
-| Centralized | 0.7 | item, trash bin, furniture |
-| Independent | 0.714 | mobile light, bed, blanket, countertop |
+| Ours (CDA) | 0.783 | utensil, teddy bear, object, item, cushion |
+| Centralized | 0.7 | item, trashbin, furniture |
+| Independent | 0.733 | mobile light, bed, blanket, countertop |
 | LaMMA-P | 0.4 | clutter, item, dishwasher, surface, countertop, bed, cutlery, glass, light |
 | SMART-LLM | 0.9 | lightswitch |

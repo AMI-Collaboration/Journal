@@ -1,7 +1,17 @@
 {
-  "ours": {
-    "name": "Ours (P2P)",
-    "track_a_llm_judge": "N/A",
+  "ours_final": {
+    "name": "Ours (CDA)",
+    "track_a_llm_judge": {
+      "TF": 1,
+      "TF_reason": "The plan completely fails to achieve the goal. Almost all actions to close and seal windows and doors across the house were blocked or left unresolved, leaving the house vulnerable to the typhoon.",
+      "PF": 5,
+      "PF_reason": "The few actions that were executed (pushing a window shut, moving a cart) match the capabilities of the Mobile_Heavy robots, but the vast majority of the plan is blocked due to rejected requests.",
+      "OC": 7,
+      "OC_reason": "The plan shows an attempt at distributed coordination through explicit ASK_HELP, PASS, and RECEIVE requests, indicating that robots are relying on communication rather than a centralized omniscient view, even though the coordination ultimately failed.",
+      "SC": 1,
+      "SC_reason": "The plan is highly incoherent, ending with a massive list of unresolved requests and blocked actions. It fails to reach a resolved state or successfully sequence the required tasks.",
+      "final_score": 3.9
+    },
     "track_b_gc": 0.0,
     "track_b_state_detail": {
       "A1_windows_closed": false,
@@ -9,54 +19,123 @@
       "A3_curtains_closed": false,
       "A4_outdoor_items_secured": false
     },
-    "object_grounding": "N/A"
+    "object_grounding": {
+      "mentioned_objects": [
+        "window",
+        "latch",
+        "lock",
+        "metal rolling storage cart",
+        "window blind",
+        "cloth",
+        "range-exhaust damper",
+        "kitchen vent",
+        "door",
+        "metal tray",
+        "drying rack",
+        "dishsponge",
+        "striped kitchen cloth",
+        "towel",
+        "white cloth",
+        "mat",
+        "clear plastic ruler",
+        "strip",
+        "dining table",
+        "small red object",
+        "console table",
+        "white throw pillow",
+        "sofa",
+        "curtain panel",
+        "towel",
+        "armchair"
+      ],
+      "grounded_objects": [
+        "lock",
+        "cloth",
+        "dishsponge",
+        "striped kitchen cloth",
+        "towel",
+        "white cloth",
+        "mat",
+        "dining table",
+        "white throw pillow",
+        "sofa",
+        "curtain panel",
+        "towel",
+        "armchair"
+      ],
+      "hallucinated_objects": [
+        "window",
+        "latch",
+        "metal rolling storage cart",
+        "window blind",
+        "range-exhaust damper",
+        "kitchen vent",
+        "door",
+        "metal tray",
+        "drying rack",
+        "clear plastic ruler",
+        "strip",
+        "small red object",
+        "console table"
+      ],
+      "grounding_rate": 0.5
+    }
   },
   "central": {
     "name": "Centralized",
     "track_a_llm_judge": {
-      "TF": 3,
-      "TF_reason": "The plan does not fully achieve the task's goal of sealing up the house completely. The actions described involve picking up and passing light objects like an apple and a laptop, which are not suitable for sealing windows and doors. Additionally, the plan does not cover all windows and doors in the house, only those in the kitchen and living room.",
-      "PF": 6,
-      "PF_reason": "The plan is partially executable given the agents' capabilities. However, the use of light objects like an apple and a laptop for sealing is not feasible. The actions of pushing furniture against windows are feasible for R5 and R6, but the overall plan lacks coherence in terms of using appropriate materials for sealing.",
-      "OC": 4,
-      "OC_reason": "The plan does not reflect a true distributed setting. There is no evidence of explicit communication or coordination between agents regarding the locations of windows and doors or the need for sealing materials. The plan seems to assume centralized knowledge of the environment.",
-      "SC": 5,
-      "SC_reason": "The step ordering is mostly logical, but the plan does not reach a fully resolved conclusion. The actions are not well-coordinated to achieve the task's goal, and there are unresolved issues regarding the appropriateness of the objects used for sealing. The plan lacks concrete actions that lead to a complete sealing of the house.",
-      "final_score": 4.25
+      "TF": 1,
+      "TF_reason": "The plan fails to meaningfully achieve the task. Using an apple and a laptop to 'seal' windows and doors is completely illogical. Furthermore, the task requires sealing the house within 10 minutes, but R2's actions extend up to 20 minutes.",
+      "PF": 3,
+      "PF_reason": "Several actions are invalid or vague. R4 attempts to use 'PickupLightObject' to receive an item from R3 instead of 'PassReceiveObject'. Additionally, 'assist in sealing' is a vague action that does not map to the agents' capabilities.",
+      "OC": 2,
+      "OC_reason": "There is no explicit communication or messaging between the agents. They magically know each other's locations and coordinate passing objects without any prior information exchange, violating the distributed knowledge constraint.",
+      "SC": 2,
+      "SC_reason": "There are severe temporal mismatches. R3 passes the laptop to R4 between 5-10 minutes, but R4 attempts to receive it between 2-5 minutes. Additionally, R2's timeline extends to 20 minutes, ignoring the 10-minute deadline established by the prompt.",
+      "final_score": 1.9
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
     "object_grounding": {
       "mentioned_objects": [
         "apple",
+        "counter",
+        "window",
+        "door",
         "laptop",
+        "table",
         "dresser",
-        "towel",
-        "towelrack"
+        "towelrack",
+        "towel"
       ],
       "grounded_objects": [
         "apple",
         "laptop",
+        "table",
         "dresser",
-        "towel",
-        "towelrack"
+        "towelrack",
+        "towel"
       ],
-      "hallucinated_objects": [],
-      "grounding_rate": 1.0
+      "hallucinated_objects": [
+        "counter",
+        "window",
+        "door"
+      ],
+      "grounding_rate": 0.667
     }
   },
   "independent": {
     "name": "Independent",
     "track_a_llm_judge": {
-      "TF": 6,
-      "TF_reason": "The plan addresses sealing the house by closing windows, curtains, and blinds, which are relevant actions for the task. However, it does not mention sealing doors or other potential entry points for the typhoon, which may be necessary for complete fulfillment.",
-      "PF": 8,
-      "PF_reason": "The actions assigned to each agent are within their capabilities. However, the plan does not specify if R1, R3, and R5 can navigate to the locations where they need to perform their tasks, which could affect feasibility.",
-      "OC": 4,
-      "OC_reason": "The plan does not demonstrate a distributed setting. There is no evidence of communication or coordination between agents, and it seems to assume a centralized knowledge of the house layout and tasks.",
-      "SC": 7,
-      "SC_reason": "The steps are logically ordered and do not leave any pending requests. However, the plan lacks specificity in some actions, such as which specific windows or curtains are being closed, which affects coherence.",
-      "final_score": 5.85
+      "TF": 1,
+      "TF_reason": "The plan fails to fulfill the task because the agents are assigned actions they cannot perform, meaning the house will not be sealed.",
+      "PF": 1,
+      "PF_reason": "None of the agents possess the capability to open or close objects (e.g., windows, curtains, blinds, cabinet doors). Furthermore, R1 and R3 are stationary grippers without navigation capabilities, yet they are assigned to close windows and curtains.",
+      "OC": 1,
+      "OC_reason": "The plan exhibits a centralized perspective, assigning specific rooms and objects to robots without any prior exploration, observation, or communication between them.",
+      "SC": 2,
+      "SC_reason": "While the steps are grouped into time blocks, the actions themselves are invalid and impossible to execute, rendering the sequence meaningless.",
+      "final_score": 1.15
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -81,15 +160,15 @@
   "lamma_p": {
     "name": "LaMMA-P",
     "track_a_llm_judge": {
-      "TF": 5,
-      "TF_reason": "The plan addresses sealing the house by closing windows and doors and securing loose objects, but it does not fully achieve the task's goal within the given time frame. The plan extends beyond the 10-minute mark, which is critical given the urgency of the task. Additionally, switching off appliances is not directly related to sealing the house.",
-      "PF": 7,
-      "PF_reason": "The plan is mostly executable given the agents' capabilities. However, R3 is tasked with securing loose objects without specifying how it will do so, which could be problematic if the objects are heavy or require more than just picking up.",
-      "OC": 3,
-      "OC_reason": "The plan does not reflect a true distributed setting. There is no evidence of communication or coordination between agents, and the plan assumes centralized knowledge of all tasks and locations, which violates the information constraint of a distributed system.",
-      "SC": 4,
-      "SC_reason": "The step ordering is mostly logical, but the plan does not reach a fully resolved conclusion within the critical 10-minute window. The actions related to electrical appliances are unnecessary for the primary task and extend beyond the required timeframe, leaving the main task unresolved.",
-      "final_score": 4.55
+      "TF": 2,
+      "TF_reason": "The plan fails to complete the task within the 10-minute deadline (it takes 20 minutes). It also uses vague, non-specific language ('each window', 'each door') instead of referencing specific objects.",
+      "PF": 1,
+      "PF_reason": "R3 is a Gripper without the 'can_navigate' capability, yet the plan commands it to 'Go to each loose object'. Additionally, R4 and R6 are commanded to close windows and doors, which may require manipulation capabilities they do not explicitly possess.",
+      "OC": 2,
+      "OC_reason": "The plan assumes a centralized, omniscient view of the house, knowing about 'each window' and 'each door' without any exploration, communication, or room-specific context.",
+      "SC": 2,
+      "SC_reason": "The sequence ignores the critical 10-minute time constraint and relies entirely on vague, generalized actions rather than concrete, executable steps.",
+      "final_score": 1.8
     },
     "track_b_gc": 0.0,
     "track_b_state_detail": {
@@ -119,14 +198,14 @@
     "name": "SMART-LLM",
     "track_a_llm_judge": {
       "TF": 5,
-      "TF_reason": "The plan addresses closing windows and doors, which are critical for sealing the house. However, it does not mention other potential openings like additional vents or any other sealing measures that might be necessary, such as securing loose objects or reinforcing weak points.",
-      "PF": 7,
-      "PF_reason": "The plan is mostly feasible given the agents' capabilities. R4 and R6 are mobile and can navigate to close windows and doors. However, the plan does not specify how R4 and R6 know the locations of these objects, which could be an issue if they are not in the same room.",
-      "OC": 3,
-      "OC_reason": "The plan does not reflect a distributed setting. It assumes that R4 and R6 have knowledge of all windows and doors without any communication or explicit instructions, which violates the information constraint of a distributed system.",
-      "SC": 6,
-      "SC_reason": "The step ordering is logically correct, with actions divided into two time segments. However, the plan does not reach a fully resolved conclusion as it does not address all potential openings or provide a comprehensive sealing strategy.",
-      "final_score": 4.85
+      "TF_reason": "The plan addresses the overall goal of sealing the house by closing doors and windows, but it relies on generic, assumed objects (Window1, Skylight1) without any specific room context or evidence that these objects exist in the agents' environments.",
+      "PF": 2,
+      "PF_reason": "R4 is a Mobile_Light agent without a gripper, making it incapable of operating window latches or reaching a skylight. Closing doors and windows typically requires manipulation capabilities (Gripper) which neither R4 nor R6 possess in this configuration.",
+      "OC": 1,
+      "OC_reason": "The plan is entirely centralized. It assumes global knowledge of all doors, windows, and vents across the house without any communication, exploration, or information sharing between the agents.",
+      "SC": 3,
+      "SC_reason": "The plan lacks logical sequencing for navigation. Agents are assigned to interact with multiple objects across presumably different locations without any movement steps, acting as if they can teleport from one window or door to the next.",
+      "final_score": 2.7
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",

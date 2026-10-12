@@ -4,17 +4,17 @@
 
 | 방법 | TF | PF | OC | SC | Final |
 |---|---|---|---|---|---|
-| Ours (P2P) | - | - | - | - | N/A |
-| Centralized | 4 | 7 | 5 | 6 | 5.25 |
-| Independent | 5 | 7 | 4 | 6 | 5.2 |
-| LaMMA-P | 6 | 8 | 5 | 7 | 6.2 |
-| SMART-LLM | 7 | 8 | 4 | 6 | 6.0 |
+| Ours (CDA) | 3 | 9 | 9 | 3 | 6.3 |
+| Centralized | 2 | 2 | 2 | 1 | 1.85 |
+| Independent | 2 | 2 | 2 | 2 | 2.0 |
+| LaMMA-P | 2 | 1 | 2 | 2 | 1.8 |
+| SMART-LLM | 4 | 2 | 2 | 2 | 2.6 |
 
 ## Track B — GC (ours, LaMMA-P만)
 
 | 방법 | GC |
 |---|---|
-| Ours (P2P) | 0.0 |
+| Ours (CDA) | 0.0 |
 | Centralized | N/A (설계상 제외) |
 | Independent | N/A (설계상 제외) |
 | LaMMA-P | 0.0 |
@@ -24,8 +24,8 @@
 
 | 방법 | Grounding Rate | Hallucinated |
 |---|---|---|
-| Ours (P2P) | N/A | N/A |
+| Ours (CDA) | 0.583 | counter, recycling bin, stove, eating utensil, cutting board, saucer, onion, lime, pear, container |
 | Centralized | 0.909 | magazine |
-| Independent | 0.714 | counter, dishsoap, trashcan, item |
+| Independent | 0.667 | counter, dishsoap, water, trashcan, item |
 | LaMMA-P | 0.25 | item, surface, appliance |
 | SMART-LLM | 1.0 | 없음 |

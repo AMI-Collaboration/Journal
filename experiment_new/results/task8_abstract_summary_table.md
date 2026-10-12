@@ -4,17 +4,17 @@
 
 | 방법 | TF | PF | OC | SC | Final |
 |---|---|---|---|---|---|
-| Ours (P2P) | - | - | - | - | N/A |
-| Centralized | 4 | 7 | 5 | 6 | 5.25 |
-| Independent | 3 | 5 | 4 | 4 | 3.9 |
-| LaMMA-P | 5 | 7 | 4 | 6 | 5.2 |
-| SMART-LLM | 6 | 8 | 5 | 7 | 6.2 |
+| Ours (CDA) | 3 | 9 | 9 | 3 | 6.3 |
+| Centralized | 3 | 2 | 2 | 1 | 2.15 |
+| Independent | 1 | 1 | 1 | 1 | 1.0 |
+| LaMMA-P | 4 | 2 | 2 | 3 | 2.75 |
+| SMART-LLM | 2 | 2 | 2 | 1 | 1.85 |
 
 ## Track B — GC (ours, LaMMA-P만)
 
 | 방법 | GC |
 |---|---|
-| Ours (P2P) | 0.0 |
+| Ours (CDA) | 0.0 |
 | Centralized | N/A (설계상 제외) |
 | Independent | N/A (설계상 제외) |
 | LaMMA-P | 0.0 |
@@ -24,8 +24,8 @@
 
 | 방법 | Grounding Rate | Hallucinated |
 |---|---|---|
-| Ours (P2P) | N/A | N/A |
-| Centralized | 0.818 | blanket, trash bin |
+| Ours (CDA) | 0.561 | throw blanket, guitar, storage corner, toothbrush, cardboard piece, floor item, rod-like item, waste bin, bundle, dresser, fabric item, rod, blanket, duvet, mattress, computer, cable, writing utensil |
+| Centralized | 0.8 | blanket, trash bin |
 | Independent | 0.679 | light, magazine, package, cleaning wipe, solution, curtain, cushion, counter, trash bin |
 | LaMMA-P | 0.333 | surface, isolation equipment |
 | SMART-LLM | 0.25 | supply, ventilation, sign |

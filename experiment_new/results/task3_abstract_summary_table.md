@@ -4,17 +4,17 @@
 
 | 방법 | TF | PF | OC | SC | Final |
 |---|---|---|---|---|---|
-| Ours (P2P) | - | - | - | - | N/A |
-| Centralized | 5 | 6 | 3 | 4 | 4.35 |
-| Independent | 5 | 6 | 3 | 4 | 4.35 |
-| LaMMA-P | 6 | 7 | 4 | 5 | 5.35 |
-| SMART-LLM | 5 | 4 | 3 | 4 | 3.95 |
+| Ours (CDA) | 2 | 2 | 2 | 2 | 2.0 |
+| Centralized | 3 | 2 | 2 | 2 | 2.3 |
+| Independent | 4 | 3 | 2 | 2 | 2.8 |
+| LaMMA-P | 2 | 1 | 2 | 3 | 1.95 |
+| SMART-LLM | 2 | 1 | 1 | 2 | 1.45 |
 
 ## Track B — GC (ours, LaMMA-P만)
 
 | 방법 | GC |
 |---|---|
-| Ours (P2P) | 0.0 |
+| Ours (CDA) | 0.0 |
 | Centralized | N/A (설계상 제외) |
 | Independent | N/A (설계상 제외) |
 | LaMMA-P | 0.0 |
@@ -24,7 +24,7 @@
 
 | 방법 | Grounding Rate | Hallucinated |
 |---|---|---|
-| Ours (P2P) | N/A | N/A |
+| Ours (CDA) | 0.323 | table lamp, bowl, tray, device, sheet of paper, dining table, marker, pen, pad, monitor, smartphone, cup, chessboard, wastebasket, potted plant, baseball bat, stick, bed, broom, bedding, blanket |
 | Centralized | 0.538 | item, couch, pen, phone, bed, window |
 | Independent | 0.714 | mobile light, pen |
 | LaMMA-P | 0.0 | clutter, light, computer, door, window, camera, microphone |

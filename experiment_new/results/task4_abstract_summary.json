@@ -1,7 +1,17 @@
 {
-  "ours": {
-    "name": "Ours (P2P)",
-    "track_a_llm_judge": "N/A",
+  "ours_final": {
+    "name": "Ours (CDA)",
+    "track_a_llm_judge": {
+      "TF": 7,
+      "TF_reason": "The robots successfully tidy up their respective rooms (kitchen, living room, bedroom, bathroom) to prepare for the guest. However, the task of preparing and serving a drink to the guest failed because the request to pass the mug was declined and dropped.",
+      "PF": 9,
+      "PF_reason": "The actions assigned to each robot align with their capabilities. R1 (Gripper) performs local manipulation tasks, while the mobile robots (R2, R3, R4) navigate and manipulate objects appropriate for their weight capacities.",
+      "OC": 9,
+      "OC_reason": "The plan reflects a distributed setting where each robot operates within its own room and attempts to coordinate across rooms via explicit requests (e.g., R2 requesting a mug from R1), respecting the information constraints.",
+      "SC": 5,
+      "SC_reason": "The plan contains unresolved and blocked actions due to R1 declining R2's request for the mug, leaving the drink service sequence incomplete and hanging.",
+      "final_score": 7.8
+    },
     "track_b_gc": 0.0,
     "track_b_state_detail": {
       "A1_living_room_clean": false,
@@ -9,20 +19,74 @@
       "A3_guest_bathroom_ready": false,
       "A4_guest_entrance_clear": false
     },
-    "object_grounding": "N/A"
+    "object_grounding": {
+      "mentioned_objects": [
+        "knife",
+        "cardboard box",
+        "bin",
+        "utensil",
+        "remote control",
+        "teddy bear",
+        "bottle",
+        "sponge",
+        "object",
+        "item",
+        "dish",
+        "bowl",
+        "soap",
+        "spray bottle",
+        "plate",
+        "cushion",
+        "sofa",
+        "pillow",
+        "tomato",
+        "lettuce leaf",
+        "laptop",
+        "cloth",
+        "mug"
+      ],
+      "grounded_objects": [
+        "knife",
+        "cardboard box",
+        "bin",
+        "remote control",
+        "bottle",
+        "sponge",
+        "dish",
+        "bowl",
+        "soap",
+        "spray bottle",
+        "plate",
+        "sofa",
+        "pillow",
+        "tomato",
+        "lettuce leaf",
+        "laptop",
+        "cloth",
+        "mug"
+      ],
+      "hallucinated_objects": [
+        "utensil",
+        "teddy bear",
+        "object",
+        "item",
+        "cushion"
+      ],
+      "grounding_rate": 0.783
+    }
   },
   "central": {
     "name": "Centralized",
     "track_a_llm_judge": {
-      "TF": 6,
-      "TF_reason": "The plan partially achieves the task's goal of preparing the house for a guest. R1 prepares a snack and drink, R2 places them in the living room, R3 tidies the bedroom, and R4 organizes the bathroom. However, the plan does not explicitly address cleaning or organizing the living room, which is crucial for welcoming a guest.",
-      "PF": 8,
-      "PF_reason": "The plan is mostly executable given each agent's capabilities. Each robot performs tasks within its abilities, such as R1 slicing and pouring, R2 navigating and placing items, R3 tidying, and R4 organizing and moving heavy objects. However, R2's task of placing the snack or drink on the table is scheduled after the guest arrives, which may not be feasible.",
-      "OC": 5,
-      "OC_reason": "The plan lacks explicit communication between agents, especially regarding the transfer of objects between R1 and R2. While R1 passes objects to R2, there is no explicit coordination or messaging system described, which is necessary for a true distributed setting.",
-      "SC": 7,
-      "SC_reason": "The step ordering is mostly logical, with each robot performing tasks in a sequence that makes sense. However, the plan does not fully resolve the task of preparing the living room before the guest arrives, and R2's task of placing items on the table occurs after the guest's arrival, which affects coherence.",
-      "final_score": 6.2
+      "TF": 2,
+      "TF_reason": "The plan fails to complete within the 15-minute time limit (R2 and R4 take up to 20-25 minutes). Additionally, it relies heavily on vague, non-committal actions ('check for clutter', 'if any heavy items need repositioning') rather than concrete task execution.",
+      "PF": 2,
+      "PF_reason": "Several actions are infeasible. R2 attempts to place an object but lacks the PlaceObject capability. R3 attempts to use 'can_navigate' to manipulate objects ('straighten pillows', 'arrange items'). R4 uses conditional logic ('if any heavy items...') which is not a valid executable action.",
+      "OC": 2,
+      "OC_reason": "The plan exhibits centralized knowledge, assuming the locations of specific rooms (kitchen, living room, bedroom, bathroom) and objects without any prior exploration or communication between the agents.",
+      "SC": 2,
+      "SC_reason": "There is a severe temporal mismatch: R1 passes the items to R2 during the [10-15 min] window, but R2 is scheduled to receive them during the [5-10 min] window. The plan also fails to resolve within the given 15-minute constraint.",
+      "final_score": 2.0
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -34,7 +98,7 @@
         "pillow",
         "dresser",
         "item",
-        "trash bin",
+        "trashbin",
         "sink",
         "shower",
         "furniture"
@@ -50,7 +114,7 @@
       ],
       "hallucinated_objects": [
         "item",
-        "trash bin",
+        "trashbin",
         "furniture"
       ],
       "grounding_rate": 0.7
@@ -59,15 +123,15 @@
   "independent": {
     "name": "Independent",
     "track_a_llm_judge": {
-      "TF": 5,
-      "TF_reason": "The plan addresses some aspects of preparing the house for a guest, such as tidying and creating a welcoming atmosphere. However, it lacks specific actions related to greeting the guest or ensuring all areas are ready. Some actions, like slicing a tomato, seem unrelated to the task of welcoming a guest.",
-      "PF": 6,
-      "PF_reason": "Most actions are feasible given the agents' capabilities, but there are issues. R2 and R3 are described as turning on lights, which is not within their capabilities. R4's actions are feasible, but the plan assumes the presence of specific objects without evidence.",
-      "OC": 3,
-      "OC_reason": "The plan does not reflect a distributed setting. There is no evidence of communication or coordination between agents, and actions are planned as if there is centralized knowledge of all rooms and objects.",
-      "SC": 4,
-      "SC_reason": "The sequence of actions is somewhat logical, but there are unresolved issues. The plan does not conclude with a clear resolution, such as a final check or greeting the guest. Some actions are out of sequence or unnecessary for the task.",
-      "final_score": 4.35
+      "TF": 3,
+      "TF_reason": "The plan attempts to prepare the house for a guest by preparing food/drinks and tidying up various rooms. However, the actions are mostly vague and not grounded in specific, executable tasks.",
+      "PF": 1,
+      "PF_reason": "The plan fails significantly on feasibility. R2, R3, and R4 are assigned actions that do not exist in their capability lists (e.g., 'turns on the mobile light', 'tidies up', 'ensures curtains are open', 'close the laptop', 'close the shower door'). They are only capable of navigation, picking up objects, pushing furniture, and passing/receiving.",
+      "OC": 5,
+      "OC_reason": "The robots act independently in their respective rooms without any explicit communication or coordination, which avoids centralized omniscience but lacks any collaborative effort.",
+      "SC": 2,
+      "SC_reason": "While the plan follows a chronological timeline, the steps for R2, R3, and R4 are completely invalid and unexecutable, breaking the logical coherence of the plan.",
+      "final_score": 3.15
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -83,6 +147,7 @@
         "pillow",
         "blanket",
         "laptop",
+        "dresser",
         "countertop",
         "sink",
         "shower door",
@@ -96,6 +161,7 @@
         "lamp",
         "pillow",
         "laptop",
+        "dresser",
         "sink",
         "shower door",
         "toilet lid"
@@ -106,21 +172,21 @@
         "blanket",
         "countertop"
       ],
-      "grounding_rate": 0.714
+      "grounding_rate": 0.733
     }
   },
   "lamma_p": {
     "name": "LaMMA-P",
     "track_a_llm_judge": {
-      "TF": 4,
-      "TF_reason": "The plan does not fully achieve the task's goal within the given time frame. The guest is arriving in 15 minutes, but the plan extends to 35 minutes. Additionally, the plan does not specify the completion of tasks like cleaning surfaces in the living room or making the bed in the guest room before the guest arrives.",
-      "PF": 6,
-      "PF_reason": "The plan is mostly executable given the agents' capabilities, but there are issues. R4 is tasked with actions in multiple rooms simultaneously, which is not feasible. R1's actions are delayed and not aligned with the guest's arrival time.",
-      "OC": 3,
-      "OC_reason": "The plan does not reflect a true distributed setting. There is no evidence of communication or coordination between agents, and actions are planned as if there is centralized knowledge of all rooms and tasks.",
-      "SC": 5,
-      "SC_reason": "The step ordering is not logically correct given the task's time constraints. The plan extends beyond the guest's arrival time, and there are unresolved tasks that should have been completed earlier. The sequence lacks coherence with respect to the task's urgency.",
-      "final_score": 4.2
+      "TF": 2,
+      "TF_reason": "The plan fails to meet the 15-minute deadline, extending to 35 minutes. It also relies on vague actions like 'picks up clutter' without specifying concrete objects.",
+      "PF": 1,
+      "PF_reason": "The plan is highly infeasible. R1 is a Gripper without navigation capabilities but is instructed to move between multiple rooms. R4 is assigned to be in two different rooms (kitchen and guest room) simultaneously. Additionally, agents are assigned actions they lack capabilities for, such as cleaning surfaces, wiping countertops, making beds, and turning on lights.",
+      "OC": 2,
+      "OC_reason": "The plan is written from a centralized perspective with full visibility of all rooms, assuming the presence of clutter, dishes, and items without any exploration or communication between agents.",
+      "SC": 1,
+      "SC_reason": "The sequential coherence is broken by assigning R4 to perform actions in two different rooms at the exact same time. Furthermore, the plan ignores the explicit 15-minute time constraint.",
+      "final_score": 1.65
     },
     "track_b_gc": 0.0,
     "track_b_state_detail": {
@@ -172,15 +238,15 @@
   "smart_llm": {
     "name": "SMART-LLM",
     "track_a_llm_judge": {
-      "TF": 3,
-      "TF_reason": "The plan does not fully achieve the task's goal of getting the house ready for a guest in 15 minutes. The actions are spread over 70 minutes, which exceeds the time constraint. Additionally, the plan lacks actions related to tidying up or preparing areas like the entrance or living room, which are typically important for welcoming guests.",
-      "PF": 5,
-      "PF_reason": "The plan is partially feasible given the agents' capabilities, but it heavily relies on R4 for most tasks, which is inefficient. R1 is not utilized at all, and R2 is not mentioned, which could have been used for tasks like picking up light objects or assisting in navigation.",
+      "TF": 2,
+      "TF_reason": "The plan completely fails the time constraint, taking 70 minutes to prepare for a guest arriving in 15 minutes.",
+      "PF": 1,
+      "PF_reason": "R4 is assigned multiple conflicting actions in the same time blocks (e.g., navigating to two different places in [0-5 min]). Furthermore, R4 is assigned actions it does not have the capabilities for, such as 'clean', 'open', and 'close'.",
       "OC": 2,
-      "OC_reason": "The plan does not reflect a true distributed setting. It appears to be centrally planned with R4 performing tasks in multiple rooms without any communication or coordination with other agents. There are no explicit messages or requests between robots, indicating a lack of adherence to information constraints.",
-      "SC": 4,
-      "SC_reason": "The step ordering is not logically coherent with the task's time constraint. The plan extends beyond the 15-minute window and lacks a clear resolution for welcoming a guest. Additionally, there are no actions related to preparing the entrance or greeting the guest, leaving the plan incomplete.",
-      "final_score": 3.2
+      "OC_reason": "The plan is written from a centralized perspective with no communication or coordination between agents.",
+      "SC": 1,
+      "SC_reason": "The step ordering is logically flawed as R4 is double-booked with simultaneous, conflicting actions within the same time blocks.",
+      "final_score": 1.65
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -194,7 +260,7 @@
         "sofa",
         "wateringcan",
         "fridge",
-        "bottle",
+        "bottle of water",
         "diningtable"
       ],
       "grounded_objects": [
@@ -205,7 +271,7 @@
         "sofa",
         "wateringcan",
         "fridge",
-        "bottle",
+        "bottle of water",
         "diningtable"
       ],
       "hallucinated_objects": [

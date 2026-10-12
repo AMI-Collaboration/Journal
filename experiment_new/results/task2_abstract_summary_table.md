@@ -4,17 +4,17 @@
 
 | 방법 | TF | PF | OC | SC | Final |
 |---|---|---|---|---|---|
-| Ours (P2P) | - | - | - | - | N/A |
-| Centralized | 5 | 7 | 4 | 6 | 5.2 |
-| Independent | 5 | 4 | 3 | 4 | 3.95 |
-| LaMMA-P | 6 | 7 | 4 | 5 | 5.35 |
-| SMART-LLM | 7 | 8 | 5 | 8 | 6.65 |
+| Ours (CDA) | 2 | 3 | 8 | 2 | 4.3 |
+| Centralized | 3 | 2 | 2 | 2 | 2.3 |
+| Independent | 2 | 1 | 2 | 1 | 1.65 |
+| LaMMA-P | 6 | 2 | 2 | 3 | 3.35 |
+| SMART-LLM | 9 | 2 | 2 | 8 | 5.0 |
 
 ## Track B — GC (ours, LaMMA-P만)
 
 | 방법 | GC |
 |---|---|
-| Ours (P2P) | 0.0 |
+| Ours (CDA) | 0.0 |
 | Centralized | N/A (설계상 제외) |
 | Independent | N/A (설계상 제외) |
 | LaMMA-P | 0.0 |
@@ -24,7 +24,7 @@
 
 | 방법 | Grounding Rate | Hallucinated |
 |---|---|---|
-| Ours (P2P) | N/A | N/A |
+| Ours (CDA) | 0.615 | waste bin, bath mat, holder, container, bathtub |
 | Centralized | 0.444 | shelf, bathtub, rack, shampoo, mat |
 | Independent | 0.545 | bathtub, tub, bathmat, shampoo, shelf |
 | LaMMA-P | 0.667 | bathtub, light switch |

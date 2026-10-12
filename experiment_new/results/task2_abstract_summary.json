@@ -1,7 +1,17 @@
 {
-  "ours": {
-    "name": "Ours (P2P)",
-    "track_a_llm_judge": "N/A",
+  "ours_final": {
+    "name": "Ours (CDA)",
+    "track_a_llm_judge": {
+      "TF": 2,
+      "TF_reason": "The plan completely misses the 5-minute deadline and fails to fill the bathtub, which is the primary requirement for the user to take a bath.",
+      "PF": 3,
+      "PF_reason": "Mobile agents R3 and R4 attempt to operate the bathtub faucet, a task requiring manipulation capabilities they lack. The Gripper agent (R1), which could potentially operate the faucet, is not utilized.",
+      "OC": 8,
+      "OC_reason": "The plan respects observability constraints by having agents attempt to communicate via ASK_HELP requests rather than assuming centralized control, even though the requests are ultimately declined.",
+      "SC": 2,
+      "SC_reason": "The plan is highly incoherent, leaving unresolved requests hanging, multiple blocked actions due to declined help, and dropped steps, failing to reach a resolved conclusion.",
+      "final_score": 4.3
+    },
     "track_b_gc": 0.0,
     "track_b_state_detail": {
       "A1_shower_area_ready": false,
@@ -9,20 +19,54 @@
       "A3_toiletries_ready": false,
       "A4_bathroom_accessible": false
     },
-    "object_grounding": "N/A"
+    "object_grounding": {
+      "mentioned_objects": [
+        "waste bin",
+        "bath mat",
+        "plunger",
+        "toilet",
+        "toilet brush",
+        "holder",
+        "towel",
+        "soap",
+        "bottle",
+        "container",
+        "bathtub",
+        "faucet",
+        "curtain"
+      ],
+      "grounded_objects": [
+        "plunger",
+        "toilet",
+        "toilet brush",
+        "towel",
+        "soap",
+        "bottle",
+        "faucet",
+        "curtain"
+      ],
+      "hallucinated_objects": [
+        "waste bin",
+        "bath mat",
+        "holder",
+        "container",
+        "bathtub"
+      ],
+      "grounding_rate": 0.615
+    }
   },
   "central": {
     "name": "Centralized",
     "track_a_llm_judge": {
-      "TF": 5,
-      "TF_reason": "The plan partially achieves the task's goal by preparing the bathroom with towels, soap, and shampoo. However, there are redundancies and potential misplacements, such as R2 and R3 both handling towels without clear necessity, and R4's actions overlap with R3's without clear coordination.",
-      "PF": 7,
-      "PF_reason": "The plan is mostly executable given the agents' capabilities, but there are issues such as R1 passing a towel to R2 without a clear need, and R4's actions could be redundant with R3's. The capabilities of each robot are respected, but the plan could be optimized.",
-      "OC": 4,
-      "OC_reason": "The plan lacks explicit communication between agents, leading to potential overlaps and inefficiencies. R2 and R3 both handle towels without coordination, and R4's actions seem to assume knowledge of other agents' actions without explicit communication.",
-      "SC": 6,
-      "SC_reason": "The step ordering is mostly logical, but there are redundancies and potential conflicts, such as multiple agents handling towels and soap without clear coordination. The plan reaches a conclusion, but with inefficiencies and potential overlaps in actions.",
-      "final_score": 5.2
+      "TF": 3,
+      "TF_reason": "The plan attempts to prepare the bathroom by gathering towels, soap, and shampoo, but it is highly redundant (multiple robots fetching towels and soap) and includes vague, non-committal actions like 'adjust it if necessary' and 'ensure a towel is accessible'.",
+      "PF": 2,
+      "PF_reason": "Several actions are infeasible. None of the robots have a 'PutObject' capability, yet the plan repeatedly instructs them to 'place' objects. R4 is instructed to 'adjust' a bath mat and 'ensure' a towel is accessible, which do not map to its capabilities. Additionally, R1 attempts to pass an object to R2, but R2 does not have a corresponding receive action.",
+      "OC": 2,
+      "OC_reason": "The plan operates with centralized knowledge, assuming all robots know exactly where objects are across different areas without any explicit communication or discovery. R1 passes an object to R2, but R2 acts independently without acknowledging the transfer.",
+      "SC": 2,
+      "SC_reason": "The sequence is broken and uncoordinated. R1's pass action is completely ignored by R2, which instead picks up a towel from a desk. The plan is filled with redundant tasks (R3 and R4 both fetching soap) and unresolved, vague instructions.",
+      "final_score": 2.3
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -57,15 +101,15 @@
   "independent": {
     "name": "Independent",
     "track_a_llm_judge": {
-      "TF": 5,
-      "TF_reason": "The plan partially achieves the task's goal. It includes actions to prepare the bathroom, such as filling the tub, placing the bath mat, and ensuring soap and shampoo are accessible. However, there is redundancy in actions (e.g., multiple agents handling the towel and bath mat) and no clear resolution on which agent successfully completes each task.",
-      "PF": 4,
-      "PF_reason": "The plan is not fully executable given the agents' capabilities. R1 and R2 both attempt to pick up the towel, which is unnecessary and inefficient. R3 and R4 have overlapping tasks, such as placing the bath mat and ensuring soap and shampoo accessibility, which could lead to conflicts.",
-      "OC": 3,
-      "OC_reason": "The plan does not reflect a true distributed setting. There is no evidence of communication or coordination between agents, and actions are taken without explicit knowledge sharing. The plan assumes centralized knowledge of the environment.",
-      "SC": 4,
-      "SC_reason": "The step ordering lacks coherence due to redundant and conflicting actions. There is no clear resolution of tasks, such as which agent successfully places the bath mat or handles the towel. The plan does not ensure all tasks are completed without overlap or conflict.",
-      "final_score": 3.95
+      "TF": 2,
+      "TF_reason": "The plan attempts to prepare the bathroom but relies heavily on vague, non-actionable steps ('ensures', 'checks') and assigns overlapping tasks to multiple robots, failing to provide a concrete resolution.",
+      "PF": 1,
+      "PF_reason": "The plan assigns actions outside the robots' capabilities. R3 turning on a faucet requires ToggleObject (which it lacks), and R4 pulling a curtain is not a supported action. Furthermore, 'ensure' and 'check' are not valid executable actions.",
+      "OC": 2,
+      "OC_reason": "There is no communication or coordination between the robots. The plan is written from a centralized perspective but fails to distribute information, leading to robots blindly attempting the same tasks.",
+      "SC": 1,
+      "SC_reason": "The step ordering and logic are highly flawed. R1 and R2 are scheduled to pick up the exact same towel at the same time, while R3 and R4 simultaneously attempt to place the bath mat and check the soap/shampoo.",
+      "final_score": 1.65
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -105,14 +149,14 @@
     "name": "LaMMA-P",
     "track_a_llm_judge": {
       "TF": 6,
-      "TF_reason": "The plan partially fulfills the task by preparing the bathroom with a clean bathtub, running water, and providing a towel and soap. However, it lacks details on ensuring the water temperature is appropriate and does not mention any personal items like shampoo or a bath mat.",
-      "PF": 7,
-      "PF_reason": "The plan is mostly feasible given the agents' capabilities. R4 can handle the bathtub tasks, and R3 can transport light objects like towels and soap. However, R1's task of lighting candles is not feasible as it lacks the capability to light objects.",
-      "OC": 4,
-      "OC_reason": "The plan does not reflect a true distributed setting. There is no evidence of communication or coordination between agents, and actions are taken without explicit knowledge sharing, such as R3 knowing where the towel and soap are located.",
-      "SC": 5,
-      "SC_reason": "The sequence of actions is mostly coherent, but there are unresolved issues such as R1's inability to light candles and the lack of communication between agents. The plan does not fully resolve the task as it leaves out important details like water temperature and additional bathing items.",
-      "final_score": 5.35
+      "TF_reason": "The plan addresses the main components of the task (preparing the bathtub, gathering towel and soap, setting the ambiance), but fails in execution due to capability constraints.",
+      "PF": 2,
+      "PF_reason": "R1 is a Gripper without the 'can_navigate' capability, yet it is assigned tasks to go to the light switch and candle location. Additionally, R3 picks up both a towel and soap simultaneously, which typically exceeds a single robot's holding capacity without a basket.",
+      "OC": 2,
+      "OC_reason": "The plan is written from a centralized perspective with full visibility of the environment. There is no communication, message passing, or coordination reflecting a distributed system.",
+      "SC": 3,
+      "SC_reason": "The sequence has logical flaws: R4 turns on the faucet and immediately turns it off in the next step, leaving no time for the bathtub to fill. Furthermore, R1's sequence is invalid due to its inability to navigate.",
+      "final_score": 3.35
     },
     "track_b_gc": 0.0,
     "track_b_state_detail": {
@@ -146,15 +190,15 @@
   "smart_llm": {
     "name": "SMART-LLM",
     "track_a_llm_judge": {
-      "TF": 7,
-      "TF_reason": "The plan achieves the task's goal of preparing the bathroom for a bath by filling the bathtub and providing soap and a towel. However, it does not specify if the water temperature is adjusted, which might be necessary for a complete task fulfillment.",
-      "PF": 8,
-      "PF_reason": "The plan is mostly executable given the agents' capabilities. R4 can handle the faucet operations, and R3 can navigate and handle light objects like soap and a towel. However, R4's ability to 'open' and 'switch on' the faucet is assumed without explicit capability details.",
-      "OC": 5,
-      "OC_reason": "The plan does not explicitly show communication or coordination between agents, which is necessary in a distributed setting. It assumes centralized knowledge of object locations and tasks without explicit messaging or requests between agents.",
+      "TF": 9,
+      "TF_reason": "The plan conceptually fulfills the task by filling the bathtub with water and gathering necessary items like a soap bar and a towel.",
+      "PF": 2,
+      "PF_reason": "R4 lacks the 'ToggleObject' capability required to switch the faucet on and off. Additionally, 'open the faucet' and 'switch on the faucet' are redundant or invalid actions for the given capabilities.",
+      "OC": 2,
+      "OC_reason": "The plan is written from a centralized perspective where agents instantly know the locations of the bathtub, soap, and towel without any exploration, communication, or information sharing.",
       "SC": 8,
-      "SC_reason": "The step ordering is logically correct, and the plan reaches a resolved conclusion with all necessary items placed near the bathtub. However, the plan could be improved by ensuring all actions are explicitly linked to the task's completion, such as confirming the water temperature.",
-      "final_score": 6.65
+      "SC_reason": "The sequence of actions is logically ordered, with R4 handling the water and R3 gathering the items concurrently within the time limit.",
+      "final_score": 5.0
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",

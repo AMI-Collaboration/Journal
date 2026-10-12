@@ -4,17 +4,17 @@
 
 | 방법 | TF | PF | OC | SC | Final |
 |---|---|---|---|---|---|
-| Ours (P2P) | - | - | - | - | N/A |
-| Centralized | 5 | 8 | 6 | 7 | 6.25 |
-| Independent | 4 | 6 | 3 | 5 | 4.2 |
-| LaMMA-P | 5 | 7 | 4 | 6 | 5.2 |
-| SMART-LLM | 4 | 5 | 3 | 4 | 3.85 |
+| Ours (CDA) | 3 | 4 | 4 | 2 | 3.4 |
+| Centralized | 2 | 3 | 2 | 2 | 2.2 |
+| Independent | 2 | 1 | 2 | 1 | 1.65 |
+| LaMMA-P | 3 | 2 | 2 | 3 | 2.45 |
+| SMART-LLM | 4 | 1 | 2 | 4 | 2.7 |
 
 ## Track B — GC (ours, LaMMA-P만)
 
 | 방법 | GC |
 |---|---|
-| Ours (P2P) | 0.0 |
+| Ours (CDA) | 0.0 |
 | Centralized | N/A (설계상 제외) |
 | Independent | N/A (설계상 제외) |
 | LaMMA-P | 0.0 |
@@ -24,8 +24,8 @@
 
 | 방법 | Grounding Rate | Hallucinated |
 |---|---|---|
-| Ours (P2P) | N/A | N/A |
+| Ours (CDA) | 0.7 | container, rug, hazard |
 | Centralized | 0.667 | magazine, furniture |
-| Independent | 0.533 | counter, appliance, item, corner, mobile_light, trash can, light |
+| Independent | 0.429 | counter, appliance, item, corner, book, surface, mobile_light, yoga mat, resistance band, door, trash can, light |
 | LaMMA-P | 0.286 | lighter workout equipment, small electronics, lighting, music, timer |
 | SMART-LLM | 0.333 | yogamat, dumbbell, light, speaker |
