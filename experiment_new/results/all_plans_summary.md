@@ -1,4 +1,4 @@
-# 전체 Joint Plan 모음 (task1~10 x run1~3 x 5개 방법론, 플랜 본문만)
+# 전체 Joint Plan 모음 (task1-10 x run1-3 x 5개 방법론, 플랜 본문만)
 
 # task1_abstract
 
