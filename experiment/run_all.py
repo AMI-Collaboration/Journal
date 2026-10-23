@@ -30,6 +30,7 @@ parser.add_argument("--run", type=int, default=1)
 parser.add_argument("--no-proposal", action="store_true")
 parser.add_argument("--no-graph-llm", action="store_true")
 parser.add_argument("--rounds", type=int, default=2)
+parser.add_argument("--n-robots", type=int, default=4, choices=[4,6,8])
 parser.add_argument("--dry-run", action="store_true")
 args = parser.parse_args()
 
@@ -118,6 +119,7 @@ for i, task in enumerate(tasks, 1):
         sys.executable, "run_cda.py",
         "--task", task, "--mode", args.mode, "--model", args.model,
         "--run", str(args.run), "--rounds", str(args.rounds),
+        "--n-robots", str(args.n_robots),
     ]
     if args.no_proposal:  cda_cmd.append("--no-proposal")
     if args.no_graph_llm: cda_cmd.append("--no-graph-llm")

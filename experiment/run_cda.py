@@ -51,6 +51,7 @@ parser.add_argument("--task", required=True)
 parser.add_argument("--mode", default="multi_room", choices=["multi_room", "single_room"])
 parser.add_argument("--model", default="gpt-4o")
 parser.add_argument("--deadline", type=int, default=20)
+parser.add_argument("--n-robots", type=int, default=4, choices=[4,6,8])
 parser.add_argument("--no-proposal", action="store_true")
 parser.add_argument("--no-graph-llm", action="store_true")
 parser.add_argument("--rounds", type=int, default=2)
@@ -63,7 +64,7 @@ data = load_all()
 if args.task not in data["tasks"]:
     raise SystemExit(f"알 수 없는 task: {args.task}")
 
-cfg_dict = build_cda_task_config(args.task, data, mode=args.mode, deadline_min=args.deadline)
+cfg_dict = build_cda_task_config(args.task, data, mode=args.mode, deadline_min=args.deadline, n_robots=args.n_robots)
 if args.dry_run:
     print("✅ dry-run: loader 성공, API 호출 없음")
     sys.exit(0)
