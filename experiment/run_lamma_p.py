@@ -1,37 +1,84 @@
 """
-task.json의 main_room 값을 읽어, 해당 FloorPlan에 lamma_p_input.json을 배치하고
-LaMMA-P 파이프라인을 자동 실행하는 래퍼.
-사용법: python run_lamma_p.py --task task6
+LaMMA-P 베이스라인 실행 스크립트.
+
+사용법:
+    python run_lamma_p.py --task task1_abstract
 """
-import json, shutil, subprocess, argparse
-from pathlib import Path
+import sys
+import types
+
+for _mod in ("tty", "termios", "fcntl"):
+    if _mod not in sys.modules:
+        sys.modules[_mod] = types.ModuleType(_mod)
+
+import argparse
+import glob
+import json
+import os
+import subprocess
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HERE)
+from loader import load_all, build_lamma_p_input  # noqa: E402
+
+LAMMA_P_DIR = os.path.join(HERE, "..", "LaMMA-P")
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--task", required=True, help="예: task6")
+parser.add_argument("--task", required=True)
 parser.add_argument("--gpt-version", default="gpt-4o")
+parser.add_argument("--run", type=int, default=1)
 args = parser.parse_args()
 
-TASK_DIR = Path(args.task)
-LAMMA_P_DIR = Path("../LaMMA-P")
+data = load_all()
+if args.task not in data["tasks"]:
+    raise SystemExit(f"알 수 없는 task: {args.task}")
 
-# 1) task.json에서 main_room 읽기
-with open(TASK_DIR / "input" / "scene" / "task.json") as f:
-    task_info = json.load(f)
+lamma_input = build_lamma_p_input(args.task, data)
+main_fp = lamma_input.pop("_main_room_fp")
+main_room_num = main_fp.replace("FP", "")
 
-main_room = task_info["main_room"]
-print(f"📍 main_room = {main_room} ({task_info.get('main_room_name', '')})")
+print(f"📋 Task: {args.task}")
+print(f"  main_room = FloorPlan{main_room_num}")
+print(f"  robot list = {lamma_input['robot list']}")
 
-# 2) lamma_p_input.json → LaMMA-P/data/final_test/FloorPlan{main_room}.json 로 복사
-src = TASK_DIR / "lamma_p_input.json"
-dst = LAMMA_P_DIR / "data" / "final_test" / f"FloorPlan{main_room}.json"
-shutil.copy(src, dst)
-print(f"✅ {src} → {dst} 복사 완료")
+dst = os.path.join(LAMMA_P_DIR, "data", "final_test", f"FloorPlan{main_room_num}.json")
+with open(dst, "w", encoding="utf-8") as f:
+    f.write(json.dumps(lamma_input) + "\n")
+print(f"✅ 저장: {dst}")
 
-# 3) LaMMA-P 파이프라인 실행
 cmd = [
     "python", "scripts/pddlrun_llmseparate.py",
-    "--floor-plan", str(main_room),
-    "--gpt-version", args.gpt_version
+    "--floor-plan", str(main_room_num),
+    "--gpt-version", args.gpt_version,
 ]
 print(f"🚀 실행: {' '.join(cmd)} (cwd={LAMMA_P_DIR})")
-subprocess.run(cmd, cwd=LAMMA_P_DIR)
+result = subprocess.run(cmd, cwd=LAMMA_P_DIR)
+
+if result.returncode != 0:
+    print(f"⚠️ LaMMA-P 실행이 비정상 종료됨 (code={result.returncode})")
+else:
+    print("✅ LaMMA-P 실행 완료")
+
+    logs_dir = os.path.join(LAMMA_P_DIR, "logs")
+    log_folders = sorted(glob.glob(os.path.join(logs_dir, "*")), key=os.path.getmtime)
+
+    result_record = {"task_n": args.task, "method": "lamma_p"}
+
+    if log_folders:
+        latest = log_folders[-1]
+        result_record["log_folder"] = latest
+        for fname in ["log.txt", "decomposed_plan.py", "allocated_plan.py",
+                      "code_plan.py", "code_planpddl.py", "combined_plan.py", "validated_plan.py"]:
+            fpath = os.path.join(latest, fname)
+            if os.path.exists(fpath):
+                with open(fpath, encoding="utf-8") as f:
+                    result_record[fname.replace(".", "_")] = f.read()
+    else:
+        print("⚠️ 로그 폴더를 찾지 못함")
+
+    results_dir = os.path.join(HERE, "results", f"run{args.run}")
+    os.makedirs(results_dir, exist_ok=True)
+    out_path = os.path.join(results_dir, f"{args.task}_lamma_p_result.json")
+    with open(out_path, "w", encoding="utf-8") as f:
+        json.dump(result_record, f, ensure_ascii=False, indent=2)
+    print(f"📁 저장: {out_path}")
