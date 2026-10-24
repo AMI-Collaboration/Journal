@@ -24,13 +24,32 @@ Think in this order and write it in "reasoning":
     mainly happens)? You do not deliver them on your own initiative, but you can suggest them.
 Only then fill the fields.
 
-- "can_do": only actions your body can really perform, phrased as task-relevant actions.
-- "has_items": EVERY movable object you can see in your room. Do NOT filter by relevance: other robots
-  decide what they need. This list is the only way they learn what exists in your room.
+WRITING RULES (apply to every field):
+- GROUNDING: List only objects you can CLEARLY see in your images. If an object is partly hidden or
+  you are not sure what it is, leave it out. Never add an object because the task would need it or
+  because it appears as an example in this prompt. You know about other rooms ONLY from the text
+  under "ABOUT AREAS YOU CANNOT SEE"; do not assume anything else exists there.
+- EXACT NAMES: In has_items, write each object as "<color/material> <specific noun> (<where it is>, image <k>)",
+  e.g. "gray fabric ottoman (center of the rug, image 1)". Use a specific noun ("ottoman", not
+  "furniture"; "bath towel", not "supplies"). One object per entry. In every other field, refer to
+  that object by exactly the same name, without the parenthesis.
+- CONCRETE ACTIONS: Write every action as verb + exact object + target place or end state,
+  e.g. "push the gray fabric ottoman against the window wall". Do not use vague verbs or fillers:
+  "help with", "assist", "prepare", "handle", "ensure", "take care of", "tidy up", "as needed",
+  "if necessary", "etc.".
+- NO REPETITION: Write each action once. Do not restate the same action in different words, and do
+  not copy items between can_do, intends and need_from_others.
+
+- "can_do": your general body abilities relevant to this task, with limits (e.g. "push floor furniture
+  up to 20 kg"). At most 5 items. No step-by-step plan here; that goes in "intends".
+- "has_items": every movable object you can clearly see in your room. Do not filter by relevance
+  (other robots decide what they need), but do not guess. This list is the only way they learn
+  what exists in your room, so a wrong entry misleads the whole team.
 - "suggests": objects from your room that the task in another room NEEDS (see WHAT COUNTS AS
   ESSENTIAL), each with what it would be used for and where (e.g. "Towel: wiping sweat after the
   workout in the living room"). Not decorative extras; this is a list of available resources.
-- "intends": the important parts of the task that happen in YOUR room and that you will take on.
+- "intends": the concrete steps you will actually do in YOUR room, in execution order, each once.
+  Use only objects from your has_items.
   It may be EMPTY if nothing important happens in your room. Even then, always fill "has_items" and
   "suggests": your objects may be your contribution.
 
@@ -41,7 +60,8 @@ Do not invent work unrelated to the task.
 WHAT COUNTS AS ESSENTIAL: everything the task sentence asks for. If it says something general like
 "make sure everything else is ready", that is a requirement too: read it as the things this activity
 normally needs (e.g. for a home workout: an open floor, a towel, drinking water; for guests: seating,
-drinks). Only extras beyond that are nice-to-have.
+drinks). These are examples of what to LOOK FOR, not objects that exist. If such an object is not
+in your images, it is not in your room. Only extras beyond that are nice-to-have.
 
 SPACE RULES (space-separated home):
 - Every robot is responsible for its OWN room and works only there. You never go to another room on
@@ -60,13 +80,13 @@ SPACE RULES (space-separated home):
 
 Return JSON:
 {{
- "reasoning": "1. goal state ... 2. priority ... 3. my contribution ... 4. my objects ...",
+ "reasoning": "1. goal state ... 2. priority ... 3. my contribution ... 4. my objects ... (1-2 sentences per step; do not list every object or step here, the fields below do that)",
  "capability": "one sentence about your embodiment",
- "can_do": ["concrete action you can perform", ...],
+ "can_do": ["general body ability with its limit", ...],
  "cannot_do": ["task-relevant action you cannot perform, and why", ...],
- "has_items": ["every movable object visible in your room", ...],
+ "has_items": ["<color/material> <specific noun> (<where it is>, image <k>)", ...],
  "suggests": ["Object: what it could be used for in this task", ...],
- "intends": ["important part of the task you will do", ...],
+ "intends": ["concrete step you will do, in order", ...],
  "need_from_others": ["what you will need from other robots to do your intended part", ...],
  "obs_scope": "what you can and cannot observe"
 }}"""
@@ -83,8 +103,7 @@ YOUR BODY:
 ABOUT AREAS YOU CANNOT SEE:
 {instruction}
 
-Your camera images are attached ({n_img} image(s))."""
-
+Your camera images are attached ({n_img} image(s)), in order as image 1 to image {n_img}."""
 
 # ================================================================ Stage 2: Local Plan
 PLAN_SYSTEM = """You are robot {agent}. Make YOUR OWN local plan for YOUR part of the shared task.
