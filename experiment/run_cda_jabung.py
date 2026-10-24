@@ -125,7 +125,7 @@ Rules:
 Plan:
 {plan_text}
 
-Return ONLY the converted plan, no explanation."""
+Return ONLY the converted plan starting with "### Joint Plan", no preamble or explanation."""
     r = _sync_client.chat.completions.create(
         model=args.model, temperature=0.0,
         messages=[{"role": "user", "content": prompt}],
