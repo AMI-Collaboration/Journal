@@ -368,7 +368,7 @@ for m in METHODS:
 print(f"\n{'─'*50}\n STEP 4/4  Object Grounding (실제 존재하는 물건 사용 여부)\n{'─'*50}")
 
 existing_objects = set()
-for fp in task["room"]:
+for fp in task["rooms"]:
     room = data["rooms"].get(fp)
     if not room:
         continue
