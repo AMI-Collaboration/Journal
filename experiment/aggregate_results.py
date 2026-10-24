@@ -114,52 +114,152 @@ def judge_plan(plan_text):
 
 ## Agent Configuration
 {AGENT_CONFIG}
-
 ## Natural Language Plan
 {plan_text}
 
-Score each 1-10:
+## Scoring Instructions
 
-TF: Task Fulfillment — does the plan fully achieve the task's goal?
+Score each criterion from 1 to 10. Evaluate the actual plan evidence, not the writing style, confidence, length, or formatting.
 
-PF: Plan Feasibility — is it executable given each agent's capabilities?
+Use the following general scale consistently:
+- 1–3: Poor. Major failures or violations prevent reliable task execution.
+- 4–6: Partial. Some requirements are satisfied, but important omissions or problems remain.
+- 7–8: Good. Most requirements are satisfied, with limited non-critical issues.
+- 9–10: Excellent. The criterion is satisfied comprehensively, with no meaningful issues.
 
-OC: Observability Consistency — Does this plan reflect a TRUE DISTRIBUTED
-setting where each robot only knows its own room and cannot see other
-rooms unless explicitly told via a message/request? A plan where any
-robot's actions depend on knowledge of another room it was never told
-about (including knowledge of hidden/invisible objects in another
-robot's room, or coordination that implies one mind sees everything at
-once) should score LOW on OC, regardless of how well-organized or
-efficient the plan looks. A single centralized planner writing for all
-robots at once, with full visibility into every room including hidden
-objects, should score LOW here even if the resulting plan reads well --
-OC measures whether the INFORMATION CONSTRAINT of a distributed system
-was respected, not whether the plan is well-organized. A plan with
-explicit ASK_HELP/HELP/PASS/RECEIVE-style requests between robots (each
-robot only acting on messages it actually received) should score HIGH.
+Do not award high scores merely because a plan claims to be complete. Identify concrete evidence and shortcomings in the plan before assigning each score.
+### TF: Task Fulfillment
 
-SC: Sequential Coherence — is the step ordering logically correct, and
-does the plan reach a fully resolved conclusion (no unresolved/pending
-requests left hanging)?
+Evaluate Task Fulfillment (TF) according to the human evaluation rubric's criterion A1: Required Goal Fulfillment.
 
-IMPORTANT -- do not be misled by confident or polished narration. Before
-scoring TF and SC, check each individual action line for:
-- Does it reference a SPECIFIC object actually available in that robot's
-  room/scene? Or does it use vague, hedging, or non-committal language
-  ("standby", "assist as necessary", "if needed", "might be needed",
-  "wait in case") that commits to no concrete action?
-- Is the object's claimed location plausible for that room type, or does
-  the plan assume an object exists without any evidence (e.g. moving
-  something to "the desk" in a room where no desk was ever mentioned)?
-A plan padded with vague standby/assist steps, or that references objects
-with no evidence they exist in that room, should score LOW on TF and SC
-even if the overall narrative sounds coherent, confident, and complete.
-Fluent, well-formatted writing is not evidence of a good plan.
+TF measures how completely the overall plan fulfills the required goals of the current task.
+
+1. Identify the required goals.
+- Use the ground-truth goals provided for the current task as the authoritative reference when available.
+- If ground-truth goals are unavailable, identify required outcomes from the task description without inventing additional requirements.
+- Interpret goal descriptions, predicates, and object synonyms semantically.
+- Apply the same required goals and task constraints to every method being compared.
+- Do not treat optional activities as required goals unless explicitly required by the task or ground truth.
+
+2. Evaluate the submitted plan.
+- Evaluate the required goals using all relevant actions and communications included in the submitted plan.
+- If the input contains plans for multiple agents, consider all provided agent plans and their explicitly documented communications when assessing each required goal.
+- Assess each required goal based on the evidence contained in the submitted plan, regardless of how actions are distributed among agents.
+- Do not assume unreported actions, communication, cooperation, or execution success.
+- Do not count the same required goal multiple times when multiple actions or agents contribute to it.
+
+3. Evaluate each required goal independently.
+- Achieved: The combined plan provides a feasible course of action that sufficiently supports fulfillment of the required outcome within the task constraints.
+- Partially achieved: The combined plan provides meaningful support, but the required outcome remains incomplete or an essential step is missing.
+- Not achieved: The goal is omitted, unsupported, infeasible, or left unmet.
+- Merely mentioning an object, stating an intention, assigning an agent, or claiming success does not establish goal fulfillment.
+- If only a plan is provided and no execution record is available, evaluate whether the proposed actions support the expected outcome. Do not require proof of physical execution.
+- Recognize semantically equivalent actions even when different methods express them using different wording or action sequences.
+
+4. Respect task-specific constraints.
+- Consider explicit deadlines, conditions, and restrictions in the current task.
+- Assess whether the combined plan can plausibly fulfill the required goals within those constraints.
+- Do not invent action durations, assume unreported execution success, or introduce unstated constraints.
+- If a capability limitation, ordering problem, or missing dependency prevents a required goal from being fulfilled, reflect its effect in that goal's achievement status.
+- Do not reduce TF merely because an issue affects PF, OC, or SC; reduce TF when the issue also affects required goal fulfillment.
+
+5. Assign the overall TF score from 1 to 10.
+- Consider the achievement status of every required goal in the combined plan.
+- Use explicit ground-truth goal weights when provided. Otherwise, treat all required goals equally.
+- Assign each required goal an achievement value:
+  - Achieved = 1.0
+  - Partially achieved = 0.5
+  - Not achieved = 0.0
+
+Calculate goal coverage as follows:
+
+Coverage = sum(goal_weight * achievement_value) / sum(goal_weights)
+
+If explicit goal weights are unavailable, use equal weights for all required goals.
+
+Calculate the TF score using:
+
+TF = round(1 + 9 * Coverage)
+
+- A score of 1 indicates virtually no required goal fulfillment.
+- A score of 10 requires all required goals to be achieved with sufficient supporting evidence and all explicit task constraints respected.
+- For intermediate scores, follow the calculated coverage consistently.
+- Do not apply an additional subjective score adjustment after calculating TF.
+- Ensure the final TF score matches the calculation exactly.
+
+6. Ensure fair comparison across methods.
+- Apply identical goal interpretation, achievement standards, and calculation rules to every method.
+- Neither the number of agents nor the planning strategy should affect the TF score by itself. Evaluate only how the submitted plan supports fulfillment of the required goals.
+- Do not reward longer plans, additional agents, extra object mentions, or coordination language unless they contribute to required goal fulfillment.
+- If two combined plans provide comparable evidence of goal fulfillment, their TF scores should be comparable.
+- Do not adjust scores to favor a particular method or obtain a preferred ranking.
+
+7. Explain the score.
+In TF_reason, identify every required goal and report its achievement status and supporting evidence from the combined plan. Explain any relevant task constraints, list the goal weights when provided, calculate Coverage, and show how the final TF score is obtained. Ensure that the reasoning supports the assigned statuses and that the final score matches the calculation.
+### PF: Plan Feasibility — is it executable given each agent's capabilities?
+
+Evaluate whether the plan's actions are executable given each agent's capabilities.
+
+Score anchors:
+- 1-2: Most actions are infeasible given the assigned agents' capabilities. Major capability violations prevent execution of essential actions.
+- 3-4: Several actions violate or exceed the assigned agents' known capabilities, substantially undermining execution.
+- 5-6: Some actions are executable, but noticeable capability-related feasibility problems remain.
+- 7-8: Most actions are executable by the assigned agents, with only minor feasibility concerns.
+- 9-10: All or nearly all actions are executable given the assigned agents' capabilities, with no material capability violations.
+
+Base PF on the actions and the capabilities specified in the evaluation input. Do not assume unsupported capabilities or penalize actions based on capabilities that are not specified.
+
+
+### OC: Observability Consistency
+
+Does this plan reflect a TRUE DISTRIBUTED setting where each robot only knows its own room and cannot see other rooms unless explicitly told via a message/request? A plan where any robot's actions depend on knowledge of another room it was never told about (including knowledge of hidden/invisible objects in another robot's room, or coordination that implies one mind sees everything at once) should score LOW on OC, regardless of how well-organized or efficient the plan looks. A single centralized planner writing for all robots at once, with full visibility into every room including hidden objects, should score LOW here even if the resulting plan reads well -- OC measures whether the INFORMATION CONSTRAINT of a distributed system was respected, not whether the plan is well-organized. A plan with explicit ASK_HELP/HELP/PASS/RECEIVE-style requests between robots (each robot only acting on messages it actually received) should score HIGH.
+
+Score anchors:
+- 1-2: The plan severely violates distributed information constraints. Agents repeatedly rely on unobserved cross-room information, hidden objects, or unjustified global knowledge. Essential actions depend on information never made available to the acting agent.
+- 3-4: The plan contains frequent or significant information-boundary violations. Multiple actions depend on unsupported cross-room knowledge or treat unverified information as fact.
+- 5-6: The plan shows mixed compliance. Some actions use valid local observations or communicated information, but meaningful unsupported assumptions or information-transfer gaps remain.
+- 7-8: The plan mostly respects information boundaries. Agents generally act on local observations or information received through communication, with only minor unsupported assumptions.
+- 9-10: The plan consistently respects distributed information constraints. Each robot acts only on its own observations or information explicitly received through valid communication. No material action depends on unjustified global knowledge or unverified cross-room information.
+
+Score OC based on the information available to each agent and the communication evidence in the plan. Do not award a high score merely because the plan is well organized or contains coordination keywords.
+
+
+### SC: Sequential Coherence
+
+Evaluate whether the action sequence respects prerequisites and dependencies.
+
+- Check whether required prerequisite actions occur before dependent actions.
+- Check whether an action relies on information, an object, or assistance that has not yet become available.
+- Penalize ordering violations that make later actions impossible, prevent task completion, or leave required dependencies unresolved.
+- Distinguish minor ordering issues from critical violations that prevent execution.
+- Check whether required requests, assistance, and information transfers are resolved when subsequent actions depend on them.
+
+Score anchors:
+- 1-2: The action sequence is largely incoherent. Critical prerequisite violations or unresolved dependencies prevent essential actions or make task completion infeasible.
+- 3-4: The sequence contains major logical gaps. Several actions depend on prerequisites, objects, information, or assistance that are not yet available.
+- 5-6: The sequence is generally logical but contains noticeable ordering problems or unresolved dependencies that may interfere with task completion.
+- 7-8: The sequence is mostly coherent. Prerequisites and dependencies are generally respected, with only minor ordering issues that do not substantially undermine task completion.
+- 9-10: The sequence respects all material prerequisites and dependencies. Required preparation, requests, assistance, and information transfers are resolved before dependent actions occur. Assign 10 when no material sequencing issue remains; assign 9 when only a minor issue remains.
+
+Do not reward a plan merely for having a long or well-organized sequence. Evaluate whether the sequence can logically lead to the required outcomes.
+
+
+### Cross-criterion consistency
+
+Apply the same criteria to every evaluated method.
+
+- Evaluate the actual plan rather than the method name or presumed strengths of the approach.
+- Do not award points solely for fluent narration, detailed formatting, or coordination keywords.
+- Avoid double-penalizing the same problem without considering its distinct consequences for each criterion. For example, an unsupported object claim may affect OC, while its effect on task achievement or execution may separately affect TF or PF.
+- When evidence is insufficient, explain what cannot be verified rather than assuming successful execution.
+- Provide concise, plan-specific reasons for every score.
+- Apply the score anchors consistently. Comparable evidence should receive comparable scores across methods.
+- Do not adjust scores to favor a particular method or obtain a preferred ranking.
 
 Output JSON only:
-{{"TF":<1-10>,"TF_reason":"...","PF":<1-10>,"PF_reason":"...",
-  "OC":<1-10>,"OC_reason":"...","SC":<1-10>,"SC_reason":"..."}}
+{{"TF":<1-10>,"TF_reason":"...","PF":<1-10>,"PF_reason":"...","OC":<1-10>,"OC_reason":"...","SC":<1-10>,"SC_reason":"..."}}
+
+
 """
     response = judge_client.chat.completions.create(
         model=GEMINI_MODEL, temperature=0.0,
