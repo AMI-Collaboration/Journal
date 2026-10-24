@@ -13,7 +13,7 @@ from a import interactive_capture
 parser = argparse.ArgumentParser()
 parser.add_argument("--task", required=True)
 parser.add_argument("--fp", required=True, help="촬영할 FloorPlan (예: FP14)")
-parser.add_argument("--n-robots", type=int, required=True, choices=[4, 6, 8])
+parser.add_argument("--n-robots", type=int, required=True, choices=[2, 3, 4, 6, 8])
 parser.add_argument("--dirty", action="store_true", help="오브젝트 더럽히기")
 args = parser.parse_args()
 
@@ -39,13 +39,16 @@ agent_count = len(fp_robots)
 robot_labels = [f"R{i}" for i, _ in fp_robots]
 
 # 저장 경로
-folder_n = f"n_{args.n_robots}"
-out_dir = os.path.join(EXP, 'image', task_type, f'task{task_num}', folder_n)
+if task_type == "simple":
+    out_dir = os.path.join(EXP, 'image', task_type, f'task{task_num}')
+else:
+    folder_n = f"n_{args.n_robots}"
+    out_dir = os.path.join(EXP, 'image', task_type, f'task{task_num}', folder_n)
 prefix = f"task{task_num}_{task_type}_{args.fp}"
 
 scene = f"FloorPlan{args.fp.replace('FP', '')}"
 
-print(f"📋 {args.task} | {args.fp} | n={args.n_robots} | {args.mode}")
+print(f"📋 {args.task} | {args.fp} | n={args.n_robots}")
 print(f"   scene: {scene} | agents: {agent_count}대 {robot_labels}")
 print(f"   저장: {out_dir}")
 print(f"   prefix: {prefix}")

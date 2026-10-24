@@ -53,16 +53,16 @@ def get_image_paths(task_n: str, robot_label: str, fp: str, mode: str = "multi_r
     task_type = parts[1]
     folder_n = f"n_{n_robots}"
 
-    folder = os.path.join(EXPERIMENT_DIR, "image", task_type, f"task{task_num}", folder_n)
+    if task_type == "simple":
+        folder = os.path.join(EXPERIMENT_DIR, "image", task_type, f"task{task_num}")
+    else:
+        folder = os.path.join(EXPERIMENT_DIR, "image", task_type, f"task{task_num}", folder_n)
     prefix = f"task{task_num}_{task_type}_{fp}_{robot_label}"
 
-    if mode == "single_room":
-        return [os.path.join(folder, f"{prefix}_1.png")]
-    else:
-        return [
-            os.path.join(folder, f"{prefix}_1.png"),
-            os.path.join(folder, f"{prefix}_2.png"),
-        ]
+    return [
+        os.path.join(folder, f"{prefix}_1.png"),
+        os.path.join(folder, f"{prefix}_2.png"),
+    ]
 
 
 def build_cda_task_config(task_n: str, data: dict, mode: str = "multi_room",
