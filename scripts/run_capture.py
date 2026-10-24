@@ -23,7 +23,7 @@ with open(os.path.join(EXP, 'task', 'task.json'), encoding='utf-8') as f:
     task_data = {t['task_n']: t for t in json.load(f)['tasks']}
 
 task = task_data[args.task]
-task_num = args.task.replace('_abstract', '').replace('task', '')
+task_num = args.task.replace('_abstract', '').replace('_simple', '').replace('task', '')
 task_type = args.task.split('_')[1]
 n_str = str(args.n_robots)
 robot_list = task['configs'][n_str]

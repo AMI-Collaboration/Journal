@@ -152,6 +152,8 @@ def interactive_capture(scene, agent_count, out_dir, prefix, robot_labels, width
             Image.fromarray(agent_event.frame).save(path)
             print(f"saved: {path}")
 
+        elif key == "m":
+            teleport_to_can(controller, current_agent)
         elif key == "x":
             break
         elif key == "\x03":
@@ -167,3 +169,39 @@ if __name__ == "__main__":
         prefix="task5_abstract_bedroom",
         robot_labels=["R3"],
     )
+
+def teleport_to_can(controller, current_agent):
+    """가까운 오브젝트를 가장 가까운 GarbageCan 안으로 이동"""
+    event = controller.last_event
+    agent_pos = event.events[current_agent].metadata["agent"]["position"]
+
+    # GarbageCan 찾기
+    cans = [o for o in event.metadata["objects"] if "GarbageCan" in o["objectId"]]
+    if not cans:
+        print("GarbageCan을 찾을 수 없습니다")
+        return
+
+    def dist(o):
+        p = o["position"]
+        return (p["x"] - agent_pos["x"])**2 + (p["z"] - agent_pos["z"])**2
+
+    nearest_can = min(cans, key=dist)
+    can_pos = nearest_can["position"]
+
+    # 가장 가까운 pickupable 오브젝트 찾기
+    pickupable = [o for o in event.metadata["objects"] if o.get("pickupable") and o.get("visible")]
+    if not pickupable:
+        print("집을 수 있는 오브젝트가 없습니다")
+        return
+
+    target = min(pickupable, key=dist)
+    new_pos = {"x": can_pos["x"], "y": can_pos["y"] + 0.1, "z": can_pos["z"]}
+
+    r = controller.step(
+        action="TeleportObject",
+        rotation={"x": 0, "y": 0, "z": 0},
+        objectId=target["objectId"],
+        position=new_pos,
+        forceAction=True
+    )
+    print(f"이동: {target['objectId']} → GarbageCan ({new_pos}) -> 성공={r.metadata['lastActionSuccess']}")
