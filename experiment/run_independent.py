@@ -68,14 +68,25 @@ Look at the attached image of your room and write a concrete plan using
 only objects you can actually see (or listed above).
 
 ## Output Format
-If task has a time limit, use time blocks spanning the FULL duration. Otherwise use [Step N].
+Use time blocks. All robots' actions are interleaved in chronological order within each block.
 
-[0-5 min]  (or [Step 1])
-- R<n> <action>  (r<n>_s<step>)
+[0-5 min]
+- R<n> [TAG] <action description>  (r<n>_s<step>)
+
+[5-10 min]
+- R<n> [TAG] <action description>  (r<n>_s<step>)
+
+Tags:
+- [LOCAL]: robot acts on its own
+- [PASS]: robot hands object to another robot
+- [RECEIVE]: robot receives object from another robot
+- [HELP]: robot helps another robot
+- [ASK_HELP]: robot requests help from another robot
 
 Rules:
-- Step number resets per robot, starting at 1
-- No tags like [LOCAL]/[PASS]/[HELP]
+- Actions are sorted by time across ALL robots (not grouped by robot)
+- Step number is per robot, starting at 1 (r1_s1, r2_s1, ...)
+- Use the full time range of the task
 """
     content_blocks = [{"type": "text", "text": prompt_text}]
     for img_path in info["images"]:
@@ -98,7 +109,43 @@ for label, info in agents.items():
     print(f"  - {label} ({info['room_type']})...")
     plans[label] = generate_plan(label, info)
 
-result = "\n\n".join(plans.values())
+# 각 로봇 계획을 하나로 합치는 단계
+newline = "\n"
+merge_prompt = f"""
+You are given individual robot plans. Merge them into a single joint plan sorted chronologically.
+
+## Task
+{task_text}
+
+## Individual Plans
+{newline.join(f"=== {label} ===" + newline + plan for label, plan in plans.items())}
+
+## Output Format
+Use time blocks. All robots actions are interleaved in chronological order within each block.
+
+[0-5 min]
+- R<n> [TAG] <action description>  (r<n>_s<step>)
+
+Tags:
+- [LOCAL]: robot acts on its own
+- [PASS]: robot hands object to another robot
+- [RECEIVE]: robot receives object from another robot
+- [HELP]: robot helps another robot
+- [ASK_HELP]: robot requests help from another robot
+
+Rules:
+- Merge ALL robots actions into ONE chronological plan
+- Do NOT change any actions, only reorder by time
+- Step number is per robot, starting at 1 (r1_s1, r2_s1, ...)
+- Output ONLY the merged plan starting with ### Joint Plan
+"""
+
+merge_r = client.chat.completions.create(
+    model=args.gpt_version, temperature=0.0,
+    messages=[{"role": "user", "content": merge_prompt}],
+)
+log_usage("independent", args.task, merge_r)
+result = merge_r.choices[0].message.content.strip()
 print("\n✅ 완료\n")
 print(result)
 

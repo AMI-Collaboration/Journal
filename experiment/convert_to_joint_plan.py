@@ -55,15 +55,25 @@ You are converting a multi-robot task plan into a clean, human-readable Joint Pl
 {allocated}
 
 ## Output Format
-If task has a time limit, use time blocks spanning the FULL duration. Otherwise use [Step N].
+Use time blocks. All robots' actions are interleaved in chronological order within each block.
 
-[0-5 min]  (or [Step 1])
-- R<n> <action>  (r<n>_s<step>)
+[0-5 min]
+- R<n> [TAG] <action description>  (r<n>_s<step>)
+
+[5-10 min]
+- R<n> [TAG] <action description>  (r<n>_s<step>)
+
+Tags:
+- [LOCAL]: robot acts on its own
+- [PASS]: robot hands object to another robot
+- [RECEIVE]: robot receives object from another robot
+- [HELP]: robot helps another robot
+- [ASK_HELP]: robot requests help from another robot
 
 Rules:
+- Actions are sorted by time across ALL robots (not grouped by robot)
 - Use robot labels R1, R2, R3... matching the allocation (robot1 -> R1, etc.)
-- Step number resets per robot, starting at 1
-- No tags like [LOCAL]/[PASS]/[HELP]
+- Step number is per robot, starting at 1 (r1_s1, r2_s1, ...)
 - Keep descriptions short, plain English (not code/PDDL)
 - Output ONLY the plan, starting with "### Joint Plan"
 """
