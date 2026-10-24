@@ -53,7 +53,7 @@ def get_image_paths(task_n: str, robot_label: str, fp: str, mode: str = "multi_r
     task_type = parts[1]
     folder_n = f"n_{n_robots}"
 
-    folder = os.path.join(EXPERIMENT_DIR, "image", mode, task_type, f"task{task_num}", folder_n)
+    folder = os.path.join(EXPERIMENT_DIR, "image", task_type, f"task{task_num}", folder_n)
     prefix = f"task{task_num}_{task_type}_{fp}_{robot_label}"
 
     if mode == "single_room":
