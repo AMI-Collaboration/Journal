@@ -313,7 +313,8 @@ async def make_local_plan(cfg: TaskConfig, agent: str, offers: dict[str, Offer],
             node.status = "dropped"
             log.log("plan", agent, "offer_withdrawn", node=node.id)
         # a request that is not a dependency of own work is withdrawn before broadcast
-        if node.type in REQUEST_TYPES and node.enables is None:
+        # ASK_HELP without enables is allowed if it directly contributes to the task goal
+        if node.type in REQUEST_TYPES and node.enables is None and node.type != ASK_HELP:
             node.status = "dropped"
             log.log("plan", agent, "request_withdrawn", node=node.id)
     log.log("plan", agent, "broadcast_requests", steps=len(nodes),

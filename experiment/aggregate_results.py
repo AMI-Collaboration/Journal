@@ -64,8 +64,14 @@ def load_result(method):
     path = os.path.join(results_dir, f"{args.task}_{method}_result.json")
     if method == "cda":
         alt_path = os.path.join(results_dir, f"{args.task}_result.json")
+        alt_path2 = os.path.join(results_dir, f"{args.task}_multi_room_cda_result.json")
+        alt_path3 = os.path.join(results_dir, f"{args.task}_multi_room_cda_jabung_result.json")
         if os.path.exists(alt_path):
             path = alt_path
+        elif os.path.exists(alt_path2):
+            path = alt_path2
+        elif os.path.exists(alt_path3):
+            path = alt_path3
     if not os.path.exists(path):
         return None
     with open(path, encoding="utf-8") as f:
@@ -140,6 +146,7 @@ TF measures how completely the overall plan fulfills the required goals of the c
 - Interpret goal descriptions, predicates, and object synonyms semantically.
 - Apply the same required goals and task constraints to every method being compared.
 - Do not treat optional activities as required goals unless explicitly required by the task or ground truth.
+- ALL required goals must be addressed. A plan that satisfies only part of the task goals should NOT receive a high TF score, even if the addressed portion is well-executed. Partial coverage of the main task is insufficient.
 
 2. Evaluate the submitted plan.
 - Evaluate the required goals using all relevant actions and communications included in the submitted plan.
@@ -209,6 +216,16 @@ Score anchors:
 
 Base PF on the actions and the capabilities specified in the evaluation input. Do not assume unsupported capabilities or penalize actions based on capabilities that are not specified.
 
+### Additional PF Deductions — Vague Object and Location References
+Penalize any of the following vague expressions, as they indicate the plan does not specify concrete, executable actions:
+- "any ..." (e.g., "any items", "any small objects", "any clutter")
+- "one of the ..." without naming the specific object
+- "something" / "anything" / "some items" / "some objects"
+- Generic terms without specific object names: "clutter", "mess", "stuff", "things", "items", "misplaced items"
+- Vague food/snack references: "quick snack item", "snack", "food item" without naming the object
+- Vague location references: "somewhere", "appropriate place", "within reach", "nearby", "reachable position", "close to", "near", "somewhere accessible"
+- Object names that change throughout the plan (e.g., "bread" → "sandwich" → "food") — inconsistent object naming indicates ambiguity
+
 
 ### OC: Observability Consistency
 
@@ -242,6 +259,10 @@ Score anchors:
 - 9-10: The sequence respects all material prerequisites and dependencies. Required preparation, requests, assistance, and information transfers are resolved before dependent actions occur. Assign 10 when no material sequencing issue remains; assign 9 when only a minor issue remains.
 
 Do not reward a plan merely for having a long or well-organized sequence. Evaluate whether the sequence can logically lead to the required outcomes.
+
+### Additional SC Deductions
+- Penalize repeated identical or near-identical actions (e.g., picking up the same object twice, going to the same location consecutively without purpose).
+- Penalize inconsistent object naming throughout the plan (e.g., referring to the same object as "bread", then "sandwich", then "food"). Object references should remain consistent from start to finish.
 
 
 ### Cross-criterion consistency

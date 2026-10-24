@@ -108,8 +108,10 @@ Return JSON (fields in this order):
  "obs_scope": "what you can and cannot observe"
 }}"""
 
-OFFER_USER = """TASK: {task}
+OFFER_USER = """## PRIMARY OBJECTIVE — Read this first and keep it in mind throughout:
+{task}
 DEADLINE: {deadline} minutes
+Every decision you make must serve this objective. Do not plan work unrelated to it.
 
 YOUR BODY:
 - room: {room}
@@ -157,12 +159,16 @@ LOCAL step that uses it). Code checks this. If a change is only possible after a
 (e.g. rolling up a rug after the shelf on it is gone), that object is in the checklist with an
 earlier step.
 
-STEP 3 - FROM OTHER ROOMS. Other robots' "suggests" are AVAILABLE RESOURCES, not a to-do list.
-RECEIVE only if one of your goals needs it and nothing in your own room covers it. One object per
-purpose.
+STEP 3 - FROM OTHER ROOMS. Actively check other robots' "suggests" — these are resources they are
+offering for the task. RECEIVE an object if:
+- one of your goals would be better served with it, OR
+- the task description implies you need it (e.g. food in the living room, towel near bathtub).
+Do not skip RECEIVE just because you can manage without it — collaboration improves the outcome.
+One object per purpose; do not receive duplicates.
 
-STEP 4 - YOUR OBJECTS FOR OTHERS. PASS one of YOUR "suggests" only if the room where the task mainly
-happens clearly needs it and does not have it.
+STEP 4 - YOUR OBJECTS FOR OTHERS. Actively PASS your "suggests" if another room's task clearly
+benefits from them. Do not wait to be asked — if you have something useful and you listed it in
+"suggests", proactively offer it with a PASS. The target robot decides whether to accept it.
 
 If nothing needs you, you need nothing, and you have nothing to offer, return an EMPTY "steps" list.
 
@@ -180,8 +186,10 @@ Step types:
             it up and handing it over (and bringing it, if you are mobile): never add steps like
             "leave it by the door". If you prepare it first, give "prepared_by": the index of the
             preparing step (if the offer is not taken, the preparation is cancelled automatically).
-"enables" is the index (0-based) of YOUR OWN later LOCAL step that is physically impossible before the
-request is done. Never request parts of the task your own steps do not depend on.
+"enables" is the index (0-based) of YOUR OWN later LOCAL step that benefits from or depends on this
+request. This is OPTIONAL: if the request directly contributes to the task goal without enabling a
+specific local step (e.g. asking another robot to fill a bathtub, turn on a heater), you may omit
+"enables". Never request work that is completely unrelated to the task.
 
 PHYSICAL RULES (simulator): a robot holds at most ONE object at a time. Write moving an object as ONE
 step with its destination: "move the X from A to B". If an item names a group ("Assorted plates"), say
@@ -233,8 +241,12 @@ Return JSON:
  ]
 }}"""
 
-PLAN_USER = """TASK: {task}
+PLAN_USER = """## PRIMARY OBJECTIVE — This is the ONLY goal that matters:
+{task}
 DEADLINE: {deadline} minutes
+
+[CRITICAL] Before planning ANY step, ask yourself: "Does this directly serve the PRIMARY OBJECTIVE?"
+If not, do NOT include it. Focus only on what the task explicitly requires.
 
 YOUR OFFER (private parts included):
 {own_offer}
@@ -246,7 +258,12 @@ PUBLIC OFFERS OF ALL ROBOTS:
 {public_offers}
 
 ROBOT PROFILES:
-{profiles}"""
+{profiles}
+
+[IMPORTANT] SAME-ROOM ROBOTS: If another robot is in YOUR room, check their "intends" carefully.
+Do NOT plan the same action on the same object as them. Divide the work — each object should be
+handled by exactly ONE robot. If they already intend to handle something, skip it and focus on
+other objects."""
 
 PLAN_FIX = """Your plan violated these rules:
 {errors}

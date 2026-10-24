@@ -136,7 +136,7 @@ raw_plan = result["joint_plan_text"]
 naturalized = _naturalize(raw_plan)
 print(naturalized)
 
-results_dir = os.path.join(HERE, "results", "jabung")
+results_dir = os.path.join(HERE, "results", {4: "run1", 6: "run2", 8: "run3"}[args.n_robots])
 os.makedirs(results_dir, exist_ok=True)
 
 result_record = {
@@ -165,12 +165,12 @@ if args.no_proposal:
 if args.no_graph_llm:
     suffix += "_no_graph_llm"
 
-out_path = os.path.join(results_dir, f"{args.task}_{args.mode}_cda{suffix}_result.json")
+out_path = os.path.join(results_dir, f"{args.task}_{args.mode}_cda_jabung{suffix}_result.json")
 with open(out_path, "w", encoding="utf-8") as f:
     json.dump(result_record, f, ensure_ascii=False, indent=2)
 
 # io_log 저장
-io_log_path = os.path.join(results_dir, f"{args.task}_{args.mode}_cda{suffix}_io_log.json")
+io_log_path = os.path.join(results_dir, f"{args.task}_{args.mode}_cda_jabung{suffix}_io_log.json")
 with open(io_log_path, "w", encoding="utf-8") as f:
     json.dump(llm.io_log, f, ensure_ascii=False, indent=2)
 print(f"📋 IO 로그: {io_log_path}")

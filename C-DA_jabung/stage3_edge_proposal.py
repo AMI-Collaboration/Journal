@@ -27,7 +27,7 @@ from collections import Counter
 from .llm import BaseLLM
 from .log import EventLog
 from .prompts import PROPOSE_USER, _j, indexed, propose_system
-from .graph import _action_str
+from .graph import _action_str, _jaccard
 from .schemas import (CONFIRMED, HELP, HELP_EDGE, PASS, PROPOSED, PROVIDER_FOR,
                       REQUEST_TYPES, TRANSFER, Edge, Node, Offer, TaskConfig, agent_num, norm)
 
@@ -109,8 +109,10 @@ async def edge_proposal(cfg: TaskConfig, plans: dict[str, list[Node]], offers: d
                 problem = None
                 if req.type != "ASK_HELP":
                     problem = "already_doing is only for ASK_HELP"
-                elif cov not in own or own[cov].type not in ("LOCAL", "HELP"):
-                    problem = f"covered_by '{cov}' is not an active LOCAL/HELP step of {agent}"
+                elif cov not in own or own[cov].type not in ("LOCAL", "HELP", "ASK_HELP"):
+                    problem = f"covered_by '{cov}' is not an active LOCAL/HELP/ASK_HELP step of {agent}"
+                elif own[cov].type == "ASK_HELP" and _jaccard(_action_str(own[cov].action), _action_str(req.action)) < 0.3:
+                    problem = f"covered_by '{cov}' does not seem to cover the same work as '{rid}' (low similarity)"
                 elif any(e.src == cov and e.dst == rid for e in edges):
                     problem = "already linked"
                 if problem:

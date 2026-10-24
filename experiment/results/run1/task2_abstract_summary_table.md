@@ -5,10 +5,10 @@
 | 방법 | TF | PF | OC | SC | Final |
 |---|---|---|---|---|---|
 | CDA | - | - | - | - | N/A |
-| Centralized | 8 | 9 | 2 | 3 | 5.35 |
-| Independent | 4 | 9 | 6 | 3 | 5.55 |
-| LaMMA-P | 10 | 10 | 10 | 10 | 10.0 |
-| SMART-LLM | 6 | 10 | 10 | 10 | 8.8 |
+| Centralized | - | - | - | - | N/A |
+| Independent | - | - | - | - | N/A |
+| LaMMA-P | - | - | - | - | N/A |
+| SMART-LLM | - | - | - | - | N/A |
 
 ## Track B — GC (ours, LaMMA-P만)
 
@@ -25,7 +25,7 @@
 | 방법 | Grounding Rate | Hallucinated |
 |---|---|---|
 | CDA | N/A | N/A |
-| Centralized | 0.429 | shelf, thermostat, bathmat, tub |
-| Independent | 0.5 | door, tap, bathtub, rack |
-| LaMMA-P | 0.4 | heater, bathtub, rack |
-| SMART-LLM | 0.6 | bathtub, heater |
+| Centralized | N/A | N/A |
+| Independent | N/A | N/A |
+| LaMMA-P | N/A | N/A |
+| SMART-LLM | N/A | N/A |
