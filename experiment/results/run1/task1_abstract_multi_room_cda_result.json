@@ -1,0 +1,952 @@
+{
+  "task_n": "task1_abstract",
+  "mode": "multi_room",
+  "model": "gpt-4o",
+  "task_text": "I woke up late and need to leave for work in 10 minutes. Get everything ready for me.",
+  "joint_plan_text": "### Joint Plan — task1_abstract  (about 5 min / deadline 20 min: OK)\n\n[0-5 min]\n- R1 [LOCAL] slice the Bread  (r1_s1)\n- R2 [PASS] pass Bowl to R1 (brings it to the kitchen)  (r2_s5)\n- R3 [LOCAL] move the Laptop from its current location to the table and open it  (r3_s1)\n- R4 [LOCAL] place the cushion neatly on the sofa  (r4_s1)\n- R1 [LOCAL] slice the Tomato  (r1_s2)\n- R2 [LOCAL] provide the Banana as a quick breakfast option  (r2_s1)\n- R4 [LOCAL] place the remote control on the coffee table  (r4_s2)\n- R1 [LOCAL] cook the Egg using the Pan  (r1_s3)\n- R2 [LOCAL] provide the Bread as a quick breakfast option  (r2_s2)\n- R1 [RECEIVE] receive Bowl from R2  (r1_s4)\n- R1 [LOCAL] arrange the sliced Bread, cooked Egg, and sliced Tomato in the Bowl  (r1_s5)\n\n### Dropped\n- R2 [LOCAL] confirm the coffee is ready by receiving the cup — capability check failed: LOCAL 'confirm the coffee is ready by receiving the cup' is not a physical action. Write what your body does to an object (move X from A to B, open, switch on, fill). If your body cannot do the real work (e.g. heavy furniture), do NOT drop it: write ASK_HELP to a robot that can (by rule)\n- R1 [HELP] pour coffee from the Coffee machine into a cup — request r2_s3 withdrawn (by rule)\n- R2 [ASK_HELP] pour coffee from the Coffee machine into a cup — withdrawn: the step it enabled (r2_s4) was released (by rule)\n\n### Not covered (from the robots' own checklists)\n- R2: Coffee machine: coffee poured into a cup",
+  "offers": {
+    "R1": {
+      "agent": "R1",
+      "capability": "I can handle light kitchen tasks like slicing, pouring, and passing objects.",
+      "can_do": [
+        "SliceObject",
+        "PourObject",
+        "PassReceiveObject"
+      ],
+      "has_items": [
+        "Bread",
+        "Tomato",
+        "Kiwi",
+        "Egg",
+        "Lettuce",
+        "Pan",
+        "Spatula",
+        "Salt shaker",
+        "Pepper shaker",
+        "Cup",
+        "Knife"
+      ],
+      "need_from_others": [
+        "Receive a plate to serve the breakfast"
+      ],
+      "intends": [
+        "Prepare a quick breakfast using available ingredients"
+      ],
+      "suggests": [
+        "Bread: for a quick breakfast",
+        "Egg: for a quick breakfast",
+        "Tomato: for a quick breakfast",
+        "Cup: for a drink"
+      ],
+      "obs_scope": "I can observe and interact with items in the kitchen but cannot see or interact with items in other rooms.",
+      "cannot_do": [
+        "PickupHeavyObject",
+        "PushFurniture"
+      ],
+      "reasoning": "1. Goal state: The person has everything they need to leave for work, including breakfast and any necessary items. 2. Priority: The most important tasks are preparing a quick breakfast and ensuring any essential items are ready. 3. My contribution: Preparing breakfast in the kitchen. 4. My objects: I have various food items and kitchen tools that can be used to prepare a quick meal."
+    },
+    "R2": {
+      "agent": "R2",
+      "capability": "I am a mobile robot capable of moving light objects.",
+      "can_do": [
+        "PickupLightObject",
+        "PassReceiveObject"
+      ],
+      "has_items": [
+        "Banana",
+        "Bread",
+        "Coffee machine",
+        "Microwave",
+        "Refrigerator",
+        "Stove",
+        "Bowl"
+      ],
+      "need_from_others": [
+        "Someone to pour coffee or prepare a sandwich if needed"
+      ],
+      "intends": [
+        "Gather breakfast items like banana and bread for a quick meal"
+      ],
+      "suggests": [
+        "Banana: quick breakfast option",
+        "Bread: for making a sandwich or toast"
+      ],
+      "obs_scope": "I can observe the kitchen and its contents but not other rooms.",
+      "cannot_do": [
+        "PickupHeavyObject",
+        "PushFurniture",
+        "SliceObject",
+        "PourObject"
+      ],
+      "reasoning": "1. Goal state: The person is ready to leave for work with essentials like breakfast, packed lunch, and any necessary items. 2. Priority: The most important tasks are preparing a quick breakfast and ensuring any necessary items for work are ready. 3. My contribution: Preparing breakfast or packing food items in the kitchen. 4. My objects: Items in the kitchen that can be used for preparing or packing food."
+    },
+    "R3": {
+      "agent": "R3",
+      "capability": "I can manipulate light objects and perform tasks like slicing or pouring.",
+      "can_do": [
+        "PickupLightObject",
+        "SliceObject",
+        "PourObject",
+        "PassReceiveObject"
+      ],
+      "has_items": [
+        "Laptop",
+        "Magazine",
+        "Lamp",
+        "Vase",
+        "Remote control"
+      ],
+      "need_from_others": [
+        "If keys or wallet are needed, they must be brought from another room."
+      ],
+      "intends": [
+        "Ensure the laptop is ready for use."
+      ],
+      "suggests": [
+        "Laptop: Could be used for work-related tasks."
+      ],
+      "obs_scope": "I can observe and interact with objects in the living room but cannot see or interact with objects in other rooms.",
+      "cannot_do": [
+        "PickupHeavyObject",
+        "PushFurniture"
+      ],
+      "reasoning": "1. Goal state: The person is ready to leave for work with all necessary items prepared. 2. Priority: Ensuring essential items like keys, wallet, and any work-related materials are ready. 3. My contribution: I can prepare items available in the living room. 4. My objects: I can handle light objects like the laptop and any documents."
+    },
+    "R4": {
+      "agent": "R4",
+      "capability": "I am a mobile robot capable of moving and carrying objects up to 20 kg.",
+      "can_do": [
+        "PickupLightObject",
+        "PickupHeavyObject",
+        "PushFurniture",
+        "PassReceiveObject"
+      ],
+      "has_items": [
+        "vase",
+        "decorative statue",
+        "lamp",
+        "cushion",
+        "remote control"
+      ],
+      "need_from_others": [
+        "Check other rooms for essentials like keys, wallet, and work bag."
+      ],
+      "intends": [
+        "Ensure the living room is tidy and check for any essential items like keys or a bag."
+      ],
+      "suggests": [
+        "None of the visible items are essential for leaving for work."
+      ],
+      "obs_scope": "I can observe and interact with objects in the living room but cannot see into other rooms.",
+      "cannot_do": [
+        "SliceObject",
+        "PourObject"
+      ],
+      "reasoning": "1. Goal state: The person is ready to leave for work with all necessary items prepared. 2. Priority: The person needs to leave in 10 minutes, so essentials like keys, bag, and any work-related items are most important. 3. My contribution: I can ensure that the living room is tidy and any necessary items here are ready to go. 4. My objects: I can provide items like keys or a bag if they are in the living room."
+    }
+  },
+  "local_plans": {
+    "R1": [
+      {
+        "id": "r1_s1",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": "slice the Bread",
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Prepare a quick breakfast using available ingredients.",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r1_s2",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": "slice the Tomato",
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Prepare a quick breakfast using available ingredients.",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r1_s3",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": "cook the Egg using the Pan",
+        "item": null,
+        "target": null,
+        "uses": 1,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Prepare a quick breakfast using available ingredients.",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r1_s4",
+        "agent": "R1",
+        "type": "RECEIVE",
+        "action": "receive Bowl",
+        "item": "Bowl",
+        "target": "R2",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": "r1_s5",
+        "serves": "Receive a bowl to serve the breakfast.",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r1_s5",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": "arrange the sliced Bread, cooked Egg, and sliced Tomato in the Bowl",
+        "item": null,
+        "target": null,
+        "uses": 2,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Prepare a quick breakfast using available ingredients.",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "R2": [
+      {
+        "id": "r2_s1",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": "provide the Banana as a quick breakfast option",
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Provide a quick breakfast option",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s2",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": "provide the Bread as a quick breakfast option",
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Provide a quick breakfast option",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s3",
+        "agent": "R2",
+        "type": "ASK_HELP",
+        "action": "pour coffee from the Coffee machine into a cup",
+        "item": null,
+        "target": "R1",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": "r2_s4",
+        "serves": "Ensure coffee is ready",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [
+          "ASK_HELP 'pour coffee from the Coffee machine into a cup' is about your own object. Handoffs go only one way: the robot that needs it writes RECEIVE; you write nothing about it now"
+        ],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s4",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": "confirm the coffee is ready by receiving the cup",
+        "item": null,
+        "target": null,
+        "uses": 1,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Ensure coffee is ready",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [
+          "LOCAL 'confirm the coffee is ready by receiving the cup' is not a physical action. Write what your body does to an object (move X from A to B, open, switch on, fill). If your body cannot do the real work (e.g. heavy furniture), do NOT drop it: write ASK_HELP to a robot that can"
+        ],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "R3": [
+      {
+        "id": "r3_s1",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": "move the Laptop from its current location to the table and open it",
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "living_room",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Ensure the laptop is ready for use.",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "R4": [
+      {
+        "id": "r4_s1",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": "place the cushion neatly on the sofa",
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "living_room",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Ensure the living room is tidy",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s2",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": "place the remote control on the coffee table",
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "living_room",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Ensure the living room is tidy",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ]
+  },
+  "judgments": [
+    {
+      "agent": "R1",
+      "request": "r2_s3",
+      "decision": "accept",
+      "reason": "I am capable of pouring objects and the task is within the kitchen where I can operate.",
+      "result": "CANDIDATE",
+      "provider": "r1_s6",
+      "targeted": true
+    },
+    {
+      "agent": "R2",
+      "request": "r1_s4",
+      "decision": "accept",
+      "reason": "R1 requested a Bowl, which I have in the kitchen. I can pass it to R1.",
+      "result": "CANDIDATE",
+      "provider": "r2_s5",
+      "targeted": true
+    },
+    {
+      "agent": "R3",
+      "request": "r1_s4",
+      "decision": "ignore",
+      "reason": "The request is targeted at R2 and involves an item (Bowl) not relevant to my task.",
+      "result": "ignore"
+    },
+    {
+      "agent": "R3",
+      "request": "r2_s3",
+      "decision": "volunteer",
+      "reason": "I can pour objects, and this task is essential for preparing a drink, which could be part of getting ready for work.",
+      "result": "rejected_by_check: cannot leave living_room to help in kitchen"
+    },
+    {
+      "agent": "R4",
+      "request": "r1_s4",
+      "decision": "ignore",
+      "reason": "The request is targeted at R2 and does not require my assistance.",
+      "result": "ignore"
+    },
+    {
+      "agent": "R4",
+      "request": "r2_s3",
+      "decision": "ignore",
+      "reason": "I cannot pour objects as it is outside my capabilities.",
+      "result": "ignore"
+    }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "r1_s1",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": "slice the Bread",
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Prepare a quick breakfast using available ingredients.",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "short",
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 1
+      },
+      {
+        "id": "r1_s2",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": "slice the Tomato",
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Prepare a quick breakfast using available ingredients.",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "short",
+        "phase": 1,
+        "t_start": 1,
+        "t_end": 2
+      },
+      {
+        "id": "r1_s3",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": "cook the Egg using the Pan",
+        "item": null,
+        "target": null,
+        "uses": 1,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Prepare a quick breakfast using available ingredients.",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "short",
+        "phase": 1,
+        "t_start": 2,
+        "t_end": 3
+      },
+      {
+        "id": "r1_s4",
+        "agent": "R1",
+        "type": "RECEIVE",
+        "action": "receive Bowl",
+        "item": "Bowl",
+        "target": "R2",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": "r1_s5",
+        "serves": "Receive a bowl to serve the breakfast.",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "short",
+        "phase": 1,
+        "t_start": 3,
+        "t_end": 4
+      },
+      {
+        "id": "r1_s5",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": "arrange the sliced Bread, cooked Egg, and sliced Tomato in the Bowl",
+        "item": null,
+        "target": null,
+        "uses": 2,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Prepare a quick breakfast using available ingredients.",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "short",
+        "phase": 1,
+        "t_start": 4,
+        "t_end": 5
+      },
+      {
+        "id": "r1_s6",
+        "agent": "R1",
+        "type": "HELP",
+        "action": "pour coffee from the Coffee machine into a cup",
+        "item": null,
+        "target": "R2",
+        "uses": 1,
+        "location": "kitchen",
+        "origin": "accept",
+        "answers": "r2_s3",
+        "enables": null,
+        "serves": null,
+        "prepared_by": null,
+        "status": "dropped",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s5",
+        "agent": "R2",
+        "type": "PASS",
+        "action": "pass the Bowl to R1",
+        "item": "Bowl",
+        "target": "R1",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "accept",
+        "answers": "r1_s4",
+        "enables": null,
+        "serves": null,
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "medium",
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 1
+      },
+      {
+        "id": "r2_s1",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": "provide the Banana as a quick breakfast option",
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Provide a quick breakfast option",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "short",
+        "phase": 1,
+        "t_start": 1,
+        "t_end": 2
+      },
+      {
+        "id": "r2_s2",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": "provide the Bread as a quick breakfast option",
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Provide a quick breakfast option",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "short",
+        "phase": 1,
+        "t_start": 2,
+        "t_end": 3
+      },
+      {
+        "id": "r2_s3",
+        "agent": "R2",
+        "type": "ASK_HELP",
+        "action": "pour coffee from the Coffee machine into a cup",
+        "item": null,
+        "target": "R1",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": "r2_s4",
+        "serves": "Ensure coffee is ready",
+        "prepared_by": null,
+        "status": "dropped",
+        "violations": [
+          "ASK_HELP 'pour coffee from the Coffee machine into a cup' is about your own object. Handoffs go only one way: the robot that needs it writes RECEIVE; you write nothing about it now"
+        ],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s4",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": "confirm the coffee is ready by receiving the cup",
+        "item": null,
+        "target": null,
+        "uses": 1,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Ensure coffee is ready",
+        "prepared_by": null,
+        "status": "dropped",
+        "violations": [
+          "LOCAL 'confirm the coffee is ready by receiving the cup' is not a physical action. Write what your body does to an object (move X from A to B, open, switch on, fill). If your body cannot do the real work (e.g. heavy furniture), do NOT drop it: write ASK_HELP to a robot that can"
+        ],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s1",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": "move the Laptop from its current location to the table and open it",
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "living_room",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Ensure the laptop is ready for use.",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "medium",
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 1
+      },
+      {
+        "id": "r4_s1",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": "place the cushion neatly on the sofa",
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "living_room",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Ensure the living room is tidy",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "short",
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 1
+      },
+      {
+        "id": "r4_s2",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": "place the remote control on the coffee table",
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "living_room",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Ensure the living room is tidy",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "short",
+        "phase": 1,
+        "t_start": 1,
+        "t_end": 2
+      }
+    ],
+    "order": {
+      "R1": [
+        "r1_s1",
+        "r1_s2",
+        "r1_s3",
+        "r1_s4",
+        "r1_s5",
+        "r1_s6"
+      ],
+      "R2": [
+        "r2_s5",
+        "r2_s1",
+        "r2_s2",
+        "r2_s3",
+        "r2_s4"
+      ],
+      "R3": [
+        "r3_s1"
+      ],
+      "R4": [
+        "r4_s1",
+        "r4_s2"
+      ]
+    },
+    "edges": [
+      {
+        "src": "r1_s1",
+        "dst": "r1_s2",
+        "kind": "SEQ",
+        "status": "CONFIRMED",
+        "source": "local",
+        "targeted": false
+      },
+      {
+        "src": "r1_s2",
+        "dst": "r1_s3",
+        "kind": "SEQ",
+        "status": "CONFIRMED",
+        "source": "local",
+        "targeted": false
+      },
+      {
+        "src": "r1_s3",
+        "dst": "r1_s4",
+        "kind": "SEQ",
+        "status": "CONFIRMED",
+        "source": "local",
+        "targeted": false
+      },
+      {
+        "src": "r1_s4",
+        "dst": "r1_s5",
+        "kind": "SEQ",
+        "status": "CONFIRMED",
+        "source": "local",
+        "targeted": false
+      },
+      {
+        "src": "r2_s5",
+        "dst": "r2_s1",
+        "kind": "SEQ",
+        "status": "CONFIRMED",
+        "source": "local",
+        "targeted": false
+      },
+      {
+        "src": "r2_s1",
+        "dst": "r2_s2",
+        "kind": "SEQ",
+        "status": "CONFIRMED",
+        "source": "local",
+        "targeted": false
+      },
+      {
+        "src": "r4_s1",
+        "dst": "r4_s2",
+        "kind": "SEQ",
+        "status": "CONFIRMED",
+        "source": "local",
+        "targeted": false
+      },
+      {
+        "src": "r2_s5",
+        "dst": "r1_s4",
+        "kind": "TRANSFER",
+        "status": "CONFIRMED",
+        "source": "rule",
+        "targeted": true
+      }
+    ],
+    "drops": [
+      {
+        "node": "r2_s4",
+        "agent": "R2",
+        "type": "LOCAL",
+        "text": "confirm the coffee is ready by receiving the cup",
+        "reason": "capability check failed: LOCAL 'confirm the coffee is ready by receiving the cup' is not a physical action. Write what your body does to an object (move X from A to B, open, switch on, fill). If your body cannot do the real work (e.g. heavy furniture), do NOT drop it: write ASK_HELP to a robot that can",
+        "by": "rule"
+      },
+      {
+        "node": "r1_s6",
+        "agent": "R1",
+        "type": "HELP",
+        "text": "pour coffee from the Coffee machine into a cup",
+        "reason": "request r2_s3 withdrawn",
+        "by": "rule"
+      },
+      {
+        "node": "r2_s3",
+        "agent": "R2",
+        "type": "ASK_HELP",
+        "text": "pour coffee from the Coffee machine into a cup",
+        "reason": "withdrawn: the step it enabled (r2_s4) was released",
+        "by": "rule"
+      }
+    ],
+    "unresolved": [],
+    "warnings": [],
+    "ops_log": []
+  },
+  "metrics": {
+    "task_id": "task1_abstract",
+    "n_steps_total": 14,
+    "n_steps_active": 11,
+    "n_blocked": 0,
+    "n_dropped": 3,
+    "n_requests": 2,
+    "n_requests_served": 1,
+    "n_collab_edges_final": 1,
+    "confirmed_ratio": 1.0,
+    "selected_by_graph": 0,
+    "selected_by_rule": 1,
+    "capability_violations_after_fix": 1,
+    "n_requests_withdrawn": 0,
+    "n_served_by_own_existing_step": 0,
+    "n_duplicates_merged": 0,
+    "n_duplicates_dropped": 0,
+    "n_redundant_branches_released": 0,
+    "n_requests_moved_later": 0,
+    "n_warnings": 0,
+    "plan_fix_rounds": {
+      "R1": 1,
+      "R2": 2,
+      "R3": 1,
+      "R4": 2
+    },
+    "n_checklist_items": 10,
+    "n_uncovered_checklist": 1,
+    "n_uncovered_essential": 1,
+    "graph_ops_applied": 0,
+    "graph_ops_rejected": 0,
+    "makespan_steps": 5,
+    "makespan_min": 5,
+    "deadline": 20,
+    "deadline_ok": true,
+    "size_source": "graph_llm",
+    "n_size_missing": 0,
+    "n_candidates_from_stage3": 2,
+    "n_order_edges_added": 0,
+    "n_order_pairs_independent": 0,
+    "success_no_blocked": true,
+    "n_requests_declined": 0,
+    "n_requests_failed": 0,
+    "n_requests_moot": 0,
+    "n_blocked_by_decline": 0,
+    "n_blocked_by_failure": 0,
+    "success_no_failure": true,
+    "n_handoff_prep_dropped": 0,
+    "n_offers_made": 0,
+    "n_offers_taken": 0,
+    "n_offers_untaken": 0,
+    "n_preparations_released": 0,
+    "n_help_edges": 0,
+    "n_transfer_edges": 1,
+    "llm_calls": 19,
+    "prompt_tokens": 50885,
+    "completion_tokens": 5343,
+    "config": {
+      "use_edge_proposal": true,
+      "use_graph_llm": true,
+      "max_graph_rounds": 2
+    }
+  },
+  "config": {
+    "use_edge_proposal": true,
+    "use_graph_llm": true,
+    "max_graph_rounds": 2,
+    "deadline_min": 20
+  }
+}

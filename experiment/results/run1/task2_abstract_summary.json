@@ -1,0 +1,169 @@
+{
+  "cda": {
+    "name": "CDA",
+    "track_a_llm_judge": "N/A",
+    "track_b_gc": 0.0,
+    "track_b_state_detail": {
+      "A1_shower_area_ready": false,
+      "A2_towel_ready": false,
+      "A3_toiletries_ready": false,
+      "A4_bathroom_accessible": false
+    },
+    "object_grounding": "N/A"
+  },
+  "central": {
+    "name": "Centralized",
+    "track_a_llm_judge": {
+      "TF": 8,
+      "TF_reason": "The required goals are to make the bathroom warm, have a towel nearby, and complete these tasks within 5 minutes. Goal 1 (Bathroom warm): Achieved, as R4 adjusts the thermostat in the 0-5 minute window. Goal 2 (Towel nearby): Achieved, as both R3 and R4 place towels nearby. Goal 3 (Ready in 5 minutes): Partially achieved, because while the thermostat is adjusted in the first 5 minutes, the towels are not placed until the 5-10 minute window, violating the strict time constraint. Coverage is approximately 0.83, leading to a TF score of 8.",
+      "PF": 9,
+      "PF_reason": "The actions assigned to the agents (picking up objects, moving, passing, receiving, and adjusting a thermostat) are standard and generally feasible for household robots. There are no obvious capability violations.",
+      "OC": 2,
+      "OC_reason": "The plan severely violates distributed information constraints. It relies entirely on a centralized planner, with agents perfectly coordinating complex multi-step handoffs (R1 to R2 to R3) and dividing tasks (R4 handling the thermostat) without any explicit communication, requests, or information sharing.",
+      "SC": 3,
+      "SC_reason": "The sequence contains major logical gaps and ordering violations. In the [0-5 min] window, R3 is scheduled to receive a towel from R2, but R2 does not receive the towel from R1 until the [5-10 min] window. R3 is then scheduled to receive the towel again in the [5-10 min] window. This unresolved dependency and temporal contradiction significantly undermines the coherence of the plan.",
+      "final_score": 5.35
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": {
+      "mentioned_objects": [
+        "towel",
+        "shelf",
+        "thermostat",
+        "towellrack",
+        "sink",
+        "bathmat",
+        "tub"
+      ],
+      "grounded_objects": [
+        "towel",
+        "towellrack",
+        "sink"
+      ],
+      "hallucinated_objects": [
+        "shelf",
+        "thermostat",
+        "bathmat",
+        "tub"
+      ],
+      "grounding_rate": 0.429
+    }
+  },
+  "independent": {
+    "name": "Independent",
+    "track_a_llm_judge": {
+      "TF": 4,
+      "TF_reason": "The task has three required goals: 1) Bathtub filled with warm water within 5 minutes, 2) Bathroom warm, 3) Towel nearby within 5 minutes. Goal 1 is partially achieved (0.5); the water is turned on in the 0-5 minute window but is not turned off until the 5-10 minute window, missing the deadline. Goal 2 is not achieved (0.0); there are no actions to warm the bathroom (e.g., turning on a heater). Goal 3 is partially achieved (0.5); towels are placed near the bathtub, but this occurs in the 5-10 minute window, missing the 5-minute deadline. Coverage = (0.5 + 0.0 + 0.5) / 3 = 0.333. TF = round(1 + 9 * 0.333) = 4.",
+      "PF": 9,
+      "PF_reason": "The actions assigned to the robots (picking up towels, moving, turning on taps, adjusting temperature) are generally feasible for standard household robots. There are no major capability violations.",
+      "OC": 6,
+      "OC_reason": "The plan shows mixed compliance with distributed constraints. R1 expects to hand a towel to another robot coming to the bedroom without any explicit communication or request being made. Otherwise, agents mostly act on local observations, though they lack awareness of each other's actions.",
+      "SC": 3,
+      "SC_reason": "The sequence contains major logical gaps and conflicts. R1 attempts to pass a towel to another robot, but no robot is scheduled to receive it, leaving a dependency unresolved. Additionally, R3 and R4 physically conflict by attempting to turn on the same hot water tap and pick up a towel from the same towel rack simultaneously.",
+      "final_score": 5.55
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": {
+      "mentioned_objects": [
+        "towel",
+        "desk",
+        "chair",
+        "door",
+        "tap",
+        "bathtub",
+        "rack",
+        "curtain"
+      ],
+      "grounded_objects": [
+        "towel",
+        "desk",
+        "chair",
+        "curtain"
+      ],
+      "hallucinated_objects": [
+        "door",
+        "tap",
+        "bathtub",
+        "rack"
+      ],
+      "grounding_rate": 0.5
+    }
+  },
+  "lamma_p": {
+    "name": "LaMMA-P",
+    "track_a_llm_judge": {
+      "TF": 10,
+      "TF_reason": "The plan successfully fulfills all required goals: turning on the bathroom heater to warm the room, filling the bathtub with water, and placing a towel on the towel rack nearby. All actions are scheduled within the 5-minute constraint. Coverage is 1.0, resulting in a TF score of 10.",
+      "PF": 10,
+      "PF_reason": "The actions assigned to R4 (navigating, turning on appliances, opening faucets, picking up and placing objects) are standard and fully executable given typical robot capabilities.",
+      "OC": 10,
+      "OC_reason": "The plan involves a single agent operating locally within its own room. There are no distributed information constraints violated, as R4 only interacts with objects in its immediate environment.",
+      "SC": 10,
+      "SC_reason": "The sequence of actions is perfectly coherent. The agent navigates to each object before interacting with it, and prerequisites for picking up and placing the towel, as well as turning on the heater and faucet, are respected.",
+      "final_score": 10.0
+    },
+    "track_b_gc": 0.0,
+    "track_b_state_detail": {
+      "A1_shower_area_ready": false,
+      "A2_towel_ready": false,
+      "A3_toiletries_ready": false,
+      "A4_bathroom_accessible": false
+    },
+    "object_grounding": {
+      "mentioned_objects": [
+        "heater",
+        "bathtub",
+        "faucet",
+        "towel",
+        "rack"
+      ],
+      "grounded_objects": [
+        "faucet",
+        "towel"
+      ],
+      "hallucinated_objects": [
+        "heater",
+        "bathtub",
+        "rack"
+      ],
+      "grounding_rate": 0.4
+    }
+  },
+  "smart_llm": {
+    "name": "SMART-LLM",
+    "track_a_llm_judge": {
+      "TF": 6,
+      "TF_reason": "The task has three required goals: 1) Bathtub filled with water, 2) Bathroom warm (heater switched on), and 3) Towel placed nearby. The plan includes valid actions to fulfill all three goals (R2 fills the bathtub, R3 turns on the heater, R4 places the towel on the TowelHolder). However, the task explicitly requires the setup to be ready 'in 5 minutes'. The plan schedules the actual execution of these tasks in the [5-10 min] interval, missing the explicit deadline. Therefore, all three goals are considered partially achieved due to the timing constraint violation. Coverage = (0.5 + 0.5 + 0.5) / 3 = 0.5. TF = round(1 + 9 * 0.5) = 6.",
+      "PF": 10,
+      "PF_reason": "The actions assigned to the agents (navigating, opening/closing a faucet, switching on a heater, picking up and placing a towel) are standard, basic capabilities. There are no capability violations.",
+      "OC": 10,
+      "OC_reason": "The agents perform independent local actions on specific objects. There is no reliance on unjustified global knowledge or unverified cross-room information.",
+      "SC": 10,
+      "SC_reason": "The sequence of actions is entirely coherent. Agents first navigate to their respective objects, then interact with them logically (e.g., R2 opens the faucet, waits, and then closes it; R4 picks up the towel before going to the holder to place it).",
+      "final_score": 8.8
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": {
+      "mentioned_objects": [
+        "bathtub",
+        "heater",
+        "towel",
+        "faucet",
+        "towelholder"
+      ],
+      "grounded_objects": [
+        "towel",
+        "faucet",
+        "towelholder"
+      ],
+      "hallucinated_objects": [
+        "bathtub",
+        "heater"
+      ],
+      "grounding_rate": 0.6
+    }
+  }
+}
