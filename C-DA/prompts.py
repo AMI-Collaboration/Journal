@@ -202,6 +202,17 @@ BEFORE RETURNING, check silently and fix:
 
 Order the steps in the order you would execute them.
 
+ACTION SCHEMA (for LOCAL and ASK_HELP steps):
+Instead of a natural language "action" string, use a structured JSON object:
+{{
+  "verb": one of ["move", "pick_up", "put_down", "push", "slice", "cook", "turn_on", "turn_off",
+                  "open", "close", "fill", "clean", "place", "pass", "receive", "pour"],
+  "object": "exact object name from has_items",
+  "from": "current location (optional)",
+  "to": "destination or end state (optional)",
+  "state": "target state after action (optional, e.g. sliced, on, clean)"
+}}
+
 Return JSON:
 {{
  "reasoning": "a) ... b) ... c) ... d) ...",
@@ -214,10 +225,10 @@ Return JSON:
  ],
  "steps": [
   {{"type": "RECEIVE", "item": "Plastic bucket", "state": "one, empty", "target": "R1", "enables": 1, "serves": 0}},
-  {{"type": "LOCAL", "action": "move the Plastic bucket from the doorway to under the window", "uses": 0, "serves": 0}},
-  {{"type": "ASK_HELP", "action": "push the Wooden bookshelf from the center to the east wall", "target": "R4", "enables": 3, "serves": 1}},
-  {{"type": "LOCAL", "action": "roll up the Striped cotton rug and move it to the corner", "uses": 1, "serves": 1}},
-  {{"type": "LOCAL", "action": "wipe the Ceramic plate with the cloth at the sink", "uses": 2, "serves": 1}},
+  {{"type": "LOCAL", "action": {{"verb": "move", "object": "Plastic bucket", "from": "doorway", "to": "under the window"}}, "uses": 0, "serves": 0}},
+  {{"type": "ASK_HELP", "action": {{"verb": "push", "object": "Wooden bookshelf", "from": "center", "to": "east wall"}}, "target": "R4", "enables": 3, "serves": 1}},
+  {{"type": "LOCAL", "action": {{"verb": "move", "object": "Striped cotton rug", "to": "corner", "state": "rolled up"}}, "uses": 1, "serves": 1}},
+  {{"type": "LOCAL", "action": {{"verb": "clean", "object": "Ceramic plate", "to": "sink", "state": "wiped clean"}}, "uses": 2, "serves": 1}},
   {{"type": "PASS", "item": "Ceramic plate", "target": "R2", "prepared_by": 4, "serves": 1}}
  ]
 }}"""

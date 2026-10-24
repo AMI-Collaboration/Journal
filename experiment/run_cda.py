@@ -64,7 +64,9 @@ data = load_all()
 if args.task not in data["tasks"]:
     raise SystemExit(f"알 수 없는 task: {args.task}")
 
-cfg_dict = build_cda_task_config(args.task, data, mode=args.mode, deadline_min=args.deadline, n_robots=args.n_robots)
+# task.json에서 deadline 읽기 (없으면 args.deadline 사용)
+task_deadline = data["tasks"].get(args.task, {}).get("deadline", args.deadline)
+cfg_dict = build_cda_task_config(args.task, data, mode=args.mode, deadline_min=task_deadline, n_robots=args.n_robots)
 if args.dry_run:
     print("✅ dry-run: loader 성공, API 호출 없음")
     sys.exit(0)
@@ -101,7 +103,38 @@ result = asyncio.run(
 )
 
 print("\n✅ 완료")
-print(result["joint_plan_text"])
+# JSON action을 자연어로 변환
+from openai import OpenAI as _OpenAI
+_sync_client = _OpenAI(api_key=open(os.path.join(HERE, "..", "LaMMA-P", "api_key.txt")).read().strip())
+
+def _naturalize(plan_text: str) -> str:
+    prompt = f"""Convert the following robot plan into natural language.
+Each action line may contain a JSON dict like {{'verb': 'pick_up', 'object': 'apple', 'from': 'counter', 'to': 'table'}}.
+Convert ONLY the JSON dict parts into fluent English phrases. Keep everything else exactly as is.
+
+Rules:
+- Convert verb+object+from+to into a natural sentence, e.g.:
+  pick up the apple from the counter
+  move the laptop from the sofa to the coffee table
+  slice the bread
+  turn on the stove
+  push the couch against the wall
+- Do NOT change robot labels, step ids, time blocks, or any non-dict text.
+- Keep the same line structure.
+
+Plan:
+{plan_text}
+
+Return ONLY the converted plan starting with "### Joint Plan", no preamble or explanation."""
+    r = _sync_client.chat.completions.create(
+        model=args.model, temperature=0.0,
+        messages=[{"role": "user", "content": prompt}],
+    )
+    return r.choices[0].message.content.strip()
+
+raw_plan = result["joint_plan_text"]
+naturalized = _naturalize(raw_plan)
+print(naturalized)
 
 results_dir = os.path.join(HERE, "results", f"run{args.run}")
 os.makedirs(results_dir, exist_ok=True)
@@ -111,7 +144,8 @@ result_record = {
     "mode": args.mode,
     "model": args.model,
     "task_text": cfg_dict["task"],
-    "joint_plan_text": result["joint_plan_text"],
+    "joint_plan_text": naturalized.split("### Unresolved")[0].split("### Blocked")[0].split("### Dropped")[0].split("### Skipped")[0].split("### Warnings")[0].strip(),
+    "joint_plan_full": result["joint_plan_text"],
     "offers": result.get("offers", {}),
     "local_plans": result.get("local_plans", {}),
     "judgments": result.get("judgments", []),

@@ -29,9 +29,41 @@ _STOP = set("a an the to of on in at into onto from for with and or by it its th
             "your my our be is are up down near next robot".split())
 
 
+def _action_str(action) -> str:
+    if isinstance(action, dict):
+        verb = action.get("verb", "")
+        obj = action.get("object", "")
+        frm = action.get("from", "")
+        to = action.get("to", "")
+        state = action.get("state", "")
+        
+        # verb + object
+        parts = []
+        if verb:
+            parts.append(verb)
+        if obj:
+            parts.extend(["the", obj])
+        
+        # from -> to 위치 정보
+        if frm and to:
+            parts.extend(["from", frm, "to", to])
+        elif frm:
+            parts.extend(["from", frm])
+        elif to:
+            parts.extend(["to", to])
+        
+        # state는 괄호로 따로
+        if state:
+            parts.append(f"({state})")
+        
+        return " ".join(parts).strip()
+    return str(action) if action else ""
+
+
+
 def _tokens(text: str) -> set[str]:
     out = set()
-    for w in re.findall(r"[a-z]+", (text or "").lower()):
+    for w in re.findall(r"[a-z]+", (_action_str(text) if isinstance(text, dict) else (text or "")).lower()):
         if w in _STOP or len(w) < 3:
             continue
         out.add(w[:-1] if w.endswith("s") and len(w) > 3 else w)
@@ -49,13 +81,13 @@ _OBJ = re.compile(r"^\s*(?:use\s+\S+(?:\s+\S+)?\s+(?:capability\s+)?to\s+)?[a-z]
                   r"against|beside|next to|near|under|so|and|without|for|with)\b|$)", re.I)
 
 
-def object_of(action: str) -> set[str]:
+def object_of(action) -> set[str]:
     """Tokens of the object a step acts on (the phrase after the verb, before the first place word)."""
-    m = _OBJ.search(action or "")
+    m = _OBJ.search(_action_str(action) or "")
     return _tokens(m.group(1)) if m else set()
 
 
-def same_object(a: str, b: str) -> bool | None:
+def same_object(a, b) -> bool | None:
     """True/False if both objects can be read; None if one cannot (fall back to whole-text similarity)."""
     x, y = object_of(a), object_of(b)
     if not x or not y:
@@ -188,7 +220,7 @@ class PlanGraph:
         return [n.id for n in self.nodes.values()
                 if n.status == "active" and n.type in WORK_TYPES and n.agent != r.agent
                 and n.id not in linked and norm(n.location) == norm(r.location)
-                and same_object(n.action, r.action) is True]
+                and same_object(_action_str(n.action), r.action) is True]
 
     # ------------------------------------------------------------ primitive mutations
     def enabling_requests(self, nid: str) -> list[Node]:
@@ -281,15 +313,15 @@ class PlanGraph:
             ids = [x for x in self.order[p.agent] if self.active(x)]
             for x in reversed(ids[:ids.index(p.id)] if p.id in ids else []):
                 n = self.nodes[x]
-                if n.type == LOCAL and item and len(item & _tokens(n.action)) >= min(2, len(item)) \
-                        and is_real_preparation(n.action):
+                if n.type == LOCAL and item and len(item & _tokens(_action_str(n.action))) >= min(2, len(item)) \
+                        and is_real_preparation(_action_str(n.action)):
                     p.prepared_by = x
                     break
             else:                                           # written after the PASS: look anywhere
                 for x in ids:
                     n = self.nodes[x]
-                    if n.type == LOCAL and item and len(item & _tokens(n.action)) >= min(2, len(item)) and \
-                            is_real_preparation(n.action) and \
+                    if n.type == LOCAL and item and len(item & _tokens(_action_str(n.action))) >= min(2, len(item)) and \
+                            is_real_preparation(_action_str(n.action)) and \
                             not any(q.prepared_by == x for q in self.nodes.values() if q.type == PASS):
                         p.prepared_by = x
                         break
@@ -353,10 +385,10 @@ class PlanGraph:
                 continue           # one robot answering two different requests: two different jobs
             if x.location and y.location and norm(x.location) != norm(y.location):
                 continue           # work in different rooms is never the same work
-            obj = same_object(x.action, y.action)
+            obj = same_object(_action_str(x.action), _action_str(y.action))
             if obj is False:
                 continue           # different objects (e.g. the left chair vs the right chair)
-            sim = _jaccard(x.action, y.action)
+            sim = _jaccard(_action_str(x.action), _action_str(y.action))
             if sim >= DUP_THRESHOLD or obj is True and sim >= DUP_THRESHOLD - 0.2:
                 issues.append({"id": f"I{next(cid)}", "issue": "DUPLICATE_WORK",
                                "similarity": round(sim, 2),
@@ -397,7 +429,7 @@ class PlanGraph:
                     continue
                 if norm(s.location) != norm(h.location):
                     continue
-                shared = (object_of(h.action) & _tokens(s.action)) | (object_of(s.action) & _tokens(h.action))
+                shared = (object_of(_action_str(h.action)) & _tokens(_action_str(s.action))) | (object_of(_action_str(s.action)) & _tokens(_action_str(h.action)))
                 if not shared:
                     continue
                 if nx.has_path(g, h.id, s.id) or nx.has_path(g, s.id, h.id):
@@ -601,9 +633,9 @@ class PlanGraph:
         for n in list(self.nodes.values()):
             if n.agent in receivers and n.agent not in givers:   # pure receivers do not stage handoffs
                 continue
-            if n.id in preps and is_real_preparation(n.action):   # real preparation of an offer: keep it
+            if n.id in preps and is_real_preparation(_action_str(n.action)):   # real preparation of an offer: keep it
                 continue
-            if n.status == "active" and n.type == LOCAL and self._PREP.search(n.action or ""):
+            if n.status == "active" and n.type == LOCAL and self._PREP.search(_action_str(n.action) or ""):
                 if self.drop(n.id, "only moves the object to a handoff spot: the PASS itself picks it up "
                                    "and hands it over", "rule") is None:
                     self.n_prep_dropped += 1
@@ -648,7 +680,7 @@ class PlanGraph:
                          if o.id != step.id and o.status == "active" and o.type in WORK_TYPES
                          and frozenset((o.id, step.id)) not in self.dismissed_dups   # LLM said: different
                          and norm(o.location) == norm(step.location)
-                         and _jaccard(o.action, step.action) >= RELEASE_THRESHOLD
+                         and _jaccard(_action_str(o.action), _action_str(step.action)) >= RELEASE_THRESHOLD
                          and all(self.providers_of(q.id) for q in self.enabling_requests(o.id))), None)
             if twin and self.drop(step.id, f"redundant: {twin.id} ({twin.agent}) does the same work "
                                            f"and can run", "rule") is None:

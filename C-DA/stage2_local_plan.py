@@ -26,6 +26,18 @@ from .schemas import (ASK_HELP, LOCAL, PASS, RECEIVE, REQUEST_TYPES, Node, Offer
                       agent_num, norm)
 
 
+def _action_str(action) -> str:
+    """action이 dict이면 자연어로, 아니면 그대로."""
+    if isinstance(action, dict):
+        parts = [action.get("verb", ""), "the" if action.get("object") else "", action.get("object", "")]
+        if action.get("from"): parts += ["from", action["from"]]
+        if action.get("to"): parts += ["to", action["to"]]
+        if action.get("state"): parts += [f"({action['state']})"]
+        return " ".join(p for p in parts if p).strip()
+    return str(action)
+
+
+
 # No exploration in this setting, and movement is part of HELP / PASS / RECEIVE: steps that only look,
 # check or search for something do not change the world and are not allowed.
 _MOVE_ONLY = re.compile(r"^\s*(go|move|walk|head|travel|return|navigate|come)\s+(back\s+)?(to|into)\b", re.I)
@@ -50,7 +62,7 @@ def _handled(st: dict) -> set:
     """Words of the object a step acts on (not of objects it merely mentions, e.g. in 'after ...')."""
     if st["type"] == RECEIVE:
         return _tokens(st.get("item") or "")
-    action = _AFTER.sub("", st.get("action", ""))
+    action = _AFTER.sub("", _action_str(st.get("action", "")))
     return object_of(action) or _tokens(action)
 
 
@@ -109,7 +121,7 @@ def validate(raw_steps: list[dict], agent: str, offers: dict[str, Offer], cfg: T
         v: list[str] = []
         step = {
             "type": t,
-            "action": str(s.get("action", "") or "").strip(),
+            "action": s.get("action", "") if isinstance(s.get("action"), dict) else str(s.get("action", "") or "").strip(),
             "item": (str(s["item"]).strip() if s.get("item") else None),
             "target": (str(s["target"]).strip().upper() if s.get("target") else None),
             "uses": s.get("uses"),
@@ -125,7 +137,7 @@ def validate(raw_steps: list[dict], agent: str, offers: dict[str, Offer], cfg: T
                 v.append(f"PASS needs a target among {[x for x in cfg.ids if x != agent]}, got {step['target']}")
             if not step["item"] or norm(step["item"]) not in {norm(x) for x in own.has_items}:
                 v.append(f"PASS item '{step['item']}' must be copied from YOUR has_items")
-            step["action"] = step["action"] or f"pass {step['item']} to {step['target']}"
+            step["action"] = _action_str(step["action"]) or f"pass {step['item']} to {step['target']}"
             _check_mover(agent, step["target"], cfg, v)
 
         if goals is not None:
@@ -141,17 +153,17 @@ def validate(raw_steps: list[dict], agent: str, offers: dict[str, Offer], cfg: T
                 step["serves"] = str(g.get("goal", g) if isinstance(g, dict) else g)
         own_items = {norm(x) for x in own.has_items}
         others = [x for x in cfg.ids if x != agent]
-        if t == ASK_HELP and any(it and it in norm(step["action"]) for it in own_items):
+        if t == ASK_HELP and any(it and it in norm(_action_str(step["action"])) for it in own_items):
             v.append(f"ASK_HELP '{step['action']}' is about your own object. Handoffs go only one way: "
                      f"the robot that needs it writes RECEIVE; you write nothing about it now")
-        if t == LOCAL and any(re.search(rf"\b{o}\b", step["action"], re.I) for o in others):
+        if t == LOCAL and any(re.search(rf"\b{o}\b", _action_str(step["action"]), re.I) for o in others):
             v.append(f"LOCAL '{step['action']}' hands something to another robot. Do not plan handoffs: "
                      f"the receiver writes RECEIVE and you answer later with a PASS")
-        if t == LOCAL and _NON_PHYSICAL.search(step["action"]):
+        if t == LOCAL and _NON_PHYSICAL.search(_action_str(step["action"])):
             v.append(f"LOCAL '{step['action']}' is not a physical action. Write what your body does to an "
                      f"object (move X from A to B, open, switch on, fill). If your body cannot do the real "
                      f"work (e.g. heavy furniture), do NOT drop it: write ASK_HELP to a robot that can")
-        m = _AFTER.search(step["action"]) if t in (LOCAL, ASK_HELP) else None
+        m = _AFTER.search(_action_str(step["action"])) if t in (LOCAL, ASK_HELP) else None
         if m:
             obj = _tokens(m.group(1))
             earlier = [x for x in (raw_steps or [])[:i] if str(x.get("type", "")).upper().strip() in (LOCAL, ASK_HELP)
@@ -160,7 +172,7 @@ def validate(raw_steps: list[dict], agent: str, offers: dict[str, Offer], cfg: T
                 v.append(f"'{step['action']}' assumes '{m.group(1)}' was moved first, but no earlier step of "
                          f"yours moves it. Add that step before it (LOCAL if your body can, otherwise ASK_HELP "
                          f"with 'enables' = this step)")
-        if t in (LOCAL, ASK_HELP) and (_OBSERVE.search(step["action"]) or _MOVE_ONLY.search(step["action"])):
+        if t in (LOCAL, ASK_HELP) and (_OBSERVE.search(_action_str(step["action"])) or _MOVE_ONLY.search(_action_str(step["action"]))):
             v.append(f"{t} '{step['action']}' only looks/checks/searches. Robots cannot explore and "
                      f"movement is part of HELP/PASS/RECEIVE: write only steps that change the room "
                      f"(what the others can see is in their offers)")
@@ -179,7 +191,7 @@ def validate(raw_steps: list[dict], agent: str, offers: dict[str, Offer], cfg: T
             if tgt not in cfg.ids or tgt == agent:
                 v.append(f"{t} needs a target among {[x for x in cfg.ids if x != agent]}, got {tgt}")
                 step["target"] = None
-            if t == ASK_HELP and not step["action"]:
+            if t == ASK_HELP and not _action_str(step["action"]):
                 v.append("ASK_HELP needs an action")
             if t == RECEIVE:
                 step["location"] = me.profile.room
@@ -191,7 +203,7 @@ def validate(raw_steps: list[dict], agent: str, offers: dict[str, Offer], cfg: T
                     v.append(f"RECEIVE item '{step['item']}' is not in {step['target']}'s has_items "
                              f"{offers[step['target']].has_items}")
                 state = str(s.get("state") or "").strip()
-                if not step["action"] or state:
+                if not _action_str(step["action"]) or state:
                     step["action"] = f"receive {step['item']}" + (f" ({state})" if state else "")
         step["violations"] = v
         step["_raw_index"] = i

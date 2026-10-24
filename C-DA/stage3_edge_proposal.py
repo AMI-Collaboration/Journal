@@ -27,6 +27,7 @@ from collections import Counter
 from .llm import BaseLLM
 from .log import EventLog
 from .prompts import PROPOSE_USER, _j, indexed, propose_system
+from .graph import _action_str
 from .schemas import (CONFIRMED, HELP, HELP_EDGE, PASS, PROPOSED, PROVIDER_FOR,
                       REQUEST_TYPES, TRANSFER, Edge, Node, Offer, TaskConfig, agent_num, norm)
 
@@ -143,7 +144,7 @@ async def edge_proposal(cfg: TaskConfig, plans: dict[str, list[Node]], offers: d
                     problem = f"uses={uses} is not a valid can_do index"
                 elif not me.profile.mobile and norm(req.location) != norm(me.profile.room):
                     problem = f"cannot leave {me.profile.room} to help in {req.location}"
-                action = action or req.action
+                action = action or _action_str(req.action)
                 location = req.location
             else:
                 item = str(j.get("item") or req.item or "")

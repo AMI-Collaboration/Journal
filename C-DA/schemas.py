@@ -142,7 +142,7 @@ class Node:
     id: str
     agent: str
     type: str
-    action: str = ""
+    action: str | dict = ""
     item: str | None = None
     target: str | None = None          # request: who is asked; provider: requester agent
     uses: int | None = None            # index into the agent's own can_do
@@ -171,8 +171,33 @@ class Node:
 
     def text(self) -> str:
         if self.type in (RECEIVE, PASS):
-            return f"{self.action} ({self.item})" if self.action else (self.item or "")
-        return self.action
+            return f"{self._action_text()} ({self.item})" if self._action_text() else (self.item or "")
+        return self._action_text()
+
+    def _action_text(self) -> str:
+        if isinstance(self.action, dict):
+            verb = self.action.get("verb", "")
+            obj = self.action.get("object", "")
+            frm = self.action.get("from", "")
+            to = self.action.get("to", "")
+            state = self.action.get("state", "")
+            
+            parts = []
+            if verb:
+                parts.append(verb)
+            if obj:
+                parts.extend(["the", obj])
+            if frm and to:
+                parts.extend(["from", frm, "to", to])
+            elif frm:
+                parts.extend(["from", frm])
+            elif to:
+                parts.extend(["to", to])
+            if state:
+                parts.append(f"({state})")
+            
+            return " ".join(parts).strip()
+        return str(self.action)
 
 
 @dataclass

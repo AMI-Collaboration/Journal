@@ -11,23 +11,23 @@ def _line(g: PlanGraph, nid: str) -> str:
     partner = g.nodes[prov[0].src].agent if prov else None
     room = {a.id: a.profile.room for a in g.cfg.agents}
     if n.type == ASK_HELP:
-        body = f"wait for {partner} to: {n.action}"
+        body = f"wait for {partner} to: {n._action_text()}"
     elif n.type == RECEIVE:
-        body = (n.action if n.action and n.action != f"receive {n.item}" else f"receive {n.item}") + f" from {partner}"
+        body = (n._action_text() if n._action_text() and n._action_text() != f"receive {n.item}" else f"receive {n.item}") + f" from {partner}"
         if partner and g.cfg.mover(partner, n.agent) == n.agent:
             body += f" (collects it from the {room[partner]})"
     elif n.type == HELP:
-        body = f"{n.action} (help {n.target} in the {room.get(n.target, n.location)})"
+        body = f"{n._action_text()} (help {n.target} in the {room.get(n.target, n.location)})"
     elif n.type == PASS:
-        prep = n.action and not n.action.lower().startswith("pass ")
-        body = (f"{n.action} -> {n.target}" if prep else f"pass {n.item} to {n.target}") \
+        prep = n._action_text() and not n._action_text().lower().startswith("pass ")
+        body = (f"{n._action_text()} -> {n.target}" if prep else f"pass {n.item} to {n.target}") \
             + (" (offered)" if n.origin == "offer" else "")
         if g.cfg.mover(n.agent, n.target) == n.agent:
             body += f" (brings it to the {room.get(n.target, '?')})"
         else:
             body += f" (hands it over; {n.target} collects it)"
     else:
-        body = n.action
+        body = n._action_text()
         serves = [g.nodes[e.dst].agent for e in g.collab_edges() if e.src == nid]
         if serves:
             body += f" (also serves {', '.join(serves)}'s request)"
