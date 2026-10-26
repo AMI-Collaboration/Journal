@@ -135,8 +135,18 @@ def validate(raw_steps: list[dict], agent: str, offers: dict[str, Offer], cfg: T
             step["location"] = me.profile.room
             if step["target"] not in cfg.ids or step["target"] == agent:
                 v.append(f"PASS needs a target among {[x for x in cfg.ids if x != agent]}, got {step['target']}")
-            if not step["item"] or norm(step["item"]) not in {norm(x) for x in own.has_items}:
+            if not step["item"]:
                 v.append(f"PASS item '{step['item']}' must be copied from YOUR has_items")
+            else:
+                own_items_norm = {norm(x) for x in own.has_items}
+                item_norm = norm(step["item"])
+                if not any(item_norm in t or t in item_norm for t in own_items_norm):
+                    v.append(f"PASS item '{step['item']}' must be copied from YOUR has_items")
+                else:
+                    # normalize item to matching has_items entry
+                    match = next((x for x in own.has_items if item_norm in norm(x) or norm(x) in item_norm), None)
+                    if match:
+                        step["item"] = match
             step["action"] = _action_str(step["action"]) or f"pass {step['item']} to {step['target']}"
             _check_mover(agent, step["target"], cfg, v)
 
