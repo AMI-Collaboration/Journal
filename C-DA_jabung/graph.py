@@ -661,7 +661,15 @@ class PlanGraph:
                 continue
             old = list(ids)
             ids.remove(r.id)
-            ids.insert(ids.index(r.enables), r.id)
+            target_pos = ids.index(r.enables)
+            # Case 3 fix: ASK_HELP must come AFTER its HELP provider in the same agent's order
+            provs = self.providers_of(r.id)
+            for e in provs:
+                prov_node = self.nodes[e.src]
+                if prov_node.agent == r.agent and prov_node.id in ids:
+                    prov_pos = ids.index(prov_node.id)
+                    target_pos = max(target_pos, prov_pos + 1)
+            ids.insert(target_pos, r.id)
             if not nx.is_directed_acyclic_graph(self.nx()):
                 self.order[r.agent] = old
                 continue

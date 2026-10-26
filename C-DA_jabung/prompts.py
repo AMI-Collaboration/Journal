@@ -36,6 +36,10 @@ _SPACE_RULES = """SPACE RULES (space-separated home):
 - There are exactly two kinds of collaboration:
   * CAPABILITY: work in your room that your body cannot do (too heavy, out of reach, needs a
     different tool) -> ASK_HELP to a robot whose body can. Say exactly what it should do.
+    If the object that needs capability work (e.g. SliceObject, PourObject) is in YOUR room but
+    the capable robot is in ANOTHER room: first PASS the object to that robot, then ASK_HELP it
+    to perform the action, then RECEIVE the result back. Any mobile robot can carry the object
+    between rooms. Never use "wait for None" — always identify a specific capable robot as target.
   * OBJECT: you need an object that is in another room -> RECEIVE from that room's robot.
 - Who moves an object between rooms is decided by the bodies, not by a request:
   * mobile giver -> the giver brings it (its PASS includes bringing it);
@@ -76,10 +80,12 @@ FIELDS:
   up to 20 kg"). At most 5. No step-by-step plan here.
 - "cannot_do": task-relevant actions your body cannot perform, and why.
 - "suggests": objects from YOUR has_items that the task in another room NEEDS, each with its use and
-  place (e.g. "Ceramic plate: serving food on the dining table"). Only essential resources, not extras.
+  place (e.g. "Ceramic plate: serving food on the dining table"). Be GENEROUS — list any object that
+  could possibly help the task, even if you are not sure it is needed. Other robots will decide.
 - "intends": concrete steps you will do in YOUR room, in execution order, each once, using only your
   has_items. May be EMPTY if nothing important happens in your room (has_items and suggests are still
-  required).
+  required). If you can prepare an object for another room (slice, pour, pick up), include it here
+  so other robots know you will handle it.
 - "need_from_others": what you need from other robots. You do not know their objects yet, so describe
   the need by FUNCTION and state, not by an object name (e.g. "a flat light container to hold soil",
   "a robot that can push a 40 kg cabinet"). Do not repeat an item from "intends".
@@ -165,6 +171,8 @@ offering for the task. RECEIVE an object if:
 - the task description implies you need it (e.g. food in the living room, towel near bathtub).
 Do not skip RECEIVE just because you can manage without it — collaboration improves the outcome.
 One object per purpose; do not receive duplicates.
+With MORE robots available, MORE collaboration is expected — each robot should contribute meaningfully.
+If you have idle capacity, look for objects to receive or tasks to assist with.
 
 STEP 4 - YOUR OBJECTS FOR OTHERS. Actively PASS your "suggests" if another room's task clearly
 benefits from them. Do not wait to be asked — if you have something useful and you listed it in
@@ -178,9 +186,13 @@ Step types:
 - ASK_HELP: another robot must DO something in your room that your body cannot. Requires "target",
             "action", "enables".
 - RECEIVE:  you need an OBJECT for one of YOUR later LOCAL steps. Requires "target", "item" (copied
-            exactly from the target's has_items), "enables". Optional "state" if it matters
+            EXACTLY AND VERBATIM from the target's has_items list — do NOT paraphrase, rename, or
+            describe the object differently), "enables". Optional "state" if it matters
             (e.g. "one plate, wiped clean"); the giver prepares that state. Do not assume a state you
             did not ask for.
+            IMPORTANT: "item" must be word-for-word from the target robot's has_items. If you want
+            a drink and the target has "clear glasses (on the shelf, image 1)", write exactly
+            "clear glasses (on the shelf, image 1)" — not "drink", "glass", or "water bottle".
 - PASS:     you OFFER one of YOUR objects to another room's robot. Requires "target", "item" (copied
             from YOUR has_items). The target decides whether to take it. PASS already includes picking
             it up and handing it over (and bringing it, if you are mobile): never add steps like
@@ -263,7 +275,12 @@ ROBOT PROFILES:
 [IMPORTANT] SAME-ROOM ROBOTS: If another robot is in YOUR room, check their "intends" carefully.
 Do NOT plan the same action on the same object as them. Divide the work — each object should be
 handled by exactly ONE robot. If they already intend to handle something, skip it and focus on
-other objects."""
+other objects.
+
+[IMPORTANT] CROSS-ROOM ASK_HELP: Before creating an ASK_HELP, check other robots' "intends".
+If another robot in YOUR OWN ROOM already intends to do that exact action on the same object,
+do NOT duplicate it. For cross-room requests, ASK_HELP is still appropriate — another robot
+doing something in their room does not prevent you from asking for help with YOUR room's needs."""
 
 PLAN_FIX = """Your plan violated these rules:
 {errors}

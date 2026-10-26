@@ -198,10 +198,12 @@ def validate(raw_steps: list[dict], agent: str, offers: dict[str, Offer], cfg: T
                 _check_mover(step["target"], agent, cfg, v)
                 if not step["item"]:
                     v.append("RECEIVE needs an item")
-                elif step["target"] in offers and norm(step["item"]) not in \
-                        {norm(x) for x in offers[step["target"]].has_items}:
-                    v.append(f"RECEIVE item '{step['item']}' is not in {step['target']}'s has_items "
-                             f"{offers[step['target']].has_items}")
+                elif step["target"] in offers:
+                    target_items_norm = {norm(x) for x in offers[step["target"]].has_items}
+                    item_norm = norm(step["item"])
+                    if not any(item_norm in t or t in item_norm for t in target_items_norm):
+                        v.append(f"RECEIVE item '{step['item']}' is not in {step['target']}'s has_items "
+                                 f"{offers[step['target']].has_items}")
                 state = str(s.get("state") or "").strip()
                 if not _action_str(step["action"]) or state:
                     step["action"] = f"receive {step['item']}" + (f" ({state})" if state else "")
@@ -227,11 +229,15 @@ def validate(raw_steps: list[dict], agent: str, offers: dict[str, Offer], cfg: T
                 e = int(e.strip())
             step["enables"] = e
             if not isinstance(e, int) or not (i < e < len(raw_types)) or raw_types[e] != LOCAL:
-                step["violations"].append(
-                    f"{step['type']} '{step['action'] or step['item']}' must name in 'enables' the index "
-                    f"of one of YOUR OWN later LOCAL steps that needs it (got {e}). If none of your "
-                    f"steps needs it, remove this request: that part belongs to whoever does it.")
-                step["enables"] = None
+                # enables is optional for RECEIVE if it directly serves the task goal
+                if step["type"] == RECEIVE:
+                    step["enables"] = None  # allow RECEIVE without enables
+                else:
+                    step["violations"].append(
+                        f"{step['type']} '{step['action'] or step['item']}' must name in 'enables' the index "
+                        f"of one of YOUR OWN later LOCAL steps that needs it (got {e}). If none of your "
+                        f"steps needs it, remove this request: that part belongs to whoever does it.")
+                    step["enables"] = None
         else:
             step["enables"] = None
         errors += [f"step {i}: {x}" for x in step["violations"]]

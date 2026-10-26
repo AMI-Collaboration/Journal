@@ -28,9 +28,27 @@ def _line(g: PlanGraph, nid: str) -> str:
             body += f" (hands it over; {n.target} collects it)"
     else:
         body = n._action_text()
-        serves = [g.nodes[e.dst].agent for e in g.collab_edges() if e.src == nid]
+        serves_edges = [e for e in g.collab_edges() if e.src == nid]
+        serves = [g.nodes[e.dst].agent for e in serves_edges]
         if serves:
-            body += f" (also serves {', '.join(serves)}'s request)"
+            # Case 1-B: ASK_HELP(dst)가 현재 노드(src)보다 나중 순서이면 [HELP]로 표시
+            # collab edge: src=provider(LOCAL), dst=request(ASK_HELP)
+            # ASK_HELP가 provider보다 나중이면 Case 1-B (정상 협업)
+            ask_help_nodes = [g.nodes[e.dst] for e in serves_edges]
+            # ASK_HELP의 t_start가 LOCAL의 t_start보다 같거나 나중이면 Case 1-B
+            # (다른 agent이므로 t_start로 비교)
+            ask_after = any(
+                (ah.t_start or 0) >= (n.t_start or 0)
+                for ah in ask_help_nodes
+            )
+            if ask_after:
+                # Case 1-B: HELP 태그로 표시
+                targets = ", ".join(serves)
+                room = {a.id: a.profile.room for a in g.cfg.agents}
+                body += f" (help {targets} in the {room.get(serves[0], n.location)})"
+                return f"- {n.agent} [HELP] {body}  ({nid})" + (f" [after {', '.join(waits)}]" if (waits := [e.src for e in g.order_edges if e.dst == nid and g.active(e.src)]) else "")
+            else:
+                body += f" (also serves {', '.join(serves)}'s request)"
     waits = [e.src for e in g.order_edges if e.dst == nid and g.active(e.src)]
     if waits:
         body += f" [after {', '.join(waits)}]"
