@@ -60,8 +60,9 @@ Write an OFFER: what YOU can contribute to THIS task, which part YOU intend to t
 WORK IN THIS ORDER (the JSON fields follow the same order):
  1. LOOK FIRST -> "has_items". Before thinking about the task, list every movable object you can
     CLEARLY see in your images. Do not filter by relevance and do not guess: if an object is partly
-    hidden or you are not sure what it is, leave it out. This list is the only way other robots learn
-    what exists in your room, so a wrong entry misleads the whole team.
+    hidden or you are not sure what it is, leave it out. NEVER infer or assume objects that are not
+    visible — if you see an apple, do not add banana or pear. Only list what you can directly see.
+    This list is the only way other robots learn what exists in your room, so a wrong entry misleads the whole team.
     Format: "<color/material> <specific noun> (<where it is>, image <k>)", one object per entry,
     e.g. "striped cotton rug (under the bookshelf, image 2)". Use a specific noun
     ("bookshelf", not "furniture"; "plate", not "dishes").
@@ -150,6 +151,8 @@ STEP 1 - TASK REASONING ("reasoning"):
     because your body cannot do it.
 Then write "goals": each with "goal", "priority" (high = essential, medium/low = nice-to-have) and
 "in_my_room". Only goals of the TASK, not general housekeeping.
+Be AMBITIOUS: if your room has multiple objects that need attention for the task, plan ALL of them.
+Do not stop after one or two steps if more work is needed. Use your full capacity.
 
 STEP 2 - CHECKLIST (requirements first, capability second) -> "checklist".
 One entry per object that must change for YOUR goals (two chairs = two entries), plus every object
@@ -184,7 +187,10 @@ STEP 5 - STEPS. Every step serves one of YOUR goals ("serves" = goal index). Hig
 Step types:
 - LOCAL:    you do it yourself in your own room. "uses": index of the can_do entry it relies on.
 - ASK_HELP: another robot must DO something in your room that your body cannot. Requires "target",
-            "action", "enables".
+            "action", "enables". IMPORTANT: "enables" is REQUIRED — always specify which of YOUR OWN
+            later LOCAL steps depends on this help being done first. Without "enables", the help has
+            no effect on your plan. If you cannot name a LOCAL step that needs it, do NOT create
+            ASK_HELP — it means you do not actually need the help.
 - RECEIVE:  you need an OBJECT for one of YOUR later LOCAL steps. Requires "target", "item" (copied
             EXACTLY AND VERBATIM from the target's has_items list — do NOT paraphrase, rename, or
             describe the object differently), "enables". Optional "state" if it matters

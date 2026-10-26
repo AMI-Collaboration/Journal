@@ -44,8 +44,7 @@ def _line(g: PlanGraph, nid: str) -> str:
             if ask_after:
                 # Case 1-B: HELP 태그로 표시
                 targets = ", ".join(serves)
-                room = {a.id: a.profile.room for a in g.cfg.agents}
-                body += f" (help {targets} in the {room.get(serves[0], n.location)})"
+                body += f" (help {targets} in the {n.location})"
                 return f"- {n.agent} [HELP] {body}  ({nid})" + (f" [after {', '.join(waits)}]" if (waits := [e.src for e in g.order_edges if e.dst == nid and g.active(e.src)]) else "")
             else:
                 body += f" (also serves {', '.join(serves)}'s request)"

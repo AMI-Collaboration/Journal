@@ -597,9 +597,9 @@ class PlanGraph:
             n.status = "blocked"
             n.violations = n.violations + [f"blocked ({cause})"]
             if n.type in REQUEST_TYPES:
-                if n.enables:
+                if n.enables and n.type != RECEIVE:           # RECEIVE never cascades to enables
                     queue.append((n.enables, cause))
-                else:                                         # no dependency info: block what follows
+                elif n.type not in (RECEIVE,) and not n.enables:
                     ids = self.order[n.agent]
                     queue += [(x, cause) for x in ids[ids.index(nid) + 1:]]
                 continue
@@ -662,13 +662,21 @@ class PlanGraph:
             old = list(ids)
             ids.remove(r.id)
             target_pos = ids.index(r.enables)
-            # Case 3 fix: ASK_HELP must come AFTER its HELP provider in the same agent's order
+            # Case 3 fix: ASK_HELP must come AFTER its HELP provider
             provs = self.providers_of(r.id)
             for e in provs:
                 prov_node = self.nodes[e.src]
                 if prov_node.agent == r.agent and prov_node.id in ids:
+                    # same agent: use order index
                     prov_pos = ids.index(prov_node.id)
                     target_pos = max(target_pos, prov_pos + 1)
+                elif prov_node.agent != r.agent:
+                    # different agent: ensure ASK_HELP is in same or later phase as HELP
+                    prov_phase = prov_node.phase or 0
+                    req_phase = r.phase or 0
+                    if prov_phase >= req_phase:
+                        # move ASK_HELP to end of its enables step vicinity
+                        target_pos = max(target_pos, len(ids) - 1)
             ids.insert(target_pos, r.id)
             if not nx.is_directed_acyclic_graph(self.nx()):
                 self.order[r.agent] = old
