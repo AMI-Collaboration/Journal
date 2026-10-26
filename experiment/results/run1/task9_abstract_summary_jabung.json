@@ -1,0 +1,92 @@
+{
+  "cda": {
+    "name": "CDA",
+    "track_a_llm_judge": {
+      "TF": 6,
+      "TF_reason": "The plan partially fulfills the task by turning off lamps in the living room and bedroom, closing the laptop, and putting away some bathroom items. However, it hallucinates 'kitchen lights', 'toothbrush', and 'toothpaste', which are not in the environment.",
+      "PF": 4,
+      "PF_reason": "There are several feasibility violations due to hallucinated objects: 'kitchen lights' in the kitchen, and 'toothbrush' and 'toothpaste' in the bathroom. The robots also use descriptive colors not present in the object list, though they can map to existing objects.",
+      "OC": 9,
+      "OC_reason": "The task does not require cross-room collaboration, and the robots correctly act independently based on their local environments.",
+      "SC": 9,
+      "SC_reason": "The sequence of actions is logical, with pick up and put down actions properly ordered. The workload is distributed reasonably across the time blocks."
+    },
+    "track_b_gc": 0.0,
+    "track_b_state_detail": {
+      "A1_bed_ready": false,
+      "A2_lights_off": false,
+      "A3_curtains_closed": false,
+      "A4_bedroom_clean": false
+    },
+    "object_grounding": "N/A"
+  },
+  "central": {
+    "name": "Centralized",
+    "track_a_llm_judge": {
+      "TF": 4,
+      "TF_reason": "The plan partially addresses the goals (turning off lights, putting things away), but relies heavily on hallucinated objects (e.g., 'kitchen lights', 'main room light', 'bathroom lights', 'blanket') and vague actions, meaning the actual task fulfillment with real objects is poor.",
+      "PF": 2,
+      "PF_reason": "Severe feasibility violations due to numerous hallucinated objects (sink basin in kitchen, cupboard, coffee table, table lamp, blanket, room lights) and vague expressions ('any light objects', 'designated storage area', 'Ensure the bed is tidy').",
+      "OC": 9,
+      "OC_reason": "The task does not require cross-room collaboration, and the robots correctly operate independently within their respective rooms based on local observations.",
+      "SC": 8,
+      "SC_reason": "The sequence of actions is mostly logical, though R4 picking up a candle from the cabinet only to store it back in the cabinet is redundant and illogical."
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": "N/A"
+  },
+  "independent": {
+    "name": "Independent",
+    "track_a_llm_judge": {
+      "TF": 6,
+      "TF_reason": "The plan addresses the main goals of turning down lights, putting things away, and preparing the bedroom. However, it relies on several hallucinated objects (football, window blinds, kitchen sink basin), which reduces the actual fulfillment of the task.",
+      "PF": 4,
+      "PF_reason": "There are multiple feasibility violations including vague expressions ('Ensure all lights are off', 'Move any light objects') and hallucinated objects not present in the room lists ('football' in bedroom, 'sink basin' in kitchen, 'window blinds' in bedroom).",
+      "OC": 9,
+      "OC_reason": "The task involves independent room preparation and does not require cross-room collaboration. The robots correctly act on local observations without unjustified global knowledge.",
+      "SC": 9,
+      "SC_reason": "The sequence of actions is logical, with pick-up actions correctly preceding place actions. There are no major ordering or dependency violations."
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": "N/A"
+  },
+  "lamma_p": {
+    "name": "LaMMA-P",
+    "track_a_llm_judge": {
+      "TF": 6,
+      "TF_reason": "The plan partially fulfills the goals by turning off some lights, putting away some items, and turning off the TV. However, it relies on hallucinated objects (LightSwitch, Radio) and vague actions ('Tidy up') to achieve some of these goals.",
+      "PF": 3,
+      "PF_reason": "Severe feasibility violations exist: 'LightSwitch' and 'Radio' are hallucinated objects not present in the environment. 'storage location' is a vague expression. 'Tidy up' is not a standard primitive action. Additionally, R1 interacts with the Bed (bedroom) and then Curtains (living_room) without any room transition.",
+      "OC": 7,
+      "OC_reason": "The task does not require cross-room collaboration, so independent robot actions are appropriate. However, R1 assumes Curtains are in the bedroom, which is incorrect based on the room lists.",
+      "SC": 9,
+      "SC_reason": "The sequence of actions is generally logical, with prerequisites like 'Go to' and 'Pick up' occurring before 'Put away' or 'Turn off'."
+    },
+    "track_b_gc": 0.0,
+    "track_b_state_detail": {
+      "A1_bed_ready": false,
+      "A2_lights_off": false,
+      "A3_curtains_closed": false,
+      "A4_bedroom_clean": false
+    },
+    "object_grounding": "N/A"
+  },
+  "smart_llm": {
+    "name": "SMART-LLM",
+    "track_a_llm_judge": {
+      "TF": 3,
+      "TF_reason": "The plan attempts to fulfill the goals (turning off lights, putting things away, preparing the bedroom), but relies heavily on hallucinated objects not present in the environment (e.g., light switches, 'dishes', kitchen sink, bedroom window, bedroom curtains).",
+      "PF": 2,
+      "PF_reason": "Severe feasibility violations due to hallucinations. 'light switch', 'dishes', 'sink' (in kitchen), 'window', and 'curtains' (in bedroom) do not exist in the provided room lists. 'dishes' is also a vague expression.",
+      "OC": 7,
+      "OC_reason": "The task does not require cross-room collaboration, and the robots act independently which is appropriate. However, they act on hallucinated global knowledge of objects that don't exist.",
+      "SC": 8,
+      "SC_reason": "The sequence of actions is mostly logical, though R4 performs a high number of actions (8) in the final 5-minute block, which borders on physically unrealistic throughput."
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": "N/A"
+  }
+}

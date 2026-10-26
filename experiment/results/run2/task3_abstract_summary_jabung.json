@@ -1,0 +1,92 @@
+{
+  "cda": {
+    "name": "CDA",
+    "track_a_llm_judge": {
+      "TF": 2,
+      "TF_reason": "The plan misses the 5-minute deadline. Furthermore, it relies heavily on hallucinated objects (e.g., 'desk', 'black office chair', 'table lamp', 'wooden side table') instead of the actual objects available in the rooms (e.g., DeskLamp, Chair, SideTable).",
+      "PF": 2,
+      "PF_reason": "The plan contains numerous feasibility violations, primarily due to hallucinated objects ('desk', 'black office chair', 'table lamp', 'small lamp') and vague expressions ('positioned correctly', 'neatly', 'desk area').",
+      "OC": 5,
+      "OC_reason": "The task does not require cross-room collaboration, and the robots act locally. However, multiple robots (R1, R3, R4, R5, R6) are acting simultaneously on similar vague objects without clear room assignments or coordination, leading to disjointed execution.",
+      "SC": 7,
+      "SC_reason": "The sequence of actions is mostly logical (e.g., picking up an object before moving it), but the plan extends beyond the required time block, and actions are performed on hallucinated objects."
+    },
+    "track_b_gc": 0.0,
+    "track_b_state_detail": {
+      "A1_laptop_ready": false,
+      "A2_meeting_area_clear": false,
+      "A3_seat_ready": false,
+      "A4_lighting_ready": false
+    },
+    "object_grounding": "N/A"
+  },
+  "central": {
+    "name": "Centralized",
+    "track_a_llm_judge": {
+      "TF": 2,
+      "TF_reason": "The plan fails to meet the 5-minute deadline, extending into the 5-10 minute block. Most actions involve vague or hallucinated objects ('monitor', 'pens', 'papers') rather than specific items from the room list. While the light is turned on, the overall desk organization is not achieved with real objects.",
+      "PF": 2,
+      "PF_reason": "Severe violations exist. The plan relies heavily on vague expressions ('necessary items', 'light object', 'any items') and hallucinated objects ('monitor', 'pens', 'papers'). It also references a 'drawer' in the bedroom, which does not exist in the provided object list.",
+      "OC": 3,
+      "OC_reason": "Collaboration logic is highly flawed. R1 asks R2 to come to the living room, but R2 moves to the bedroom instead. R1 later passes objects to R2 while they are presumably in different rooms, and R2 passes objects to R4 without ever observing or picking them up.",
+      "SC": 2,
+      "SC_reason": "Multiple sequencing and dependency errors: R2 passes an object to R4 without ever picking one up; R1 passes an object to R2 without them being in the same room; R2 moves to the bedroom when already there; and multiple actions share the same step IDs (e.g., r4_s2, r4_s3)."
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": "N/A"
+  },
+  "independent": {
+    "name": "Independent",
+    "track_a_llm_judge": {
+      "TF": 3,
+      "TF_reason": "The plan fails to respect the 5-minute deadline, scheduling half of the tasks in the 5-10 minute block. Additionally, it relies heavily on hallucinated objects (notebook, pen, phone, glass, water) and vague actions to achieve the goal of making the desk presentable.",
+      "PF": 2,
+      "PF_reason": "Severe feasibility issues due to numerous hallucinated objects (notebook, pen, phone, glass, water, window blinds) and vague expressions ('any clutter', 'any small items', 'ensure', 'check').",
+      "OC": 4,
+      "OC_reason": "Poor coordination and observability. R1 asks for help to turn on the bedroom light in the 5-10 minute block, but R4 already turned it on in the 0-5 minute block. Robots seem to act with disjointed awareness of each other's actions.",
+      "SC": 4,
+      "SC_reason": "There are significant ordering and logical violations: R1's ASK_HELP receives no response and is redundant; multiple robots (R3 and R4) perform overlapping, redundant actions on the same objects (laptop, chair, desk); and critical preparation steps occur after the 5-minute deadline."
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": "N/A"
+  },
+  "lamma_p": {
+    "name": "LaMMA-P",
+    "track_a_llm_judge": {
+      "TF": 2,
+      "TF_reason": "The plan fails to meet the 5-minute deadline, as most critical actions are scheduled in the [5-10 min] block. Additionally, the plan relies on hallucinated objects ('desk', 'light switch', 'camera', 'microphone') and vague concepts ('clutter') rather than using the actual objects available in the rooms.",
+      "PF": 2,
+      "PF_reason": "Severe feasibility violations due to the use of hallucinated objects ('desk', 'light switch', 'camera', 'microphone') that do not exist in the provided room lists. The plan also uses vague expressions like 'clutter' and 'check status', which are not executable actions.",
+      "OC": 8,
+      "OC_reason": "The task does not require cross-room collaboration, and the robots appropriately act independently. However, they act on hallucinated local information.",
+      "SC": 6,
+      "SC_reason": "While the local sequence of actions is logically ordered (e.g., go to object, then interact), the plan schedules the core task actions in the [5-10 min] block, violating the strict 5-minute deadline dependency."
+    },
+    "track_b_gc": 0.0,
+    "track_b_state_detail": {
+      "A1_laptop_ready": false,
+      "A2_meeting_area_clear": false,
+      "A3_seat_ready": false,
+      "A4_lighting_ready": false
+    },
+    "object_grounding": "N/A"
+  },
+  "smart_llm": {
+    "name": "SMART-LLM",
+    "track_a_llm_judge": {
+      "TF": 2,
+      "TF_reason": "The plan attempts to fulfill the task goals, but relies entirely on hallucinated objects (Desk, LightSwitch, Papers, Pens, PenHolder, Audio Equipment) that do not exist in the provided room lists. Therefore, the required goals are not actually achieved.",
+      "PF": 0,
+      "PF_reason": "Severe violations due to hallucinations. Almost every object interacted with (Desk, LightSwitch, Papers, Pens, PenHolder, Audio Equipment) is hallucinated. Additionally, actions like 'Check Audio Equipment functionality' and 'Clean the Desk surface' are vague.",
+      "OC": 7,
+      "OC_reason": "The task does not require cross-room collaboration, and the robots act independently which is appropriate. However, they act on hallucinated objects, though they don't seem to use unjustified global knowledge.",
+      "SC": 8,
+      "SC_reason": "The sequential ordering of actions (go to object, pick up, put down) is logically coherent, despite the objects being hallucinated."
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": "N/A"
+  }
+}

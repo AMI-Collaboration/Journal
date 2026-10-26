@@ -1,0 +1,92 @@
+{
+  "cda": {
+    "name": "CDA",
+    "track_a_llm_judge": {
+      "TF": 3,
+      "TF_reason": "The plan only partially addresses the comfort goal by placing a pillow on the bed and turning on a lamp. It completely fails to provide water or other basics (like tissues), and relies on hallucinated blankets.",
+      "PF": 3,
+      "PF_reason": "The plan includes hallucinated objects ('red blanket', 'black and white blanket'). Additionally, R2's action of moving a blanket from the sofa to the same sofa is nonsensical.",
+      "OC": 2,
+      "OC_reason": "The robots act completely independently with no collaboration or communication attempted.",
+      "SC": 5,
+      "SC_reason": "While R3's actions are sequentially ordered, R2's action is illogical (moving an object from a location to the exact same location)."
+    },
+    "track_b_gc": 0.0,
+    "track_b_state_detail": {
+      "A1_isolation_room_clean": false,
+      "A2_bed_ready": false,
+      "A3_hygiene_items_ready": false,
+      "A4_water_ready": false
+    },
+    "object_grounding": "N/A"
+  },
+  "central": {
+    "name": "Centralized",
+    "track_a_llm_judge": {
+      "TF": 2,
+      "TF_reason": "The plan largely fails to achieve the required goals using real objects. The setup relies heavily on hallucinated items like a 'water bottle', 'blanket', and 'hand sanitizer'. While a real mug of water is prepared, it is never successfully delivered to the bedroom.",
+      "PF": 2,
+      "PF_reason": "Severe feasibility violations exist. The plan includes multiple hallucinated objects (water bottle, blanket, hand sanitizer, tissues in the bathroom). It also contains vague actions ('Clear desk space for essentials', 'Ensure the bathroom is tidy') and violates the one-object-at-a-time rule (R2 passing multiple items simultaneously).",
+      "OC": 5,
+      "OC_reason": "Collaboration is attempted through PASS and RECEIVE actions between R1, R2, and R3. However, there are significant logic errors, such as R2 passing objects it never observed or picked up, indicating unjustified global knowledge or assumptions.",
+      "SC": 3,
+      "SC_reason": "Critical sequential and dependency violations occur. R2 passes items to R3 that it never picked up. In the 15-20 minute block, R2 is simultaneously receiving items in the kitchen and passing a blanket to R3 (presumably in the bedroom), which is physically impossible. Action IDs are also reused (r2_s1)."
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": "N/A"
+  },
+  "independent": {
+    "name": "Independent",
+    "track_a_llm_judge": {
+      "TF": 4,
+      "TF_reason": "The plan fails to consolidate the required items into a single resting room. Water is prepared in the kitchen but never brought to the bedroom or living room. The water bottle in the bedroom and blankets in both rooms are hallucinated objects.",
+      "PF": 3,
+      "PF_reason": "There are multiple hallucinations (blanket, water bottle, stove) and vague expressions ('ensure it is neatly spread', 'ensure the sink area is clear', 'check that the trash bin is empty', 'tidy up any clutter'). Additionally, robots attempt to hold multiple objects at once.",
+      "OC": 2,
+      "OC_reason": "The robots act completely independently in their respective rooms with no successful collaboration. R1 attempts an ASK_HELP action at the very end of the plan, but it is not directed at anyone and receives no response.",
+      "SC": 4,
+      "SC_reason": "There are several sequential and physical violations: R2 picks up a blanket and a pillow consecutively without placing the first one down, violating the one-object-at-a-time rule. R3 does the same with a blanket and a lamp. R1's request for help is left unresolved."
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": "N/A"
+  },
+  "lamma_p": {
+    "name": "LaMMA-P",
+    "track_a_llm_judge": {
+      "TF": 2,
+      "TF_reason": "The plan fails to achieve the required goals using actual objects. Almost all objects interacted with are hallucinated (clean sheets, water bottle, light switch, thermostat, medicine). While a GarbageCan and TissueBox exist in the environment, the plan relies heavily on non-existent items to fulfill the task.",
+      "PF": 0,
+      "PF_reason": "Severe feasibility violations exist. The plan is dominated by hallucinated objects (clean sheets, water bottle, light switch, thermostat, medicine). It uses vague locations ('water source', 'storage area'). Additionally, R4 violates the one-object-at-a-time rule by picking up 'tissues, medicine, and trash can' simultaneously.",
+      "OC": 2,
+      "OC_reason": "There is only one robot (R4) executing the entire plan independently. No collaboration is attempted, which scores low according to the evaluation criteria.",
+      "SC": 8,
+      "SC_reason": "The sequential ordering of actions (go to location -> pick up -> go to destination -> place) is logically coherent. However, the plan's execution is impossible due to the severe feasibility issues."
+    },
+    "track_b_gc": 0.0,
+    "track_b_state_detail": {
+      "A1_isolation_room_clean": false,
+      "A2_bed_ready": false,
+      "A3_hygiene_items_ready": false,
+      "A4_water_ready": false
+    },
+    "object_grounding": "N/A"
+  },
+  "smart_llm": {
+    "name": "SMART-LLM",
+    "track_a_llm_judge": {
+      "TF": 3,
+      "TF_reason": "The plan attempts to fulfill the task by setting up a bed, providing water, tissues, and a trash can. However, it relies heavily on hallucinated objects (water bottle, clean sheets, blankets) and locations (storage room), meaning the core goals of providing water and a comfortable resting setup are not actually achieved with the available objects.",
+      "PF": 1,
+      "PF_reason": "The plan contains severe feasibility violations. It includes numerous hallucinated objects (water bottle, clean sheets, blankets, light switch, thermostat) and hallucinated locations ('storage'). It also uses highly vague actions such as 'Clean the room', 'Adjust the lighting', and 'Set a comfortable temperature'.",
+      "OC": 2,
+      "OC_reason": "There is absolutely no collaboration between the agents. R1 and R4 act completely independently without any PASS, RECEIVE, or HELP interactions, which is highly penalized.",
+      "SC": 8,
+      "SC_reason": "The sequential ordering of actions is mostly logical (e.g., picking up an object before placing it). However, the sequence is applied to hallucinated objects and locations."
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": "N/A"
+  }
+}

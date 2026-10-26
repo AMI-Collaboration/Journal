@@ -1,0 +1,94 @@
+{
+  "cda": {
+    "name": "CDA",
+    "track_a_llm_judge": {
+      "TF": 6,
+      "TF_reason": "The plan partially fulfills the task by clearing some surfaces and turning on lights. However, several actions target hallucinated objects (e.g., golden bedspread, yellow flower, green bottle) or use vague destinations, meaning actual clutter may remain unaddressed.",
+      "PF": 3,
+      "PF_reason": "Severe feasibility violations due to numerous hallucinated objects (two glasses, golden bedspread, yellow flower, closet, green bottle, orange bottle) and vague expressions ('out of sight', 'less visible location', 'visible trash').",
+      "OC": 7,
+      "OC_reason": "The task does not require cross-room collaboration, and agents mostly act locally. However, R1 unnecessarily asks R5 (who is in a different room) for help, which is a minor collaboration logic error.",
+      "SC": 9,
+      "SC_reason": "The sequence of actions is generally logical, with objects being picked up before being moved. The declined help request is appropriately skipped without causing a deadlock."
+    },
+    "track_b_gc": 0.0,
+    "track_b_state_detail": {
+      "A1_plates_in_kitchen": false,
+      "A2_bowls_in_kitchen": false,
+      "A3_cups_in_kitchen": false,
+      "A4_forks_and_spoons_in_kitchen": false,
+      "A5_dishes_area_cleared": false
+    },
+    "object_grounding": "N/A"
+  },
+  "central": {
+    "name": "Centralized",
+    "track_a_llm_judge": {
+      "TF": 3,
+      "TF_reason": "The plan fails to achieve most goals concretely due to heavy reliance on vague instructions ('any light objects', 'any clutter') and hallucinated objects (glass, toothbrush, toothpaste, towel rack). Only a few concrete actions with real objects (plate, cup, pillows) are executed.",
+      "PF": 2,
+      "PF_reason": "Severe violations of feasibility rules. The plan is dominated by vague expressions ('any light objects', 'ensure', 'check', 'any remaining clutter') and hallucinated objects not present in the rooms (glass, toothbrush, holder, toothpaste, towel rack).",
+      "OC": 9,
+      "OC_reason": "The task does not require cross-room collaboration, as each room can be tidied independently. The robots correctly operate locally without unnecessary collaboration or unjustified global knowledge.",
+      "SC": 8,
+      "SC_reason": "The sequence of actions is generally coherent and respects time blocks, though the extreme vagueness makes it difficult to evaluate strict dependencies. No major ordering violations are present."
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": "N/A"
+  },
+  "independent": {
+    "name": "Independent",
+    "track_a_llm_judge": {
+      "TF": 4,
+      "TF_reason": "The plan attempts to fulfill the task goals (clearing surfaces, arranging items, lighting) but heavily relies on hallucinated objects (e.g., glass, closet, bedspread, toothbrush, sink, window blinds) and vague instructions ('any small clutter', 'ensure all surfaces are clear'), meaning the core goals are largely not achieved with concrete, real objects.",
+      "PF": 2,
+      "PF_reason": "Severe feasibility violations exist: numerous hallucinated objects (glass, closet, bedspread, toothbrush, sink, bathroom cabinet, TV stand, towel rack, counter, window blinds), vague expressions ('any small clutter', 'any visible trash', 'ensure all surfaces are clear'), a robot holding multiple objects at once (R1 holding a bottle and a glass), and misuse of the PassReceiveObject action for simply placing items in a cabinet.",
+      "OC": 8,
+      "OC_reason": "The task does not require cross-room collaboration, and the robots appropriately act independently within their own rooms. However, R1's misuse of the PassReceiveObject action (intended for collaboration) to place objects locally is a minor logical error.",
+      "SC": 6,
+      "SC_reason": "The sequence of actions is mostly logical (pick up before place), but R1 repeatedly uses the PassReceiveObject action without a corresponding receiver, which is a dependency violation for that specific action type."
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": "N/A"
+  },
+  "lamma_p": {
+    "name": "LaMMA-P",
+    "track_a_llm_judge": {
+      "TF": 3,
+      "TF_reason": "The plan attempts to address the task goals (lighting, clearing surfaces, arranging furniture, removing trash) but relies entirely on high-level, vague statements rather than concrete actions on specific objects from the environment. Without specifying which actual objects are being moved or cleaned, the task cannot be considered fulfilled.",
+      "PF": 2,
+      "PF_reason": "The plan contains severe feasibility violations due to the pervasive use of vague expressions ('clutter', 'trash', 'designated area', 'lights', 'final inspection'). It fails to interact with specific, named objects from the provided room lists, making the plan largely unexecutable by a robot.",
+      "OC": 6,
+      "OC_reason": "The task does not require inter-robot collaboration, and the robots correctly divide the work by operating independently. However, they act on assumed abstract concepts ('clutter', 'trash') rather than legitimate local observations of specific objects.",
+      "SC": 5,
+      "SC_reason": "While the high-level sequence of moving, picking up, and storing makes logical sense, the actions are too abstract. Additionally, R4 is assigned to 'Turn on lights in all rooms' and 'Conduct final inspection' in all rooms as single steps, which ignores the physical navigation and time required to move between multiple rooms."
+    },
+    "track_b_gc": 0.0,
+    "track_b_state_detail": {
+      "A1_plates_in_kitchen": false,
+      "A2_bowls_in_kitchen": false,
+      "A3_cups_in_kitchen": false,
+      "A4_forks_and_spoons_in_kitchen": false,
+      "A5_dishes_area_cleared": false
+    },
+    "object_grounding": "N/A"
+  },
+  "smart_llm": {
+    "name": "SMART-LLM",
+    "track_a_llm_judge": {
+      "TF": 3,
+      "TF_reason": "The plan relies entirely on high-level, vague statements (e.g., 'Clear and clean countertops', 'Switch on all lights') rather than concrete, object-level actions. It fails to specify which rooms the robots are operating in for most tasks, and does not address specific clutter or objects listed in the environment.",
+      "PF": 2,
+      "PF_reason": "The plan is dominated by vague expressions ('all lights', 'all curtains', 'countertops', 'final check') and does not interact with specific objects from the provided room lists. 'Dispose of trash outside' assumes an 'outside' location not defined in the environment.",
+      "OC": 5,
+      "OC_reason": "Robots act independently, which is acceptable since the task does not strictly require cross-room collaboration. However, the lack of specific room assignments and reliance on global assumptions (e.g., 'all lights', 'all curtains') reduces observability consistency.",
+      "SC": 5,
+      "SC_reason": "The high-level sequence (clean, arrange, check) is logically ordered, but the actions themselves are too vague to form a coherent, executable sequence of dependencies. 'Final check' is not a valid physical action."
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": "N/A"
+  }
+}

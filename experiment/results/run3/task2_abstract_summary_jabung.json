@@ -1,0 +1,92 @@
+{
+  "cda": {
+    "name": "CDA",
+    "track_a_llm_judge": {
+      "TF": 4,
+      "TF_reason": "The plan attempts to fulfill the goals, but relies heavily on hallucinated objects (bathtub, beige towel, brown towel, white towel, bath mat, rug) that are not in the actual room list. The task requires real objects to be used.",
+      "PF": 2,
+      "PF_reason": "Severe violations due to numerous hallucinated objects (bathtub, beige towel, brown towel, white towel, striped bath mat, green striped rug). Additionally, vague locations like 'near the bathtub' are used.",
+      "OC": 5,
+      "OC_reason": "The task does not require cross-room collaboration as all necessary items (Faucet, Towel) are in the bathroom. However, the plan includes unnecessary and confusing ASK_HELP actions between multiple robots in the same room.",
+      "SC": 3,
+      "SC_reason": "The plan contains an unresolved cycle issue ('No movable nodes to break the cycle'). Furthermore, multiple robots are assigned redundant and overlapping tasks (moving various hallucinated towels) in the same time block, leading to a chaotic sequence."
+    },
+    "track_b_gc": 0.0,
+    "track_b_state_detail": {
+      "A1_shower_area_ready": false,
+      "A2_towel_ready": false,
+      "A3_toiletries_ready": false,
+      "A4_bathroom_accessible": false
+    },
+    "object_grounding": "N/A"
+  },
+  "central": {
+    "name": "Centralized",
+    "track_a_llm_judge": {
+      "TF": 2,
+      "TF_reason": "The plan fails to fulfill the core task requirements. The 5-minute deadline is missed as the plan extends to 10 minutes. The bathtub is not filled with warm water (no interaction with the Faucet). While towels are placed, the overall goal is largely unachieved.",
+      "PF": 2,
+      "PF_reason": "Severe feasibility issues due to multiple hallucinations and vague expressions. Hallucinated objects include 'shelf', 'thermostat', 'towel rack', and 'bath mat'. Vague expressions include 'within reach', 'nearby surface', and 'ensure'.",
+      "OC": 2,
+      "OC_reason": "Unnecessary and illogical collaboration. The task requires a towel in the bathroom, and there is already a Towel in the bathroom (FP404). The robots unnecessarily pass a towel across multiple agents (R1 to R2 to R3) and rooms (bedroom to bathroom), which wastes steps and makes no sense given the initial object locations.",
+      "SC": 5,
+      "SC_reason": "There are ordering and labeling issues. R1 has two actions labeled 'r1_s1' in the first block. R2 'waits in the bedroom' in the first block but then 'arrives in the bedroom' in the second block (both labeled r2_s1). The pass/receive sequence itself is technically ordered correctly across time blocks, but the redundant actions and duplicate step IDs reduce coherence."
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": "N/A"
+  },
+  "independent": {
+    "name": "Independent",
+    "track_a_llm_judge": {
+      "TF": 2,
+      "TF_reason": "The plan fails to meet the 5-minute deadline, extending into the 5-10 minute block. It also relies heavily on hallucinated objects (e.g., finding a towel in the bedroom when none exists there, bathtub, towel rack, bathroom mat).",
+      "PF": 2,
+      "PF_reason": "Severe feasibility issues due to hallucinated objects (towel in FP304, bathtub, towel rack, bathroom mat, bathroom door) and vague actions ('ensure a towel is hanging nearby', 'ensure the bathroom door is closed').",
+      "OC": 3,
+      "OC_reason": "Collaboration is attempted to bring a towel from the bedroom to the bathroom, which is unnecessary since a towel already exists in the bathroom. Furthermore, the collaboration logic is flawed (R1 passes a towel without a clear receiver, R2 acts independently on another hallucinated towel).",
+      "SC": 2,
+      "SC_reason": "Significant logical and ordering violations: R1, R2, and R3 all pick up 'the towel' independently. R2 moves to deliver a towel in the 0-5 min block, while R1 tries to pass a towel in the 5-10 min block. Multiple robots redundantly and confusingly handle the same conceptual object."
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": "N/A"
+  },
+  "lamma_p": {
+    "name": "LaMMA-P",
+    "track_a_llm_judge": {
+      "TF": 2,
+      "TF_reason": "The plan relies heavily on hallucinated objects (bathtub, heater, water heater, towel rack) which are not present in the actual room list, meaning the core goals are not genuinely achieved.",
+      "PF": 2,
+      "PF_reason": "Severe violations due to the use of multiple hallucinated objects (heater, bathtub, water heater, towel rack) and vague expressions ('towel location').",
+      "OC": 9,
+      "OC_reason": "The task does not require cross-room collaboration since the towel is already in the bathroom. The robots act on local observations appropriately without unjustified global knowledge.",
+      "SC": 9,
+      "SC_reason": "The sequence of actions for each robot is logically ordered (e.g., go to object, then interact with it), despite the objects being hallucinated."
+    },
+    "track_b_gc": 0.0,
+    "track_b_state_detail": {
+      "A1_shower_area_ready": false,
+      "A2_towel_ready": false,
+      "A3_toiletries_ready": false,
+      "A4_bathroom_accessible": false
+    },
+    "object_grounding": "N/A"
+  },
+  "smart_llm": {
+    "name": "SMART-LLM",
+    "track_a_llm_judge": {
+      "TF": 2,
+      "TF_reason": "The plan fails to meet the 5-minute deadline, extending to 10 minutes. Additionally, it relies heavily on hallucinated objects (thermostat, heater, bathtub, towel holder) that do not exist in the provided room list.",
+      "PF": 2,
+      "PF_reason": "Severe violations due to the use of multiple hallucinated objects (thermostat, heater, bathtub, towel holder) which makes the plan infeasible to execute in the actual environment.",
+      "OC": 9,
+      "OC_reason": "The robot acts independently within its room, which is appropriate since all required resources (water, towel) are expected to be in the bathroom. No unnecessary collaboration is attempted.",
+      "SC": 8,
+      "SC_reason": "The sequence of actions is logically ordered (turn on water, wait, turn off water, get towel, place towel), though it spans across two time blocks and misses the deadline."
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": "N/A"
+  }
+}

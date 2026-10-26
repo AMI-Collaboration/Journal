@@ -1,0 +1,92 @@
+{
+  "cda": {
+    "name": "CDA",
+    "track_a_llm_judge": {
+      "TF": 0,
+      "TF_reason": "The plan fails to achieve any of the task goals. The snack preparation and delivery failed (blocked), the attempt to dim the lights failed (blocked), and the attempts to make the living room comfortable relied entirely on hallucinated objects.",
+      "PF": 0,
+      "PF_reason": "Severe violations due to hallucinations. R3 interacts exclusively with hallucinated objects (wooden table, wooden chair, blue blanket, black speaker) that do not exist in the living room. R8 also attempts to interact with a hallucinated chandelier.",
+      "OC": 2,
+      "OC_reason": "Collaboration was required to bring snacks from the kitchen to the living room, which was attempted but failed due to unresolved requests and declined actions. Furthermore, robots act on hallucinated objects, showing a lack of valid local observation.",
+      "SC": 4,
+      "SC_reason": "The plan is mostly composed of blocked and unresolved actions due to failed dependencies (e.g., R3 waiting to receive an apple that R2 couldn't process). The few actions that did execute were independent but invalid."
+    },
+    "track_b_gc": 0.0,
+    "track_b_state_detail": {
+      "A1_tv_ready": false,
+      "A2_seating_ready": false,
+      "A3_movie_area_clean": false,
+      "A4_remote_ready": false
+    },
+    "object_grounding": "N/A"
+  },
+  "central": {
+    "name": "Centralized",
+    "track_a_llm_judge": {
+      "TF": 2,
+      "TF_reason": "The plan attempts to prepare a snack (tomato, lettuce, egg) but fails to deliver it coherently due to logical contradictions. The goal of making the living room comfortable and dim is addressed only with vague, high-level statements rather than concrete actions using real objects (e.g., turning off the FloorLamp).",
+      "PF": 2,
+      "PF_reason": "The plan contains hallucinated objects ('tray') and numerous vague actions ('Adjusts the living room lighting', 'Prepares a snack', 'Rearrange furniture', 'Double-checks'). Additionally, R1 holds multiple items (knife, tomato, lettuce, egg) simultaneously without putting them down.",
+      "OC": 2,
+      "OC_reason": "Collaboration logic is nonsensical. R3 is in the bathroom but requests and receives a snack tray from R2 in the kitchen. There is no logical reason for R3 to be involved in the snack delivery from the bathroom.",
+      "SC": 1,
+      "SC_reason": "Severe sequential and spatial contradictions throughout. R1 performs actions in the kitchen and living room simultaneously in the 0-5 min block. R2 passes the snack to R3 but also takes it to the living room. R3 stays in the bathroom but simultaneously carries the tray to the living room. In the final block, R2 receives a snack from R1 despite already handling a snack earlier."
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": "N/A"
+  },
+  "independent": {
+    "name": "Independent",
+    "track_a_llm_judge": {
+      "TF": 2,
+      "TF_reason": "The plan fails to achieve the required goals using concrete actions and real objects. The snack (salad) is prepared but never delivered to the living room because the PASS action has no corresponding RECEIVE. The dimming and comfort goals are attempted using vague actions and hallucinated objects (e.g., 'curtains', 'chair' in the living room).",
+      "PF": 1,
+      "PF_reason": "The plan is riddled with severe feasibility violations. It relies heavily on vague expressions ('any light objects', 'any lamps', 'ensure', 'check') and hallucinated objects (curtains, blanket, chips, candy bar). Additionally, robots attempt to pass unspecified objects to unspecified recipients.",
+      "OC": 2,
+      "OC_reason": "Cross-room collaboration is required to bring a snack to the living room, but the collaboration logic is completely broken. R1, R3, and R4 all execute PASS actions to 'another robot' without any corresponding RECEIVE actions from any other robot, meaning objects are left in limbo.",
+      "SC": 2,
+      "SC_reason": "There are numerous sequential and dependency violations. R1 slices vegetables without ever picking up a knife, and places them on a plate without picking up a plate. Furthermore, multiple PASS actions occur without any matching RECEIVE actions, breaking the sequence of object transfer."
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": "N/A"
+  },
+  "lamma_p": {
+    "name": "LaMMA-P",
+    "track_a_llm_judge": {
+      "TF": 2,
+      "TF_reason": "The plan fails to achieve the required goals using real objects. It relies heavily on hallucinated objects ('light switch', 'curtains', 'popcorn', 'drink', 'serving area') rather than utilizing the actual items available in the rooms (e.g., DeskLamp, FloorLamp, Apple, Bread).",
+      "PF": 2,
+      "PF_reason": "Severe feasibility violations exist. Almost all interacted objects are hallucinated and not present in the room lists. Additionally, R1 picks up both 'popcorn' and 'drink' in the same time block, violating the one-object-at-a-time rule, and 'serving area' is a vague expression.",
+      "OC": 3,
+      "OC_reason": "The task requires cross-room collaboration to bring a snack from the kitchen to the living room. However, there is no explicit room transition or PASS/RECEIVE action to transfer the food to the living room. The robots act independently without bridging the gap between the rooms.",
+      "SC": 2,
+      "SC_reason": "Critical dependency violations: In [10-15 min], R3 puts the 'drink' on the serving area, but R3 never picked it up (R1 picked it up). Furthermore, R1 puts the 'popcorn' in the microwave but never takes it out before placing it on the serving area in [25-30 min]."
+    },
+    "track_b_gc": 0.0,
+    "track_b_state_detail": {
+      "A1_tv_ready": false,
+      "A2_seating_ready": false,
+      "A3_movie_area_clean": false,
+      "A4_remote_ready": false
+    },
+    "object_grounding": "N/A"
+  },
+  "smart_llm": {
+    "name": "SMART-LLM",
+    "track_a_llm_judge": {
+      "TF": 2,
+      "TF_reason": "The plan relies heavily on hallucinated objects to achieve the task goals. 'Popcorn', 'light switch', 'snack cupboard', 'coffee table', 'clutter', and 'storage' do not exist in the provided room lists. The only valid goal achieved is arranging the existing pillows on the sofa for comfort. Because the snack and dimming goals use hallucinated objects, they count as not achieved.",
+      "PF": 2,
+      "PF_reason": "There are severe feasibility violations due to the extensive use of hallucinated objects (light switch, snack cupboard, popcorn, coffee table) and vague expressions ('clutter', 'storage'). The robot interacts with many items that are not actually present in the environment.",
+      "OC": 7,
+      "OC_reason": "As a single-agent plan, cross-room collaboration is not required. The robot acts on its own observations, though it seamlessly navigates to the microwave (which is in the kitchen) without explicitly stating a room change, assuming global knowledge of the microwave's location.",
+      "SC": 8,
+      "SC_reason": "The sequential ordering of actions is mostly logical. The steps to operate the microwave (open, insert, close, turn on, wait, turn off, open, remove) are correctly ordered. However, the plan involves interacting with hallucinated objects, which slightly detracts from overall coherence."
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": "N/A"
+  }
+}

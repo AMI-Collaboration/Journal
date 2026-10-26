@@ -1,0 +1,92 @@
+{
+  "cda": {
+    "name": "CDA",
+    "track_a_llm_judge": {
+      "TF": 3,
+      "TF_reason": "The plan attempts to fulfill the goals, but relies heavily on hallucinated objects (e.g., 'white bathtub', 'brown laundry basket', multiple colored towels) that do not exist in the provided room lists. The task requested a bathtub, but since it is not in the environment, the robots hallucinated it.",
+      "PF": 2,
+      "PF_reason": "Severe feasibility issues due to hallucinated objects ('white bathtub', 'brown laundry basket', 'brown towel', 'white towel'). The action 'pour the white bathtub' is physically nonsensical. Vague expressions like 'checked for a towel' are also present.",
+      "OC": 4,
+      "OC_reason": "Unnecessary and confusing collaboration logic. R5 and R6 ask R4 for help to 'pour the bathtub' for no clear reason, and R2 acts independently on a hallucinated laundry basket without communicating findings.",
+      "SC": 4,
+      "SC_reason": "The sequence contains highly redundant and illogical actions, with R4, R5, and R6 all simultaneously moving different hallucinated towels to the edge of the same hallucinated bathtub."
+    },
+    "track_b_gc": 0.0,
+    "track_b_state_detail": {
+      "A1_shower_area_ready": false,
+      "A2_towel_ready": false,
+      "A3_toiletries_ready": false,
+      "A4_bathroom_accessible": false
+    },
+    "object_grounding": "N/A"
+  },
+  "central": {
+    "name": "Centralized",
+    "track_a_llm_judge": {
+      "TF": 1,
+      "TF_reason": "The plan completely fails to fill the bathtub with warm water (no interaction with the Faucet). The 5-minute deadline is missed as actions extend into the 5-10 minute block. The plan also relies on hallucinated objects.",
+      "PF": 2,
+      "PF_reason": "Severe violations due to hallucinated objects (shelf, thermostat, towel rack, bathroom door, and a towel in the bedroom). The plan also uses vague expressions like 'nearby for use' and 'ensure'.",
+      "OC": 3,
+      "OC_reason": "The plan features highly unnecessary and complex collaboration (R1 passing to R2, who moves and passes to R3) to bring a hallucinated towel from the bedroom, even though a real towel already exists in the bathroom (which R4 redundantly handles).",
+      "SC": 6,
+      "SC_reason": "The sequence of passing the towel is logically ordered, but R2 performs an unrealistic number of sequential actions (arrive, receive, move, pass) in a single 5-minute block."
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": "N/A"
+  },
+  "independent": {
+    "name": "Independent",
+    "track_a_llm_judge": {
+      "TF": 2,
+      "TF_reason": "The plan fails to meet the 5-minute deadline, extending into the 5-10 minute block. It relies on hallucinated objects like 'bathtub' and 'towel rack' which are not in the room lists. Multiple robots redundantly attempt to achieve the same goals.",
+      "PF": 2,
+      "PF_reason": "Severe feasibility issues: R1 holds multiple objects simultaneously (book and mug). R2 hallucinates a towel on the bed (towel is only in FP404). R3 and R4 interact with hallucinated objects ('bathtub', 'towel rack'). The plan also includes vague actions like 'check water level', 'adjusting if necessary', and 'ensure'.",
+      "OC": 2,
+      "OC_reason": "Collaboration is completely unnecessary since the towel is already in the bathroom (FP404). Furthermore, R1 passes irrelevant objects (book, mug) and R2 passes a towel, but there are no corresponding RECEIVE actions from any other robots.",
+      "SC": 2,
+      "SC_reason": "Major sequencing and logical errors: PASS actions by R1 and R2 have no matching RECEIVE actions. R3 and R4 perform highly redundant and conflicting actions on the same hallucinated objects (turning on water, picking up the towel). R1 picks up two objects before passing them, violating the one-object-at-a-time rule."
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": "N/A"
+  },
+  "lamma_p": {
+    "name": "LaMMA-P",
+    "track_a_llm_judge": {
+      "TF": 2,
+      "TF_reason": "The plan fails to achieve the goals using real objects. It relies heavily on hallucinated objects ('heater', 'bathtub', 'towel rack') that do not exist in the provided room lists.",
+      "PF": 2,
+      "PF_reason": "Severe feasibility violations due to multiple hallucinated objects. 'heater', 'bathtub', and 'towel rack' are not in the actual objects list. Additionally, if R3 is in the bedroom (FP304), 'towel' is also hallucinated there.",
+      "OC": 4,
+      "OC_reason": "Robots act on hallucinated objects, implying unjustified global knowledge of items that don't exist in their respective rooms. There is no clear collaboration, and R3 appears to navigate to a 'bathtub' which is not in its expected environment.",
+      "SC": 7,
+      "SC_reason": "The sequence of actions is mostly logical (go to object, pick up, place), but 'Open the faucet' followed by 'Turn on the faucet' is redundant."
+    },
+    "track_b_gc": 0.0,
+    "track_b_state_detail": {
+      "A1_shower_area_ready": false,
+      "A2_towel_ready": false,
+      "A3_toiletries_ready": false,
+      "A4_bathroom_accessible": false
+    },
+    "object_grounding": "N/A"
+  },
+  "smart_llm": {
+    "name": "SMART-LLM",
+    "track_a_llm_judge": {
+      "TF": 2,
+      "TF_reason": "The plan fails to achieve the core goals using real objects. The 'Bathtub' and 'Heater' are hallucinated (not present in the actual room lists), meaning the bath cannot be prepared as requested. While the 'Towel' is real, it is placed on a hallucinated 'TowelHolder'.",
+      "PF": 2,
+      "PF_reason": "Severe feasibility violations due to the use of multiple hallucinated objects. 'Bathtub', 'Heater', and 'TowelHolder' do not exist in the provided room lists. Additionally, the agent configurations are undefined, but the hallucinations alone make the plan largely infeasible.",
+      "OC": 9,
+      "OC_reason": "The task does not require cross-room collaboration since the necessary items (like the Faucet and Towel) are located in the bathroom (FP404). The robots act on local observations without unjustified global knowledge.",
+      "SC": 9,
+      "SC_reason": "The sequence of actions is logically ordered. Prerequisites like going to an object before interacting with it, and picking up the towel before placing it, are respected."
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": "N/A"
+  }
+}
