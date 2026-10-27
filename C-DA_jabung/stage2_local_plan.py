@@ -173,6 +173,12 @@ def validate(raw_steps: list[dict], agent: str, offers: dict[str, Offer], cfg: T
             v.append(f"LOCAL '{step['action']}' is not a physical action. Write what your body does to an "
                      f"object (move X from A to B, open, switch on, fill). If your body cannot do the real "
                      f"work (e.g. heavy furniture), do NOT drop it: write ASK_HELP to a robot that can")
+        if t == LOCAL:
+            import re as _re
+            action_str = _action_str(step["action"])
+            same = _re.search(r'from\s+([\w\s]+?)\s+to\s+\1', action_str, _re.IGNORECASE)
+            if same:
+                v.append(f"LOCAL '{step['action']}' moves object from and to the same place ('{same.group(1)}'). Choose a different destination.")
         m = _AFTER.search(_action_str(step["action"])) if t in (LOCAL, ASK_HELP) else None
         if m:
             obj = _tokens(m.group(1))

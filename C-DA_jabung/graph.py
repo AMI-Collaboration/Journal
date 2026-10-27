@@ -787,6 +787,16 @@ class PlanGraph:
             end[nid] = start + u
             n.phase = max(1, -(-int(end[nid]) // PHASE_MIN))
 
+        # Fix: ASK_HELP phase must be >= its HELP/LOCAL provider's phase
+        for nid, n in self.nodes.items():
+            if n.type == ASK_HELP and n.status == "active":
+                provs = self.providers_of(nid)
+                for e in provs:
+                    prov = self.nodes[e.src]
+                    if prov.status == "active" and prov.phase and n.phase:
+                        if n.phase < prov.phase:
+                            n.phase = prov.phase
+
     def makespan_min(self) -> int:
         ph = [n.phase for n in self.nodes.values() if n.status == "active" and n.phase]
         return max(ph or [0]) * PHASE_MIN

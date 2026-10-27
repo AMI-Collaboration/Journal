@@ -16,9 +16,25 @@ _WORDING = """WORDING RULES (every field):
   The same object has the same name everywhere.
 - CONCRETE ACTIONS: verb + exact object + destination or end state,
   e.g. "push the wooden bookshelf against the east wall".
-- BANNED WORDS (too vague): help with, assist, prepare, handle, ensure, take care of, tidy up,
-  organize, arrange, coordinate, mark, as needed, if necessary, etc., all, other, remaining,
-  everything, and so on.
+- BANNED WORDS — writing any of these causes your plan to be rejected:
+  Too vague: help with, assist, prepare, handle, ensure, take care of, tidy up, organize,
+  arrange, coordinate, mark, as needed, if necessary, etc., all, other, remaining, everything.
+  Vague locations: "out of sight", "accessible location", "safe location", "optimal position",
+  "appropriate place", "nearby", "somewhere", "a spot", "brightly lit", "dim", "secure location",
+  "comfortable position", "workout area", "snack area", "resting area".
+  If you use any banned word, your plan will be REJECTED and you must rewrite.
+
+- CONCRETE DESTINATIONS (mandatory): every move/place/put_down action must name a specific
+  real furniture or object as destination from your has_items.
+  CORRECT: "move the mug from the counter to the cabinet shelf"
+  WRONG: "move the mug to a safe location" / "move the mug out of sight"
+
+- PHYSICAL ACTIONS ONLY (mandatory): decompose abstract goals into atomic physical steps.
+  CORRECT: "turn off the ceiling lamp" + "turn on the floor lamp" (for dim lighting)
+  WRONG: "dim the lights" / "adjust lighting to optimal"
+  CORRECT: "move the book from the desk to the cabinet" (for tidying)
+  WRONG: "tidy up the desk" / "organize the workspace"
+  Any action with no direct physical counterpart in the simulator will be REJECTED.
 - ONE OBJECT, ONE STEP, ONCE: one object per step. Never write the same action twice in
   different words."""
 
@@ -79,6 +95,9 @@ FIELDS:
 - "capability": one sentence about your embodiment.
 - "can_do": general body abilities relevant to this task, with limits (e.g. "push floor furniture
   up to 20 kg"). At most 5. No step-by-step plan here.
+  All mobile and gripper robots can toggle switches and buttons (turn_on, turn_off) on any
+  appliance or lamp in their room — always include "ToggleObject (turn on/off lights, TV,
+  appliances)" in can_do unless your embodiment truly prevents it.
 - "cannot_do": task-relevant actions your body cannot perform, and why.
 - "suggests": objects from YOUR has_items that the task in another room NEEDS, each with its use and
   place (e.g. "Ceramic plate: serving food on the dining table"). Be GENEROUS — list any object that
@@ -143,6 +162,10 @@ and then the same work again in other words.
 
 STEP 1 - TASK REASONING ("reasoning"):
  a) FINISHED STATE: what is different in the house when the task is done?
+    Think beyond the literal words. "watch a movie" implies: TV on, sofa arranged, lighting dimmed,
+    snacks ready. "guest coming" implies: seating ready, drinks prepared, surfaces clear, welcoming.
+    "home workout" implies: floor space cleared, equipment out, water nearby, shower ready after.
+    Always infer the FULL set of physical conditions needed for the activity to happen comfortably.
  b) ESSENTIAL vs NICE-TO-HAVE: which changes does the task require (including what it asks to have
     "ready"), and which are only extras?
  c) WHERE: in which room does each change happen?
@@ -176,6 +199,9 @@ Do not skip RECEIVE just because you can manage without it — collaboration imp
 One object per purpose; do not receive duplicates.
 With MORE robots available, MORE collaboration is expected — each robot should contribute meaningfully.
 If you have idle capacity, look for objects to receive or tasks to assist with.
+[IMPORTANT] EVERY robot must have at least 2 active steps. If your room has nothing to do,
+look for objects to receive from other rooms, or offer your objects via PASS. A robot with
+zero or one step is wasting capacity — find more work related to the task.
 
 STEP 4 - YOUR OBJECTS FOR OTHERS. Actively PASS your "suggests" if another room's task clearly
 benefits from them. Do not wait to be asked — if you have something useful and you listed it in
@@ -225,6 +251,14 @@ BEFORE RETURNING, check silently and fix:
 - every object in checklist and steps is copied exactly from a has_items list;
 - each checklist entry has exactly one step; no two steps change the same object in the same way;
 - no banned word; every "enables" points to a later LOCAL step of yours.
+- every pick_up step must be followed by a put_down, PASS, or use step for the same object.
+  A pick_up with no follow-up is meaningless — either add the destination step or remove the pick_up.
+- no step moves an object from and to the same location (e.g. "move X from table to table").
+  Always specify a different destination.
+- every destination must be a real object or furniture from has_items, not a vague description.
+- never move an object to the same furniture it started on (e.g. "from sofa to sofa" is invalid).
+  If rearranging within the same area, specify a different surface, floor, or exact sub-location
+  (e.g. "from the center of the sofa to the left armrest", "from the sofa to the floor next to it").
 
 Order the steps in the order you would execute them.
 
@@ -309,6 +343,11 @@ private observations).
 FIRST check your own plan: if one of your existing steps already does what an ASK_HELP asks for,
 answer "already_doing" with "covered_by": that step id. Any step you add must not repeat work that is
 already in your plan, in any wording.
+
+DUPLICATE REQUESTS: if multiple robots sent ASK_HELP for the exact same action on the same object,
+only ONE should be served. If you are already serving an identical request from another robot
+(same action, same object), answer "ignore" for the duplicate — do not add a second HELP step
+for the same work.
 
 Decisions:
 - "already_doing": your existing step (give "covered_by") already does it. Only for ASK_HELP.
