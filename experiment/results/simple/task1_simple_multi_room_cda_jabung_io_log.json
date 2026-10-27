@@ -1,0 +1,260 @@
+[
+  {
+    "key": "offer:R2",
+    "system": "You are robot R2, a household robot that sees only its own room.\n\nSTEP 1 — LIST has_items: every clearly visible movable object in your images.\nFormat: \"<color> <noun> (<location>, image <k>)\". NEVER ",
+    "user": "## TASK (serve this only):\nTurn on coffee machine and TV\nDEADLINE: 10 minutes\n\nYOUR BODY: room=living_room, mobile=True, payload=5 kg, embodiment=Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture, SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\n(none)\n\nImages attached (2 image(s)), image 1 to 2.",
+    "output": {
+      "has_items": [
+        "black TV (on TV stand, image 1)",
+        "white coffee machine (on dining table, image 2)"
+      ],
+      "reasoning": "a) GOAL STATE: The TV and coffee machine are both turned on. b) PRIORITY: Ensure both devices are powered on within the 10-minute deadline. c) MY ROOM: Turn on the black TV and white coffee machine. d) FOR OTHERS: No items needed for other rooms.",
+      "capability": "I am a mobile robot with light object handling abilities.",
+      "can_do": [
+        "PickupLightObject: lift small items",
+        "PassReceiveObject: transfer items",
+        "ToggleObject: turn on/off lights, TV, appliances"
+      ],
+      "cannot_do": [
+        "PickupHeavyObject: too heavy for me",
+        "PushFurniture: cannot move furniture",
+        "SliceObject: cannot cut",
+        "PourObject: cannot pour liquids"
+      ],
+      "suggests": [],
+      "intends": [
+        "ToggleObject: turn on black TV (on TV stand, image 1)",
+        "ToggleObject: turn on white coffee machine (on dining table, image 2)"
+      ],
+      "need_from_others": [],
+      "obs_scope": "I can observe and interact with objects in the living room."
+    }
+  },
+  {
+    "key": "offer:R1",
+    "system": "You are robot R1, a household robot that sees only its own room.\n\nSTEP 1 — LIST has_items: every clearly visible movable object in your images.\nFormat: \"<color> <noun> (<location>, image <k>)\". NEVER ",
+    "user": "## TASK (serve this only):\nTurn on coffee machine and TV\nDEADLINE: 10 minutes\n\nYOUR BODY: room=kitchen, mobile=True, payload=5 kg, embodiment=Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture, SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\nCup (in Cabinet)\nPlate (in Cabinet)\nWineBottle (in Cabinet)\nFork (in Drawer)\nKnife (in Drawer)\nSpoon (in Drawer)\nEgg (in Fridge)\nDishSponge (in SinkBasin)\n\nImages attached (2 image(s)), image 1 to 2.",
+    "output": {
+      "has_items": [
+        "green plant (counter, image 1)",
+        "metal pot (counter, image 1)",
+        "brown stone (counter, image 1)",
+        "green lettuce (counter, image 1)",
+        "white paper towel (counter, image 1)",
+        "blue coffee machine (counter, image 2)",
+        "red toaster (counter, image 2)"
+      ],
+      "reasoning": "a) The coffee machine and TV must be turned on. b) Turning on both devices quickly is most important. c) I will turn on the blue coffee machine. d) None of my items are needed for the TV.",
+      "capability": "I am a mobile robot capable of interacting with light objects.",
+      "can_do": [
+        "PickupLightObject: pick up items under 5 kg",
+        "PassReceiveObject: transfer objects to/from others",
+        "ToggleObject: turn on/off lights, TV, appliances"
+      ],
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift items over 5 kg",
+        "PushFurniture: cannot move furniture",
+        "SliceObject: cannot cut items",
+        "PourObject: cannot pour liquids"
+      ],
+      "suggests": [],
+      "intends": [
+        "ToggleObject: turn on blue coffee machine"
+      ],
+      "need_from_others": [
+        "ToggleObject: turn on TV"
+      ],
+      "obs_scope": "I can observe and interact with items in the kitchen only."
+    }
+  },
+  {
+    "key": "plan:R1",
+    "system": "You are robot R1 in the kitchen. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
+    "user": "## TASK:\nTurn on coffee machine and TV\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am a mobile robot capable of interacting with light objects.\",\n \"can_do\": [\n  \"PickupLightObject: pick up items under 5 kg\",\n  \"PassReceiveObject: transfer objects to/from others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"green plant (counter, image 1)\",\n  \"metal pot (counter, image 1)\",\n  \"brown stone (counter, image 1)\",\n  \"green lettuce (counter, imag",
+    "output": {
+      "reasoning": "a) The task requires turning on both the coffee machine and the TV. b) R1 is in the kitchen and can turn on the blue coffee machine. c) R2 is in the living room and can turn on the black TV. d) Each robot will handle the task in their respective rooms to avoid duplication.",
+      "goals": [
+        {
+          "goal": "Turn on blue coffee machine",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "blue coffee machine",
+          "change": "turn on",
+          "weight": "light",
+          "how": "LOCAL"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "blue coffee machine",
+            "from": "counter",
+            "to": "on"
+          },
+          "uses": 0,
+          "serves": 1
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R2",
+    "system": "You are robot R2 in the living_room. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessibl",
+    "user": "## TASK:\nTurn on coffee machine and TV\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am a mobile robot with light object handling abilities.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items\",\n  \"PassReceiveObject: transfer items\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"black TV (on TV stand, image 1)\",\n  \"white coffee machine (on dining table, image 2)\"\n ],\n \"need_from_others\": [],\n \"intends\": [\n  \"ToggleObject: turn on black TV (",
+    "output": {
+      "reasoning": "a) The goal is to ensure both the black TV and the white coffee machine in the living room are turned on. b) The priority is high as both devices need to be powered on within the 10-minute deadline. c) Since both devices are in my room, I will handle them directly. d) No assistance is needed from other robots as both tasks are within my capabilities and room.",
+      "goals": [
+        {
+          "goal": "Turn on the black TV and white coffee machine",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "black TV",
+          "change": "turn on",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "white coffee machine",
+          "change": "turn on",
+          "weight": "light",
+          "how": "LOCAL"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "black TV",
+            "from": "TV stand",
+            "to": "on"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "white coffee machine",
+            "from": "dining table",
+            "to": "on"
+          },
+          "uses": 0,
+          "serves": 1
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R1:fix",
+    "system": "You are robot R1 in the kitchen. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
+    "user": "## TASK:\nTurn on coffee machine and TV\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am a mobile robot capable of interacting with light objects.\",\n \"can_do\": [\n  \"PickupLightObject: pick up items under 5 kg\",\n  \"PassReceiveObject: transfer objects to/from others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"green plant (counter, image 1)\",\n  \"metal pot (counter, image 1)\",\n  \"brown stone (counter, image 1)\",\n  \"green lettuce (counter, imag",
+    "output": {
+      "reasoning": "a) The task requires turning on both the coffee machine and the TV. b) R1 is in the kitchen and can turn on the blue coffee machine. c) R2 is in the living room and can turn on the black TV. d) Each robot will handle the task in their respective rooms to avoid duplication.",
+      "goals": [
+        {
+          "goal": "Turn on blue coffee machine",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "blue coffee machine",
+          "change": "turn on",
+          "weight": "light",
+          "how": "LOCAL"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "blue coffee machine",
+            "from": "counter",
+            "to": "on"
+          },
+          "uses": 0,
+          "serves": 0
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R2:fix",
+    "system": "You are robot R2 in the living_room. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessibl",
+    "user": "## TASK:\nTurn on coffee machine and TV\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am a mobile robot with light object handling abilities.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items\",\n  \"PassReceiveObject: transfer items\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"black TV (on TV stand, image 1)\",\n  \"white coffee machine (on dining table, image 2)\"\n ],\n \"need_from_others\": [],\n \"intends\": [\n  \"ToggleObject: turn on black TV (",
+    "output": {
+      "reasoning": "a) The goal is to ensure both the black TV and the white coffee machine in the living room are turned on. b) The priority is high as both devices need to be powered on within the 10-minute deadline. c) Since both devices are in my room, I will handle them directly. d) No assistance is needed from other robots as both tasks are within my capabilities and room.",
+      "goals": [
+        {
+          "goal": "Turn on the black TV and white coffee machine",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "black TV",
+          "change": "turn on",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "white coffee machine",
+          "change": "turn on",
+          "weight": "light",
+          "how": "LOCAL"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "black TV",
+            "from": "TV stand",
+            "to": "on"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "white coffee machine",
+            "from": "dining table",
+            "to": "on"
+          },
+          "uses": 0,
+          "serves": 0
+        }
+      ]
+    }
+  },
+  {
+    "key": "graph:size",
+    "system": "Estimate how long each robot step takes.\n- \"short\": quick action on light object in own room (pick, place, switch).\n- \"medium\": several actions, awkward object, or travelling to another room.\n- \"long\"",
+    "user": "TASK: Turn on coffee machine and TV\nROBOTS: {\n \"R1\": {\n  \"room\": \"kitchen\",\n  \"mobile\": true,\n  \"body\": \"Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture, SliceObject, PourObject.\"\n },\n \"R2\": {\n  \"room\": \"living_room\",\n  \"mobile\": true,\n  \"body\": \"Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture, SliceObject, PourObject.\"\n }\n}\nSTEPS: [\n {\n  \"id\": \"r1_s1\",\n  \"agent\": \"R1\",\n  \"type\": \"LOCAL\",\n  \"actio",
+    "output": {
+      "sizes": {
+        "r1_s1": "short",
+        "r2_s1": "short",
+        "r2_s2": "short"
+      }
+    }
+  }
+]

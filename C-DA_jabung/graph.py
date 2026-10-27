@@ -671,12 +671,13 @@ class PlanGraph:
                     prov_pos = ids.index(prov_node.id)
                     target_pos = max(target_pos, prov_pos + 1)
                 elif prov_node.agent != r.agent:
-                    # different agent: ensure ASK_HELP is in same or later phase as HELP
-                    prov_phase = prov_node.phase or 0
-                    req_phase = r.phase or 0
-                    if prov_phase >= req_phase:
-                        # move ASK_HELP to end of its enables step vicinity
-                        target_pos = max(target_pos, len(ids) - 1)
+                    # different agent: do NOT tighten ASK_HELP that has a cross-agent provider
+                    # (phase info not available yet; tightening would break ordering)
+                    ids[:] = old[:]
+                    target_pos = None
+                    break
+            if target_pos is None:
+                continue
             ids.insert(target_pos, r.id)
             if not nx.is_directed_acyclic_graph(self.nx()):
                 self.order[r.agent] = old

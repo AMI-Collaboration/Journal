@@ -1,0 +1,687 @@
+{
+  "task_n": "task10_simple",
+  "mode": "multi_room",
+  "model": "gpt-4o",
+  "task_text": "Empty the trash cans",
+  "joint_plan_text": "```plaintext\n### Joint Plan — task10_simple  (about 5 min / deadline 20 min: OK)\n### Robots: R1:Mobile_Light(kitchen), R2:Mobile_Light(living_room), R3:Mobile_Light(bedroom), R4:Mobile_Light(bathroom)\n\n\n[0-5 min]\n- R1 [LOCAL] pick up the brown paper bag from the green trash can to carried  (r1_s1)\n- R2 [LOCAL] pick up the brown paper rolls from the gray trash can to my possession  (r2_s1)\n- R3 [LOCAL] pick up the black trash bag (floor, image 1) from the floor to outside  (r3_s1)\n- R4 [LOCAL] pick up the trash can from next to the cabinet to the designated disposal area  (r4_s1)\n- R1 [LOCAL] move the brown paper bag from carried to the outside trash area  (r1_s2)\n- R3 [LOCAL] pick up the black trash bag (floor, image 2) from the floor to outside  (r3_s2)\n- R4 [LOCAL] put down the trash can from the designated disposal area to next to the cabinet  (r4_s2)",
+  "joint_plan_full": "### Joint Plan — task10_simple  (about 5 min / deadline 20 min: OK)\n### Robots: R1:Mobile_Light(kitchen), R2:Mobile_Light(living_room), R3:Mobile_Light(bedroom), R4:Mobile_Light(bathroom)\n\n\n[0-5 min]\n- R1 [LOCAL] pick_up the brown paper bag from green trash can to carried  (r1_s1)\n- R2 [LOCAL] pick_up the brown paper rolls from gray trash can to my possession  (r2_s1)\n- R3 [LOCAL] pick_up the black trash bag (floor, image 1) from floor to outside  (r3_s1)\n- R4 [LOCAL] pick_up the trash can from next to cabinet to designated disposal area  (r4_s1)\n- R1 [LOCAL] move the brown paper bag from carried to outside trash area  (r1_s2)\n- R3 [LOCAL] pick_up the black trash bag (floor, image 2) from floor to outside  (r3_s2)\n- R4 [LOCAL] put_down the trash can from designated disposal area to next to cabinet  (r4_s2)\n\n### Dropped\n- R2 [PASS] pass brown paper rolls (trash can, image 1) to R1 (brown paper rolls (trash can, image 1)) — offer not taken by R1 (by rule)",
+  "offers": {
+    "R1": {
+      "agent": "R1",
+      "capability": "I am mobile and can carry light objects up to 5 kg.",
+      "can_do": [
+        "PickupLightObject: lift objects under 5 kg",
+        "PassReceiveObject: transfer objects to/from others",
+        "ToggleObject: turn on/off lights, TV, appliances"
+      ],
+      "has_items": [
+        "green trash can (floor, image 1)",
+        "brown paper bag (green trash can, image 1)"
+      ],
+      "need_from_others": [
+        "RECEIVE empty trash bag"
+      ],
+      "intends": [
+        "pickup brown paper bag from green trash can",
+        "move brown paper bag to outside trash area"
+      ],
+      "suggests": [],
+      "obs_scope": "I can observe and interact with objects in the kitchen.",
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift objects over 5 kg",
+        "PushFurniture: cannot move furniture",
+        "SliceObject: cannot cut objects",
+        "PourObject: cannot pour liquids"
+      ],
+      "reasoning": "a) Trash cans must be emptied. b) The most important task is to empty the trash cans within the deadline. c) I will remove the brown paper bag from the green trash can. d) No items from my room are needed elsewhere."
+    },
+    "R2": {
+      "agent": "R2",
+      "capability": "I am a mobile robot capable of light object manipulation.",
+      "can_do": [
+        "PickupLightObject: lift small/light items",
+        "PassReceiveObject: exchange items with others",
+        "ToggleObject: turn on/off lights, TV, appliances"
+      ],
+      "has_items": [
+        "gray trash can (corner, image 1)",
+        "brown paper rolls (trash can, image 1)",
+        "black chair (left of trash can, image 1)",
+        "TV (on cabinet, image 2)",
+        "white object (on cabinet, image 2)",
+        "laptop (on table, image 2)"
+      ],
+      "need_from_others": [
+        "Receive: a place to dispose of trash outside the living room"
+      ],
+      "intends": [
+        "PickupLightObject: remove brown paper rolls from gray trash can",
+        "PassReceiveObject: transport brown paper rolls to designated disposal area"
+      ],
+      "suggests": [],
+      "obs_scope": "I can observe and interact with items in the living room.",
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift heavy items",
+        "PushFurniture: cannot move furniture",
+        "SliceObject: cannot cut items",
+        "PourObject: cannot pour liquids"
+      ],
+      "reasoning": "a) GOAL STATE: Trash cans are empty. b) PRIORITY: Ensure trash is removed within 20 minutes. c) MY ROOM: Empty the gray trash can. d) FOR OTHERS: None of my has_items serve another room's needs."
+    },
+    "R3": {
+      "agent": "R3",
+      "capability": "I am a mobile robot capable of moving light objects.",
+      "can_do": [
+        "PickupLightObject: lift small items",
+        "PassReceiveObject: transfer items to/from others",
+        "ToggleObject: turn on/off lights, TV, appliances"
+      ],
+      "has_items": [
+        "black trash bag (floor, image 1)",
+        "black trash bag (floor, image 2)",
+        "gray trash can (corner, image 2)"
+      ],
+      "need_from_others": [],
+      "intends": [
+        "pickup black trash bag (floor, image 1)",
+        "pickup black trash bag (floor, image 2)",
+        "move black trash bag (floor, image 1) to outside",
+        "move black trash bag (floor, image 2) to outside"
+      ],
+      "suggests": [],
+      "obs_scope": "I can observe and interact with items in my room only.",
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift heavy items",
+        "PushFurniture: cannot move large furniture",
+        "SliceObject: cannot cut or slice items",
+        "PourObject: cannot pour liquids"
+      ],
+      "reasoning": "a) GOAL STATE: Trash cans are empty and trash is removed from the room. b) PRIORITY: Ensure all trash is collected and removed within the deadline. c) MY ROOM: Remove the black trash bags from the room. d) FOR OTHERS: None of my items serve another room's needs."
+    },
+    "R4": {
+      "agent": "R4",
+      "capability": "I can move around the room and interact with light objects.",
+      "can_do": [
+        "PickupLightObject: lift small items",
+        "PassReceiveObject: transfer items to/from others",
+        "ToggleObject: turn on/off lights, TV, appliances"
+      ],
+      "has_items": [
+        "plunger (next to cabinet, image 1)",
+        "trash can (next to cabinet, image 1)"
+      ],
+      "need_from_others": [
+        "Receive: empty trash from another room if needed"
+      ],
+      "intends": [
+        "PickupLightObject: remove trash from trash can",
+        "PassReceiveObject: transfer trash to designated disposal area"
+      ],
+      "suggests": [],
+      "obs_scope": "I can observe and interact with items in the bathroom only.",
+      "cannot_do": [
+        "PickupHeavyObject: too heavy for my capacity",
+        "PushFurniture: beyond my physical capability",
+        "SliceObject: no cutting tools",
+        "PourObject: no pouring mechanism"
+      ],
+      "reasoning": "a) GOAL STATE: Trash cans are empty. b) PRIORITY: Emptying the trash cans within the deadline. c) MY ROOM: Remove trash from the trash can. d) FOR OTHERS: None of my has_items serve another room's needs."
+    }
+  },
+  "local_plans": {
+    "R1": [
+      {
+        "id": "r1_s1",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "brown paper bag",
+          "from": "green trash can",
+          "to": "carried"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "empty the green trash can in the kitchen",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r1_s2",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "move",
+          "object": "brown paper bag",
+          "from": "carried",
+          "to": "outside trash area"
+        },
+        "item": null,
+        "target": null,
+        "uses": 1,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "empty the green trash can in the kitchen",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "R2": [
+      {
+        "id": "r2_s1",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "brown paper rolls",
+          "from": "gray trash can",
+          "to": "my possession"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "living_room",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Empty the gray trash can in the living room",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s2",
+        "agent": "R2",
+        "type": "PASS",
+        "action": "pass brown paper rolls (trash can, image 1) to R1",
+        "item": "brown paper rolls (trash can, image 1)",
+        "target": "R1",
+        "uses": null,
+        "location": "living_room",
+        "origin": "offer",
+        "answers": null,
+        "enables": null,
+        "serves": "Empty the gray trash can in the living room",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "R3": [
+      {
+        "id": "r3_s1",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "black trash bag (floor, image 1)",
+          "from": "floor",
+          "to": "outside"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Remove black trash bags from the bedroom",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s2",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "black trash bag (floor, image 2)",
+          "from": "floor",
+          "to": "outside"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Remove black trash bags from the bedroom",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "R4": [
+      {
+        "id": "r4_s1",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "trash can",
+          "from": "next to cabinet",
+          "to": "designated disposal area"
+        },
+        "item": null,
+        "target": null,
+        "uses": 1,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Empty the trash can in the bathroom.",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s2",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "trash can",
+          "from": "designated disposal area",
+          "to": "next to cabinet"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Empty the trash can in the bathroom.",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ]
+  },
+  "judgments": [
+    {
+      "agent": "R1",
+      "offer": "r2_s2",
+      "decision": "decline",
+      "reason": "The offer to pass brown paper rolls is not needed for my current task of emptying the green trash can.",
+      "result": "decline"
+    }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "r1_s1",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "brown paper bag",
+          "from": "green trash can",
+          "to": "carried"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "empty the green trash can in the kitchen",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "short",
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 1
+      },
+      {
+        "id": "r1_s2",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "move",
+          "object": "brown paper bag",
+          "from": "carried",
+          "to": "outside trash area"
+        },
+        "item": null,
+        "target": null,
+        "uses": 1,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "empty the green trash can in the kitchen",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "medium",
+        "phase": 1,
+        "t_start": 1,
+        "t_end": 2
+      },
+      {
+        "id": "r2_s1",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "brown paper rolls",
+          "from": "gray trash can",
+          "to": "my possession"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "living_room",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Empty the gray trash can in the living room",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "short",
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 1
+      },
+      {
+        "id": "r2_s2",
+        "agent": "R2",
+        "type": "PASS",
+        "action": "pass brown paper rolls (trash can, image 1) to R1",
+        "item": "brown paper rolls (trash can, image 1)",
+        "target": "R1",
+        "uses": null,
+        "location": "living_room",
+        "origin": "offer",
+        "answers": null,
+        "enables": null,
+        "serves": "Empty the gray trash can in the living room",
+        "prepared_by": null,
+        "status": "dropped",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s1",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "black trash bag (floor, image 1)",
+          "from": "floor",
+          "to": "outside"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Remove black trash bags from the bedroom",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "medium",
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 1
+      },
+      {
+        "id": "r3_s2",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "black trash bag (floor, image 2)",
+          "from": "floor",
+          "to": "outside"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Remove black trash bags from the bedroom",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "medium",
+        "phase": 1,
+        "t_start": 1,
+        "t_end": 2
+      },
+      {
+        "id": "r4_s1",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "trash can",
+          "from": "next to cabinet",
+          "to": "designated disposal area"
+        },
+        "item": null,
+        "target": null,
+        "uses": 1,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Empty the trash can in the bathroom.",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "medium",
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 1
+      },
+      {
+        "id": "r4_s2",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "trash can",
+          "from": "designated disposal area",
+          "to": "next to cabinet"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Empty the trash can in the bathroom.",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "short",
+        "phase": 1,
+        "t_start": 1,
+        "t_end": 2
+      }
+    ],
+    "order": {
+      "R1": [
+        "r1_s1",
+        "r1_s2"
+      ],
+      "R2": [
+        "r2_s1",
+        "r2_s2"
+      ],
+      "R3": [
+        "r3_s1",
+        "r3_s2"
+      ],
+      "R4": [
+        "r4_s1",
+        "r4_s2"
+      ]
+    },
+    "edges": [
+      {
+        "src": "r1_s1",
+        "dst": "r1_s2",
+        "kind": "SEQ",
+        "status": "CONFIRMED",
+        "source": "local",
+        "targeted": false
+      },
+      {
+        "src": "r3_s1",
+        "dst": "r3_s2",
+        "kind": "SEQ",
+        "status": "CONFIRMED",
+        "source": "local",
+        "targeted": false
+      },
+      {
+        "src": "r4_s1",
+        "dst": "r4_s2",
+        "kind": "SEQ",
+        "status": "CONFIRMED",
+        "source": "local",
+        "targeted": false
+      }
+    ],
+    "drops": [
+      {
+        "node": "r2_s2",
+        "agent": "R2",
+        "type": "PASS",
+        "text": "pass brown paper rolls (trash can, image 1) to R1 (brown paper rolls (trash can, image 1))",
+        "reason": "offer not taken by R1",
+        "by": "rule"
+      }
+    ],
+    "unresolved": [],
+    "warnings": [],
+    "ops_log": []
+  },
+  "metrics": {
+    "task_id": "task10_simple",
+    "n_steps_total": 8,
+    "n_steps_active": 7,
+    "n_blocked": 0,
+    "n_dropped": 1,
+    "n_requests": 0,
+    "n_requests_served": 0,
+    "n_collab_edges_final": 0,
+    "confirmed_ratio": null,
+    "selected_by_graph": 0,
+    "selected_by_rule": 0,
+    "capability_violations_after_fix": 0,
+    "n_requests_withdrawn": 0,
+    "n_served_by_own_existing_step": 0,
+    "n_duplicates_merged": 0,
+    "n_duplicates_dropped": 0,
+    "n_redundant_branches_released": 0,
+    "n_requests_moved_later": 0,
+    "n_warnings": 0,
+    "plan_fix_rounds": {
+      "R1": 1,
+      "R2": 1,
+      "R3": 1,
+      "R4": 1
+    },
+    "n_checklist_items": 5,
+    "n_uncovered_checklist": 0,
+    "n_uncovered_essential": 0,
+    "graph_ops_applied": 0,
+    "graph_ops_rejected": 0,
+    "makespan_steps": 2,
+    "makespan_min": 5,
+    "deadline": 20,
+    "deadline_ok": true,
+    "size_source": "graph_llm",
+    "n_size_missing": 0,
+    "n_candidates_from_stage3": 0,
+    "n_order_edges_added": 0,
+    "n_order_pairs_independent": 0,
+    "success_no_blocked": true,
+    "n_requests_declined": 0,
+    "n_requests_failed": 0,
+    "n_requests_moot": 0,
+    "n_blocked_by_decline": 0,
+    "n_blocked_by_failure": 0,
+    "success_no_failure": true,
+    "n_handoff_prep_dropped": 0,
+    "n_offers_made": 1,
+    "n_offers_taken": 0,
+    "n_offers_untaken": 1,
+    "n_preparations_released": 0,
+    "n_help_edges": 0,
+    "n_transfer_edges": 0,
+    "llm_calls": 14,
+    "prompt_tokens": 32411,
+    "completion_tokens": 3028,
+    "config": {
+      "use_edge_proposal": true,
+      "use_graph_llm": true,
+      "max_graph_rounds": 2
+    },
+    "wall_time_sec": 10.2
+  },
+  "config": {
+    "use_edge_proposal": true,
+    "use_graph_llm": true,
+    "max_graph_rounds": 2,
+    "deadline_min": 20
+  }
+}

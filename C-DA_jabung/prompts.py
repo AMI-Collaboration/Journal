@@ -159,7 +159,18 @@ YOUR can_do: {can_do_indexed}
 ALL ROBOTS' OFFERS: {public_offers}
 ROBOT PROFILES: {profiles}
 
-[SAME-ROOM] Check teammates' "intends" — divide work, never duplicate same object.
+[CRITICAL] AVOID DUPLICATE WORK:
+Before writing ANY step, scan ALL robots' "intends" in PUBLIC OFFERS above.
+- If ANY other robot already intends to do the same action on the same object → DO NOT repeat it.
+- If ANY other robot intends to turn on/off the same light/appliance → skip it, they handle it.
+- If ANY other robot intends to move the same object → skip it.
+- "Same work" means same verb + same object, even if worded differently.
+  ("turn off ceiling lamp" = "turn off the light" if it's the same fixture)
+- This applies to ALL robots, not just your roommates.
+
+[SAME-ROOM] Divide objects explicitly: if 3 robots share a room with 6 objects,
+each robot handles 2 different objects. Never two robots touching the same object.
+
 [CROSS-ROOM ASK_HELP] Only when no robot in YOUR room already covers it."""
 
 PLAN_FIX = """Your plan violated these rules:

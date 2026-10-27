@@ -21,6 +21,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--task", required=True)
 parser.add_argument("--gpt-version", default="gpt-4o")
 parser.add_argument("--run", type=int, default=1)
+parser.add_argument("--n-robots", type=int, default=4)
 args = parser.parse_args()
 
 data = load_all()

@@ -15,6 +15,16 @@ ALL_TASKS = [
     "task5_abstract", "task6_abstract", "task7_abstract", "task8_abstract",
     "task9_abstract", "task10_abstract",
 ]
+ALL_SIMPLE_TASKS = [
+    "task1_simple", "task2_simple", "task3_simple", "task4_simple",
+    "task5_simple", "task6_simple", "task7_simple", "task8_simple",
+    "task9_simple", "task10_simple",
+]
+SIMPLE_N_ROBOTS = {
+    "task1_simple": 2, "task2_simple": 2, "task3_simple": 2,
+    "task4_simple": 4, "task5_simple": 4, "task6_simple": 4,
+    "task7_simple": 4, "task8_simple": 4, "task9_simple": 4, "task10_simple": 4,
+}
 ALL_METHODS = ["cda", "central", "independent", "lamma_p", "smart_llm"]
 
 USD_IN  = 2.5   # per 1M prompt tokens
@@ -30,11 +40,17 @@ parser.add_argument("--run", type=int, default=1)
 parser.add_argument("--no-proposal", action="store_true")
 parser.add_argument("--no-graph-llm", action="store_true")
 parser.add_argument("--rounds", type=int, default=2)
-parser.add_argument("--n-robots", type=int, default=4, choices=[4,6,8])
+parser.add_argument("--n-robots", type=int, default=4, choices=[2,4,6,8])
 parser.add_argument("--dry-run", action="store_true")
+parser.add_argument("--simple", action="store_true", help="simple task 실행")
 args = parser.parse_args()
 
-tasks = args.tasks
+tasks = ALL_SIMPLE_TASKS if args.simple else args.tasks
+
+def get_n_robots(task):
+    if args.simple:
+        return SIMPLE_N_ROBOTS.get(task, 4)
+    return args.n_robots
 total = len(tasks)
 
 print(f"총 {total}개 task, 방법론: {[m for m in ALL_METHODS if m not in args.skip]}")
@@ -115,11 +131,12 @@ for i, task in enumerate(tasks, 1):
     print(f"{'='*55}")
 
     # C-DA
+    n_robots = get_n_robots(task)
     cda_cmd = [
         sys.executable, "run_cda.py",
         "--task", task, "--mode", args.mode, "--model", args.model,
         "--run", str(args.run), "--rounds", str(args.rounds),
-        "--n-robots", str(args.n_robots),
+        "--n-robots", str(n_robots),
     ]
     if args.no_proposal:  cda_cmd.append("--no-proposal")
     if args.no_graph_llm: cda_cmd.append("--no-graph-llm")
@@ -135,6 +152,7 @@ for i, task in enumerate(tasks, 1):
         sys.executable, "run_central.py",
         "--task", task, "--mode", args.mode,
         "--gpt-version", args.model, "--run", str(args.run),
+        "--n-robots", str(n_robots),
     ])
 
     # Independent
@@ -142,12 +160,14 @@ for i, task in enumerate(tasks, 1):
         sys.executable, "run_independent.py",
         "--task", task, "--mode", args.mode,
         "--gpt-version", args.model, "--run", str(args.run),
+        "--n-robots", str(n_robots),
     ])
 
     # LaMMA-P
     run_cmd("lamma_p", [
         sys.executable, "run_lamma_p.py",
         "--task", task, "--gpt-version", args.model, "--run", str(args.run),
+        "--n-robots", str(n_robots),
     ])
     if "lamma_p" not in args.skip:
         run_cmd("lamma_p_convert", [
@@ -160,6 +180,7 @@ for i, task in enumerate(tasks, 1):
     run_cmd("smart_llm", [
         sys.executable, "run_smart_llm.py",
         "--task", task, "--gpt-version", args.model, "--run", str(args.run),
+        "--n-robots", str(n_robots),
     ])
     if "smart_llm" not in args.skip:
         run_cmd("smart_llm_convert", [

@@ -1,0 +1,649 @@
+{
+  "task_n": "task6_simple",
+  "mode": "multi_room",
+  "model": "gpt-4o",
+  "task_text": "Store tomato, turn on TV, set alarm, close the shower curtain",
+  "joint_plan_text": "```plaintext\n### Joint Plan — task6_simple  (about 5 min / deadline 10 min: OK)\n### Robots: R1:Mobile_Light(kitchen), R2:Mobile_Light(living_room), R3:Mobile_Heavy(bedroom), R4:Mobile_Light(bathroom)\n\n\n[0-5 min]\n- R1 [LOCAL] move the red tomato from the gray plate to the cabinet  (r1_s1)\n- R2 [LOCAL] turn on the TV  (r2_s1)\n- R3 [LOCAL] turn on the black TV  (r3_s1)\n- R4 [LOCAL] close the white shower curtain  (r4_s1)\n- R3 [LOCAL] toggle the black alarm clock  (r3_s2)",
+  "joint_plan_full": "### Joint Plan — task6_simple  (about 5 min / deadline 10 min: OK)\n### Robots: R1:Mobile_Light(kitchen), R2:Mobile_Light(living_room), R3:Mobile_Heavy(bedroom), R4:Mobile_Light(bathroom)\n\n\n[0-5 min]\n- R1 [LOCAL] move the red tomato from gray plate to cabinet  (r1_s1)\n- R2 [LOCAL] turn_on the TV from off to on  (r2_s1)\n- R3 [LOCAL] turn_on the black TV from desk to on  (r3_s1)\n- R4 [LOCAL] close the white shower curtain from bathtub to closed position  (r4_s1)\n- R3 [LOCAL] toggle the black alarm clock from dresser to set  (r3_s2)\n\n### Dropped\n- R2 [PASS] pass turn on TV to R1 (turn on TV) — withdrawn in Stage 2: PASS item 'turn on TV' must be copied from YOUR has_items (by stage2-check)\n- R4 [PASS] pass red tomato (in bathtub, image 2) to R1 (red tomato (in bathtub, image 2)) — offer not taken by R1 (by rule)\n\n### Not covered (from the robots' own checklists)\n- R2: TV: turn on\n- R4: red tomato: pass for storage",
+  "offers": {
+    "R1": {
+      "agent": "R1",
+      "capability": "I am a mobile robot capable of light object manipulation.",
+      "can_do": [
+        "PickupLightObject: pick up objects under 5 kg",
+        "PassReceiveObject: exchange objects with others",
+        "ToggleObject: turn on/off lights, TV, appliances"
+      ],
+      "has_items": [
+        "black coffee maker (on counter, image 1)",
+        "silver kettle (on counter, image 1)",
+        "green sponge (on counter, image 1)",
+        "gray plate (on counter, image 2)",
+        "red tomato (on gray plate, image 2)",
+        "brown bread (on counter, image 2)"
+      ],
+      "need_from_others": [
+        "Turn on TV",
+        "Set alarm",
+        "Close shower curtain"
+      ],
+      "intends": [
+        "move red tomato from gray plate to cabinet",
+        "ask_help to turn on TV",
+        "ask_help to set alarm",
+        "ask_help to close shower curtain"
+      ],
+      "suggests": [],
+      "obs_scope": "I can observe and interact with objects in the kitchen only.",
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift objects over 5 kg",
+        "PushFurniture: cannot move furniture",
+        "SliceObject: cannot cut or slice objects",
+        "PourObject: cannot pour liquids"
+      ],
+      "reasoning": "a) The tomato must be stored, the TV turned on, the alarm set, and the shower curtain closed. b) Storing the tomato and turning on the TV are priorities as they involve immediate action. c) The tomato will be moved from the gray plate to a storage location. d) None of my has_items directly serve another room's needs."
+    },
+    "R2": {
+      "agent": "R2",
+      "capability": "I am a mobile robot with light object handling capabilities.",
+      "can_do": [
+        "PickupLightObject: move small items",
+        "PassReceiveObject: exchange items with others",
+        "ToggleObject: turn on/off lights, TV, appliances"
+      ],
+      "has_items": [
+        "brown vase (corner, image 1)",
+        "glass table (center, image 1)",
+        "beige chairs (around table, image 1)",
+        "black pendant lamp (above table, image 1)",
+        "red sofa (near wall, image 2)",
+        "TV (on stand, image 2)",
+        "floor lamp (near sofa, image 2)",
+        "table lamp (on side table, image 2)",
+        "blue book (on side table, image 2)"
+      ],
+      "need_from_others": [
+        "Store tomato in kitchen",
+        "Set alarm",
+        "Close shower curtain"
+      ],
+      "intends": [
+        "turn on TV"
+      ],
+      "suggests": [],
+      "obs_scope": "I can observe and interact with items in the living room.",
+      "cannot_do": [
+        "PickupHeavyObject: too heavy for me",
+        "PushFurniture: beyond my strength",
+        "SliceObject: no cutting tools",
+        "PourObject: no pouring mechanism"
+      ],
+      "reasoning": "a) GOAL STATE: Tomato stored, TV on, alarm set, shower curtain closed. b) PRIORITY: Complete tasks within 10 minutes. c) MY ROOM: Turn on TV. d) FOR OTHERS: None of my items serve another room's needs."
+    },
+    "R3": {
+      "agent": "R3",
+      "capability": "I am a mobile robot with the ability to manipulate objects and move within the room.",
+      "can_do": [
+        "PickupLightObject: pick up small items",
+        "PickupHeavyObject: pick up larger items",
+        "PushFurniture: move furniture",
+        "PassReceiveObject: transfer items",
+        "ToggleObject: turn on/off lights, TV, appliances"
+      ],
+      "has_items": [
+        "green lamp (dresser, image 1)",
+        "black alarm clock (dresser, image 1)",
+        "brown cardboard box (floor, image 1)",
+        "brown basketball (floor, image 1)",
+        "blue bed (floor, image 1)",
+        "white pillow (bed, image 1)",
+        "blue blanket (bed, image 1)",
+        "brown dresser (floor, image 1)",
+        "brown desk (floor, image 2)",
+        "black TV (desk, image 2)",
+        "blue notebook (desk, image 2)",
+        "brown chair (floor, image 2)",
+        "brown laundry basket (floor, image 2)"
+      ],
+      "need_from_others": [
+        "Store tomato",
+        "Close the shower curtain"
+      ],
+      "intends": [
+        "turn on black TV (desk, image 2)",
+        "set black alarm clock (dresser, image 1)"
+      ],
+      "suggests": [],
+      "obs_scope": "I can observe and interact with items in the bedroom.",
+      "cannot_do": [
+        "SliceObject: cannot cut or slice items",
+        "PourObject: cannot pour liquids"
+      ],
+      "reasoning": "a) GOAL STATE: Tomato stored, TV on, alarm set, shower curtain closed. b) PRIORITY: Complete tasks within 10 minutes. c) MY ROOM: Turn on black TV, set black alarm clock. d) FOR OTHERS: None of my has_items serve another room's needs."
+    },
+    "R4": {
+      "agent": "R4",
+      "capability": "I am a mobile robot with light object handling capabilities.",
+      "can_do": [
+        "PickupLightObject: handle light items",
+        "PassReceiveObject: transfer items",
+        "ToggleObject: turn on/off lights, TV, appliances"
+      ],
+      "has_items": [
+        "pink soap (on sink, image 1)",
+        "green towel (on towel rack, image 2)",
+        "white shower curtain (on bathtub, image 2)",
+        "red tomato (in bathtub, image 2)"
+      ],
+      "need_from_others": [
+        "StoreObject: store the red tomato",
+        "ToggleObject: turn on the TV",
+        "SetAlarm: set the alarm"
+      ],
+      "intends": [
+        "close white shower curtain (on bathtub, image 2)",
+        "pass red tomato (in bathtub, image 2)"
+      ],
+      "suggests": [
+        "red tomato (in bathtub, image 2)"
+      ],
+      "obs_scope": "I can observe and interact with items in the bathroom.",
+      "cannot_do": [
+        "PickupHeavyObject: cannot handle heavy items",
+        "PushFurniture: cannot move furniture",
+        "SliceObject: cannot cut items",
+        "PourObject: cannot pour liquids"
+      ],
+      "reasoning": "a) The tomato must be stored, the TV turned on, the alarm set, and the shower curtain closed. b) Closing the shower curtain and storing the tomato are priorities as they are directly within my room. c) I will close the white shower curtain and pass the red tomato for storage. d) The red tomato needs to be moved to another room for storage."
+    }
+  },
+  "local_plans": {
+    "R1": [
+      {
+        "id": "r1_s1",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "move",
+          "object": "red tomato",
+          "from": "gray plate",
+          "to": "cabinet"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Store the red tomato in the cabinet",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "R2": [
+      {
+        "id": "r2_s1",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "turn_on",
+          "object": "TV",
+          "from": "off",
+          "to": "on"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "living_room",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "turn on TV",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s2",
+        "agent": "R2",
+        "type": "PASS",
+        "action": "pass turn on TV to R1",
+        "item": "turn on TV",
+        "target": "R1",
+        "uses": null,
+        "location": "living_room",
+        "origin": "offer",
+        "answers": null,
+        "enables": null,
+        "serves": "turn on TV",
+        "prepared_by": null,
+        "status": "dropped",
+        "violations": [
+          "PASS item 'turn on TV' must be copied from YOUR has_items"
+        ],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "R3": [
+      {
+        "id": "r3_s1",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "turn_on",
+          "object": "black TV",
+          "from": "desk",
+          "to": "on"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Turn on black TV",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s2",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "toggle",
+          "object": "black alarm clock",
+          "from": "dresser",
+          "to": "set"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Turn on black TV",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "R4": [
+      {
+        "id": "r4_s1",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "close",
+          "object": "white shower curtain",
+          "from": "bathtub",
+          "to": "closed position"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "pass the red tomato for storage",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s2",
+        "agent": "R4",
+        "type": "PASS",
+        "action": "pass red tomato (in bathtub, image 2) to R1",
+        "item": "red tomato (in bathtub, image 2)",
+        "target": "R1",
+        "uses": null,
+        "location": "bathroom",
+        "origin": "offer",
+        "answers": null,
+        "enables": null,
+        "serves": "pass the red tomato for storage",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ]
+  },
+  "judgments": [
+    {
+      "agent": "R1",
+      "offer": "r4_s2",
+      "decision": "decline",
+      "reason": "already have red tomato on gray plate",
+      "result": "decline"
+    }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "r1_s1",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "move",
+          "object": "red tomato",
+          "from": "gray plate",
+          "to": "cabinet"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Store the red tomato in the cabinet",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "short",
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 1
+      },
+      {
+        "id": "r2_s1",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "turn_on",
+          "object": "TV",
+          "from": "off",
+          "to": "on"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "living_room",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "turn on TV",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "short",
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 1
+      },
+      {
+        "id": "r2_s2",
+        "agent": "R2",
+        "type": "PASS",
+        "action": "pass turn on TV to R1",
+        "item": "turn on TV",
+        "target": "R1",
+        "uses": null,
+        "location": "living_room",
+        "origin": "offer",
+        "answers": null,
+        "enables": null,
+        "serves": "turn on TV",
+        "prepared_by": null,
+        "status": "dropped",
+        "violations": [
+          "PASS item 'turn on TV' must be copied from YOUR has_items"
+        ],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s1",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "turn_on",
+          "object": "black TV",
+          "from": "desk",
+          "to": "on"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Turn on black TV",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "short",
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 1
+      },
+      {
+        "id": "r3_s2",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "toggle",
+          "object": "black alarm clock",
+          "from": "dresser",
+          "to": "set"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Turn on black TV",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "short",
+        "phase": 1,
+        "t_start": 1,
+        "t_end": 2
+      },
+      {
+        "id": "r4_s1",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "close",
+          "object": "white shower curtain",
+          "from": "bathtub",
+          "to": "closed position"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "pass the red tomato for storage",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "short",
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 1
+      },
+      {
+        "id": "r4_s2",
+        "agent": "R4",
+        "type": "PASS",
+        "action": "pass red tomato (in bathtub, image 2) to R1",
+        "item": "red tomato (in bathtub, image 2)",
+        "target": "R1",
+        "uses": null,
+        "location": "bathroom",
+        "origin": "offer",
+        "answers": null,
+        "enables": null,
+        "serves": "pass the red tomato for storage",
+        "prepared_by": null,
+        "status": "dropped",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "order": {
+      "R1": [
+        "r1_s1"
+      ],
+      "R2": [
+        "r2_s1",
+        "r2_s2"
+      ],
+      "R3": [
+        "r3_s1",
+        "r3_s2"
+      ],
+      "R4": [
+        "r4_s1",
+        "r4_s2"
+      ]
+    },
+    "edges": [
+      {
+        "src": "r3_s1",
+        "dst": "r3_s2",
+        "kind": "SEQ",
+        "status": "CONFIRMED",
+        "source": "local",
+        "targeted": false
+      }
+    ],
+    "drops": [
+      {
+        "node": "r2_s2",
+        "agent": "R2",
+        "type": "PASS",
+        "text": "pass turn on TV to R1 (turn on TV)",
+        "reason": "withdrawn in Stage 2: PASS item 'turn on TV' must be copied from YOUR has_items",
+        "by": "stage2-check"
+      },
+      {
+        "node": "r4_s2",
+        "agent": "R4",
+        "type": "PASS",
+        "text": "pass red tomato (in bathtub, image 2) to R1 (red tomato (in bathtub, image 2))",
+        "reason": "offer not taken by R1",
+        "by": "rule"
+      }
+    ],
+    "unresolved": [],
+    "warnings": [],
+    "ops_log": []
+  },
+  "metrics": {
+    "task_id": "task6_simple",
+    "n_steps_total": 7,
+    "n_steps_active": 5,
+    "n_blocked": 0,
+    "n_dropped": 2,
+    "n_requests": 0,
+    "n_requests_served": 0,
+    "n_collab_edges_final": 0,
+    "confirmed_ratio": null,
+    "selected_by_graph": 0,
+    "selected_by_rule": 0,
+    "capability_violations_after_fix": 1,
+    "n_requests_withdrawn": 1,
+    "n_served_by_own_existing_step": 0,
+    "n_duplicates_merged": 0,
+    "n_duplicates_dropped": 0,
+    "n_redundant_branches_released": 0,
+    "n_requests_moved_later": 0,
+    "n_warnings": 0,
+    "plan_fix_rounds": {
+      "R1": 1,
+      "R2": 2,
+      "R3": 2,
+      "R4": 2
+    },
+    "n_checklist_items": 6,
+    "n_uncovered_checklist": 2,
+    "n_uncovered_essential": 2,
+    "graph_ops_applied": 0,
+    "graph_ops_rejected": 0,
+    "makespan_steps": 2,
+    "makespan_min": 5,
+    "deadline": 10,
+    "deadline_ok": true,
+    "size_source": "graph_llm",
+    "n_size_missing": 0,
+    "n_candidates_from_stage3": 0,
+    "n_order_edges_added": 0,
+    "n_order_pairs_independent": 0,
+    "success_no_blocked": true,
+    "n_requests_declined": 0,
+    "n_requests_failed": 0,
+    "n_requests_moot": 0,
+    "n_blocked_by_decline": 0,
+    "n_blocked_by_failure": 0,
+    "success_no_failure": true,
+    "n_handoff_prep_dropped": 0,
+    "n_offers_made": 2,
+    "n_offers_taken": 0,
+    "n_offers_untaken": 1,
+    "n_preparations_released": 0,
+    "n_help_edges": 0,
+    "n_transfer_edges": 0,
+    "llm_calls": 17,
+    "prompt_tokens": 46568,
+    "completion_tokens": 3971,
+    "config": {
+      "use_edge_proposal": true,
+      "use_graph_llm": true,
+      "max_graph_rounds": 2
+    },
+    "wall_time_sec": 12.5
+  },
+  "config": {
+    "use_edge_proposal": true,
+    "use_graph_llm": true,
+    "max_graph_rounds": 2,
+    "deadline_min": 20
+  }
+}

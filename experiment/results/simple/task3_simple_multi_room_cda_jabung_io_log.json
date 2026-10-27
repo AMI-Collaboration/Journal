@@ -1,0 +1,353 @@
+[
+  {
+    "key": "offer:R2",
+    "system": "You are robot R2, a household robot that sees only its own room.\n\nSTEP 1 — LIST has_items: every clearly visible movable object in your images.\nFormat: \"<color> <noun> (<location>, image <k>)\". NEVER ",
+    "user": "## TASK (serve this only):\nTake cabbage out of the fridge and put it in the bowl, open laptop\nDEADLINE: 10 minutes\n\nYOUR BODY: room=bedroom, mobile=True, payload=5 kg, embodiment=Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture, SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\n(none)\n\nImages attached (2 image(s)), image 1 to 2.",
+    "output": {
+      "has_items": [
+        "gray laptop (desk, image 1)",
+        "blue pen (desk, image 1)",
+        "black smartphone (desk, image 1)",
+        "gray laptop (desk, image 2)",
+        "blue pen (desk, image 2)",
+        "orange chair (desk, image 2)"
+      ],
+      "reasoning": "a) The cabbage must be in the bowl, and the laptop must be open. b) Opening the laptop and moving the cabbage are priorities. c) I will open the gray laptop. d) I cannot assist with the cabbage as it is in the fridge, not in my room.",
+      "capability": "I am a mobile robot with light object handling capabilities.",
+      "can_do": [
+        "PickupLightObject: handle small items",
+        "PassReceiveObject: transfer items",
+        "ToggleObject: turn on/off lights, TV, appliances"
+      ],
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift heavy items",
+        "PushFurniture: cannot move furniture",
+        "SliceObject: cannot cut items",
+        "PourObject: cannot pour liquids"
+      ],
+      "suggests": [],
+      "intends": [
+        "open gray laptop (desk, image 1)"
+      ],
+      "need_from_others": [
+        "RECEIVE cabbage from fridge"
+      ],
+      "obs_scope": "I can observe and interact with items in my room."
+    }
+  },
+  {
+    "key": "offer:R1",
+    "system": "You are robot R1, a household robot that sees only its own room.\n\nSTEP 1 — LIST has_items: every clearly visible movable object in your images.\nFormat: \"<color> <noun> (<location>, image <k>)\". NEVER ",
+    "user": "## TASK (serve this only):\nTake cabbage out of the fridge and put it in the bowl, open laptop\nDEADLINE: 10 minutes\n\nYOUR BODY: room=kitchen, mobile=True, payload=5 kg, embodiment=Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture, SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\nCup (in Cabinet)\nPlate (in Cabinet)\nButterKnife (in Drawer)\nApple (in Fridge)\nLettuce (in Fridge)\n\nImages attached (2 image(s)), image 1 to 2.",
+    "output": {
+      "has_items": [
+        "black pot (counter, image 1)",
+        "brown bread (counter, image 1)",
+        "red apple (counter, image 1)",
+        "pink vase (counter, image 1)",
+        "black fridge (corner, image 1)",
+        "black ceiling lamp (ceiling, image 1)",
+        "brown cabinet (wall, image 1)",
+        "silver sink (counter, image 1)",
+        "black stove (counter, image 2)",
+        "brown bowl (counter, image 2)",
+        "transparent measuring cup (counter, image 2)",
+        "black laptop (counter, image 2)"
+      ],
+      "reasoning": "a) GOAL STATE: Cabbage in the brown bowl and the black laptop open. b) PRIORITY: Ensure cabbage is placed in the bowl and laptop is opened within 10 minutes. c) MY ROOM: Move cabbage from the black fridge to the brown bowl and open the black laptop. d) FOR OTHERS: None of my has_items are needed elsewhere.",
+      "capability": "I am a mobile robot capable of light object manipulation.",
+      "can_do": [
+        "PickupLightObject: lift objects under 5 kg",
+        "PassReceiveObject: exchange objects with others",
+        "ToggleObject: turn on/off lights, TV, appliances"
+      ],
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift objects over 5 kg",
+        "PushFurniture: cannot move furniture",
+        "SliceObject: cannot cut or slice objects",
+        "PourObject: cannot pour liquids"
+      ],
+      "suggests": [],
+      "intends": [
+        "open black fridge",
+        "pickup cabbage from black fridge",
+        "move cabbage to brown bowl",
+        "open black laptop"
+      ],
+      "need_from_others": [],
+      "obs_scope": "I can observe the kitchen and interact with objects within it."
+    }
+  },
+  {
+    "key": "plan:R2",
+    "system": "You are robot R2 in the bedroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
+    "user": "## TASK:\nTake cabbage out of the fridge and put it in the bowl, open laptop\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am a mobile robot with light object handling capabilities.\",\n \"can_do\": [\n  \"PickupLightObject: handle small items\",\n  \"PassReceiveObject: transfer items\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"gray laptop (desk, image 1)\",\n  \"blue pen (desk, image 1)\",\n  \"black smartphone (desk, image 1)\",\n  \"gray laptop (desk, im",
+    "output": {
+      "reasoning": "a) The task requires the cabbage to be placed in the bowl and the laptop to be opened. b) R1 will handle the cabbage as it is in the kitchen, and I will open the laptop in the bedroom. c) I will focus on opening the gray laptop on the desk. d) Since R1 is handling the cabbage, I will not duplicate that effort.",
+      "goals": [
+        {
+          "goal": "open gray laptop",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "gray laptop (desk, image 1)",
+          "change": "open",
+          "weight": "light",
+          "how": "LOCAL"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "open",
+            "object": "gray laptop",
+            "from": "desk, image 1",
+            "to": "open"
+          },
+          "uses": 0,
+          "serves": 1
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R1",
+    "system": "You are robot R1 in the kitchen. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
+    "user": "## TASK:\nTake cabbage out of the fridge and put it in the bowl, open laptop\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am a mobile robot capable of light object manipulation.\",\n \"can_do\": [\n  \"PickupLightObject: lift objects under 5 kg\",\n  \"PassReceiveObject: exchange objects with others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"black pot (counter, image 1)\",\n  \"brown bread (counter, image 1)\",\n  \"red apple (counter, image 1)\",\n  \"pi",
+    "output": {
+      "reasoning": "a) The task requires the cabbage to be placed in the brown bowl and the black laptop to be opened. b) The priority is high due to the 10-minute deadline. c) My room is the kitchen, where both the cabbage and the laptop are located. d) No items from my room are needed by other robots.",
+      "goals": [
+        {
+          "goal": "Cabbage in the brown bowl and black laptop open",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "cabbage",
+          "change": "move to brown bowl",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "black laptop",
+          "change": "open",
+          "weight": "light",
+          "how": "LOCAL"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "open",
+            "object": "black fridge",
+            "from": "closed",
+            "to": "open"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "cabbage",
+            "from": "black fridge",
+            "to": "in hand"
+          },
+          "uses": 1,
+          "serves": 2
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "cabbage",
+            "from": "in hand",
+            "to": "brown bowl"
+          },
+          "uses": 2,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "open",
+            "object": "black laptop",
+            "from": "closed",
+            "to": "open"
+          },
+          "uses": 0,
+          "serves": 0
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R2:fix",
+    "system": "You are robot R2 in the bedroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
+    "user": "## TASK:\nTake cabbage out of the fridge and put it in the bowl, open laptop\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am a mobile robot with light object handling capabilities.\",\n \"can_do\": [\n  \"PickupLightObject: handle small items\",\n  \"PassReceiveObject: transfer items\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"gray laptop (desk, image 1)\",\n  \"blue pen (desk, image 1)\",\n  \"black smartphone (desk, image 1)\",\n  \"gray laptop (desk, im",
+    "output": {
+      "reasoning": "a) The task requires the cabbage to be placed in the bowl and the laptop to be opened. b) R1 will handle the cabbage as it is in the kitchen, and I will open the laptop in the bedroom. c) I will focus on opening the gray laptop on the desk. d) Since R1 is handling the cabbage, I will not duplicate that effort.",
+      "goals": [
+        {
+          "goal": "open gray laptop",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "gray laptop (desk, image 1)",
+          "change": "open",
+          "weight": "light",
+          "how": "LOCAL"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "open",
+            "object": "gray laptop",
+            "from": "desk, image 1",
+            "to": "open"
+          },
+          "uses": 0,
+          "serves": 0
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R1:fix",
+    "system": "You are robot R1 in the kitchen. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
+    "user": "## TASK:\nTake cabbage out of the fridge and put it in the bowl, open laptop\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am a mobile robot capable of light object manipulation.\",\n \"can_do\": [\n  \"PickupLightObject: lift objects under 5 kg\",\n  \"PassReceiveObject: exchange objects with others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"black pot (counter, image 1)\",\n  \"brown bread (counter, image 1)\",\n  \"red apple (counter, image 1)\",\n  \"pi",
+    "output": {
+      "reasoning": "a) The task requires the cabbage to be placed in the brown bowl and the black laptop to be opened. b) The priority is high due to the 10-minute deadline. c) My room is the kitchen, where both the cabbage and the laptop are located. d) No items from my room are needed by other robots.",
+      "goals": [
+        {
+          "goal": "Cabbage in the brown bowl and black laptop open",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "cabbage",
+          "change": "move to brown bowl",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "black laptop",
+          "change": "open",
+          "weight": "light",
+          "how": "LOCAL"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "open",
+            "object": "black fridge",
+            "from": "closed",
+            "to": "open"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "cabbage",
+            "from": "black fridge",
+            "to": "in hand"
+          },
+          "uses": 1,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "cabbage",
+            "from": "in hand",
+            "to": "brown bowl"
+          },
+          "uses": 2,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "open",
+            "object": "black laptop",
+            "from": "closed",
+            "to": "open"
+          },
+          "uses": 0,
+          "serves": 0
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R2:fix",
+    "system": "You are robot R2 in the bedroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
+    "user": "## TASK:\nTake cabbage out of the fridge and put it in the bowl, open laptop\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am a mobile robot with light object handling capabilities.\",\n \"can_do\": [\n  \"PickupLightObject: handle small items\",\n  \"PassReceiveObject: transfer items\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"gray laptop (desk, image 1)\",\n  \"blue pen (desk, image 1)\",\n  \"black smartphone (desk, image 1)\",\n  \"gray laptop (desk, im",
+    "output": {
+      "reasoning": "a) The task requires the cabbage to be placed in the bowl and the laptop to be opened. b) R1 will handle the cabbage as it is in the kitchen, and I will open the laptop in the bedroom. c) I will focus on opening the gray laptop on the desk. d) Since R1 is handling the cabbage, I will not duplicate that effort.",
+      "goals": [
+        {
+          "goal": "open gray laptop",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "gray laptop (desk, image 1)",
+          "change": "open",
+          "weight": "light",
+          "how": "LOCAL"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "open",
+            "object": "gray laptop (desk, image 1)",
+            "from": "desk, image 1",
+            "to": "open"
+          },
+          "uses": 0,
+          "serves": 0
+        }
+      ]
+    }
+  },
+  {
+    "key": "graph:size",
+    "system": "Estimate how long each robot step takes.\n- \"short\": quick action on light object in own room (pick, place, switch).\n- \"medium\": several actions, awkward object, or travelling to another room.\n- \"long\"",
+    "user": "TASK: Take cabbage out of the fridge and put it in the bowl, open laptop\nROBOTS: {\n \"R1\": {\n  \"room\": \"kitchen\",\n  \"mobile\": true,\n  \"body\": \"Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture, SliceObject, PourObject.\"\n },\n \"R2\": {\n  \"room\": \"bedroom\",\n  \"mobile\": true,\n  \"body\": \"Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture, SliceObject, PourObject.\"\n }\n}\nSTEPS: [\n {\n  \"id\": \"r1_s1\",\n  \"agent\": ",
+    "output": {
+      "sizes": {
+        "r1_s1": "short",
+        "r2_s1": "short",
+        "r1_s2": "short",
+        "r1_s3": "short",
+        "r1_s4": "short"
+      }
+    }
+  }
+]

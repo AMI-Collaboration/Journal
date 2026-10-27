@@ -1,0 +1,906 @@
+{
+  "task_n": "task4_simple",
+  "mode": "multi_room",
+  "model": "gpt-4o",
+  "task_text": "Wash lettuce, clear ottoman, store CD, fill the bathtub",
+  "joint_plan_text": "```plaintext\n### Joint Plan — task4_simple  (about 10 min / deadline 10 min: OK)\n### Robots: R1:Mobile_Light(kitchen), R2:Mobile_Light(living_room), R3:Mobile_Heavy(bedroom), R4:Mobile_Light(bathroom)\n\n\n[0-5 min]\n- R1 [LOCAL] pick up the green lettuce from the sink to under the silver faucet  (r1_s1)\n- R2 [LOCAL] pick up the green book from the ottoman to hands  (r2_s1)\n- R3 [LOCAL] pick up the CDs from the shelf to R3  (r3_s1)\n- R4 [LOCAL] turn on the silver faucet from the bathtub to on  (r4_s1)\n- R1 [LOCAL] turn on the silver faucet from off to on  (r1_s2)\n- R3 [PASS] pass CDs (shelf, image 2) to R1 (offered) (brings it to the kitchen)  (r3_s2)\n- R4 [LOCAL] fill the white bathtub from empty to filled with water  (r4_s2)\n- R1 [LOCAL] put down the green lettuce from under the silver faucet to the counter  (r1_s3)\n- R1 [LOCAL] turn off the silver faucet from on to off  (r1_s4)\n- R1 [RECEIVE] receive CDs (shelf, image 2) from R3  (r1_s5)\n\n[5-10 min]\n- R1 [LOCAL] PassReceiveObject: receive CDs from R3  (r1_s6)",
+  "joint_plan_full": "### Joint Plan — task4_simple  (about 10 min / deadline 10 min: OK)\n### Robots: R1:Mobile_Light(kitchen), R2:Mobile_Light(living_room), R3:Mobile_Heavy(bedroom), R4:Mobile_Light(bathroom)\n\n\n[0-5 min]\n- R1 [LOCAL] pick_up the green lettuce from sink to under silver faucet  (r1_s1)\n- R2 [LOCAL] pick_up the green book from ottoman to hands  (r2_s1)\n- R3 [LOCAL] pick_up the CDs from shelf to R3  (r3_s1)\n- R4 [LOCAL] turn_on the silver faucet from bathtub to on  (r4_s1)\n- R1 [LOCAL] turn_on the silver faucet from off to on  (r1_s2)\n- R3 [PASS] pass CDs (shelf, image 2) to R1 (offered) (brings it to the kitchen)  (r3_s2)\n- R4 [LOCAL] fill the white bathtub from empty to filled with water  (r4_s2)\n- R1 [LOCAL] put_down the green lettuce from under silver faucet to counter  (r1_s3)\n- R1 [LOCAL] turn_off the silver faucet from on to off  (r1_s4)\n- R1 [RECEIVE] receive CDs (shelf, image 2) from R3  (r1_s5)\n\n[5-10 min]\n- R1 [LOCAL] PassReceiveObject: receive CDs from R3  (r1_s6)\n\n### Dropped\n- R2 [PASS] pass green book (ottoman, image 2) to R3 (green book (ottoman, image 2)) — offer not taken by R3 (by rule)",
+  "offers": {
+    "R1": {
+      "agent": "R1",
+      "capability": "I am mobile and can handle light objects.",
+      "can_do": [
+        "PickupLightObject: lift small items",
+        "PassReceiveObject: transfer items to/from others",
+        "ToggleObject: turn on/off lights, TV, appliances"
+      ],
+      "has_items": [
+        "green plant (counter, image 1)",
+        "silver faucet (sink, image 1)",
+        "blue bowl (counter, image 1)",
+        "brown bread (counter, image 1)",
+        "green lettuce (sink, image 2)",
+        "red apple (counter, image 2)",
+        "black pan (counter, image 2)",
+        "black pot (counter, image 2)"
+      ],
+      "need_from_others": [
+        "Clear ottoman",
+        "Store CD",
+        "Fill bathtub"
+      ],
+      "intends": [
+        "PickupLightObject: move green lettuce from sink to counter",
+        "ToggleObject: turn on silver faucet",
+        "PickupLightObject: rinse green lettuce under silver faucet",
+        "ToggleObject: turn off silver faucet",
+        "PassReceiveObject: pass green lettuce to another robot if needed"
+      ],
+      "suggests": [],
+      "obs_scope": "I can observe and interact with items in the kitchen.",
+      "cannot_do": [
+        "PickupHeavyObject: too heavy for my capacity",
+        "PushFurniture: not designed for moving furniture",
+        "SliceObject: lack cutting tools",
+        "PourObject: cannot pour liquids"
+      ],
+      "reasoning": "a) GOAL STATE: Lettuce washed, ottoman clear, CD stored, bathtub filled. b) PRIORITY: Complete tasks within 10 minutes. c) MY ROOM: Wash lettuce using the silver faucet. d) FOR OTHERS: None of my has_items serve another room's needs."
+    },
+    "R2": {
+      "agent": "R2",
+      "capability": "I am a mobile robot with light object handling abilities.",
+      "can_do": [
+        "PickupLightObject: pick up small items",
+        "PassReceiveObject: transfer items to/from others",
+        "ToggleObject: turn on/off lights, TV, appliances"
+      ],
+      "has_items": [
+        "green book (ottoman, image 2)",
+        "purple blanket (sofa, image 1)",
+        "red pillow (sofa, image 1)"
+      ],
+      "need_from_others": [
+        "WashLettuce: wash lettuce",
+        "StoreCD: store CD",
+        "FillBathtub: fill the bathtub"
+      ],
+      "intends": [
+        "PickupLightObject: pick up green book from ottoman",
+        "PassReceiveObject: pass green book to another robot for storage"
+      ],
+      "suggests": [],
+      "obs_scope": "I can observe and interact with items in the living room.",
+      "cannot_do": [
+        "PickupHeavyObject: too heavy for me",
+        "PushFurniture: cannot move furniture",
+        "SliceObject: cannot cut or chop",
+        "PourObject: cannot pour liquids"
+      ],
+      "reasoning": "a) GOAL STATE: Lettuce washed, ottoman clear, CD stored, bathtub filled. b) PRIORITY: Complete tasks within 10 minutes. c) MY ROOM: Clear ottoman by moving green book. d) FOR OTHERS: No items serve another room's needs."
+    },
+    "R3": {
+      "agent": "R3",
+      "capability": "I can move around and carry objects up to 20 kg.",
+      "can_do": [
+        "PickupLightObject: lift small items",
+        "PickupHeavyObject: lift large items",
+        "PushFurniture: move furniture",
+        "PassReceiveObject: transfer items",
+        "ToggleObject: turn on/off lights, TV, appliances"
+      ],
+      "has_items": [
+        "white pillow (bed, image 1)",
+        "green pillow (bed, image 1)",
+        "black and white blanket (bed, image 1)",
+        "table lamp (desk, image 1)",
+        "laptop (desk, image 1)",
+        "red chair (desk, image 1)",
+        "black desk lamp (desk, image 1)",
+        "orange tennis racket (floor, image 2)",
+        "books (shelf, image 2)",
+        "CDs (shelf, image 2)",
+        "yellow bowl (shelf, image 2)",
+        "magazines (dresser, image 2)"
+      ],
+      "need_from_others": [
+        "Wash lettuce",
+        "Clear ottoman",
+        "Fill bathtub"
+      ],
+      "intends": [
+        "PickupLightObject: pick up CDs from shelf",
+        "PassReceiveObject: pass CDs to another robot"
+      ],
+      "suggests": [
+        "CDs (shelf, image 2)"
+      ],
+      "obs_scope": "I can observe and interact with items in my room only.",
+      "cannot_do": [
+        "SliceObject: cannot cut or chop",
+        "PourObject: cannot pour liquids"
+      ],
+      "reasoning": "a) The lettuce must be washed, the ottoman cleared, the CD stored, and the bathtub filled. b) Prioritizing tasks that require interaction with other rooms. c) No changes needed in my room. d) The CDs can be stored elsewhere."
+    },
+    "R4": {
+      "agent": "R4",
+      "capability": "I am a mobile robot with light object handling abilities.",
+      "can_do": [
+        "PickupLightObject: handle small items",
+        "PassReceiveObject: exchange items with others",
+        "ToggleObject: turn on/off lights, TV, appliances"
+      ],
+      "has_items": [
+        "silver faucet (bathtub, image 2)",
+        "white bathtub (bathroom, image 2)",
+        "brown towel (towel rack, image 1)",
+        "orange soap dispenser (sink, image 1)",
+        "white sink (bathroom, image 1)",
+        "green trash bin (bathroom, image 1)"
+      ],
+      "need_from_others": [
+        "Wash lettuce",
+        "Clear ottoman",
+        "Store CD"
+      ],
+      "intends": [
+        "turn on silver faucet (bathtub, image 2)",
+        "fill white bathtub (bathroom, image 2)"
+      ],
+      "suggests": [],
+      "obs_scope": "I can observe the bathroom and its contents.",
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift heavy items",
+        "PushFurniture: cannot move furniture",
+        "SliceObject: cannot cut or chop",
+        "PourObject: cannot pour liquids"
+      ],
+      "reasoning": "a) GOAL STATE: Bathtub filled, lettuce washed, ottoman cleared, CD stored. b) PRIORITY: Fill bathtub and wash lettuce as they require water. c) MY ROOM: Fill bathtub using silver faucet. d) FOR OTHERS: None of my has_items serve another room's needs."
+    }
+  },
+  "local_plans": {
+    "R1": [
+      {
+        "id": "r1_s1",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "green lettuce",
+          "from": "sink",
+          "to": "under silver faucet"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Wash lettuce",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r1_s2",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "turn_on",
+          "object": "silver faucet",
+          "from": "off",
+          "to": "on"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Wash lettuce",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r1_s3",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "green lettuce",
+          "from": "under silver faucet",
+          "to": "counter"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Wash lettuce",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r1_s4",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "turn_off",
+          "object": "silver faucet",
+          "from": "on",
+          "to": "off"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Wash lettuce",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "R2": [
+      {
+        "id": "r2_s1",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "green book",
+          "from": "ottoman",
+          "to": "hands"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "living_room",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Clear the ottoman by moving the green book.",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s2",
+        "agent": "R2",
+        "type": "PASS",
+        "action": "pass green book (ottoman, image 2) to R3",
+        "item": "green book (ottoman, image 2)",
+        "target": "R3",
+        "uses": null,
+        "location": "living_room",
+        "origin": "offer",
+        "answers": null,
+        "enables": null,
+        "serves": "Clear the ottoman by moving the green book.",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "R3": [
+      {
+        "id": "r3_s1",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "CDs",
+          "from": "shelf",
+          "to": "R3"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Store CD",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s2",
+        "agent": "R3",
+        "type": "PASS",
+        "action": "pass CDs (shelf, image 2) to R1",
+        "item": "CDs (shelf, image 2)",
+        "target": "R1",
+        "uses": null,
+        "location": "bedroom",
+        "origin": "offer",
+        "answers": null,
+        "enables": null,
+        "serves": "Store CD",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "R4": [
+      {
+        "id": "r4_s1",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "turn_on",
+          "object": "silver faucet",
+          "from": "bathtub",
+          "to": "on"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Fill the bathtub",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s2",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "fill",
+          "object": "white bathtub",
+          "from": "empty",
+          "to": "filled with water"
+        },
+        "item": null,
+        "target": null,
+        "uses": 1,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Fill the bathtub",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ]
+  },
+  "judgments": [
+    {
+      "agent": "R1",
+      "offer": "r3_s2",
+      "decision": "receive",
+      "reason": "",
+      "result": "CANDIDATE",
+      "provider": "r3_s2",
+      "receive": "r1_s5",
+      "use": "r1_s6"
+    },
+    {
+      "agent": "R3",
+      "offer": "r2_s2",
+      "decision": "decline",
+      "reason": "The task of clearing the ottoman is not part of my current goals, and I am focused on handling the CDs.",
+      "result": "decline"
+    }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "r1_s1",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "green lettuce",
+          "from": "sink",
+          "to": "under silver faucet"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Wash lettuce",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "short",
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 1
+      },
+      {
+        "id": "r1_s2",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "turn_on",
+          "object": "silver faucet",
+          "from": "off",
+          "to": "on"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Wash lettuce",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "short",
+        "phase": 1,
+        "t_start": 1,
+        "t_end": 2
+      },
+      {
+        "id": "r1_s3",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "green lettuce",
+          "from": "under silver faucet",
+          "to": "counter"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Wash lettuce",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "short",
+        "phase": 1,
+        "t_start": 2,
+        "t_end": 3
+      },
+      {
+        "id": "r1_s4",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "turn_off",
+          "object": "silver faucet",
+          "from": "on",
+          "to": "off"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Wash lettuce",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "short",
+        "phase": 1,
+        "t_start": 3,
+        "t_end": 4
+      },
+      {
+        "id": "r1_s5",
+        "agent": "R1",
+        "type": "RECEIVE",
+        "action": "receive CDs (shelf, image 2)",
+        "item": "CDs (shelf, image 2)",
+        "target": "R3",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "accept",
+        "answers": null,
+        "enables": "r1_s6",
+        "serves": "offered CDs (shelf, image 2)",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "short",
+        "phase": 1,
+        "t_start": 4,
+        "t_end": 5
+      },
+      {
+        "id": "r1_s6",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": "PassReceiveObject: receive CDs from R3",
+        "item": null,
+        "target": null,
+        "uses": 1,
+        "location": "kitchen",
+        "origin": "accept",
+        "answers": null,
+        "enables": null,
+        "serves": "offered CDs (shelf, image 2)",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "short",
+        "phase": 2,
+        "t_start": 5,
+        "t_end": 6
+      },
+      {
+        "id": "r2_s1",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "green book",
+          "from": "ottoman",
+          "to": "hands"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "living_room",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Clear the ottoman by moving the green book.",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "short",
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 1
+      },
+      {
+        "id": "r2_s2",
+        "agent": "R2",
+        "type": "PASS",
+        "action": "pass green book (ottoman, image 2) to R3",
+        "item": "green book (ottoman, image 2)",
+        "target": "R3",
+        "uses": null,
+        "location": "living_room",
+        "origin": "offer",
+        "answers": null,
+        "enables": null,
+        "serves": "Clear the ottoman by moving the green book.",
+        "prepared_by": null,
+        "status": "dropped",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s1",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "CDs",
+          "from": "shelf",
+          "to": "R3"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Store CD",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "short",
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 1
+      },
+      {
+        "id": "r3_s2",
+        "agent": "R3",
+        "type": "PASS",
+        "action": "pass CDs (shelf, image 2) to R1",
+        "item": "CDs (shelf, image 2)",
+        "target": "R1",
+        "uses": null,
+        "location": "bedroom",
+        "origin": "offer",
+        "answers": "r1_s5",
+        "enables": null,
+        "serves": "Store CD",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "medium",
+        "phase": 1,
+        "t_start": 1,
+        "t_end": 2
+      },
+      {
+        "id": "r4_s1",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "turn_on",
+          "object": "silver faucet",
+          "from": "bathtub",
+          "to": "on"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Fill the bathtub",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "short",
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 1
+      },
+      {
+        "id": "r4_s2",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "fill",
+          "object": "white bathtub",
+          "from": "empty",
+          "to": "filled with water"
+        },
+        "item": null,
+        "target": null,
+        "uses": 1,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Fill the bathtub",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "medium",
+        "phase": 1,
+        "t_start": 1,
+        "t_end": 2
+      }
+    ],
+    "order": {
+      "R1": [
+        "r1_s1",
+        "r1_s2",
+        "r1_s3",
+        "r1_s4",
+        "r1_s5",
+        "r1_s6"
+      ],
+      "R2": [
+        "r2_s1",
+        "r2_s2"
+      ],
+      "R3": [
+        "r3_s1",
+        "r3_s2"
+      ],
+      "R4": [
+        "r4_s1",
+        "r4_s2"
+      ]
+    },
+    "edges": [
+      {
+        "src": "r1_s1",
+        "dst": "r1_s2",
+        "kind": "SEQ",
+        "status": "CONFIRMED",
+        "source": "local",
+        "targeted": false
+      },
+      {
+        "src": "r1_s2",
+        "dst": "r1_s3",
+        "kind": "SEQ",
+        "status": "CONFIRMED",
+        "source": "local",
+        "targeted": false
+      },
+      {
+        "src": "r1_s3",
+        "dst": "r1_s4",
+        "kind": "SEQ",
+        "status": "CONFIRMED",
+        "source": "local",
+        "targeted": false
+      },
+      {
+        "src": "r1_s4",
+        "dst": "r1_s5",
+        "kind": "SEQ",
+        "status": "CONFIRMED",
+        "source": "local",
+        "targeted": false
+      },
+      {
+        "src": "r1_s5",
+        "dst": "r1_s6",
+        "kind": "SEQ",
+        "status": "CONFIRMED",
+        "source": "local",
+        "targeted": false
+      },
+      {
+        "src": "r3_s1",
+        "dst": "r3_s2",
+        "kind": "SEQ",
+        "status": "CONFIRMED",
+        "source": "local",
+        "targeted": false
+      },
+      {
+        "src": "r4_s1",
+        "dst": "r4_s2",
+        "kind": "SEQ",
+        "status": "CONFIRMED",
+        "source": "local",
+        "targeted": false
+      },
+      {
+        "src": "r3_s2",
+        "dst": "r1_s5",
+        "kind": "TRANSFER",
+        "status": "CONFIRMED",
+        "source": "rule",
+        "targeted": true
+      }
+    ],
+    "drops": [
+      {
+        "node": "r2_s2",
+        "agent": "R2",
+        "type": "PASS",
+        "text": "pass green book (ottoman, image 2) to R3 (green book (ottoman, image 2))",
+        "reason": "offer not taken by R3",
+        "by": "rule"
+      }
+    ],
+    "unresolved": [],
+    "warnings": [],
+    "ops_log": []
+  },
+  "metrics": {
+    "task_id": "task4_simple",
+    "n_steps_total": 12,
+    "n_steps_active": 11,
+    "n_blocked": 0,
+    "n_dropped": 1,
+    "n_requests": 1,
+    "n_requests_served": 1,
+    "n_collab_edges_final": 1,
+    "confirmed_ratio": 1.0,
+    "selected_by_graph": 0,
+    "selected_by_rule": 1,
+    "capability_violations_after_fix": 0,
+    "n_requests_withdrawn": 0,
+    "n_served_by_own_existing_step": 0,
+    "n_duplicates_merged": 0,
+    "n_duplicates_dropped": 0,
+    "n_redundant_branches_released": 0,
+    "n_requests_moved_later": 0,
+    "n_warnings": 0,
+    "plan_fix_rounds": {
+      "R1": 1,
+      "R2": 1,
+      "R3": 1,
+      "R4": 0
+    },
+    "n_checklist_items": 4,
+    "n_uncovered_checklist": 0,
+    "n_uncovered_essential": 0,
+    "graph_ops_applied": 0,
+    "graph_ops_rejected": 0,
+    "makespan_steps": 6,
+    "makespan_min": 10,
+    "deadline": 10,
+    "deadline_ok": true,
+    "size_source": "graph_llm",
+    "n_size_missing": 0,
+    "n_candidates_from_stage3": 1,
+    "n_order_edges_added": 0,
+    "n_order_pairs_independent": 0,
+    "success_no_blocked": true,
+    "n_requests_declined": 0,
+    "n_requests_failed": 0,
+    "n_requests_moot": 0,
+    "n_blocked_by_decline": 0,
+    "n_blocked_by_failure": 0,
+    "success_no_failure": true,
+    "n_handoff_prep_dropped": 0,
+    "n_offers_made": 2,
+    "n_offers_taken": 1,
+    "n_offers_untaken": 1,
+    "n_preparations_released": 0,
+    "n_help_edges": 0,
+    "n_transfer_edges": 1,
+    "llm_calls": 14,
+    "prompt_tokens": 32847,
+    "completion_tokens": 3092,
+    "config": {
+      "use_edge_proposal": true,
+      "use_graph_llm": true,
+      "max_graph_rounds": 2
+    },
+    "wall_time_sec": 11.6
+  },
+  "config": {
+    "use_edge_proposal": true,
+    "use_graph_llm": true,
+    "max_graph_rounds": 2,
+    "deadline_min": 20
+  }
+}

@@ -142,7 +142,10 @@ raw_plan = result["joint_plan_text"]
 naturalized = _naturalize(raw_plan)
 print(naturalized)
 
-results_dir = os.path.join(HERE, "results", {4: "run1", 6: "run2", 8: "run3"}[args.n_robots])
+if "simple" in args.task:
+    results_dir = os.path.join(HERE, "results", "simple")
+else:
+    results_dir = os.path.join(HERE, "results", "abstract", {4: "run1", 6: "run2", 8: "run3"}.get(args.n_robots, "run1"))
 os.makedirs(results_dir, exist_ok=True)
 
 result_record = {

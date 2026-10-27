@@ -1,0 +1,92 @@
+{
+  "cda": {
+    "name": "CDA",
+    "track_a_llm_judge": {
+      "TF": 3,
+      "TF_reason": "The task requires closing all windows and doors and securing loose items. Due to numerous blocked actions, most windows and doors remain open, and many loose items across different rooms are not secured. The plan fails to achieve the core goals.",
+      "PF": 4,
+      "PF_reason": "There are several hallucinated objects (e.g., 'orange fruit', 'gray blanket') and vague descriptions (e.g., 'black plastic bin', 'white door'). Additionally, multiple actions were blocked, indicating feasibility issues in the generated steps.",
+      "OC": 5,
+      "OC_reason": "The task does not strictly require cross-room collaboration, as robots can secure their respective rooms independently. However, unnecessary ASK_HELP requests were made, leading to declined requests and unresolved cyclic dependencies that blocked execution.",
+      "SC": 3,
+      "SC_reason": "There is a direct conflict where R5 and R6 both attempt to move the same basketball to different locations in the same time block. Furthermore, unresolved dependency cycles caused a significant portion of the plan to be blocked."
+    },
+    "track_b_gc": 0.0,
+    "track_b_state_detail": {
+      "A1_windows_closed": false,
+      "A2_doors_closed": false,
+      "A3_curtains_closed": false,
+      "A4_outdoor_items_secured": false
+    },
+    "object_grounding": "N/A"
+  },
+  "central": {
+    "name": "Centralized",
+    "track_a_llm_judge": {
+      "TF": 3,
+      "TF_reason": "The plan only partially addresses the task. Windows and doors are only closed in the living room, ignoring the kitchen, bedroom, and bathroom. Only a few loose objects are picked up, leaving many unsecured across all rooms.",
+      "PF": 2,
+      "PF_reason": "Severe feasibility violations exist. R1 and R3 pick up and hold multiple objects simultaneously (violating the one-object-at-a-time rule). The plan uses vague expressions like 'Ensure all light objects are secured' and 'cushions' (which are not in the room's object list, though Pillow is).",
+      "OC": 3,
+      "OC_reason": "Collaboration logic is highly flawed. R1 attempts to pass objects to R2, but R2 moved to the living room in the previous time block, meaning they are not co-located. Furthermore, R2 never explicitly receives the objects from R1.",
+      "SC": 2,
+      "SC_reason": "Multiple sequencing and logical errors: R1 passes objects to R2 without a corresponding RECEIVE action from R2. R3 and R4 have duplicate action IDs (e.g., r3_s1 and r4_s1 are used multiple times). R3 closes doors in the living room in the first block, and R4 redundantly closes them again in the second block."
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": "N/A"
+  },
+  "independent": {
+    "name": "Independent",
+    "track_a_llm_judge": {
+      "TF": 4,
+      "TF_reason": "The plan partially addresses the task by attempting to secure items and close windows in the kitchen and living room. However, it completely ignores the bedroom and bathroom. Furthermore, many goals are 'achieved' using vague actions or hallucinated receptacles, reducing the actual task fulfillment.",
+      "PF": 2,
+      "PF_reason": "Severe feasibility issues exist. The plan relies heavily on vague expressions ('Secure the laptop', 'Ensure the plant... is stable', 'Ensure the door is closed', 'any loose cushions'). It also hallucinates objects and receptacles not present in the room lists, such as 'cabinet', 'counter', and 'sink basin' in the kitchen.",
+      "OC": 5,
+      "OC_reason": "Cross-room collaboration is not strictly required for this task, and the robots correctly operate locally. However, robots in the same room (R1/R2 in the kitchen, R3/R4 in the living room) fail to observe each other's actions, leading them to interact with the same objects redundantly or after they have already been moved.",
+      "SC": 3,
+      "SC_reason": "There are major sequential and logical conflicts. R2 picks up and stores the apple, but R1 later tries to pick up the same apple from the counter. Similarly, R1 stores the tomato, and R2 later tries to pick it up from the counter. R3 and R4 also have conflicting redundant actions on the remote control."
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": "N/A"
+  },
+  "lamma_p": {
+    "name": "LaMMA-P",
+    "track_a_llm_judge": {
+      "TF": 0,
+      "TF_reason": "The plan fails to achieve the task goals because it does not interact with any specific, real objects from the provided room lists. It relies entirely on abstract concepts ('first window', 'first loose item') rather than concrete actions on actual items.",
+      "PF": 0,
+      "PF_reason": "The plan is completely infeasible as it consists entirely of vague expressions and unnamed objects ('first window', 'next door', 'first loose item inside'). No specific objects from the environment are targeted.",
+      "OC": 5,
+      "OC_reason": "While no collaboration is required for a single robot, R4 assumes it can instantly identify all windows, doors, and loose items both inside and outside without exploring the different rooms, which implies unjustified global knowledge.",
+      "SC": 5,
+      "SC_reason": "The high-level sequence of actions (identify -> go to -> pick up -> secure) is logically ordered, but the complete lack of concrete objects and room navigation makes the sequence unexecutable in practice."
+    },
+    "track_b_gc": 0.0,
+    "track_b_state_detail": {
+      "A1_windows_closed": false,
+      "A2_doors_closed": false,
+      "A3_curtains_closed": false,
+      "A4_outdoor_items_secured": false
+    },
+    "object_grounding": "N/A"
+  },
+  "smart_llm": {
+    "name": "SMART-LLM",
+    "track_a_llm_judge": {
+      "TF": 2,
+      "TF_reason": "The plan attempts to fulfill the task goals, but it relies almost entirely on hallucinated objects (Window1, Window2, Window3, FrontDoor, BackDoor, SafePlaceInside, GardenChair, SafePlaceOutside, GardenTable) that do not exist in the environment. Goals achieved via hallucinated objects count as not achieved.",
+      "PF": 2,
+      "PF_reason": "Severe feasibility violations due to the dominance of hallucinated objects. The robots interact with numerous objects and locations (e.g., Window1, FrontDoor, SafePlaceInside, GardenChair) that are not listed in the actual room contents.",
+      "OC": 7,
+      "OC_reason": "The task does not require cross-room collaboration, and the robots act independently, which is appropriate. However, they act on hallucinated objects, meaning they are not relying on legitimate local observations.",
+      "SC": 9,
+      "SC_reason": "The sequential coherence is generally good. The order of operations (go to -> pick up -> go to -> put) respects basic physical prerequisites and dependencies."
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": "N/A"
+  }
+}

@@ -1,0 +1,765 @@
+{
+  "task_n": "task2_abstract",
+  "mode": "multi_room",
+  "model": "gpt-4o",
+  "task_text": "I want to take a bath in 5 minutes. The bathroom should be ready — bathtub filled with warm water, and I'll need something to dry off with nearby.",
+  "joint_plan_text": "```plaintext\n### Joint Plan — task2_abstract  (about 5 min / deadline 5 min: OK)\n### Robots: R1:Gripper(bedroom), R2:Mobile_Light(bedroom), R3:Gripper(bathroom), R4:Mobile_Heavy(bathroom)\n\n\n[0-5 min]\n- R2 [LOCAL] pick up the blue towel from the desk to the bathroom  (r2_s1)\n- R3 [ASK_HELP] wait for R4 to: fill the bathtub to filled with warm water  (r3_s1)\n- R4 [LOCAL] move the white towel from the towel rack to the bathtub  (r4_s1)\n- R4 [HELP] toggle the bathtub faucet to fill with warm water (help R3 in the bathroom)  (r4_s3)\n- R3 [LOCAL] move the beige towel from the towel rack to the striped mat  (r3_s2)\n- R4 [LOCAL] move the green striped mat from the floor to in front of the bathtub  (r4_s2)",
+  "joint_plan_full": "### Joint Plan — task2_abstract  (about 5 min / deadline 5 min: OK)\n### Robots: R1:Gripper(bedroom), R2:Mobile_Light(bedroom), R3:Gripper(bathroom), R4:Mobile_Heavy(bathroom)\n\n\n[0-5 min]\n- R2 [LOCAL] pick_up the blue towel from desk to bathroom  (r2_s1)\n- R3 [ASK_HELP] wait for R4 to: fill the bathtub to filled with warm water  (r3_s1)\n- R4 [LOCAL] move the white towel from towel rack to bathtub  (r4_s1)\n- R4 [HELP] toggle bathtub faucet to fill with warm water (help R3 in the bathroom)  (r4_s3)\n- R3 [LOCAL] move the beige towel from towel rack to striped mat  (r3_s2)\n- R4 [LOCAL] move the green striped mat from floor to in front of bathtub  (r4_s2)\n\n### Dropped\n- R1 [PASS] pass white mug (desk, image 2) to R2 (white mug (desk, image 2)) — offer not taken by R2 (by rule)\n- R1 [PASS] pass bowl (desk, image 2) to R2 (bowl (desk, image 2)) — offer not taken by R2 (by rule)\n- R2 [PASS] pass blue towel (desk, image 2) to R3 (blue towel (desk, image 2)) — offer not taken by R3 (by rule)\n\n### Not covered (from the robots' own checklists)\n- R1: white mug: pass to R2",
+  "offers": {
+    "R1": {
+      "agent": "R1",
+      "capability": "I am fixed in place and can manipulate light objects within reach.",
+      "can_do": [
+        "PickupLightObject: lift small items",
+        "SliceObject: cut items",
+        "PourObject: pour liquids",
+        "PassReceiveObject: hand over items",
+        "ToggleObject: turn on/off lights, TV, appliances"
+      ],
+      "has_items": [
+        "white mug (desk, image 2)",
+        "laptop (desk, image 2)",
+        "smartphone (desk, image 2)",
+        "book (desk, image 2)",
+        "pencil (desk, image 2)",
+        "lamp (desk, image 2)",
+        "clock (desk, image 2)",
+        "statue (desk, image 2)",
+        "bowl (desk, image 2)"
+      ],
+      "need_from_others": [
+        "FillBathtub: fill bathtub with warm water",
+        "ProvideTowel: bring a towel to the bathroom"
+      ],
+      "intends": [],
+      "suggests": [],
+      "obs_scope": "I can only observe and interact with items in the bedroom.",
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift heavy items",
+        "PushFurniture: cannot move furniture",
+        "MoveToOtherRoom: fixed in place, cannot leave room"
+      ],
+      "reasoning": "a) GOAL STATE: Bathtub filled with warm water and a towel nearby. b) PRIORITY: Ensure the bathroom is ready for a bath within 5 minutes. c) MY ROOM: I cannot contribute directly to the bathroom setup. d) FOR OTHERS: None of my has_items serve the bathroom's needs."
+    },
+    "R2": {
+      "agent": "R2",
+      "capability": "I am a mobile robot with light object handling abilities.",
+      "can_do": [
+        "PickupLightObject: lift small items",
+        "PassReceiveObject: hand over or collect items",
+        "ToggleObject: turn on/off lights, TV, appliances"
+      ],
+      "has_items": [
+        "blue towel (desk, image 2)",
+        "brown basket (floor, image 1)"
+      ],
+      "need_from_others": [
+        "Fill bathtub with warm water"
+      ],
+      "intends": [
+        "move blue towel from desk to bathroom"
+      ],
+      "suggests": [
+        "blue towel"
+      ],
+      "obs_scope": "I can observe and interact with items in the bedroom.",
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift heavy items",
+        "PushFurniture: cannot move furniture",
+        "SliceObject: cannot cut or slice",
+        "PourObject: cannot pour liquids"
+      ],
+      "reasoning": "a) The bathroom must have a filled bathtub with warm water and a towel nearby. b) The most important task is ensuring the bathtub is filled with warm water. c) I can move the blue towel from the desk to the bathroom. d) The blue towel serves the bathroom's needs."
+    },
+    "R3": {
+      "agent": "R3",
+      "capability": "I am fixed in place and can manipulate objects within reach using a gripper.",
+      "can_do": [
+        "PickupLightObject: pick up light items like towels",
+        "SliceObject: cut objects if needed",
+        "PourObject: pour water into the bathtub",
+        "PassReceiveObject: pass items to other robots",
+        "ToggleObject: turn on/off lights, TV, appliances"
+      ],
+      "has_items": [
+        "beige towel (towel rack, image 1)",
+        "bathtub (left side, image 1)",
+        "sink (right side, image 1)",
+        "toilet (right side, image 2)",
+        "plunger (next to toilet, image 2)",
+        "trash bin (next to toilet, image 2)",
+        "striped mat (floor, image 1)",
+        "showerhead (above bathtub, image 1)",
+        "robot (next to door, image 2)"
+      ],
+      "need_from_others": [],
+      "intends": [
+        "PourObject: fill bathtub with warm water",
+        "PickupLightObject: place beige towel on striped mat"
+      ],
+      "suggests": [],
+      "obs_scope": "I can observe and interact with items in the bathroom only.",
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift heavy items",
+        "PushFurniture: cannot move furniture",
+        "Move: cannot move to another room"
+      ],
+      "reasoning": "a) The bathtub must be filled with warm water, and a towel should be accessible for drying off. b) Filling the bathtub and ensuring the towel is nearby are the highest priorities. c) I will fill the bathtub and ensure the towel is accessible. d) No items are needed for other rooms."
+    },
+    "R4": {
+      "agent": "R4",
+      "capability": "I am a mobile robot capable of moving objects and pushing furniture.",
+      "can_do": [
+        "PickupLightObject: move small items",
+        "PickupHeavyObject: move larger items",
+        "PushFurniture: adjust furniture position",
+        "PassReceiveObject: transfer items",
+        "ToggleObject: turn on/off lights, TV, appliances"
+      ],
+      "has_items": [
+        "white towel (towel rack, image 2)",
+        "green striped mat (floor, image 1)",
+        "bathtub (bathroom, image 1)",
+        "sink (bathroom, image 2)",
+        "toilet (bathroom, image 2)",
+        "trash bin (bathroom, image 2)",
+        "shower curtain (bathtub, image 1)",
+        "shelf (wall, image 1)",
+        "soap (shelf, image 1)",
+        "shampoo (shelf, image 1)",
+        "conditioner (shelf, image 1)"
+      ],
+      "need_from_others": [
+        "Ensure bathtub faucet is functional for filling with water."
+      ],
+      "intends": [
+        "move white towel from towel rack to bathtub",
+        "toggle bathtub faucet to fill with warm water"
+      ],
+      "suggests": [],
+      "obs_scope": "I can observe the entire bathroom and its contents.",
+      "cannot_do": [
+        "SliceObject: cannot cut or slice items",
+        "PourObject: cannot pour liquids"
+      ],
+      "reasoning": "a) GOAL STATE: Bathtub filled with warm water, towel nearby. b) PRIORITY: Filling the bathtub with warm water. c) MY ROOM: Place towel near bathtub. d) FOR OTHERS: No items needed elsewhere."
+    }
+  },
+  "local_plans": {
+    "R1": [
+      {
+        "id": "r1_s1",
+        "agent": "R1",
+        "type": "PASS",
+        "action": "pass white mug (desk, image 2) to R2",
+        "item": "white mug (desk, image 2)",
+        "target": "R2",
+        "uses": null,
+        "location": "bedroom",
+        "origin": "offer",
+        "answers": null,
+        "enables": null,
+        "serves": "Ensure the bathroom is ready for a bath with a filled bathtub and a towel nearby.",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r1_s2",
+        "agent": "R1",
+        "type": "PASS",
+        "action": "pass bowl (desk, image 2) to R2",
+        "item": "bowl (desk, image 2)",
+        "target": "R2",
+        "uses": null,
+        "location": "bedroom",
+        "origin": "offer",
+        "answers": null,
+        "enables": null,
+        "serves": "Ensure the bathroom is ready for a bath with a filled bathtub and a towel nearby.",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "R2": [
+      {
+        "id": "r2_s1",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "blue towel",
+          "from": "desk",
+          "to": "bathroom"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "move blue towel to bathroom",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s2",
+        "agent": "R2",
+        "type": "PASS",
+        "action": "pass blue towel (desk, image 2) to R3",
+        "item": "blue towel (desk, image 2)",
+        "target": "R3",
+        "uses": null,
+        "location": "bedroom",
+        "origin": "offer",
+        "answers": null,
+        "enables": null,
+        "serves": "move blue towel to bathroom",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "R3": [
+      {
+        "id": "r3_s1",
+        "agent": "R3",
+        "type": "ASK_HELP",
+        "action": {
+          "verb": "fill",
+          "object": "bathtub",
+          "to": "filled with warm water"
+        },
+        "item": null,
+        "target": "R4",
+        "uses": null,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": "r3_s2",
+        "serves": "bathtub filled with warm water",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s2",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "move",
+          "object": "beige towel",
+          "from": "towel rack",
+          "to": "striped mat"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "beige towel placed on striped mat",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "R4": [
+      {
+        "id": "r4_s1",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "move",
+          "object": "white towel",
+          "from": "towel rack",
+          "to": "bathtub"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Place towel near bathtub",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s2",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "move",
+          "object": "green striped mat",
+          "from": "floor",
+          "to": "in front of bathtub"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Place towel near bathtub",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ]
+  },
+  "judgments": [
+    {
+      "agent": "R1",
+      "request": "r3_s1",
+      "decision": "ignore",
+      "reason": "The request is targeted at R4, and I am unable to assist with tasks outside of my room.",
+      "result": "ignore"
+    },
+    {
+      "agent": "R2",
+      "request": "r3_s1",
+      "decision": "ignore",
+      "reason": "The request is targeted at R4, and I cannot fill the bathtub with warm water.",
+      "result": "ignore"
+    },
+    {
+      "agent": "R4",
+      "request": "r3_s1",
+      "decision": "accept",
+      "reason": "I can toggle the bathtub faucet to fill it with warm water, which aligns with my current capabilities and plan.",
+      "result": "CANDIDATE",
+      "provider": "r4_s3",
+      "targeted": true
+    },
+    {
+      "agent": "R2",
+      "offer": "r1_s1",
+      "decision": "decline",
+      "reason": "The white mug is not needed for preparing the bathroom for a bath.",
+      "result": "decline"
+    },
+    {
+      "agent": "R2",
+      "offer": "r1_s2",
+      "decision": "decline",
+      "reason": "The bowl is not needed for preparing the bathroom for a bath.",
+      "result": "decline"
+    },
+    {
+      "agent": "R3",
+      "offer": "r2_s2",
+      "decision": "decline",
+      "reason": "I already have a beige towel in the bathroom, which I can use for the task.",
+      "result": "decline"
+    }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "r1_s1",
+        "agent": "R1",
+        "type": "PASS",
+        "action": "pass white mug (desk, image 2) to R2",
+        "item": "white mug (desk, image 2)",
+        "target": "R2",
+        "uses": null,
+        "location": "bedroom",
+        "origin": "offer",
+        "answers": null,
+        "enables": null,
+        "serves": "Ensure the bathroom is ready for a bath with a filled bathtub and a towel nearby.",
+        "prepared_by": null,
+        "status": "dropped",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r1_s2",
+        "agent": "R1",
+        "type": "PASS",
+        "action": "pass bowl (desk, image 2) to R2",
+        "item": "bowl (desk, image 2)",
+        "target": "R2",
+        "uses": null,
+        "location": "bedroom",
+        "origin": "offer",
+        "answers": null,
+        "enables": null,
+        "serves": "Ensure the bathroom is ready for a bath with a filled bathtub and a towel nearby.",
+        "prepared_by": null,
+        "status": "dropped",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s1",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "blue towel",
+          "from": "desk",
+          "to": "bathroom"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "move blue towel to bathroom",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "medium",
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 1
+      },
+      {
+        "id": "r2_s2",
+        "agent": "R2",
+        "type": "PASS",
+        "action": "pass blue towel (desk, image 2) to R3",
+        "item": "blue towel (desk, image 2)",
+        "target": "R3",
+        "uses": null,
+        "location": "bedroom",
+        "origin": "offer",
+        "answers": null,
+        "enables": null,
+        "serves": "move blue towel to bathroom",
+        "prepared_by": null,
+        "status": "dropped",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s1",
+        "agent": "R3",
+        "type": "ASK_HELP",
+        "action": {
+          "verb": "fill",
+          "object": "bathtub",
+          "to": "filled with warm water"
+        },
+        "item": null,
+        "target": "R4",
+        "uses": null,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": "r3_s2",
+        "serves": "bathtub filled with warm water",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 2
+      },
+      {
+        "id": "r3_s2",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "move",
+          "object": "beige towel",
+          "from": "towel rack",
+          "to": "striped mat"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "beige towel placed on striped mat",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "short",
+        "phase": 1,
+        "t_start": 2,
+        "t_end": 3
+      },
+      {
+        "id": "r4_s1",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "move",
+          "object": "white towel",
+          "from": "towel rack",
+          "to": "bathtub"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Place towel near bathtub",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "short",
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 1
+      },
+      {
+        "id": "r4_s3",
+        "agent": "R4",
+        "type": "HELP",
+        "action": "toggle bathtub faucet to fill with warm water",
+        "item": null,
+        "target": "R3",
+        "uses": 4,
+        "location": "bathroom",
+        "origin": "accept",
+        "answers": "r3_s1",
+        "enables": null,
+        "serves": null,
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "short",
+        "phase": 1,
+        "t_start": 1,
+        "t_end": 2
+      },
+      {
+        "id": "r4_s2",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "move",
+          "object": "green striped mat",
+          "from": "floor",
+          "to": "in front of bathtub"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Place towel near bathtub",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "short",
+        "phase": 1,
+        "t_start": 2,
+        "t_end": 3
+      }
+    ],
+    "order": {
+      "R1": [
+        "r1_s1",
+        "r1_s2"
+      ],
+      "R2": [
+        "r2_s1",
+        "r2_s2"
+      ],
+      "R3": [
+        "r3_s1",
+        "r3_s2"
+      ],
+      "R4": [
+        "r4_s1",
+        "r4_s3",
+        "r4_s2"
+      ]
+    },
+    "edges": [
+      {
+        "src": "r3_s1",
+        "dst": "r3_s2",
+        "kind": "SEQ",
+        "status": "CONFIRMED",
+        "source": "local",
+        "targeted": false
+      },
+      {
+        "src": "r4_s1",
+        "dst": "r4_s3",
+        "kind": "SEQ",
+        "status": "CONFIRMED",
+        "source": "local",
+        "targeted": false
+      },
+      {
+        "src": "r4_s3",
+        "dst": "r4_s2",
+        "kind": "SEQ",
+        "status": "CONFIRMED",
+        "source": "local",
+        "targeted": false
+      },
+      {
+        "src": "r4_s3",
+        "dst": "r3_s1",
+        "kind": "HELP",
+        "status": "CONFIRMED",
+        "source": "rule",
+        "targeted": true
+      }
+    ],
+    "drops": [
+      {
+        "node": "r1_s1",
+        "agent": "R1",
+        "type": "PASS",
+        "text": "pass white mug (desk, image 2) to R2 (white mug (desk, image 2))",
+        "reason": "offer not taken by R2",
+        "by": "rule"
+      },
+      {
+        "node": "r1_s2",
+        "agent": "R1",
+        "type": "PASS",
+        "text": "pass bowl (desk, image 2) to R2 (bowl (desk, image 2))",
+        "reason": "offer not taken by R2",
+        "by": "rule"
+      },
+      {
+        "node": "r2_s2",
+        "agent": "R2",
+        "type": "PASS",
+        "text": "pass blue towel (desk, image 2) to R3 (blue towel (desk, image 2))",
+        "reason": "offer not taken by R3",
+        "by": "rule"
+      }
+    ],
+    "unresolved": [],
+    "warnings": [],
+    "ops_log": []
+  },
+  "metrics": {
+    "task_id": "task2_abstract",
+    "n_steps_total": 9,
+    "n_steps_active": 6,
+    "n_blocked": 0,
+    "n_dropped": 3,
+    "n_requests": 1,
+    "n_requests_served": 1,
+    "n_collab_edges_final": 1,
+    "confirmed_ratio": 1.0,
+    "selected_by_graph": 0,
+    "selected_by_rule": 1,
+    "capability_violations_after_fix": 0,
+    "n_requests_withdrawn": 0,
+    "n_served_by_own_existing_step": 0,
+    "n_duplicates_merged": 0,
+    "n_duplicates_dropped": 0,
+    "n_redundant_branches_released": 0,
+    "n_requests_moved_later": 0,
+    "n_warnings": 0,
+    "plan_fix_rounds": {
+      "R1": 2,
+      "R2": 1,
+      "R3": 1,
+      "R4": 1
+    },
+    "n_checklist_items": 5,
+    "n_uncovered_checklist": 1,
+    "n_uncovered_essential": 0,
+    "graph_ops_applied": 0,
+    "graph_ops_rejected": 0,
+    "makespan_steps": 3,
+    "makespan_min": 5,
+    "deadline": 5,
+    "deadline_ok": true,
+    "size_source": "graph_llm",
+    "n_size_missing": 0,
+    "n_candidates_from_stage3": 1,
+    "n_order_edges_added": 0,
+    "n_order_pairs_independent": 0,
+    "success_no_blocked": true,
+    "n_requests_declined": 0,
+    "n_requests_failed": 0,
+    "n_requests_moot": 0,
+    "n_blocked_by_decline": 0,
+    "n_blocked_by_failure": 0,
+    "success_no_failure": true,
+    "n_handoff_prep_dropped": 0,
+    "n_offers_made": 3,
+    "n_offers_taken": 0,
+    "n_offers_untaken": 3,
+    "n_preparations_released": 0,
+    "n_help_edges": 1,
+    "n_transfer_edges": 0,
+    "llm_calls": 18,
+    "prompt_tokens": 42528,
+    "completion_tokens": 3494,
+    "config": {
+      "use_edge_proposal": true,
+      "use_graph_llm": true,
+      "max_graph_rounds": 2
+    },
+    "wall_time_sec": 14.8
+  },
+  "config": {
+    "use_edge_proposal": true,
+    "use_graph_llm": true,
+    "max_graph_rounds": 2,
+    "deadline_min": 20
+  }
+}
