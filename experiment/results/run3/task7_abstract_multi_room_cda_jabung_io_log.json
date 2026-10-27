@@ -1,348 +1,390 @@
 [
   {
-    "key": "offer:R1",
-    "system": "You are robot R1, one of several heterogeneous household robots.\nEach robot sees only its own room. Nobody, including a central system, sees everything.\nYou cannot explore: reason only from your image",
-    "user": "## PRIMARY OBJECTIVE — Read this first and keep it in mind throughout:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\nEvery decision you make must serve this objective. Do not plan work unrelated to it.\n\nYOUR BODY:\n- room: kitchen\n- mobile (can leave its room): False\n- payload: not specified (judge from your embodiment)\n- embodiment: Gripper. CAN: PickupLightObject, Sli",
+    "key": "offer:R4",
+    "system": "You are robot R4, a household robot that sees only its own room.\n\nSTEP 1 — LIST has_items: every clearly visible movable object in your images.\nFormat: \"<color> <noun> (<location>, image <k>)\". NEVER ",
+    "user": "## TASK (serve this only):\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\nYOUR BODY: room=living_room, mobile=True, payload=5 kg, embodiment=Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture, SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\n(none)\n\nImages attached (2 image(s)), image 1 to 2.",
     "output": {
       "has_items": [
-        "green cabbage (on the counter, image 1)",
-        "metal can (on the counter, image 1)",
-        "white mug (on the counter, image 1)",
-        "red apple (on the island, image 2)",
-        "brown loaf of bread (on the island, image 2)",
-        "silver fork (on the island, image 2)",
-        "red tomato (on the island, image 2)"
+        "white pillow (sofa, image 1)",
+        "black laptop (dining table, image 1)",
+        "black dining chair (dining table, image 1)",
+        "brown dining table (center, image 1)",
+        "floor lamp (corner, image 1)",
+        "table lamp (side table, image 1)",
+        "black sofa (center, image 1)",
+        "beige armchair (corner, image 2)",
+        "TV (TV stand, image 2)",
+        "TV stand (corner, image 2)",
+        "glass coffee table (center, image 2)",
+        "gray bowl (coffee table, image 2)"
       ],
-      "reasoning": "a) All windows and doors must be shut, and loose items secured. b) The priority is to secure the kitchen items and ensure the window is closed. c) I will secure loose items on the counter and island. d) None of my items are needed in other rooms.",
-      "capability": "I am a fixed robot with a gripper, capable of handling light objects.",
+      "reasoning": "a) All windows and doors must be shut, and loose items secured. b) Securing windows and doors is the top priority. c) Ensure all loose items in the living room are secured. d) None of my items are needed in other rooms.",
+      "capability": "I am a mobile robot with light object handling capabilities.",
       "can_do": [
-        "PickupLightObject up to 1 kg",
-        "SliceObject with precision",
-        "PourObject from containers",
-        "PassReceiveObject to/from mobile robots"
+        "PickupLightObject: handle objects up to 5 kg",
+        "PassReceiveObject: transfer objects to/from others",
+        "ToggleObject: turn on/off lights, TV, appliances"
       ],
       "cannot_do": [
-        "PickupHeavyObject over 1 kg",
-        "PushFurniture due to being fixed in place"
+        "PickupHeavyObject: cannot lift objects over 5 kg",
+        "PushFurniture: cannot move heavy furniture",
+        "SliceObject: cannot cut or slice objects",
+        "PourObject: cannot pour liquids"
       ],
       "suggests": [],
       "intends": [
-        "Pickup the green cabbage and place it in a cabinet",
-        "Pickup the metal can and place it in a cabinet",
-        "Pickup the white mug and place it in a cabinet",
-        "Pickup the red apple and place it in a cabinet",
-        "Pickup the brown loaf of bread and place it in a cabinet",
-        "Pickup the silver fork and place it in a drawer",
-        "Pickup the red tomato and place it in a cabinet"
+        "move white pillow from sofa to dining table",
+        "move black laptop from dining table to sofa",
+        "move gray bowl from coffee table to dining table"
       ],
       "need_from_others": [
-        "A robot to close the kitchen window"
+        "Close windows and doors in the living room"
       ],
-      "obs_scope": "I can observe the kitchen and its contents but cannot see other rooms."
-    }
-  },
-  {
-    "key": "offer:R4",
-    "system": "You are robot R4, one of several heterogeneous household robots.\nEach robot sees only its own room. Nobody, including a central system, sees everything.\nYou cannot explore: reason only from your image",
-    "user": "## PRIMARY OBJECTIVE — Read this first and keep it in mind throughout:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\nEvery decision you make must serve this objective. Do not plan work unrelated to it.\n\nYOUR BODY:\n- room: living_room\n- mobile (can leave its room): True\n- payload: 5 kg\n- embodiment: Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: Pickup",
-    "output": {
-      "has_items": [
-        "black lamp (next to the sofa, image 1)",
-        "white pillow (on the sofa, image 1)",
-        "black dining table (behind the sofa, image 1)",
-        "blue chair (around the dining table, image 1)",
-        "black floor lamp (near the dining table, image 1)",
-        "beige armchair (near the TV, image 2)",
-        "black TV (on the TV stand, image 2)",
-        "glass coffee table (in front of the armchairs, image 2)",
-        "grey bowl (on the coffee table, image 2)"
-      ],
-      "reasoning": "a) All windows and doors must be shut, and loose items secured. b) Securing windows and doors is the highest priority due to the approaching typhoon. c) I will secure any loose items in the living room. d) I can offer the white pillow to secure items in other rooms.",
-      "capability": "I am a mobile robot capable of moving between rooms and carrying light objects.",
-      "can_do": [
-        "PickupLightObject up to 5 kg",
-        "PassReceiveObject to/from other robots"
-      ],
-      "cannot_do": [
-        "PickupHeavyObject because my payload is limited to 5 kg",
-        "PushFurniture because I lack the strength"
-      ],
-      "suggests": [
-        "White pillow: could be used to secure loose items"
-      ],
-      "intends": [
-        "Pickup white pillow and place it securely on the sofa"
-      ],
-      "need_from_others": [
-        "A robot to shut any open windows or doors in the living room"
-      ],
-      "obs_scope": "I can observe the living room and identify loose items but cannot see outside or in other rooms."
+      "obs_scope": "I can observe and interact with objects in the living room."
     }
   },
   {
     "key": "offer:R2",
-    "system": "You are robot R2, one of several heterogeneous household robots.\nEach robot sees only its own room. Nobody, including a central system, sees everything.\nYou cannot explore: reason only from your image",
-    "user": "## PRIMARY OBJECTIVE — Read this first and keep it in mind throughout:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\nEvery decision you make must serve this objective. Do not plan work unrelated to it.\n\nYOUR BODY:\n- room: kitchen\n- mobile (can leave its room): True\n- payload: 5 kg\n- embodiment: Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeav",
+    "system": "You are robot R2, a household robot that sees only its own room.\n\nSTEP 1 — LIST has_items: every clearly visible movable object in your images.\nFormat: \"<color> <noun> (<location>, image <k>)\". NEVER ",
+    "user": "## TASK (serve this only):\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\nYOUR BODY: room=kitchen, mobile=True, payload=5 kg, embodiment=Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture, SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\nCup (in Cabinet)\nPlate (in Cabinet)\nWineBottle (in Cabinet)\nFork (in Drawer)\nKnif",
     "output": {
       "has_items": [
-        "silver pot (on the stove, image 1)",
-        "potted plant (on the counter, image 1)",
-        "red apple (on the counter, image 2)",
-        "blue toaster (on the counter, image 2)",
-        "white dish towel (on the counter, image 2)",
-        "gray bowl (on the counter, image 2)"
+        "silver pot lid (counter, image 1)",
+        "green plant (counter, image 1)",
+        "white robot (counter, image 1)",
+        "red apple (counter, image 1)",
+        "brown basket (counter, image 1)",
+        "silver microwave (cabinet, image 1)",
+        "silver oven (counter, image 1)",
+        "silver pot (stove, image 1)",
+        "silver faucet (sink, image 1)",
+        "silver sink basin (counter, image 1)",
+        "red apple (counter, image 2)",
+        "blue toaster (counter, image 2)",
+        "silver bowl (counter, image 2)",
+        "black stool (floor, image 2)",
+        "black stool (floor, image 2)",
+        "white door (background, image 2)"
       ],
-      "reasoning": "a) All windows and doors must be shut, and loose items secured to prevent damage from the typhoon. b) The most important tasks are securing windows and doors and ensuring loose items are not left unsecured. c) In my room, I need to ensure the window is shut and secure any loose items. d) The white dish towel could be used to secure items in another room if needed.",
-      "capability": "I am a mobile robot capable of moving around and carrying light objects up to 5 kg.",
+      "reasoning": "a) GOAL STATE: All windows and doors closed, loose items secured. b) PRIORITY: Secure items and close openings quickly. c) MY ROOM: Secure loose items like the red apple and ensure the door is shut. d) FOR OTHERS: None of my items are needed elsewhere.",
+      "capability": "I am a mobile robot with light object handling capabilities.",
       "can_do": [
-        "PickupLightObject up to 5 kg",
-        "PassReceiveObject to/from other robots"
+        "PickupLightObject: pick up items under 5 kg",
+        "PassReceiveObject: pass or receive items",
+        "ToggleObject: turn on/off lights, TV, appliances"
       ],
       "cannot_do": [
-        "PickupHeavyObject because my payload is limited to 5 kg",
-        "PushFurniture because I am not designed for heavy pushing",
-        "SliceObject because I lack slicing tools",
-        "PourObject because I lack pouring mechanisms"
+        "PickupHeavyObject: cannot lift items over 5 kg",
+        "PushFurniture: cannot move furniture",
+        "SliceObject: cannot cut items",
+        "PourObject: cannot pour liquids"
       ],
-      "suggests": [
-        "White dish towel: could be used to secure items in another room"
-      ],
+      "suggests": [],
       "intends": [
-        "Close the window (near the counter, image 1)",
-        "Move the potted plant away from the window (on the counter, image 1)",
-        "Move the red apple to a secure location (on the counter, image 2)",
-        "Move the gray bowl to a secure location (on the counter, image 2)"
+        "move red apple from counter to basket",
+        "move red apple from counter to basket",
+        "close white door"
       ],
       "need_from_others": [
-        "Assistance to close heavy doors if present"
+        "CloseWindows: ensure all windows are shut"
       ],
-      "obs_scope": "I can observe and interact with objects in the kitchen and move to other rooms if needed."
+      "obs_scope": "I can only observe the kitchen and its contents."
     }
   },
   {
     "key": "offer:R3",
-    "system": "You are robot R3, one of several heterogeneous household robots.\nEach robot sees only its own room. Nobody, including a central system, sees everything.\nYou cannot explore: reason only from your image",
-    "user": "## PRIMARY OBJECTIVE — Read this first and keep it in mind throughout:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\nEvery decision you make must serve this objective. Do not plan work unrelated to it.\n\nYOUR BODY:\n- room: living_room\n- mobile (can leave its room): False\n- payload: not specified (judge from your embodiment)\n- embodiment: Gripper. CAN: PickupLightObject,",
+    "system": "You are robot R3, a household robot that sees only its own room.\n\nSTEP 1 — LIST has_items: every clearly visible movable object in your images.\nFormat: \"<color> <noun> (<location>, image <k>)\". NEVER ",
+    "user": "## TASK (serve this only):\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\nYOUR BODY: room=living_room, mobile=False, payload=not specified (judge from your embodiment), embodiment=Gripper. CAN: PickupLightObject, SliceObject, PourObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture. This robot is FIXED IN PLACE and can never move to another room. To pass",
     "output": {
       "has_items": [
-        "silver laptop (on the table, image 1)",
-        "black remote control (on the table, image 1)",
-        "white plate (on the table, image 1)",
-        "red object (on the table, image 1)",
-        "book (on the table, image 1)",
-        "potted plant (on the console table, image 1)",
-        "black trash bin (on the floor, image 1)",
-        "floor lamp (next to the table, image 1)",
-        "blue curtain (next to the window, image 1)",
-        "television (on the stand, image 2)",
-        "glass vase (on the stand, image 2)",
-        "white box (on the floor, image 2)"
+        "black laptop (table, image 1)",
+        "red object (table, image 1)",
+        "white plate (table, image 1)",
+        "book (table, image 1)",
+        "pencil (table, image 1)",
+        "pen (table, image 1)",
+        "plant (console table, image 1)",
+        "black trash can (floor, image 1)",
+        "floor lamp (floor, image 1)",
+        "TV (TV stand, image 2)",
+        "white vase (TV stand, image 2)",
+        "white object (floor, image 2)",
+        "telescope (near window, image 2)"
       ],
-      "reasoning": "a) All windows and doors must be shut, and loose items secured. b) Securing windows and doors is the highest priority due to the approaching typhoon. c) Secure any loose items in the living room and ensure the window is closed. d) The blue curtain could be used to cover or secure items in another room if needed.",
-      "capability": "I am a Gripper robot fixed in the living room.",
+      "reasoning": "a) GOAL STATE: All windows and doors are shut, and loose items are secured. b) PRIORITY: Secure windows and doors first, then loose items. c) MY ROOM: Secure loose items like the telescope and small objects on the table. d) FOR OTHERS: None of my items are needed in other rooms.",
+      "capability": "I am fixed in place with a gripper for handling light objects.",
       "can_do": [
-        "PickupLightObject up to 2 kg",
-        "SliceObject with precision",
-        "PourObject accurately",
-        "PassReceiveObject to/from mobile robots"
+        "PickupLightObject: handle small items like pens and plates",
+        "SliceObject: cut items if needed",
+        "PourObject: pour liquids if present",
+        "PassReceiveObject: exchange items with other robots",
+        "ToggleObject: turn on/off lights, TV, appliances"
       ],
       "cannot_do": [
-        "PickupHeavyObject over 2 kg",
-        "PushFurniture due to fixed position"
+        "PickupHeavyObject: cannot lift heavy items like furniture",
+        "PushFurniture: cannot move large furniture",
+        "Move: cannot relocate to other rooms"
       ],
-      "suggests": [
-        "Blue curtain: could be used to cover or secure items in another room"
-      ],
+      "suggests": [],
       "intends": [
-        "Pickup the silver laptop and place it on the floor",
-        "Pickup the black remote control and place it on the floor",
-        "Pickup the white plate and place it on the floor",
-        "Pickup the red object and place it on the floor",
-        "Pickup the book and place it on the floor",
-        "Ensure the blue curtain is fully closed over the window"
+        "PickupLightObject: move red object from table to console table",
+        "PickupLightObject: move white plate from table to console table",
+        "PickupLightObject: move pencil from table to console table",
+        "PickupLightObject: move pen from table to console table",
+        "PickupLightObject: move book from table to console table",
+        "PassReceiveObject: pass telescope to another robot for securing"
       ],
       "need_from_others": [
-        "A mobile robot to close the door in the living room"
+        "ASK_HELP: close windows and doors",
+        "ASK_HELP: secure telescope"
       ],
-      "obs_scope": "I can observe the living room and its contents but cannot see outside or into other rooms."
+      "obs_scope": "I can observe and interact with items in the living room only."
+    }
+  },
+  {
+    "key": "offer:R1",
+    "system": "You are robot R1, a household robot that sees only its own room.\n\nSTEP 1 — LIST has_items: every clearly visible movable object in your images.\nFormat: \"<color> <noun> (<location>, image <k>)\". NEVER ",
+    "user": "## TASK (serve this only):\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\nYOUR BODY: room=kitchen, mobile=False, payload=not specified (judge from your embodiment), embodiment=Gripper. CAN: PickupLightObject, SliceObject, PourObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture. This robot is FIXED IN PLACE and can never move to another room. To pass an ",
+    "output": {
+      "has_items": [
+        "green soap dispenser (counter, image 1)",
+        "silver faucet (sink, image 1)",
+        "green cabbage (counter, image 1)",
+        "white mug (counter, image 1)",
+        "blue coffee machine (counter, image 1)",
+        "red toaster (counter, image 1)",
+        "red apple (island, image 2)",
+        "brown bread (island, image 2)",
+        "silver knife (island, image 2)",
+        "red tomato (island, image 2)"
+      ],
+      "reasoning": "a) GOAL STATE: All windows and doors in the kitchen are closed, and loose items are secured. b) PRIORITY: Closing windows and securing items quickly to prevent damage. c) MY ROOM: Secure loose items like the cabbage, mug, apple, bread, knife, and tomato. d) FOR OTHERS: None of my items are needed in other rooms for this task.",
+      "capability": "I am fixed in place with a gripper for handling light objects.",
+      "can_do": [
+        "PickupLightObject: handle small items like mugs and fruits",
+        "SliceObject: cut items like bread or vegetables",
+        "PourObject: pour liquids from containers",
+        "PassReceiveObject: hand over or receive items",
+        "ToggleObject: turn on/off lights, TV, appliances"
+      ],
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift heavy items due to gripper limitations",
+        "PushFurniture: cannot move furniture as I am fixed in place"
+      ],
+      "suggests": [],
+      "intends": [
+        "move green cabbage from counter to cabinet",
+        "move white mug from counter to cabinet",
+        "move red apple from island to cabinet",
+        "move brown bread from island to cabinet",
+        "move silver knife from island to drawer",
+        "move red tomato from island to cabinet"
+      ],
+      "need_from_others": [
+        "CloseWindow: ensure all windows in the kitchen are shut",
+        "CloseDoor: ensure all doors in the kitchen are shut"
+      ],
+      "obs_scope": "I can observe and interact with items in the kitchen but cannot see or access other rooms."
     }
   },
   {
     "key": "offer:R5",
-    "system": "You are robot R5, one of several heterogeneous household robots.\nEach robot sees only its own room. Nobody, including a central system, sees everything.\nYou cannot explore: reason only from your image",
-    "user": "## PRIMARY OBJECTIVE — Read this first and keep it in mind throughout:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\nEvery decision you make must serve this objective. Do not plan work unrelated to it.\n\nYOUR BODY:\n- room: bedroom\n- mobile (can leave its room): True\n- payload: 20 kg\n- embodiment: Mobile_Heavy. CAN: PickupLightObject, PickupHeavyObject, PushFurniture, Pa",
+    "system": "You are robot R5, a household robot that sees only its own room.\n\nSTEP 1 — LIST has_items: every clearly visible movable object in your images.\nFormat: \"<color> <noun> (<location>, image <k>)\". NEVER ",
+    "user": "## TASK (serve this only):\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\nYOUR BODY: room=bedroom, mobile=True, payload=20 kg, embodiment=Mobile_Heavy. CAN: PickupLightObject, PickupHeavyObject, PushFurniture, PassReceiveObject. CANNOT: SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\n(none)\n\nImages attached (2 image(s)), image 1 to 2.",
     "output": {
       "has_items": [
-        "white window (on the wall, image 1)",
-        "brown basketball (on the floor, image 1)",
-        "white dresser (next to the window, image 1)",
-        "black clock (on the dresser, image 1)",
-        "white bed (center of the room, image 2)",
-        "silver laptop (on the bed, image 2)",
-        "black phone (on the bed, image 2)"
+        "white window (wall, image 1)",
+        "white dresser (corner, image 1)",
+        "brown baseball bat (next to dresser, image 1)",
+        "orange basketball (floor, image 1)",
+        "white bed (center, image 2)",
+        "gray laptop (on bed, image 2)",
+        "black phone (on bed, image 2)",
+        "white pillow (on bed, image 2)",
+        "gray blanket (on bed, image 2)",
+        "white lamp (on dresser, image 1)",
+        "silver clock (on dresser, image 1)",
+        "blue rug (floor, image 2)",
+        "white fan (next to bed, image 2)"
       ],
-      "reasoning": "a) All windows and doors must be shut, and loose items secured. b) The most critical task is securing the window and any loose items due to the approaching typhoon. c) In my room, the window needs to be shut, and loose items like the basketball and electronics should be secured. d) My items like the basketball could be used to secure other rooms if needed.",
-      "capability": "I am a mobile robot capable of handling heavy objects.",
+      "reasoning": "a) GOAL STATE: All windows shut and loose items secured to prevent damage. b) PRIORITY: Closing the window and securing loose items quickly. c) MY ROOM: Shut the white window and secure the orange basketball and gray laptop. d) FOR OTHERS: None of my has_items serve another room's needs.",
+      "capability": "I am a mobile robot capable of moving and securing objects up to 20 kg.",
       "can_do": [
-        "PickupLightObject up to 20 kg",
-        "PickupHeavyObject up to 20 kg",
-        "PushFurniture up to 20 kg",
-        "PassReceiveObject up to 20 kg"
+        "PickupLightObject: pick up objects under 5 kg",
+        "PickupHeavyObject: pick up objects up to 20 kg",
+        "PushFurniture: move heavy furniture",
+        "PassReceiveObject: transfer objects to/from others",
+        "ToggleObject: turn on/off lights, TV, appliances"
       ],
       "cannot_do": [
-        "SliceObject because I lack cutting tools",
-        "PourObject because I lack pouring mechanisms"
+        "SliceObject: cannot cut or slice objects",
+        "PourObject: cannot pour liquids"
       ],
-      "suggests": [
-        "Brown basketball: could be used to weigh down or block items in another room"
-      ],
+      "suggests": [],
       "intends": [
-        "Shut the white window",
-        "Pickup the brown basketball and place it on the bed",
-        "Pickup the silver laptop and place it on the dresser",
-        "Pickup the black phone and place it on the dresser"
+        "close white window",
+        "move orange basketball to white dresser",
+        "move gray laptop to white dresser"
       ],
       "need_from_others": [],
-      "obs_scope": "I can observe the bedroom and its contents but cannot see other rooms."
-    }
-  },
-  {
-    "key": "offer:R8",
-    "system": "You are robot R8, one of several heterogeneous household robots.\nEach robot sees only its own room. Nobody, including a central system, sees everything.\nYou cannot explore: reason only from your image",
-    "user": "## PRIMARY OBJECTIVE — Read this first and keep it in mind throughout:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\nEvery decision you make must serve this objective. Do not plan work unrelated to it.\n\nYOUR BODY:\n- room: bathroom\n- mobile (can leave its room): True\n- payload: 5 kg\n- embodiment: Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHea",
-    "output": {
-      "has_items": [
-        "black plastic trash bin (next to the toilet, image 1)",
-        "brown wooden stick (beside the toilet, image 1)",
-        "white towel (on the towel rack, image 2)"
-      ],
-      "reasoning": "a) All windows and doors must be shut, and loose items secured before the typhoon hits. b) The priority is to secure the bathroom and ensure all windows and doors are closed. c) In my room, I need to ensure the bathroom door is shut and secure any loose items. d) The white towel could be used to secure items in other rooms if needed.",
-      "capability": "I am a mobile robot capable of moving between rooms and handling light objects.",
-      "can_do": [
-        "PickupLightObject up to 5 kg",
-        "PassReceiveObject to other robots"
-      ],
-      "cannot_do": [
-        "PickupHeavyObject because I am designed for light objects",
-        "PushFurniture as it exceeds my capability"
-      ],
-      "suggests": [
-        "White towel: could be used to secure items in other rooms"
-      ],
-      "intends": [
-        "Close the bathroom door to secure the room"
-      ],
-      "need_from_others": [
-        "Confirmation that all windows in the bathroom are shut"
-      ],
-      "obs_scope": "I can observe the bathroom and its contents but cannot see other rooms."
+      "obs_scope": "I can observe and interact with items in my room only."
     }
   },
   {
     "key": "offer:R6",
-    "system": "You are robot R6, one of several heterogeneous household robots.\nEach robot sees only its own room. Nobody, including a central system, sees everything.\nYou cannot explore: reason only from your image",
-    "user": "## PRIMARY OBJECTIVE — Read this first and keep it in mind throughout:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\nEvery decision you make must serve this objective. Do not plan work unrelated to it.\n\nYOUR BODY:\n- room: bedroom\n- mobile (can leave its room): True\n- payload: 5 kg\n- embodiment: Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeav",
+    "system": "You are robot R6, a household robot that sees only its own room.\n\nSTEP 1 — LIST has_items: every clearly visible movable object in your images.\nFormat: \"<color> <noun> (<location>, image <k>)\". NEVER ",
+    "user": "## TASK (serve this only):\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\nYOUR BODY: room=bedroom, mobile=True, payload=5 kg, embodiment=Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture, SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\n(none)\n\nImages attached (2 image(s)), image 1 to 2.",
     "output": {
       "has_items": [
-        "white cardboard box (near the door, image 1)",
-        "black plastic bin (near the door, image 1)",
-        "black chair (next to the desk, image 2)",
-        "white desk (against the wall, image 2)",
-        "brown basketball (on the floor, image 2)",
-        "white bed (right side, image 2)",
-        "silver laptop (on the bed, image 2)",
-        "white dresser (right side, image 2)",
-        "white window (on the wall, image 2)"
+        "white door (left wall, image 1)",
+        "white box (floor, image 1)",
+        "black bin (floor, image 1)",
+        "window (back wall, image 2)",
+        "desk (back wall, image 2)",
+        "chair (back wall, image 2)",
+        "bed (right wall, image 2)",
+        "laptop (bed, image 2)",
+        "lamp (desk, image 2)",
+        "basketball (floor, image 2)",
+        "books (desk, image 2)",
+        "rug (floor, image 2)"
       ],
-      "reasoning": "a) All windows and doors must be shut, and loose items secured. b) The priority is to secure the room before the typhoon hits in 10 minutes. c) I need to close the window and secure loose items like the basketball. d) The cardboard box and plastic bin could be used to secure items in other rooms.",
-      "capability": "I am a mobile robot capable of picking up light objects and moving between rooms.",
+      "reasoning": "a) GOAL STATE: All windows and doors must be shut, and loose items secured. b) PRIORITY: Closing the window and door quickly to prevent damage. c) MY ROOM: Close the window and door, secure the basketball. d) FOR OTHERS: None of my has_items serve another room's needs.",
+      "capability": "I am mobile and can carry light objects up to 5 kg.",
       "can_do": [
-        "PickupLightObject up to 5 kg",
-        "PassReceiveObject to/from other rooms"
+        "PickupLightObject: lift items under 5 kg",
+        "PassReceiveObject: exchange items with others",
+        "ToggleObject: turn on/off lights, TV, appliances"
       ],
       "cannot_do": [
-        "PickupHeavyObject over 5 kg",
-        "PushFurniture due to lack of strength",
-        "SliceObject as I lack cutting tools",
-        "PourObject as I lack pouring mechanisms"
+        "PickupHeavyObject: cannot lift items over 5 kg",
+        "PushFurniture: cannot move large furniture",
+        "SliceObject: cannot cut or slice objects",
+        "PourObject: cannot pour liquids"
       ],
-      "suggests": [
-        "White cardboard box: could be used to store or secure items.",
-        "Black plastic bin: could be used to store or secure items."
-      ],
+      "suggests": [],
       "intends": [
-        "Close the white window.",
-        "Pickup the brown basketball and place it in the black plastic bin."
+        "close window (back wall, image 2)",
+        "close white door (left wall, image 1)",
+        "move basketball to bed (right wall, image 2)"
       ],
       "need_from_others": [],
-      "obs_scope": "I can observe and interact with objects in the bedroom and move to other rooms if needed."
+      "obs_scope": "I can observe and interact with items in the bedroom only."
     }
   },
   {
     "key": "offer:R7",
-    "system": "You are robot R7, one of several heterogeneous household robots.\nEach robot sees only its own room. Nobody, including a central system, sees everything.\nYou cannot explore: reason only from your image",
-    "user": "## PRIMARY OBJECTIVE — Read this first and keep it in mind throughout:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\nEvery decision you make must serve this objective. Do not plan work unrelated to it.\n\nYOUR BODY:\n- room: bathroom\n- mobile (can leave its room): True\n- payload: 20 kg\n- embodiment: Mobile_Heavy. CAN: PickupLightObject, PickupHeavyObject, PushFurniture, P",
+    "system": "You are robot R7, a household robot that sees only its own room.\n\nSTEP 1 — LIST has_items: every clearly visible movable object in your images.\nFormat: \"<color> <noun> (<location>, image <k>)\". NEVER ",
+    "user": "## TASK (serve this only):\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\nYOUR BODY: room=bathroom, mobile=True, payload=20 kg, embodiment=Mobile_Heavy. CAN: PickupLightObject, PickupHeavyObject, PushFurniture, PassReceiveObject. CANNOT: SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\nCloth (in BathtubBasin)\n\nImages attached (2 image(s)), image 1 to 2.",
     "output": {
       "has_items": [
-        "metal towel rack (next to the sink, image 1)",
-        "white toilet paper roll (on the towel rack, image 1)",
-        "mirror (above the sink, image 1)",
-        "white sink (below the mirror, image 1)",
-        "white door (at the end of the room, image 1)",
-        "white shelves (on the wall, image 1)",
-        "showerhead (near the bathtub, image 2)",
-        "black trash bin (near the bathtub, image 2)",
-        "white bathtub (next to the trash bin, image 2)",
-        "white curtain (next to the bathtub, image 2)",
-        "black mat (on the floor, image 2)"
+        "white toilet paper (rack, image 1)",
+        "silver towel rack (left wall, image 1)",
+        "white sink (center, image 1)",
+        "mirror (above sink, image 1)",
+        "white door (right wall, image 1)",
+        "white shelves (right wall, image 1)",
+        "white hairdryer (floor, image 2)",
+        "black trash bin (floor, image 2)",
+        "white bathtub (right wall, image 2)",
+        "black mat (floor, image 2)",
+        "white curtain (bathtub, image 2)"
       ],
-      "reasoning": "a) All windows and doors must be shut, and loose items secured. b) The priority is to secure the bathroom and assist other rooms if needed. c) Ensure the bathroom door is shut and secure any loose items. d) I can assist in securing items in other rooms if needed.",
-      "capability": "I am a mobile robot capable of handling heavy objects and moving between rooms.",
+      "reasoning": "a) GOAL STATE: All windows and doors are shut, and loose items are secured. b) PRIORITY: Closing windows and doors to prevent water and wind damage. c) MY ROOM: Ensure the white door is closed and secure loose items like the white hairdryer. d) FOR OTHERS: None of my has_items are needed in other rooms.",
+      "capability": "I am a mobile robot capable of moving and securing objects within my room.",
       "can_do": [
-        "PickupLightObject up to 20 kg",
-        "PickupHeavyObject up to 20 kg",
-        "PushFurniture up to 20 kg",
-        "PassReceiveObject up to 20 kg"
+        "PickupLightObject: move small items",
+        "PickupHeavyObject: move heavier items",
+        "PushFurniture: adjust furniture position",
+        "PassReceiveObject: hand over or receive items",
+        "ToggleObject: turn on/off lights, TV, appliances"
       ],
       "cannot_do": [
-        "SliceObject because I lack cutting tools",
-        "PourObject because I lack pouring mechanisms"
+        "SliceObject: cannot cut or slice items",
+        "PourObject: cannot pour liquids"
       ],
-      "suggests": [
-        "White toilet paper roll: could be used to secure small items.",
-        "Black trash bin: could be used to store loose items."
-      ],
+      "suggests": [],
       "intends": [
-        "Shut the white door to secure the bathroom."
+        "close white door",
+        "move white hairdryer to white shelves",
+        "ensure black trash bin is stable",
+        "ensure white curtain is drawn across bathtub"
       ],
-      "need_from_others": [
-        "Confirmation that all windows in other rooms are shut."
-      ],
-      "obs_scope": "I can observe the bathroom and its contents but cannot see other rooms."
+      "need_from_others": [],
+      "obs_scope": "I can observe and interact with items in the bathroom only."
     }
   },
   {
-    "key": "plan:R4",
-    "system": "You are robot R4. Make YOUR OWN local plan for YOUR part of the shared task.\nNobody assigns you work, and you do not assign work to others.\n\nGROUNDING: an object exists only if it appears in a has_ite",
-    "user": "## PRIMARY OBJECTIVE — This is the ONLY goal that matters:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\n[CRITICAL] Before planning ANY step, ask yourself: \"Does this directly serve the PRIMARY OBJECTIVE?\"\nIf not, do NOT include it. Focus only on what the task explicitly requires.\n\nYOUR OFFER (private parts included):\n{\n \"agent\": \"R4\",\n \"capability\": \"I am a mobile ro",
+    "key": "offer:R8",
+    "system": "You are robot R8, a household robot that sees only its own room.\n\nSTEP 1 — LIST has_items: every clearly visible movable object in your images.\nFormat: \"<color> <noun> (<location>, image <k>)\". NEVER ",
+    "user": "## TASK (serve this only):\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\nYOUR BODY: room=bathroom, mobile=True, payload=5 kg, embodiment=Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture, SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\nCloth (in BathtubBasin)\n\nImages attached (2 image(s)), image 1 to 2.",
     "output": {
-      "reasoning": "a) The finished state requires all windows and doors to be shut and any loose items inside to be secured. b) The essential changes are securing the white pillow on the sofa and ensuring all windows and doors in the living room are shut. c) These changes occur in the living room. d) I can secure the white pillow myself, but I need help to shut any open windows or doors in the living room.",
+      "has_items": [
+        "black trash bin (next to toilet, image 1)",
+        "white toilet (next to trash bin, image 1)",
+        "brown plunger (next to toilet, image 1)",
+        "white bathtub (next to wall, image 1)",
+        "black bath mat (on floor, image 1)",
+        "white towel (on rack, image 1)",
+        "white scale (next to sink, image 2)",
+        "white sink (next to door, image 2)",
+        "mirror (above sink, image 2)",
+        "white door (next to sink, image 2)",
+        "window (above bathtub, image 1)"
+      ],
+      "reasoning": "a) GOAL STATE: All windows and doors are shut, and loose items are secured. b) PRIORITY: Closing windows and doors to prevent water and wind damage. c) MY ROOM: Close the window and secure any loose items like the towel and bath mat. d) FOR OTHERS: None of my items serve another room's needs.",
+      "capability": "I am a mobile robot with light object handling capabilities.",
+      "can_do": [
+        "PickupLightObject: lift objects under 5 kg",
+        "PassReceiveObject: transfer objects to/from others",
+        "ToggleObject: turn on/off lights, TV, appliances"
+      ],
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift objects over 5 kg",
+        "PushFurniture: cannot move heavy furniture",
+        "SliceObject: cannot cut or slice objects",
+        "PourObject: cannot pour liquids"
+      ],
+      "suggests": [],
+      "intends": [
+        "close window (above bathtub, image 1)",
+        "pickup black bath mat (on floor, image 1)",
+        "pickup white towel (on rack, image 1)",
+        "place black bath mat (in bathtub, image 1)",
+        "place white towel (in bathtub, image 1)"
+      ],
+      "need_from_others": [],
+      "obs_scope": "I can observe and interact with items in the bathroom."
+    }
+  },
+  {
+    "key": "plan:R2",
+    "system": "You are robot R2 in the kitchen. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
+    "user": "## TASK:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am a mobile robot with light object handling capabilities.\",\n \"can_do\": [\n  \"PickupLightObject: pick up items under 5 kg\",\n  \"PassReceiveObject: pass or receive items\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"silver pot lid (counte",
+    "output": {
+      "reasoning": "a) GOAL STATE: All windows and doors closed, loose items secured. b) PRIORITY: Secure items and close openings quickly. c) MY ROOM: Secure loose items like the red apple and ensure the door is shut. d) FOR OTHERS: None of my items are needed elsewhere.",
       "goals": [
         {
-          "goal": "Secure the white pillow on the sofa",
+          "goal": "close white door",
           "priority": "high",
           "in_my_room": true
         },
         {
-          "goal": "Ensure all windows and doors in the living room are shut",
-          "priority": "high",
+          "goal": "secure red apples",
+          "priority": "medium",
           "in_my_room": true
         }
       ],
       "checklist": [
         {
-          "object": "white pillow",
-          "change": "placed securely on the sofa",
+          "object": "white door",
+          "change": "close",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "red apple",
+          "change": "move to basket",
           "weight": "light",
           "how": "LOCAL"
         }
@@ -351,78 +393,445 @@
         {
           "type": "LOCAL",
           "action": {
-            "verb": "pick_up",
-            "object": "white pillow",
-            "from": "sofa",
-            "to": "sofa",
-            "state": "securely placed"
+            "verb": "move",
+            "object": "red apple",
+            "from": "counter",
+            "to": "brown basket"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "red apple",
+            "from": "counter",
+            "to": "brown basket"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "close",
+            "object": "white door",
+            "from": "background",
+            "to": "closed"
           },
           "uses": 0,
           "serves": 0
-        },
-        {
-          "type": "ASK_HELP",
-          "action": {
-            "verb": "close",
-            "object": "windows and doors",
-            "to": "shut"
-          },
-          "target": "R3",
-          "serves": 1
         }
       ]
     }
   },
   {
-    "key": "plan:R2",
-    "system": "You are robot R2. Make YOUR OWN local plan for YOUR part of the shared task.\nNobody assigns you work, and you do not assign work to others.\n\nGROUNDING: an object exists only if it appears in a has_ite",
-    "user": "## PRIMARY OBJECTIVE — This is the ONLY goal that matters:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\n[CRITICAL] Before planning ANY step, ask yourself: \"Does this directly serve the PRIMARY OBJECTIVE?\"\nIf not, do NOT include it. Focus only on what the task explicitly requires.\n\nYOUR OFFER (private parts included):\n{\n \"agent\": \"R2\",\n \"capability\": \"I am a mobile ro",
+    "key": "plan:R3",
+    "system": "You are robot R3 in the living_room. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessibl",
+    "user": "## TASK:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am fixed in place with a gripper for handling light objects.\",\n \"can_do\": [\n  \"PickupLightObject: handle small items like pens and plates\",\n  \"SliceObject: cut items if needed\",\n  \"PourObject: pour liquids if present\",\n  \"PassReceiveObject: exchange items with other ",
     "output": {
-      "reasoning": "a) The finished state requires all windows and doors to be shut and loose items secured to prevent damage from the approaching typhoon. b) Essential changes include closing the window and securing loose items like the potted plant, red apple, and gray bowl. c) These changes occur in the kitchen. d) I can perform all necessary actions in my room as they involve light objects and a window I can close.",
+      "reasoning": "a) GOAL STATE: All windows and doors are shut, and loose items are secured. b) PRIORITY: Secure windows and doors first, then loose items. c) MY ROOM: Secure loose items like the telescope and small objects on the table. d) FOR OTHERS: None of my items are needed in other rooms.",
       "goals": [
         {
-          "goal": "Close the window near the counter",
-          "priority": "high",
-          "in_my_room": true
-        },
-        {
-          "goal": "Move the potted plant to a secure location",
-          "priority": "high",
-          "in_my_room": true
-        },
-        {
-          "goal": "Move the red apple to a secure location",
-          "priority": "high",
-          "in_my_room": true
-        },
-        {
-          "goal": "Move the gray bowl to a secure location",
+          "goal": "secure loose items in the living room",
           "priority": "high",
           "in_my_room": true
         }
       ],
       "checklist": [
         {
-          "object": "window",
-          "change": "closed",
+          "object": "red object",
+          "change": "move to console table",
           "weight": "light",
           "how": "LOCAL"
         },
         {
-          "object": "potted plant",
-          "change": "moved to a secure location",
+          "object": "white plate",
+          "change": "move to console table",
           "weight": "light",
           "how": "LOCAL"
         },
         {
-          "object": "red apple",
-          "change": "moved to a secure location",
+          "object": "pencil",
+          "change": "move to console table",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "pen",
+          "change": "move to console table",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "book",
+          "change": "move to console table",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "telescope",
+          "change": "pass to another robot for securing",
+          "weight": "light",
+          "how": "PASS"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "red object",
+            "from": "table",
+            "to": "console table"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "white plate",
+            "from": "table",
+            "to": "console table"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "pencil",
+            "from": "table",
+            "to": "console table"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "pen",
+            "from": "table",
+            "to": "console table"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "book",
+            "from": "table",
+            "to": "console table"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "PASS",
+          "item": "telescope",
+          "target": "R4",
+          "serves": 0
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R4",
+    "system": "You are robot R4 in the living_room. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessibl",
+    "user": "## TASK:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I am a mobile robot with light object handling capabilities.\",\n \"can_do\": [\n  \"PickupLightObject: handle objects up to 5 kg\",\n  \"PassReceiveObject: transfer objects to/from others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"white pillo",
+    "output": {
+      "reasoning": "a) The typhoon requires securing all loose items and ensuring windows and doors are shut. b) My primary task is to secure loose items in the living room. c) I need assistance to close windows and doors in the living room. d) I will move items to more secure locations within the room.",
+      "goals": [
+        {
+          "goal": "Secure loose items in the living room",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "white pillow",
+          "change": "move from sofa to dining table",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "black laptop",
+          "change": "move from dining table to sofa",
           "weight": "light",
           "how": "LOCAL"
         },
         {
           "object": "gray bowl",
-          "change": "moved to a secure location",
+          "change": "move from coffee table to dining table",
+          "weight": "light",
+          "how": "LOCAL"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "white pillow",
+            "from": "sofa",
+            "to": "dining table"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "black laptop",
+            "from": "dining table",
+            "to": "sofa"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "gray bowl",
+            "from": "coffee table",
+            "to": "dining table"
+          },
+          "uses": 0,
+          "serves": 1
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R1",
+    "system": "You are robot R1 in the kitchen. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
+    "user": "## TASK:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am fixed in place with a gripper for handling light objects.\",\n \"can_do\": [\n  \"PickupLightObject: handle small items like mugs and fruits\",\n  \"SliceObject: cut items like bread or vegetables\",\n  \"PourObject: pour liquids from containers\",\n  \"PassReceiveObject: hand o",
+    "output": {
+      "reasoning": "a) GOAL STATE: All windows and doors in the kitchen are closed, and loose items are secured. b) PRIORITY: Closing windows and securing items quickly to prevent damage. c) MY ROOM: Secure loose items like the cabbage, mug, apple, bread, knife, and tomato. d) FOR OTHERS: None of my items are needed in other rooms for this task.",
+      "goals": [
+        {
+          "goal": "Secure all loose items in the kitchen and ensure windows and doors are closed.",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "green cabbage",
+          "change": "move from counter to cabinet",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "white mug",
+          "change": "move from counter to cabinet",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "red apple",
+          "change": "move from island to cabinet",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "brown bread",
+          "change": "move from island to cabinet",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "silver knife",
+          "change": "move from island to drawer",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "red tomato",
+          "change": "move from island to cabinet",
+          "weight": "light",
+          "how": "LOCAL"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "green cabbage",
+            "from": "counter",
+            "to": "cabinet"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "white mug",
+            "from": "counter",
+            "to": "cabinet"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "red apple",
+            "from": "island",
+            "to": "cabinet"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "brown bread",
+            "from": "island",
+            "to": "cabinet"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "silver knife",
+            "from": "island",
+            "to": "drawer"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "red tomato",
+            "from": "island",
+            "to": "cabinet"
+          },
+          "uses": 0,
+          "serves": 1
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R5",
+    "system": "You are robot R5 in the bedroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
+    "user": "## TASK:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R5\",\n \"capability\": \"I am a mobile robot capable of moving and securing objects up to 20 kg.\",\n \"can_do\": [\n  \"PickupLightObject: pick up objects under 5 kg\",\n  \"PickupHeavyObject: pick up objects up to 20 kg\",\n  \"PushFurniture: move heavy furniture\",\n  \"PassReceiveObject: transfer objects",
+    "output": {
+      "reasoning": "a) GOAL STATE: All windows shut and loose items secured to prevent damage. b) PRIORITY: Closing the window and securing loose items quickly. c) MY ROOM: Shut the white window and secure the orange basketball and gray laptop. d) FOR OTHERS: None of my has_items serve another room's needs.",
+      "goals": [
+        {
+          "goal": "close white window and secure loose items in the bedroom",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "white window",
+          "change": "close",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "orange basketball",
+          "change": "move to white dresser",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "gray laptop",
+          "change": "move to white dresser",
+          "weight": "light",
+          "how": "LOCAL"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "close",
+            "object": "white window",
+            "from": "wall",
+            "to": "closed"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "orange basketball",
+            "from": "floor",
+            "to": "white dresser"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "gray laptop",
+            "from": "white bed",
+            "to": "white dresser"
+          },
+          "uses": 0,
+          "serves": 1
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R6",
+    "system": "You are robot R6 in the bedroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
+    "user": "## TASK:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R6\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift items under 5 kg\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"white door (left wall, image ",
+    "output": {
+      "reasoning": "a) GOAL STATE: All windows and doors must be shut, and loose items secured. b) PRIORITY: Closing the window and door quickly to prevent damage. c) MY ROOM: Close the window and door, secure the basketball. d) FOR OTHERS: None of my has_items serve another room's needs.",
+      "goals": [
+        {
+          "goal": "close window and door, secure loose items",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "window (back wall, image 2)",
+          "change": "close",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "white door (left wall, image 1)",
+          "change": "close",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "basketball (floor, image 2)",
+          "change": "move to bed",
           "weight": "light",
           "how": "LOCAL"
         }
@@ -433,6 +842,82 @@
           "action": {
             "verb": "close",
             "object": "window",
+            "from": "back wall, image 2",
+            "to": "closed"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "close",
+            "object": "white door",
+            "from": "left wall, image 1",
+            "to": "closed"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "basketball",
+            "from": "floor, image 2",
+            "to": "bed, image 2"
+          },
+          "uses": 0,
+          "serves": 1
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R8",
+    "system": "You are robot R8 in the bathroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, ",
+    "user": "## TASK:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R8\",\n \"capability\": \"I am a mobile robot with light object handling capabilities.\",\n \"can_do\": [\n  \"PickupLightObject: lift objects under 5 kg\",\n  \"PassReceiveObject: transfer objects to/from others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"black trash b",
+    "output": {
+      "reasoning": "a) The primary goal is to ensure all windows and doors are shut and loose items are secured to prevent damage from the approaching typhoon. b) My focus is on the bathroom, where I need to close the window and secure loose items like the towel and bath mat. c) Closing the window is a high priority to prevent water and wind from entering. d) No items from my room are needed by others, and no assistance is required from other robots.",
+      "goals": [
+        {
+          "goal": "close window above bathtub",
+          "priority": "high",
+          "in_my_room": true
+        },
+        {
+          "goal": "secure loose items in the bathroom",
+          "priority": "medium",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "window (above bathtub, image 1)",
+          "change": "close",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "black bath mat (on floor, image 1)",
+          "change": "move to bathtub",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "white towel (on rack, image 1)",
+          "change": "move to bathtub",
+          "weight": "light",
+          "how": "LOCAL"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "close",
+            "object": "window",
+            "from": "above bathtub",
             "to": "closed"
           },
           "uses": 0,
@@ -441,260 +926,10 @@
         {
           "type": "LOCAL",
           "action": {
-            "verb": "move",
-            "object": "potted plant",
-            "from": "counter",
-            "to": "secure location"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "move",
-            "object": "red apple",
-            "from": "counter",
-            "to": "secure location"
-          },
-          "uses": 0,
-          "serves": 2
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "move",
-            "object": "gray bowl",
-            "from": "counter",
-            "to": "secure location"
-          },
-          "uses": 0,
-          "serves": 3
-        }
-      ]
-    }
-  },
-  {
-    "key": "plan:R3",
-    "system": "You are robot R3. Make YOUR OWN local plan for YOUR part of the shared task.\nNobody assigns you work, and you do not assign work to others.\n\nGROUNDING: an object exists only if it appears in a has_ite",
-    "user": "## PRIMARY OBJECTIVE — This is the ONLY goal that matters:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\n[CRITICAL] Before planning ANY step, ask yourself: \"Does this directly serve the PRIMARY OBJECTIVE?\"\nIf not, do NOT include it. Focus only on what the task explicitly requires.\n\nYOUR OFFER (private parts included):\n{\n \"agent\": \"R3\",\n \"capability\": \"I am a Gripper r",
-    "output": {
-      "reasoning": "a) The finished state requires all windows and doors in the living room to be shut and all loose items secured to prevent damage from the approaching typhoon. b) Essential changes include closing the window with the blue curtain and securing loose items like the silver laptop, black remote control, white plate, red object, and book. c) These changes occur in the living room. d) I can secure the loose items by placing them on the floor, but I need help to close the living room door.",
-      "goals": [
-        {
-          "goal": "Ensure the blue curtain is fully closed over the window",
-          "priority": "high",
-          "in_my_room": true
-        },
-        {
-          "goal": "Secure loose items by placing them on the floor",
-          "priority": "high",
-          "in_my_room": true
-        },
-        {
-          "goal": "Ensure the living room door is closed",
-          "priority": "high",
-          "in_my_room": true
-        }
-      ],
-      "checklist": [
-        {
-          "object": "blue curtain",
-          "change": "fully closed over the window",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "silver laptop",
-          "change": "placed on the floor",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "black remote control",
-          "change": "placed on the floor",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "white plate",
-          "change": "placed on the floor",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "red object",
-          "change": "placed on the floor",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "book",
-          "change": "placed on the floor",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "living room door",
-          "change": "closed",
-          "weight": "heavy",
-          "how": "ASK_HELP"
-        }
-      ],
-      "steps": [
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "move",
-            "object": "silver laptop",
-            "from": "table",
-            "to": "floor"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "move",
-            "object": "black remote control",
-            "from": "table",
-            "to": "floor"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "move",
-            "object": "white plate",
-            "from": "table",
-            "to": "floor"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "move",
-            "object": "red object",
-            "from": "table",
-            "to": "floor"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "move",
-            "object": "book",
-            "from": "table",
-            "to": "floor"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "close",
-            "object": "blue curtain",
-            "to": "fully closed"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "ASK_HELP",
-          "action": {
-            "verb": "close",
-            "object": "living room door"
-          },
-          "target": "R4",
-          "serves": 2
-        }
-      ]
-    }
-  },
-  {
-    "key": "plan:R1",
-    "system": "You are robot R1. Make YOUR OWN local plan for YOUR part of the shared task.\nNobody assigns you work, and you do not assign work to others.\n\nGROUNDING: an object exists only if it appears in a has_ite",
-    "user": "## PRIMARY OBJECTIVE — This is the ONLY goal that matters:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\n[CRITICAL] Before planning ANY step, ask yourself: \"Does this directly serve the PRIMARY OBJECTIVE?\"\nIf not, do NOT include it. Focus only on what the task explicitly requires.\n\nYOUR OFFER (private parts included):\n{\n \"agent\": \"R1\",\n \"capability\": \"I am a fixed rob",
-    "output": {
-      "reasoning": "a) The finished state requires all windows and doors to be shut, and all loose items in the kitchen to be secured. b) Essential changes include securing all loose items in the kitchen and ensuring the kitchen window is closed. c) These changes happen in the kitchen. d) I can secure light objects, but I cannot close the window due to my fixed position. I will need help from R2, who is mobile and in the same room, to close the kitchen window.",
-      "goals": [
-        {
-          "goal": "Secure all loose items in the kitchen",
-          "priority": "high",
-          "in_my_room": true
-        },
-        {
-          "goal": "Ensure the kitchen window is closed",
-          "priority": "high",
-          "in_my_room": true
-        }
-      ],
-      "checklist": [
-        {
-          "object": "green cabbage",
-          "change": "placed in a cabinet",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "metal can",
-          "change": "placed in a cabinet",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "white mug",
-          "change": "placed in a cabinet",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "red apple",
-          "change": "placed in a cabinet",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "brown loaf of bread",
-          "change": "placed in a cabinet",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "silver fork",
-          "change": "placed in a drawer",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "red tomato",
-          "change": "placed in a cabinet",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "kitchen window",
-          "change": "closed",
-          "weight": "heavy",
-          "how": "ASK_HELP"
-        }
-      ],
-      "steps": [
-        {
-          "type": "LOCAL",
-          "action": {
             "verb": "pick_up",
-            "object": "green cabbage",
-            "from": "counter",
-            "to": "cabinet"
+            "object": "black bath mat",
+            "from": "on floor",
+            "to": "in bathtub"
           },
           "uses": 0,
           "serves": 0
@@ -703,366 +938,67 @@
           "type": "LOCAL",
           "action": {
             "verb": "pick_up",
-            "object": "metal can",
-            "from": "counter",
-            "to": "cabinet"
+            "object": "white towel",
+            "from": "on rack",
+            "to": "in bathtub"
           },
           "uses": 0,
           "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "pick_up",
-            "object": "white mug",
-            "from": "counter",
-            "to": "cabinet"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "pick_up",
-            "object": "red apple",
-            "from": "island",
-            "to": "cabinet"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "pick_up",
-            "object": "brown loaf of bread",
-            "from": "island",
-            "to": "cabinet"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "pick_up",
-            "object": "silver fork",
-            "from": "island",
-            "to": "drawer"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "pick_up",
-            "object": "red tomato",
-            "from": "island",
-            "to": "cabinet"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "ASK_HELP",
-          "action": {
-            "verb": "close",
-            "object": "kitchen window"
-          },
-          "target": "R2",
-          "enables": null,
-          "serves": 1
-        }
-      ]
-    }
-  },
-  {
-    "key": "plan:R6",
-    "system": "You are robot R6. Make YOUR OWN local plan for YOUR part of the shared task.\nNobody assigns you work, and you do not assign work to others.\n\nGROUNDING: an object exists only if it appears in a has_ite",
-    "user": "## PRIMARY OBJECTIVE — This is the ONLY goal that matters:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\n[CRITICAL] Before planning ANY step, ask yourself: \"Does this directly serve the PRIMARY OBJECTIVE?\"\nIf not, do NOT include it. Focus only on what the task explicitly requires.\n\nYOUR OFFER (private parts included):\n{\n \"agent\": \"R6\",\n \"capability\": \"I am a mobile ro",
-    "output": {
-      "reasoning": "a) The task requires that all windows and doors are shut, and loose items are secured before the typhoon hits. b) Essential changes include closing the white window and securing the brown basketball in the black plastic bin. c) These changes occur in the bedroom. d) I can close the window and secure the basketball myself, as they are within my capabilities.",
-      "goals": [
-        {
-          "goal": "Close the white window.",
-          "priority": "high",
-          "in_my_room": true
-        },
-        {
-          "goal": "Secure the brown basketball in the black plastic bin.",
-          "priority": "high",
-          "in_my_room": true
-        }
-      ],
-      "checklist": [
-        {
-          "object": "white window",
-          "change": "closed",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "brown basketball",
-          "change": "placed in the black plastic bin",
-          "weight": "light",
-          "how": "LOCAL"
-        }
-      ],
-      "steps": [
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "close",
-            "object": "white window"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "pick_up",
-            "object": "brown basketball",
-            "from": "floor"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "place",
-            "object": "brown basketball",
-            "to": "black plastic bin"
-          },
-          "uses": 0,
-          "serves": 1
-        }
-      ]
-    }
-  },
-  {
-    "key": "plan:R5",
-    "system": "You are robot R5. Make YOUR OWN local plan for YOUR part of the shared task.\nNobody assigns you work, and you do not assign work to others.\n\nGROUNDING: an object exists only if it appears in a has_ite",
-    "user": "## PRIMARY OBJECTIVE — This is the ONLY goal that matters:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\n[CRITICAL] Before planning ANY step, ask yourself: \"Does this directly serve the PRIMARY OBJECTIVE?\"\nIf not, do NOT include it. Focus only on what the task explicitly requires.\n\nYOUR OFFER (private parts included):\n{\n \"agent\": \"R5\",\n \"capability\": \"I am a mobile ro",
-    "output": {
-      "reasoning": "a) The finished state requires all windows and doors to be shut, and loose items secured to prevent damage from the approaching typhoon. b) Essential changes include shutting the window and securing loose items like the basketball, laptop, and phone. c) These changes occur in the bedroom. d) I can perform all necessary actions in my room as I am capable of handling both light and heavy objects.",
-      "goals": [
-        {
-          "goal": "Shut the white window",
-          "priority": "high",
-          "in_my_room": true
-        },
-        {
-          "goal": "Secure the brown basketball by placing it on the bed",
-          "priority": "high",
-          "in_my_room": true
-        },
-        {
-          "goal": "Secure the silver laptop by placing it on the dresser",
-          "priority": "high",
-          "in_my_room": true
-        },
-        {
-          "goal": "Secure the black phone by placing it on the dresser",
-          "priority": "high",
-          "in_my_room": true
-        }
-      ],
-      "checklist": [
-        {
-          "object": "white window",
-          "change": "shut",
-          "weight": "heavy",
-          "how": "LOCAL"
-        },
-        {
-          "object": "brown basketball",
-          "change": "placed on the bed",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "silver laptop",
-          "change": "placed on the dresser",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "black phone",
-          "change": "placed on the dresser",
-          "weight": "light",
-          "how": "LOCAL"
-        }
-      ],
-      "steps": [
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "close",
-            "object": "white window"
-          },
-          "uses": 1,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "pick_up",
-            "object": "brown basketball",
-            "from": "floor",
-            "to": "bed"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "pick_up",
-            "object": "silver laptop",
-            "from": "bed",
-            "to": "dresser"
-          },
-          "uses": 0,
-          "serves": 2
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "pick_up",
-            "object": "black phone",
-            "from": "bed",
-            "to": "dresser"
-          },
-          "uses": 0,
-          "serves": 3
-        }
-      ]
-    }
-  },
-  {
-    "key": "plan:R8",
-    "system": "You are robot R8. Make YOUR OWN local plan for YOUR part of the shared task.\nNobody assigns you work, and you do not assign work to others.\n\nGROUNDING: an object exists only if it appears in a has_ite",
-    "user": "## PRIMARY OBJECTIVE — This is the ONLY goal that matters:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\n[CRITICAL] Before planning ANY step, ask yourself: \"Does this directly serve the PRIMARY OBJECTIVE?\"\nIf not, do NOT include it. Focus only on what the task explicitly requires.\n\nYOUR OFFER (private parts included):\n{\n \"agent\": \"R8\",\n \"capability\": \"I am a mobile ro",
-    "output": {
-      "reasoning": "a) The finished state requires all windows and doors to be shut, and any loose items to be secured to prevent damage from the approaching typhoon. b) The essential changes include closing the bathroom door and ensuring all windows in the bathroom are shut. c) These changes occur in the bathroom. d) I can close the bathroom door myself, but I need confirmation that all windows in the bathroom are shut, as I cannot verify this myself.",
-      "goals": [
-        {
-          "goal": "Close the bathroom door to secure the room",
-          "priority": "high",
-          "in_my_room": true
-        },
-        {
-          "goal": "Ensure all windows in the bathroom are shut",
-          "priority": "high",
-          "in_my_room": true
-        }
-      ],
-      "checklist": [
-        {
-          "object": "bathroom door",
-          "change": "closed",
-          "weight": "light",
-          "how": "LOCAL"
-        }
-      ],
-      "steps": [
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "close",
-            "object": "bathroom door"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "ASK_HELP",
-          "action": {
-            "verb": "confirm",
-            "object": "all windows in the bathroom",
-            "state": "shut"
-          },
-          "target": "R7",
-          "serves": 1
-        }
-      ]
-    }
-  },
-  {
-    "key": "plan:R4:fix",
-    "system": "You are robot R4. Make YOUR OWN local plan for YOUR part of the shared task.\nNobody assigns you work, and you do not assign work to others.\n\nGROUNDING: an object exists only if it appears in a has_ite",
-    "user": "## PRIMARY OBJECTIVE — This is the ONLY goal that matters:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\n[CRITICAL] Before planning ANY step, ask yourself: \"Does this directly serve the PRIMARY OBJECTIVE?\"\nIf not, do NOT include it. Focus only on what the task explicitly requires.\n\nYOUR OFFER (private parts included):\n{\n \"agent\": \"R4\",\n \"capability\": \"I am a mobile ro",
-    "output": {
-      "reasoning": "a) The finished state requires all windows and doors to be shut and any loose items inside to be secured. b) The essential changes are securing the white pillow on the sofa and ensuring all windows and doors in the living room are shut. c) These changes occur in the living room. d) I can secure the white pillow myself, but I need help to shut any open windows or doors in the living room.",
-      "goals": [
-        {
-          "goal": "Secure the white pillow on the sofa",
-          "priority": "high",
-          "in_my_room": true
-        },
-        {
-          "goal": "Ensure all windows and doors in the living room are shut",
-          "priority": "high",
-          "in_my_room": true
-        }
-      ],
-      "checklist": [
-        {
-          "object": "white pillow",
-          "change": "placed securely on the sofa",
-          "weight": "light",
-          "how": "LOCAL"
-        }
-      ],
-      "steps": [
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "pick_up",
-            "object": "white pillow",
-            "from": "sofa",
-            "to": "sofa",
-            "state": "securely placed"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "ASK_HELP",
-          "action": {
-            "verb": "close",
-            "object": "windows and doors",
-            "to": "shut"
-          },
-          "target": "R3",
-          "enables": 0,
-          "serves": 1
         }
       ]
     }
   },
   {
     "key": "plan:R7",
-    "system": "You are robot R7. Make YOUR OWN local plan for YOUR part of the shared task.\nNobody assigns you work, and you do not assign work to others.\n\nGROUNDING: an object exists only if it appears in a has_ite",
-    "user": "## PRIMARY OBJECTIVE — This is the ONLY goal that matters:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\n[CRITICAL] Before planning ANY step, ask yourself: \"Does this directly serve the PRIMARY OBJECTIVE?\"\nIf not, do NOT include it. Focus only on what the task explicitly requires.\n\nYOUR OFFER (private parts included):\n{\n \"agent\": \"R7\",\n \"capability\": \"I am a mobile ro",
+    "system": "You are robot R7 in the bathroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, ",
+    "user": "## TASK:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R7\",\n \"capability\": \"I am a mobile robot capable of moving and securing objects within my room.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PickupHeavyObject: move heavier items\",\n  \"PushFurniture: adjust furniture position\",\n  \"PassReceiveObject: hand over or receive items\"",
     "output": {
-      "reasoning": "a) The finished state requires all windows and doors to be shut, and any loose items secured to prevent damage from the approaching typhoon. b) The essential change for my room is to shut the white door to secure the bathroom. c) This change happens in the bathroom. d) I can shut the door myself as I am capable of handling heavy objects and moving between rooms.",
+      "reasoning": "a) GOAL STATE: All windows and doors are shut, and loose items are secured. b) PRIORITY: Closing windows and doors to prevent water and wind damage. c) MY ROOM: Ensure the white door is closed and secure loose items like the white hairdryer. d) FOR OTHERS: None of my has_items are needed in other rooms.",
       "goals": [
         {
-          "goal": "Shut the white door to secure the bathroom.",
+          "goal": "close white door",
           "priority": "high",
+          "in_my_room": true
+        },
+        {
+          "goal": "move white hairdryer to white shelves",
+          "priority": "medium",
+          "in_my_room": true
+        },
+        {
+          "goal": "ensure black trash bin is stable",
+          "priority": "medium",
+          "in_my_room": true
+        },
+        {
+          "goal": "ensure white curtain is drawn across bathtub",
+          "priority": "medium",
           "in_my_room": true
         }
       ],
       "checklist": [
         {
           "object": "white door",
-          "change": "shut to secure the bathroom",
-          "weight": "heavy",
+          "change": "closed",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "white hairdryer",
+          "change": "moved to white shelves",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "black trash bin",
+          "change": "stabilized",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "white curtain",
+          "change": "drawn across bathtub",
+          "weight": "light",
           "how": "LOCAL"
         }
       ],
@@ -1072,213 +1008,173 @@
           "action": {
             "verb": "close",
             "object": "white door",
-            "to": "shut"
+            "from": "right wall",
+            "to": "closed"
           },
-          "uses": 1,
-          "serves": 0
-        }
-      ]
-    }
-  },
-  {
-    "key": "plan:R8:fix",
-    "system": "You are robot R8. Make YOUR OWN local plan for YOUR part of the shared task.\nNobody assigns you work, and you do not assign work to others.\n\nGROUNDING: an object exists only if it appears in a has_ite",
-    "user": "## PRIMARY OBJECTIVE — This is the ONLY goal that matters:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\n[CRITICAL] Before planning ANY step, ask yourself: \"Does this directly serve the PRIMARY OBJECTIVE?\"\nIf not, do NOT include it. Focus only on what the task explicitly requires.\n\nYOUR OFFER (private parts included):\n{\n \"agent\": \"R8\",\n \"capability\": \"I am a mobile ro",
-    "output": {
-      "reasoning": "a) The finished state requires all windows and doors to be shut, and any loose items to be secured to prevent damage from the approaching typhoon. b) The essential changes include closing the bathroom door and ensuring all windows in the bathroom are shut. c) These changes occur in the bathroom. d) I can close the bathroom door myself, but I need confirmation that all windows in the bathroom are shut, as I cannot verify this myself.",
-      "goals": [
-        {
-          "goal": "Close the bathroom door to secure the room",
-          "priority": "high",
-          "in_my_room": true
+          "uses": 0,
+          "serves": 1
         },
-        {
-          "goal": "Ensure all windows in the bathroom are shut",
-          "priority": "high",
-          "in_my_room": true
-        }
-      ],
-      "checklist": [
-        {
-          "object": "bathroom door",
-          "change": "closed",
-          "weight": "light",
-          "how": "LOCAL"
-        }
-      ],
-      "steps": [
         {
           "type": "LOCAL",
           "action": {
-            "verb": "close",
-            "object": "bathroom door"
+            "verb": "move",
+            "object": "white hairdryer",
+            "from": "floor",
+            "to": "white shelves"
           },
           "uses": 0,
-          "serves": 0
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "black trash bin",
+            "from": "floor",
+            "to": "stable position"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "white curtain",
+            "from": "bathtub",
+            "to": "drawn across bathtub"
+          },
+          "uses": 0,
+          "serves": 1
         }
       ]
     }
   },
   {
     "key": "plan:R3:fix",
-    "system": "You are robot R3. Make YOUR OWN local plan for YOUR part of the shared task.\nNobody assigns you work, and you do not assign work to others.\n\nGROUNDING: an object exists only if it appears in a has_ite",
-    "user": "## PRIMARY OBJECTIVE — This is the ONLY goal that matters:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\n[CRITICAL] Before planning ANY step, ask yourself: \"Does this directly serve the PRIMARY OBJECTIVE?\"\nIf not, do NOT include it. Focus only on what the task explicitly requires.\n\nYOUR OFFER (private parts included):\n{\n \"agent\": \"R3\",\n \"capability\": \"I am a Gripper r",
+    "system": "You are robot R3 in the living_room. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessibl",
+    "user": "## TASK:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am fixed in place with a gripper for handling light objects.\",\n \"can_do\": [\n  \"PickupLightObject: handle small items like pens and plates\",\n  \"SliceObject: cut items if needed\",\n  \"PourObject: pour liquids if present\",\n  \"PassReceiveObject: exchange items with other ",
     "output": {
-      "reasoning": "a) The finished state requires all windows and doors in the living room to be shut and all loose items secured to prevent damage from the approaching typhoon. b) Essential changes include closing the window with the blue curtain and securing loose items like the silver laptop, black remote control, white plate, red object, and book. c) These changes occur in the living room. d) I can secure the loose items by placing them on the floor, but I need help to close the living room door.",
+      "reasoning": "a) GOAL STATE: All windows and doors are shut, and loose items are secured. b) PRIORITY: Secure windows and doors first, then loose items. c) MY ROOM: Secure loose items like the telescope and small objects on the table. d) FOR OTHERS: None of my items are needed in other rooms.",
       "goals": [
         {
-          "goal": "Ensure the blue curtain is fully closed over the window",
-          "priority": "high",
-          "in_my_room": true
-        },
-        {
-          "goal": "Secure loose items by placing them on the floor",
-          "priority": "high",
-          "in_my_room": true
-        },
-        {
-          "goal": "Ensure the living room door is closed",
+          "goal": "secure loose items in the living room",
           "priority": "high",
           "in_my_room": true
         }
       ],
       "checklist": [
         {
-          "object": "blue curtain",
-          "change": "fully closed over the window",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "silver laptop",
-          "change": "placed on the floor",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "black remote control",
-          "change": "placed on the floor",
+          "object": "red object",
+          "change": "move to console table",
           "weight": "light",
           "how": "LOCAL"
         },
         {
           "object": "white plate",
-          "change": "placed on the floor",
+          "change": "move to console table",
           "weight": "light",
           "how": "LOCAL"
         },
         {
-          "object": "red object",
-          "change": "placed on the floor",
+          "object": "pencil",
+          "change": "move to console table",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "pen",
+          "change": "move to console table",
           "weight": "light",
           "how": "LOCAL"
         },
         {
           "object": "book",
-          "change": "placed on the floor",
+          "change": "move to console table",
           "weight": "light",
           "how": "LOCAL"
         },
         {
-          "object": "living room door",
-          "change": "closed",
-          "weight": "heavy",
-          "how": "ASK_HELP"
+          "object": "telescope",
+          "change": "pass to another robot for securing",
+          "weight": "light",
+          "how": "PASS"
         }
       ],
       "steps": [
         {
           "type": "LOCAL",
           "action": {
-            "verb": "move",
-            "object": "silver laptop",
-            "from": "table",
-            "to": "floor"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "move",
-            "object": "black remote control",
-            "from": "table",
-            "to": "floor"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "move",
-            "object": "white plate",
-            "from": "table",
-            "to": "floor"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "move",
+            "verb": "pick_up",
             "object": "red object",
             "from": "table",
-            "to": "floor"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "move",
-            "object": "book",
-            "from": "table",
-            "to": "floor"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "close",
-            "object": "blue curtain",
-            "to": "fully closed"
+            "to": "console table"
           },
           "uses": 0,
           "serves": 0
         },
         {
-          "type": "ASK_HELP",
+          "type": "LOCAL",
           "action": {
-            "verb": "close",
-            "object": "living room door"
+            "verb": "pick_up",
+            "object": "white plate",
+            "from": "table",
+            "to": "console table"
           },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "pencil",
+            "from": "table",
+            "to": "console table"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "pen",
+            "from": "table",
+            "to": "console table"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "book",
+            "from": "table",
+            "to": "console table"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "PASS",
+          "item": "telescope",
           "target": "R4",
-          "enables": 5,
-          "serves": 2
+          "serves": 0
         }
       ]
     }
   },
   {
     "key": "plan:R4:fix",
-    "system": "You are robot R4. Make YOUR OWN local plan for YOUR part of the shared task.\nNobody assigns you work, and you do not assign work to others.\n\nGROUNDING: an object exists only if it appears in a has_ite",
-    "user": "## PRIMARY OBJECTIVE — This is the ONLY goal that matters:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\n[CRITICAL] Before planning ANY step, ask yourself: \"Does this directly serve the PRIMARY OBJECTIVE?\"\nIf not, do NOT include it. Focus only on what the task explicitly requires.\n\nYOUR OFFER (private parts included):\n{\n \"agent\": \"R4\",\n \"capability\": \"I am a mobile ro",
+    "system": "You are robot R4 in the living_room. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessibl",
+    "user": "## TASK:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I am a mobile robot with light object handling capabilities.\",\n \"can_do\": [\n  \"PickupLightObject: handle objects up to 5 kg\",\n  \"PassReceiveObject: transfer objects to/from others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"white pillo",
     "output": {
-      "reasoning": "a) The finished state requires all windows and doors to be shut and any loose items inside to be secured. b) The essential changes are securing the white pillow on the sofa and ensuring all windows and doors in the living room are shut. c) These changes occur in the living room. d) I can secure the white pillow myself, but I need help to shut any open windows or doors in the living room.",
+      "reasoning": "a) The typhoon requires securing all loose items and ensuring windows and doors are shut. b) My primary task is to secure loose items in the living room. c) I need assistance to close windows and doors in the living room. d) I will move items to more secure locations within the room.",
       "goals": [
         {
-          "goal": "Secure the white pillow on the sofa",
-          "priority": "high",
-          "in_my_room": true
-        },
-        {
-          "goal": "Ensure all windows and doors in the living room are shut",
+          "goal": "Secure loose items in the living room",
           "priority": "high",
           "in_my_room": true
         }
@@ -1286,7 +1182,19 @@
       "checklist": [
         {
           "object": "white pillow",
-          "change": "placed securely on the sofa",
+          "change": "move from sofa to dining table",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "black laptop",
+          "change": "move from dining table to sofa",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "gray bowl",
+          "change": "move from coffee table to dining table",
           "weight": "light",
           "how": "LOCAL"
         }
@@ -1295,11 +1203,985 @@
         {
           "type": "LOCAL",
           "action": {
-            "verb": "pick_up",
+            "verb": "move",
             "object": "white pillow",
             "from": "sofa",
-            "to": "sofa",
-            "state": "securely placed"
+            "to": "dining table"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "black laptop",
+            "from": "dining table",
+            "to": "sofa"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "gray bowl",
+            "from": "coffee table",
+            "to": "dining table"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "ASK_HELP",
+          "action": {
+            "verb": "close",
+            "object": "windows and doors",
+            "from": "living room",
+            "to": "secured"
+          },
+          "target": "R5",
+          "enables": 0,
+          "serves": 0
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R5:fix",
+    "system": "You are robot R5 in the bedroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
+    "user": "## TASK:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R5\",\n \"capability\": \"I am a mobile robot capable of moving and securing objects up to 20 kg.\",\n \"can_do\": [\n  \"PickupLightObject: pick up objects under 5 kg\",\n  \"PickupHeavyObject: pick up objects up to 20 kg\",\n  \"PushFurniture: move heavy furniture\",\n  \"PassReceiveObject: transfer objects",
+    "output": {
+      "reasoning": "a) GOAL STATE: All windows shut and loose items secured to prevent damage. b) PRIORITY: Closing the window and securing loose items quickly. c) MY ROOM: Shut the white window and secure the orange basketball and gray laptop. d) FOR OTHERS: None of my has_items serve another room's needs.",
+      "goals": [
+        {
+          "goal": "close white window and secure loose items in the bedroom",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "white window",
+          "change": "close",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "orange basketball",
+          "change": "move to white dresser",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "gray laptop",
+          "change": "move to white dresser",
+          "weight": "light",
+          "how": "LOCAL"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "close",
+            "object": "white window",
+            "from": "wall",
+            "to": "closed"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "orange basketball",
+            "from": "floor",
+            "to": "white dresser"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "gray laptop",
+            "from": "white bed",
+            "to": "white dresser"
+          },
+          "uses": 0,
+          "serves": 0
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R1:fix",
+    "system": "You are robot R1 in the kitchen. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
+    "user": "## TASK:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am fixed in place with a gripper for handling light objects.\",\n \"can_do\": [\n  \"PickupLightObject: handle small items like mugs and fruits\",\n  \"SliceObject: cut items like bread or vegetables\",\n  \"PourObject: pour liquids from containers\",\n  \"PassReceiveObject: hand o",
+    "output": {
+      "reasoning": "a) GOAL STATE: All windows and doors in the kitchen are closed, and loose items are secured. b) PRIORITY: Closing windows and securing items quickly to prevent damage. c) MY ROOM: Secure loose items like the cabbage, mug, apple, bread, knife, and tomato. d) FOR OTHERS: None of my items are needed in other rooms for this task.",
+      "goals": [
+        {
+          "goal": "Secure all loose items in the kitchen and ensure windows and doors are closed.",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "green cabbage",
+          "change": "move from counter to cabinet",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "white mug",
+          "change": "move from counter to cabinet",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "red apple",
+          "change": "move from island to cabinet",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "brown bread",
+          "change": "move from island to cabinet",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "silver knife",
+          "change": "move from island to drawer",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "red tomato",
+          "change": "move from island to cabinet",
+          "weight": "light",
+          "how": "LOCAL"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "green cabbage",
+            "from": "counter",
+            "to": "cabinet"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "white mug",
+            "from": "counter",
+            "to": "cabinet"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "red apple",
+            "from": "island",
+            "to": "cabinet"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "brown bread",
+            "from": "island",
+            "to": "cabinet"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "silver knife",
+            "from": "island",
+            "to": "drawer"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "red tomato",
+            "from": "island",
+            "to": "cabinet"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "ASK_HELP",
+          "action": {
+            "verb": "CloseWindow",
+            "object": "kitchen windows",
+            "from": "open",
+            "to": "closed"
+          },
+          "target": "R2",
+          "enables": 0,
+          "serves": 0
+        },
+        {
+          "type": "ASK_HELP",
+          "action": {
+            "verb": "CloseDoor",
+            "object": "kitchen doors",
+            "from": "open",
+            "to": "closed"
+          },
+          "target": "R2",
+          "enables": 0,
+          "serves": 0
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R6:fix",
+    "system": "You are robot R6 in the bedroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
+    "user": "## TASK:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R6\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift items under 5 kg\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"white door (left wall, image ",
+    "output": {
+      "reasoning": "a) GOAL STATE: All windows and doors must be shut, and loose items secured. b) PRIORITY: Closing the window and door quickly to prevent damage. c) MY ROOM: Close the window and door, secure the basketball. d) FOR OTHERS: None of my has_items serve another room's needs.",
+      "goals": [
+        {
+          "goal": "close window and door, secure loose items",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "window (back wall, image 2)",
+          "change": "close",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "white door (left wall, image 1)",
+          "change": "close",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "basketball (floor, image 2)",
+          "change": "move to bed",
+          "weight": "light",
+          "how": "LOCAL"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "close",
+            "object": "window",
+            "from": "back wall, image 2",
+            "to": "closed"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "close",
+            "object": "white door",
+            "from": "left wall, image 1",
+            "to": "closed"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "basketball",
+            "from": "floor, image 2",
+            "to": "bed, image 2"
+          },
+          "uses": 0,
+          "serves": 0
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R7:fix",
+    "system": "You are robot R7 in the bathroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, ",
+    "user": "## TASK:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R7\",\n \"capability\": \"I am a mobile robot capable of moving and securing objects within my room.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PickupHeavyObject: move heavier items\",\n  \"PushFurniture: adjust furniture position\",\n  \"PassReceiveObject: hand over or receive items\"",
+    "output": {
+      "reasoning": "a) GOAL STATE: All windows and doors are shut, and loose items are secured. b) PRIORITY: Closing windows and doors to prevent water and wind damage. c) MY ROOM: Ensure the white door is closed and secure loose items like the white hairdryer. d) FOR OTHERS: None of my has_items are needed in other rooms.",
+      "goals": [
+        {
+          "goal": "close white door",
+          "priority": "high",
+          "in_my_room": true
+        },
+        {
+          "goal": "move white hairdryer to white shelves",
+          "priority": "medium",
+          "in_my_room": true
+        },
+        {
+          "goal": "ensure black trash bin is stable",
+          "priority": "medium",
+          "in_my_room": true
+        },
+        {
+          "goal": "ensure white curtain is drawn across bathtub",
+          "priority": "medium",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "white door",
+          "change": "closed",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "white hairdryer",
+          "change": "moved to white shelves",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "black trash bin",
+          "change": "stabilized",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "white curtain",
+          "change": "drawn across bathtub",
+          "weight": "light",
+          "how": "LOCAL"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "close",
+            "object": "white door",
+            "from": "right wall",
+            "to": "closed"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "white hairdryer",
+            "from": "floor",
+            "to": "white shelves"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "black trash bin",
+            "from": "floor",
+            "to": "stable position"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "white curtain",
+            "from": "bathtub",
+            "to": "drawn across bathtub"
+          },
+          "uses": 0,
+          "serves": 1
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R8:fix",
+    "system": "You are robot R8 in the bathroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, ",
+    "user": "## TASK:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R8\",\n \"capability\": \"I am a mobile robot with light object handling capabilities.\",\n \"can_do\": [\n  \"PickupLightObject: lift objects under 5 kg\",\n  \"PassReceiveObject: transfer objects to/from others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"black trash b",
+    "output": {
+      "reasoning": "a) The primary goal is to ensure all windows and doors are shut and loose items are secured to prevent damage from the approaching typhoon. b) My focus is on the bathroom, where I need to close the window and secure loose items like the towel and bath mat. c) Closing the window is a high priority to prevent water and wind from entering. d) No items from my room are needed by others, and no assistance is required from other robots.",
+      "goals": [
+        {
+          "goal": "close window above bathtub",
+          "priority": "high",
+          "in_my_room": true
+        },
+        {
+          "goal": "secure loose items in the bathroom",
+          "priority": "medium",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "window (above bathtub, image 1)",
+          "change": "close",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "black bath mat (on floor, image 1)",
+          "change": "move to bathtub",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "white towel (on rack, image 1)",
+          "change": "move to bathtub",
+          "weight": "light",
+          "how": "LOCAL"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "close",
+            "object": "window",
+            "from": "above bathtub",
+            "to": "closed"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "black bath mat",
+            "from": "on floor",
+            "to": "in bathtub"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "white towel",
+            "from": "on rack",
+            "to": "in bathtub"
+          },
+          "uses": 0,
+          "serves": 0
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R4:fix",
+    "system": "You are robot R4 in the living_room. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessibl",
+    "user": "## TASK:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I am a mobile robot with light object handling capabilities.\",\n \"can_do\": [\n  \"PickupLightObject: handle objects up to 5 kg\",\n  \"PassReceiveObject: transfer objects to/from others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"white pillo",
+    "output": {
+      "reasoning": "a) The typhoon requires securing all loose items and ensuring windows and doors are shut. b) My primary task is to secure loose items in the living room. c) I need assistance to close windows and doors in the living room. d) I will move items to more secure locations within the room.",
+      "goals": [
+        {
+          "goal": "Secure loose items in the living room",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "white pillow",
+          "change": "move from sofa to dining table",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "black laptop",
+          "change": "move from dining table to sofa",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "gray bowl",
+          "change": "move from coffee table to dining table",
+          "weight": "light",
+          "how": "LOCAL"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "white pillow",
+            "from": "sofa",
+            "to": "dining table"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "black laptop",
+            "from": "dining table",
+            "to": "sofa"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "gray bowl",
+            "from": "coffee table",
+            "to": "dining table"
+          },
+          "uses": 0,
+          "serves": 0
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R3:fix",
+    "system": "You are robot R3 in the living_room. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessibl",
+    "user": "## TASK:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am fixed in place with a gripper for handling light objects.\",\n \"can_do\": [\n  \"PickupLightObject: handle small items like pens and plates\",\n  \"SliceObject: cut items if needed\",\n  \"PourObject: pour liquids if present\",\n  \"PassReceiveObject: exchange items with other ",
+    "output": {
+      "reasoning": "a) GOAL STATE: All windows and doors are shut, and loose items are secured. b) PRIORITY: Secure windows and doors first, then loose items. c) MY ROOM: Secure loose items like the telescope and small objects on the table. d) FOR OTHERS: None of my items are needed in other rooms.",
+      "goals": [
+        {
+          "goal": "secure loose items in the living room",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "red object",
+          "change": "move to console table",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "white plate",
+          "change": "move to console table",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "pencil",
+          "change": "move to console table",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "pen",
+          "change": "move to console table",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "book",
+          "change": "move to console table",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "telescope",
+          "change": "pass to another robot for securing",
+          "weight": "light",
+          "how": "PASS"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "red object",
+            "from": "table",
+            "to": "console table"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "white plate",
+            "from": "table",
+            "to": "console table"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "pencil",
+            "from": "table",
+            "to": "console table"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "pen",
+            "from": "table",
+            "to": "console table"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "book",
+            "from": "table",
+            "to": "console table"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "PASS",
+          "item": "telescope",
+          "target": "R4",
+          "serves": 0
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R6:fix",
+    "system": "You are robot R6 in the bedroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
+    "user": "## TASK:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R6\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift items under 5 kg\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"white door (left wall, image ",
+    "output": {
+      "reasoning": "a) GOAL STATE: All windows and doors must be shut, and loose items secured. b) PRIORITY: Closing the window and door quickly to prevent damage. c) MY ROOM: Close the window and door, secure the basketball. d) FOR OTHERS: None of my has_items serve another room's needs.",
+      "goals": [
+        {
+          "goal": "close window and door, secure loose items",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "window (back wall, image 2)",
+          "change": "close",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "white door (left wall, image 1)",
+          "change": "close",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "basketball (floor, image 2)",
+          "change": "move to bed",
+          "weight": "light",
+          "how": "LOCAL"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "close",
+            "object": "window (back wall, image 2)",
+            "from": "back wall, image 2",
+            "to": "closed"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "close",
+            "object": "white door (left wall, image 1)",
+            "from": "left wall, image 1",
+            "to": "closed"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "basketball",
+            "from": "floor, image 2",
+            "to": "bed, image 2"
+          },
+          "uses": 0,
+          "serves": 0
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R7:fix",
+    "system": "You are robot R7 in the bathroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, ",
+    "user": "## TASK:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R7\",\n \"capability\": \"I am a mobile robot capable of moving and securing objects within my room.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PickupHeavyObject: move heavier items\",\n  \"PushFurniture: adjust furniture position\",\n  \"PassReceiveObject: hand over or receive items\"",
+    "output": {
+      "reasoning": "a) GOAL STATE: All windows and doors are shut, and loose items are secured. b) PRIORITY: Closing windows and doors to prevent water and wind damage. c) MY ROOM: Ensure the white door is closed and secure loose items like the white hairdryer. d) FOR OTHERS: None of my has_items are needed in other rooms.",
+      "goals": [
+        {
+          "goal": "close white door",
+          "priority": "high",
+          "in_my_room": true
+        },
+        {
+          "goal": "move white hairdryer to white shelves",
+          "priority": "medium",
+          "in_my_room": true
+        },
+        {
+          "goal": "ensure black trash bin is stable",
+          "priority": "medium",
+          "in_my_room": true
+        },
+        {
+          "goal": "ensure white curtain is drawn across bathtub",
+          "priority": "medium",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "white door",
+          "change": "closed",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "white hairdryer",
+          "change": "moved to white shelves",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "black trash bin",
+          "change": "stabilized",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "white curtain",
+          "change": "drawn across bathtub",
+          "weight": "light",
+          "how": "LOCAL"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "close",
+            "object": "white door",
+            "from": "right wall",
+            "to": "closed"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "white hairdryer",
+            "from": "floor",
+            "to": "white shelves"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "black trash bin",
+            "from": "floor",
+            "to": "stable position"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "white curtain",
+            "from": "bathtub",
+            "to": "drawn across bathtub"
+          },
+          "uses": 0,
+          "serves": 1
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R1:fix",
+    "system": "You are robot R1 in the kitchen. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
+    "user": "## TASK:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am fixed in place with a gripper for handling light objects.\",\n \"can_do\": [\n  \"PickupLightObject: handle small items like mugs and fruits\",\n  \"SliceObject: cut items like bread or vegetables\",\n  \"PourObject: pour liquids from containers\",\n  \"PassReceiveObject: hand o",
+    "output": {
+      "reasoning": "a) GOAL STATE: All windows and doors in the kitchen are closed, and loose items are secured. b) PRIORITY: Closing windows and securing items quickly to prevent damage. c) MY ROOM: Secure loose items like the cabbage, mug, apple, bread, knife, and tomato. d) FOR OTHERS: None of my items are needed in other rooms for this task.",
+      "goals": [
+        {
+          "goal": "Secure all loose items in the kitchen and ensure windows and doors are closed.",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "green cabbage",
+          "change": "move from counter to cabinet",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "white mug",
+          "change": "move from counter to cabinet",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "red apple",
+          "change": "move from island to cabinet",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "brown bread",
+          "change": "move from island to cabinet",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "silver knife",
+          "change": "move from island to drawer",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "red tomato",
+          "change": "move from island to cabinet",
+          "weight": "light",
+          "how": "LOCAL"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "green cabbage",
+            "from": "counter",
+            "to": "cabinet"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "white mug",
+            "from": "counter",
+            "to": "cabinet"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "red apple",
+            "from": "island",
+            "to": "cabinet"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "brown bread",
+            "from": "island",
+            "to": "cabinet"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "silver knife",
+            "from": "island",
+            "to": "drawer"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "red tomato",
+            "from": "island",
+            "to": "cabinet"
           },
           "uses": 0,
           "serves": 0
@@ -1309,34 +2191,40 @@
   },
   {
     "key": "plan:R8:fix",
-    "system": "You are robot R8. Make YOUR OWN local plan for YOUR part of the shared task.\nNobody assigns you work, and you do not assign work to others.\n\nGROUNDING: an object exists only if it appears in a has_ite",
-    "user": "## PRIMARY OBJECTIVE — This is the ONLY goal that matters:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\n[CRITICAL] Before planning ANY step, ask yourself: \"Does this directly serve the PRIMARY OBJECTIVE?\"\nIf not, do NOT include it. Focus only on what the task explicitly requires.\n\nYOUR OFFER (private parts included):\n{\n \"agent\": \"R8\",\n \"capability\": \"I am a mobile ro",
+    "system": "You are robot R8 in the bathroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, ",
+    "user": "## TASK:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R8\",\n \"capability\": \"I am a mobile robot with light object handling capabilities.\",\n \"can_do\": [\n  \"PickupLightObject: lift objects under 5 kg\",\n  \"PassReceiveObject: transfer objects to/from others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"black trash b",
     "output": {
-      "reasoning": "a) The finished state requires all windows and doors to be shut, and any loose items to be secured to prevent damage from the approaching typhoon. b) The essential changes include closing the bathroom door and ensuring all windows in the bathroom are shut. c) These changes occur in the bathroom. d) I can close the bathroom door myself, but I need confirmation that all windows in the bathroom are shut, as I cannot verify this myself.",
+      "reasoning": "a) The primary goal is to ensure all windows and doors are shut and loose items are secured to prevent damage from the approaching typhoon. b) My focus is on the bathroom, where I need to close the window and secure loose items like the towel and bath mat. c) Closing the window is a high priority to prevent water and wind from entering. d) No items from my room are needed by others, and no assistance is required from other robots.",
       "goals": [
         {
-          "goal": "Close the bathroom door to secure the room",
+          "goal": "close window above bathtub",
           "priority": "high",
           "in_my_room": true
         },
         {
-          "goal": "Ensure all windows in the bathroom are shut",
-          "priority": "high",
+          "goal": "secure loose items in the bathroom",
+          "priority": "medium",
           "in_my_room": true
         }
       ],
       "checklist": [
         {
-          "object": "bathroom door",
-          "change": "closed",
+          "object": "window (above bathtub, image 1)",
+          "change": "close",
           "weight": "light",
           "how": "LOCAL"
         },
         {
-          "object": "bathroom window",
-          "change": "confirmed shut",
+          "object": "black bath mat (on floor, image 1)",
+          "change": "move to bathtub",
           "weight": "light",
-          "how": "ASK_HELP"
+          "how": "LOCAL"
+        },
+        {
+          "object": "white towel (on rack, image 1)",
+          "change": "move to bathtub",
+          "weight": "light",
+          "how": "LOCAL"
         }
       ],
       "steps": [
@@ -1344,101 +2232,9 @@
           "type": "LOCAL",
           "action": {
             "verb": "close",
-            "object": "bathroom door"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "ASK_HELP",
-          "action": {
-            "verb": "confirm",
-            "object": "bathroom window",
-            "state": "shut"
-          },
-          "target": "R7",
-          "enables": null,
-          "serves": 1
-        }
-      ]
-    }
-  },
-  {
-    "key": "plan:R1:fix",
-    "system": "You are robot R1. Make YOUR OWN local plan for YOUR part of the shared task.\nNobody assigns you work, and you do not assign work to others.\n\nGROUNDING: an object exists only if it appears in a has_ite",
-    "user": "## PRIMARY OBJECTIVE — This is the ONLY goal that matters:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\n[CRITICAL] Before planning ANY step, ask yourself: \"Does this directly serve the PRIMARY OBJECTIVE?\"\nIf not, do NOT include it. Focus only on what the task explicitly requires.\n\nYOUR OFFER (private parts included):\n{\n \"agent\": \"R1\",\n \"capability\": \"I am a fixed rob",
-    "output": {
-      "reasoning": "a) The finished state requires all windows and doors to be shut, and all loose items in the kitchen to be secured. b) Essential changes include securing all loose items in the kitchen and ensuring the kitchen window is closed. c) These changes happen in the kitchen. d) I can secure light objects, but I cannot close the window due to my fixed position. I will need help from R2, who is mobile and in the same room, to close the kitchen window.",
-      "goals": [
-        {
-          "goal": "Secure all loose items in the kitchen",
-          "priority": "high",
-          "in_my_room": true
-        },
-        {
-          "goal": "Ensure the kitchen window is closed",
-          "priority": "high",
-          "in_my_room": true
-        }
-      ],
-      "checklist": [
-        {
-          "object": "green cabbage",
-          "change": "placed in a cabinet",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "metal can",
-          "change": "placed in a cabinet",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "white mug",
-          "change": "placed in a cabinet",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "red apple",
-          "change": "placed in a cabinet",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "brown loaf of bread",
-          "change": "placed in a cabinet",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "silver fork",
-          "change": "placed in a drawer",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "red tomato",
-          "change": "placed in a cabinet",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "kitchen window",
-          "change": "closed",
-          "weight": "heavy",
-          "how": "ASK_HELP"
-        }
-      ],
-      "steps": [
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "pick_up",
-            "object": "green cabbage",
-            "from": "counter",
-            "to": "cabinet"
+            "object": "window",
+            "from": "above bathtub",
+            "to": "closed"
           },
           "uses": 0,
           "serves": 0
@@ -1447,9 +2243,9 @@
           "type": "LOCAL",
           "action": {
             "verb": "pick_up",
-            "object": "metal can",
-            "from": "counter",
-            "to": "cabinet"
+            "object": "black bath mat",
+            "from": "on floor",
+            "to": "in bathtub"
           },
           "uses": 0,
           "serves": 0
@@ -1458,614 +2254,126 @@
           "type": "LOCAL",
           "action": {
             "verb": "pick_up",
-            "object": "white mug",
-            "from": "counter",
-            "to": "cabinet"
+            "object": "white towel",
+            "from": "on rack",
+            "to": "in bathtub"
           },
           "uses": 0,
           "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "pick_up",
-            "object": "red apple",
-            "from": "island",
-            "to": "cabinet"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "pick_up",
-            "object": "brown loaf of bread",
-            "from": "island",
-            "to": "cabinet"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "pick_up",
-            "object": "silver fork",
-            "from": "island",
-            "to": "drawer"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "pick_up",
-            "object": "red tomato",
-            "from": "island",
-            "to": "cabinet"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "ASK_HELP",
-          "action": {
-            "verb": "close",
-            "object": "kitchen window"
-          },
-          "target": "R2",
-          "enables": 0,
-          "serves": 1
-        }
-      ]
-    }
-  },
-  {
-    "key": "plan:R3:fix",
-    "system": "You are robot R3. Make YOUR OWN local plan for YOUR part of the shared task.\nNobody assigns you work, and you do not assign work to others.\n\nGROUNDING: an object exists only if it appears in a has_ite",
-    "user": "## PRIMARY OBJECTIVE — This is the ONLY goal that matters:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\n[CRITICAL] Before planning ANY step, ask yourself: \"Does this directly serve the PRIMARY OBJECTIVE?\"\nIf not, do NOT include it. Focus only on what the task explicitly requires.\n\nYOUR OFFER (private parts included):\n{\n \"agent\": \"R3\",\n \"capability\": \"I am a Gripper r",
-    "output": {
-      "reasoning": "a) The finished state requires all windows and doors in the living room to be shut and all loose items secured to prevent damage from the approaching typhoon. b) Essential changes include closing the window with the blue curtain and securing loose items like the silver laptop, black remote control, white plate, red object, and book. c) These changes occur in the living room. d) I can secure the loose items by placing them on the floor, but I need help to close the living room door.",
-      "goals": [
-        {
-          "goal": "Ensure the blue curtain is fully closed over the window",
-          "priority": "high",
-          "in_my_room": true
-        },
-        {
-          "goal": "Secure loose items by placing them on the floor",
-          "priority": "high",
-          "in_my_room": true
-        },
-        {
-          "goal": "Ensure the living room door is closed",
-          "priority": "high",
-          "in_my_room": true
-        }
-      ],
-      "checklist": [
-        {
-          "object": "blue curtain",
-          "change": "fully closed over the window",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "silver laptop",
-          "change": "placed on the floor",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "black remote control",
-          "change": "placed on the floor",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "white plate",
-          "change": "placed on the floor",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "red object",
-          "change": "placed on the floor",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "book",
-          "change": "placed on the floor",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "living room door",
-          "change": "closed",
-          "weight": "heavy",
-          "how": "ASK_HELP"
-        }
-      ],
-      "steps": [
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "move",
-            "object": "silver laptop",
-            "from": "table",
-            "to": "floor"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "move",
-            "object": "black remote control",
-            "from": "table",
-            "to": "floor"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "move",
-            "object": "white plate",
-            "from": "table",
-            "to": "floor"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "move",
-            "object": "red object",
-            "from": "table",
-            "to": "floor"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "move",
-            "object": "book",
-            "from": "table",
-            "to": "floor"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "close",
-            "object": "blue curtain",
-            "to": "fully closed"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "ASK_HELP",
-          "action": {
-            "verb": "close",
-            "object": "living room door"
-          },
-          "target": "R4",
-          "serves": 2
-        }
-      ]
-    }
-  },
-  {
-    "key": "plan:R1:fix",
-    "system": "You are robot R1. Make YOUR OWN local plan for YOUR part of the shared task.\nNobody assigns you work, and you do not assign work to others.\n\nGROUNDING: an object exists only if it appears in a has_ite",
-    "user": "## PRIMARY OBJECTIVE — This is the ONLY goal that matters:\nA typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nDEADLINE: 10 minutes\n\n[CRITICAL] Before planning ANY step, ask yourself: \"Does this directly serve the PRIMARY OBJECTIVE?\"\nIf not, do NOT include it. Focus only on what the task explicitly requires.\n\nYOUR OFFER (private parts included):\n{\n \"agent\": \"R1\",\n \"capability\": \"I am a fixed rob",
-    "output": {
-      "reasoning": "a) The finished state requires all windows and doors to be shut, and all loose items in the kitchen to be secured. b) Essential changes include securing all loose items in the kitchen and ensuring the kitchen window is closed. c) These changes happen in the kitchen. d) I can secure light objects, but I cannot close the window due to my fixed position. I will need help from R2, who is mobile and in the same room, to close the kitchen window.",
-      "goals": [
-        {
-          "goal": "Secure all loose items in the kitchen",
-          "priority": "high",
-          "in_my_room": true
-        },
-        {
-          "goal": "Ensure the kitchen window is closed",
-          "priority": "high",
-          "in_my_room": true
-        }
-      ],
-      "checklist": [
-        {
-          "object": "green cabbage",
-          "change": "placed in a cabinet",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "metal can",
-          "change": "placed in a cabinet",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "white mug",
-          "change": "placed in a cabinet",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "red apple",
-          "change": "placed in a cabinet",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "brown loaf of bread",
-          "change": "placed in a cabinet",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "silver fork",
-          "change": "placed in a drawer",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "red tomato",
-          "change": "placed in a cabinet",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "kitchen window",
-          "change": "closed",
-          "weight": "heavy",
-          "how": "ASK_HELP"
-        }
-      ],
-      "steps": [
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "pick_up",
-            "object": "green cabbage",
-            "from": "counter",
-            "to": "cabinet"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "pick_up",
-            "object": "metal can",
-            "from": "counter",
-            "to": "cabinet"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "pick_up",
-            "object": "white mug",
-            "from": "counter",
-            "to": "cabinet"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "pick_up",
-            "object": "red apple",
-            "from": "island",
-            "to": "cabinet"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "pick_up",
-            "object": "brown loaf of bread",
-            "from": "island",
-            "to": "cabinet"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "pick_up",
-            "object": "silver fork",
-            "from": "island",
-            "to": "drawer"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "pick_up",
-            "object": "red tomato",
-            "from": "island",
-            "to": "cabinet"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "ASK_HELP",
-          "action": {
-            "verb": "close",
-            "object": "kitchen window"
-          },
-          "target": "R2",
-          "serves": 1
-        }
-      ]
-    }
-  },
-  {
-    "key": "propose:R1",
-    "system": "You are robot R1. Other robots have published requests.\nJudge each request, and each object offered to you, using everything you know (including your\nprivate observations).\n\nFIRST check your own plan:",
-    "user": "TASK: A typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\n\nYOUR OFFER (private parts included):\n{\n \"agent\": \"R1\",\n \"capability\": \"I am a fixed robot with a gripper, capable of handling light objects.\",\n \"can_do\": [\n  \"PickupLightObject up to 1 kg\",\n  \"SliceObject with precision\",\n  \"PourObject from containers\",\n  \"PassReceiveObject to/from mobile robots\"\n ],\n \"has_items\": [\n  \"green cabbage (on ",
-    "output": {
-      "offers": [],
-      "judgments": [
-        {
-          "request": "r3_s7",
-          "decision": "ignore",
-          "reason": "The request is targeted at R4 and is in the living room, which is outside my scope and capability."
-        },
-        {
-          "request": "r8_s2",
-          "decision": "ignore",
-          "reason": "The request is targeted at R7 and is in the bathroom, which is outside my scope and capability."
         }
       ]
     }
   },
   {
     "key": "propose:R4",
-    "system": "You are robot R4. Other robots have published requests.\nJudge each request, and each object offered to you, using everything you know (including your\nprivate observations).\n\nFIRST check your own plan:",
-    "user": "TASK: A typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\n\nYOUR OFFER (private parts included):\n{\n \"agent\": \"R4\",\n \"capability\": \"I am a mobile robot capable of moving between rooms and carrying light objects.\",\n \"can_do\": [\n  \"PickupLightObject up to 5 kg\",\n  \"PassReceiveObject to/from other robots\"\n ],\n \"has_items\": [\n  \"black lamp (next to the sofa, image 1)\",\n  \"white pillow (on the sofa, im",
+    "system": "You are robot R4. Judge other robots' requests and offers.\n\nFIRST: check your own plan. If you already do what an ASK_HELP asks → \"already_doing\" + covered_by.\nDUPLICATE REQUESTS: if you're already se",
+    "user": "TASK: A typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I am a mobile robot with light object handling capabilities.\",\n \"can_do\": [\n  \"PickupLightObject: handle objects up to 5 kg\",\n  \"PassReceiveObject: transfer objects to/from others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"white pillow (sofa, image 1)\",\n  \"bl",
     "output": {
-      "offers": [],
-      "judgments": [
+      "offers": [
         {
-          "request": "r1_s8",
-          "decision": "ignore",
-          "reason": "The request is targeted at R2 and is in the kitchen, which is outside my observation scope."
-        },
-        {
-          "request": "r3_s7",
-          "decision": "accept",
-          "reason": "I am in the living room and can close the living room door.",
-          "action": "close the living room door",
-          "uses": 0,
-          "insert_after": "r4_s1"
-        },
-        {
-          "request": "r8_s2",
-          "decision": "ignore",
-          "reason": "The request is targeted at R7 and is in the bathroom, which is outside my observation scope."
+          "offer": "r3_s6",
+          "decision": "receive",
+          "action": "pass telescope from R3 to R4",
+          "uses": 1,
+          "insert_after": "r4_s3"
         }
-      ]
-    }
-  },
-  {
-    "key": "propose:R3",
-    "system": "You are robot R3. Other robots have published requests.\nJudge each request, and each object offered to you, using everything you know (including your\nprivate observations).\n\nFIRST check your own plan:",
-    "user": "TASK: A typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\n\nYOUR OFFER (private parts included):\n{\n \"agent\": \"R3\",\n \"capability\": \"I am a Gripper robot fixed in the living room.\",\n \"can_do\": [\n  \"PickupLightObject up to 2 kg\",\n  \"SliceObject with precision\",\n  \"PourObject accurately\",\n  \"PassReceiveObject to/from mobile robots\"\n ],\n \"has_items\": [\n  \"silver laptop (on the table, image 1)\",\n  \"bla",
-    "output": {
-      "offers": [],
-      "judgments": [
-        {
-          "request": "r1_s8",
-          "decision": "ignore",
-          "reason": "The request is targeted at R2 and involves the kitchen, which is outside my operational scope."
-        },
-        {
-          "request": "r8_s2",
-          "decision": "ignore",
-          "reason": "The request is targeted at R7 and involves the bathroom, which is outside my operational scope."
-        }
-      ]
-    }
-  },
-  {
-    "key": "propose:R2",
-    "system": "You are robot R2. Other robots have published requests.\nJudge each request, and each object offered to you, using everything you know (including your\nprivate observations).\n\nFIRST check your own plan:",
-    "user": "TASK: A typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\n\nYOUR OFFER (private parts included):\n{\n \"agent\": \"R2\",\n \"capability\": \"I am a mobile robot capable of moving around and carrying light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject up to 5 kg\",\n  \"PassReceiveObject to/from other robots\"\n ],\n \"has_items\": [\n  \"silver pot (on the stove, image 1)\",\n  \"potted plant (on the counter,",
-    "output": {
-      "offers": [],
-      "judgments": [
-        {
-          "request": "r1_s8",
-          "decision": "already_doing",
-          "covered_by": "r2_s1",
-          "reason": "I am already planning to close the window in the kitchen, which covers this request."
-        },
-        {
-          "request": "r3_s7",
-          "decision": "ignore",
-          "reason": "The request is targeted at R4 and involves closing a door in the living room, which is outside my current task scope and capabilities."
-        },
-        {
-          "request": "r8_s2",
-          "decision": "ignore",
-          "reason": "The request is targeted at R7 and involves confirming the state of a window in the bathroom, which is outside my current task scope and capabilities."
-        }
-      ]
-    }
-  },
-  {
-    "key": "propose:R5",
-    "system": "You are robot R5. Other robots have published requests.\nJudge each request, and each object offered to you, using everything you know (including your\nprivate observations).\n\nFIRST check your own plan:",
-    "user": "TASK: A typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\n\nYOUR OFFER (private parts included):\n{\n \"agent\": \"R5\",\n \"capability\": \"I am a mobile robot capable of handling heavy objects.\",\n \"can_do\": [\n  \"PickupLightObject up to 20 kg\",\n  \"PickupHeavyObject up to 20 kg\",\n  \"PushFurniture up to 20 kg\",\n  \"PassReceiveObject up to 20 kg\"\n ],\n \"has_items\": [\n  \"white window (on the wall, image 1)\",\n  ",
-    "output": {
-      "offers": [],
-      "judgments": [
-        {
-          "request": "r1_s8",
-          "decision": "ignore",
-          "reason": "The request is targeted at R2 and I am not in the kitchen."
-        },
-        {
-          "request": "r3_s7",
-          "decision": "ignore",
-          "reason": "The request is targeted at R4 and I am not in the living room."
-        },
-        {
-          "request": "r8_s2",
-          "decision": "ignore",
-          "reason": "The request is targeted at R7 and I am not in the bathroom."
-        }
-      ]
-    }
-  },
-  {
-    "key": "propose:R6",
-    "system": "You are robot R6. Other robots have published requests.\nJudge each request, and each object offered to you, using everything you know (including your\nprivate observations).\n\nFIRST check your own plan:",
-    "user": "TASK: A typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\n\nYOUR OFFER (private parts included):\n{\n \"agent\": \"R6\",\n \"capability\": \"I am a mobile robot capable of picking up light objects and moving between rooms.\",\n \"can_do\": [\n  \"PickupLightObject up to 5 kg\",\n  \"PassReceiveObject to/from other rooms\"\n ],\n \"has_items\": [\n  \"white cardboard box (near the door, image 1)\",\n  \"black plastic bin (nea",
-    "output": {
-      "offers": [],
-      "judgments": [
-        {
-          "request": "r1_s8",
-          "decision": "ignore",
-          "reason": "The request is targeted at R2 and I am currently focused on securing the bedroom."
-        },
-        {
-          "request": "r3_s7",
-          "decision": "ignore",
-          "reason": "The request is targeted at R4 and I am currently focused on securing the bedroom."
-        },
-        {
-          "request": "r8_s2",
-          "decision": "ignore",
-          "reason": "The request is targeted at R7 and I am currently focused on securing the bedroom."
-        }
-      ]
-    }
-  },
-  {
-    "key": "propose:R7",
-    "system": "You are robot R7. Other robots have published requests.\nJudge each request, and each object offered to you, using everything you know (including your\nprivate observations).\n\nFIRST check your own plan:",
-    "user": "TASK: A typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\n\nYOUR OFFER (private parts included):\n{\n \"agent\": \"R7\",\n \"capability\": \"I am a mobile robot capable of handling heavy objects and moving between rooms.\",\n \"can_do\": [\n  \"PickupLightObject up to 20 kg\",\n  \"PickupHeavyObject up to 20 kg\",\n  \"PushFurniture up to 20 kg\",\n  \"PassReceiveObject up to 20 kg\"\n ],\n \"has_items\": [\n  \"metal towel rac",
-    "output": {
-      "offers": [],
-      "judgments": [
-        {
-          "request": "r1_s8",
-          "decision": "ignore",
-          "reason": "The request is targeted at R2 and is located in the kitchen, which is outside my current scope."
-        },
-        {
-          "request": "r3_s7",
-          "decision": "ignore",
-          "reason": "The request is targeted at R4 and is located in the living room, which is outside my current scope."
-        },
-        {
-          "request": "r8_s2",
-          "decision": "reject",
-          "reason": "I cannot confirm the state of the bathroom window as I can only observe the bathroom and its contents, and the window is not listed in my has_items."
-        }
-      ]
-    }
-  },
-  {
-    "key": "propose:R8",
-    "system": "You are robot R8. Other robots have published requests.\nJudge each request, and each object offered to you, using everything you know (including your\nprivate observations).\n\nFIRST check your own plan:",
-    "user": "TASK: A typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\n\nYOUR OFFER (private parts included):\n{\n \"agent\": \"R8\",\n \"capability\": \"I am a mobile robot capable of moving between rooms and handling light objects.\",\n \"can_do\": [\n  \"PickupLightObject up to 5 kg\",\n  \"PassReceiveObject to other robots\"\n ],\n \"has_items\": [\n  \"black plastic trash bin (next to the toilet, image 1)\",\n  \"brown wooden stick ",
-    "output": {
-      "offers": [],
-      "judgments": [
-        {
-          "request": "r1_s8",
-          "decision": "ignore",
-          "reason": "The request is targeted at R2 and involves the kitchen, which is outside my current scope and capabilities."
-        },
-        {
-          "request": "r3_s7",
-          "decision": "ignore",
-          "reason": "The request is targeted at R4 and involves the living room, which is outside my current scope and capabilities."
-        }
-      ]
+      ],
+      "judgments": []
     }
   },
   {
     "key": "graph:1",
-    "system": "You are the graph integrator for a team of robots. You are NOT a planner and NOT an allocator:\nevery step was written by the robot that will execute it, and you never create steps or give a robot\nwork",
-    "user": "TASK: A typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\n\nJOINT PLAN (each robot's steps in its own order):\n{\n \"R1\": [\n  {\n   \"id\": \"r1_s1\",\n   \"agent\": \"R1\",\n   \"type\": \"LOCAL\",\n   \"action\": {\n    \"verb\": \"pick_up\",\n    \"object\": \"green cabbage\",\n    \"from\": \"counter\",\n    \"to\": \"cabinet\"\n   }\n  },\n  {\n   \"id\": \"r1_s2\",\n   \"agent\": \"R1\",\n   \"type\": \"LOCAL\",\n   \"action\": {\n    \"verb\": \"pick_up\"",
+    "system": "You are the graph integrator. You do NOT plan or allocate — every step was written by the robot that executes it.\nTurn CANDIDATE collaborations into one consistent joint plan.\n\nOperations (use only wi",
+    "user": "TASK: A typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nJOINT PLAN: {\n \"R1\": [\n  {\n   \"id\": \"r1_s1\",\n   \"agent\": \"R1\",\n   \"type\": \"LOCAL\",\n   \"action\": {\n    \"verb\": \"move\",\n    \"object\": \"green cabbage\",\n    \"from\": \"counter\",\n    \"to\": \"cabinet\"\n   }\n  },\n  {\n   \"id\": \"r1_s2\",\n   \"agent\": \"R1\",\n   \"type\": \"LOCAL\",\n   \"action\": {\n    \"verb\": \"move\",\n    \"object\": \"white mug\",\n    \"from\": \"cou",
     "output": {
       "ops": [
         {
-          "op": "drop",
-          "node": "r6_s1",
-          "why": "duplicate work with r5_s1, both closing the same white window"
+          "op": "disconnect",
+          "src": "r2_s1",
+          "dst": "r1_s3",
+          "why": "Duplicate work with different destinations for the red apple."
         },
         {
-          "op": "unresolved",
-          "issue": "I2",
-          "why": "not duplicate, different destinations for the basketball"
+          "op": "disconnect",
+          "src": "r2_s2",
+          "dst": "r1_s3",
+          "why": "Duplicate work with different destinations for the red apple."
+        },
+        {
+          "op": "disconnect",
+          "src": "r6_s3",
+          "dst": "r5_s2",
+          "why": "Duplicate work with different destinations for the basketball."
+        }
+      ]
+    }
+  },
+  {
+    "key": "graph:2",
+    "system": "You are the graph integrator. You do NOT plan or allocate — every step was written by the robot that executes it.\nTurn CANDIDATE collaborations into one consistent joint plan.\n\nOperations (use only wi",
+    "user": "TASK: A typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nJOINT PLAN: {\n \"R1\": [\n  {\n   \"id\": \"r1_s1\",\n   \"agent\": \"R1\",\n   \"type\": \"LOCAL\",\n   \"action\": {\n    \"verb\": \"move\",\n    \"object\": \"green cabbage\",\n    \"from\": \"counter\",\n    \"to\": \"cabinet\"\n   }\n  },\n  {\n   \"id\": \"r1_s2\",\n   \"agent\": \"R1\",\n   \"type\": \"LOCAL\",\n   \"action\": {\n    \"verb\": \"move\",\n    \"object\": \"white mug\",\n    \"from\": \"cou",
+    "output": {
+      "ops": [
+        {
+          "op": "disconnect",
+          "src": "r2_s1",
+          "dst": "r1_s3",
+          "why": "Different destinations for the red apple."
+        },
+        {
+          "op": "disconnect",
+          "src": "r2_s2",
+          "dst": "r1_s3",
+          "why": "Different destinations for the red apple."
+        },
+        {
+          "op": "disconnect",
+          "src": "r6_s3",
+          "dst": "r5_s2",
+          "why": "Different destinations for the basketball."
         }
       ]
     }
   },
   {
     "key": "graph:size",
-    "system": "You estimate how long each step of a household robot plan takes. You do not change the plan.\nFor every step give a size:\n- \"short\":  one quick action on a light object in the robot's own room (pick an",
-    "user": "TASK: A typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\n\nROBOTS:\n{\n \"R1\": {\n  \"room\": \"kitchen\",\n  \"mobile\": false,\n  \"body\": \"Gripper. CAN: PickupLightObject, SliceObject, PourObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture. This robot is FIXED IN PLACE and can never move to another room. To pass an item to another robot, that other robot must come to this robot's own room",
+    "system": "Estimate how long each robot step takes.\n- \"short\": quick action on light object in own room (pick, place, switch).\n- \"medium\": several actions, awkward object, or travelling to another room.\n- \"long\"",
+    "user": "TASK: A typhoon is approaching and will hit in about 10 minutes. All windows and doors need to be shut, and anything outside or loose inside should be secured.\nROBOTS: {\n \"R1\": {\n  \"room\": \"kitchen\",\n  \"mobile\": false,\n  \"body\": \"Gripper. CAN: PickupLightObject, SliceObject, PourObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture. This robot is FIXED IN PLACE and can never move to another room. To pass an item to another robot, that other robot must come to this robot's own room ",
     "output": {
       "sizes": {
         "r1_s1": "short",
         "r2_s1": "short",
         "r3_s1": "short",
         "r4_s1": "short",
-        "r5_s1": "short",
-        "r6_s2": "short",
-        "r7_s1": "short",
-        "r8_s1": "short",
+        "r5_s1": "medium",
+        "r6_s1": "medium",
+        "r7_s1": "medium",
+        "r8_s1": "medium",
         "r1_s2": "short",
         "r2_s2": "short",
         "r3_s2": "short",
-        "r4_s2": "medium",
+        "r4_s2": "short",
         "r5_s2": "short",
-        "r6_s3": "short",
+        "r6_s2": "medium",
+        "r7_s2": "short",
+        "r8_s2": "short",
         "r1_s3": "short",
-        "r2_s3": "short",
+        "r2_s3": "medium",
         "r3_s3": "short",
+        "r4_s3": "short",
         "r5_s3": "short",
+        "r6_s3": "short",
+        "r7_s3": "short",
+        "r8_s3": "short",
         "r1_s4": "short",
-        "r2_s4": "short",
         "r3_s4": "short",
-        "r5_s4": "short",
+        "r7_s4": "short",
         "r1_s5": "short",
         "r3_s5": "short",
         "r1_s6": "short",
-        "r3_s6": "short",
-        "r1_s7": "short"
+        "r3_s6": "medium",
+        "r4_s4": "medium",
+        "r4_s5": "short"
       }
     }
   }

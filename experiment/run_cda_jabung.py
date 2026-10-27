@@ -91,7 +91,9 @@ config = TaskConfig.from_notebook(
 )
 llm = MockLLM() if args.model == "mock" else OpenAILLM(model=args.model)
 
+import time as _time
 print("\n🚀 C-DA 파이프라인 실행 중...")
+_t0 = _time.time()
 result = asyncio.run(
     run_pipeline(
         config, llm,
@@ -102,6 +104,8 @@ result = asyncio.run(
     )
 )
 
+_elapsed = round(_time.time() - _t0, 1)
+result["metrics"]["wall_time_sec"] = _elapsed
 print("\n✅ 완료")
 # JSON action을 자연어로 변환
 from openai import OpenAI as _OpenAI
@@ -126,10 +130,12 @@ Plan:
 {plan_text}
 
 Return ONLY the converted plan starting with "### Joint Plan", no preamble or explanation."""
-    r = _sync_client.chat.completions.create(
-        model=args.model, temperature=0.0,
-        messages=[{"role": "user", "content": prompt}],
-    )
+    # gpt-5+ 계열은 temperature 파라미터 미지원
+    no_temp_models = ("gpt-5", "o1", "o3", "o4")
+    kwargs = {"model": args.model, "messages": [{"role": "user", "content": prompt}]}
+    if not any(args.model.startswith(m) for m in no_temp_models):
+        kwargs["temperature"] = 0.0
+    r = _sync_client.chat.completions.create(**kwargs)
     return r.choices[0].message.content.strip()
 
 raw_plan = result["joint_plan_text"]

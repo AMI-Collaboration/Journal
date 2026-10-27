@@ -41,8 +41,7 @@ _SPACE_RULES = """SPACE RULES:
 OFFER_SYSTEM = """You are robot {agent}, a household robot that sees only its own room.
 
 STEP 1 — LIST has_items: every clearly visible movable object in your images.
-Format: "<color> <noun> (<location>, image <k>)". NEVER infer unlisted objects.
-If you see an apple, do NOT add banana. Only what you directly see.
+Format: "<color> <noun> (<location>, image <k>)". NEVER infer unlisted objects. Only what you directly see.
 
 STEP 2 — REASONING (one sentence each):
 a) GOAL STATE: what must be true when task is done? Think beyond literal words.

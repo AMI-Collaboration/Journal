@@ -1,0 +1,1078 @@
+{
+  "task_n": "task8_abstract",
+  "mode": "multi_room",
+  "model": "gpt-4o",
+  "task_text": "Someone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.",
+  "joint_plan_text": "```plaintext\n### Joint Plan — task8_abstract  (about 10 min / deadline 20 min: OK)\n### Robots: R1:Gripper(kitchen), R2:Mobile_Light(living_room), R3:Mobile_Light(bedroom), R4:Mobile_Light(bathroom)\n\n\n[0-5 min]\n- R2 [LOCAL] move the red blanket from the sofa to the purple sofa  (r2_s1)\n- R3 [LOCAL] move the green pillow from the white bed to the wooden nightstand  (r3_s1)\n- R4 [LOCAL] move the brown towel from the wall to the sink counter  (r4_s1)\n- R2 [LOCAL] pick up the water pitcher from the dining table to the wooden coffee table  (r2_s2)\n- R3 [LOCAL] move the black and white blanket from the white bed to the wooden nightstand  (r3_s2)\n- R2 [LOCAL] pick up the blue mug from the dining table to the wooden coffee table  (r2_s3)\n- R3 [LOCAL] move the water bottles from the shelf to the wooden nightstand  (r3_s3)\n- R3 [LOCAL] turn on the lamp from the wooden nightstand to on  (r3_s4)\n\n[5-10 min]\n- R3 [PASS] pass water bottles (on shelf, image 2) to R4 (offered) (brings it to the bathroom)  (r3_s5)\n- R4 [RECEIVE] receive water bottles (on shelf, image 2) from R3  (r4_s2)\n- R4 [LOCAL] pass water bottles (on shelf, image 2) to R4  (r4_s3)",
+  "joint_plan_full": "### Joint Plan — task8_abstract  (about 10 min / deadline 20 min: OK)\n### Robots: R1:Gripper(kitchen), R2:Mobile_Light(living_room), R3:Mobile_Light(bedroom), R4:Mobile_Light(bathroom)\n\n\n[0-5 min]\n- R2 [LOCAL] move the red blanket from sofa to purple sofa  (r2_s1)\n- R3 [LOCAL] move the green pillow from white bed to wooden nightstand  (r3_s1)\n- R4 [LOCAL] move the brown towel from wall to sink counter  (r4_s1)\n- R2 [LOCAL] pick_up the water pitcher from dining table to wooden coffee table  (r2_s2)\n- R3 [LOCAL] move the black and white blanket from white bed to wooden nightstand  (r3_s2)\n- R2 [LOCAL] pick_up the blue mug from dining table to wooden coffee table  (r2_s3)\n- R3 [LOCAL] move the water bottles from shelf to wooden nightstand  (r3_s3)\n- R3 [LOCAL] turn_on the lamp from wooden nightstand to on  (r3_s4)\n\n[5-10 min]\n- R3 [PASS] pass water bottles (on shelf, image 2) to R4 (offered) (brings it to the bathroom)  (r3_s5)\n- R4 [RECEIVE] receive water bottles (on shelf, image 2) from R3  (r4_s2)\n- R4 [LOCAL] pass water bottles (on shelf, image 2) to R4  (r4_s3)\n\n### Unresolved\n- {'request': 'r2_s4', 'agent': 'R2', 'text': 'pour the blue mug from water pitcher to filled with water', 'outcome': 'declined', 'why': 'R1 declined: reject', 'by': 'rule'}\n\n### Blocked (cannot run; the robot skips them and continues)\n- R2 [ASK_HELP] pour the blue mug from water pitcher to filled with water (r2_s4) — blocked (declined)\n\n### Dropped\n- R1 [PASS] pass green cup (counter, image 1) to R2 (green cup (counter, image 1)) — offer not taken by R2 (by rule)\n- R1 [LOCAL] pour the green cup from kettle to filled with water — prepared only for r1_s2, an offer R2 did not take (by rule)\n\n### Not covered (from the robots' own checklists)\n- R1: green cup: pass to another robot\n- R3: black and white blanket: move to wooden nightstand",
+  "offers": {
+    "R1": {
+      "agent": "R1",
+      "capability": "I am fixed in place with a gripper for handling light objects.",
+      "can_do": [
+        "PickupLightObject: lift small items",
+        "SliceObject: cut food items",
+        "PourObject: pour liquids",
+        "PassReceiveObject: hand over items",
+        "ToggleObject: turn on/off lights, TV, appliances"
+      ],
+      "has_items": [
+        "green cup (counter, image 1)",
+        "coffee machine (counter, image 1)",
+        "microwave (counter, image 1)",
+        "large bowl (counter, image 1)",
+        "knife (counter, image 1)",
+        "spoon (counter, image 1)",
+        "toaster (counter, image 2)",
+        "kettle (counter, image 2)",
+        "paper towel roll (counter, image 2)"
+      ],
+      "need_from_others": [
+        "RECEIVE: Mug from SinkBasin for serving water"
+      ],
+      "intends": [
+        "PourObject: fill green cup with water from kettle",
+        "PassReceiveObject: pass green cup to another robot"
+      ],
+      "suggests": [
+        "green cup",
+        "kettle",
+        "paper towel roll"
+      ],
+      "obs_scope": "I can only observe and interact with items in the kitchen.",
+      "cannot_do": [
+        "PickupHeavyObject: too heavy for my gripper",
+        "PushFurniture: cannot move furniture",
+        "Move: fixed in place",
+        "Cook: no cooking capability",
+        "Clean: cannot clean surfaces"
+      ],
+      "reasoning": "a) GOAL STATE: The room must be comfortable for resting, with water and essentials accessible. b) PRIORITY: Ensure water and basic needs are ready within 20 minutes. c) MY ROOM: Prepare water and any light snacks. d) FOR OTHERS: Provide water and possibly snacks for the resting area."
+    },
+    "R2": {
+      "agent": "R2",
+      "capability": "I am a mobile robot with light object handling abilities.",
+      "can_do": [
+        "PickupLightObject: lift objects under 5 kg",
+        "PassReceiveObject: exchange objects with others",
+        "ToggleObject: turn on/off lights, TV, appliances"
+      ],
+      "has_items": [
+        "purple sofa (center, image 1)",
+        "red blanket (sofa, image 1)",
+        "TV (wall, image 1)",
+        "wooden coffee table (center, image 1)",
+        "potted plant (console table, image 1)",
+        "console table (right wall, image 1)",
+        "book (dining table, image 2)",
+        "blue mug (dining table, image 2)",
+        "water pitcher (dining table, image 2)",
+        "dining table (center, image 2)",
+        "dining chairs (around table, image 2)"
+      ],
+      "need_from_others": [
+        "PourObject: fill blue mug with water from water pitcher"
+      ],
+      "intends": [
+        "move red blanket from sofa to purple sofa",
+        "pickup water pitcher from dining table",
+        "pickup blue mug from dining table",
+        "move water pitcher to wooden coffee table",
+        "move blue mug to wooden coffee table"
+      ],
+      "suggests": [
+        "water pitcher (dining table, image 2)",
+        "blue mug (dining table, image 2)"
+      ],
+      "obs_scope": "I can observe and interact with objects in the living room and dining area.",
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift objects over 5 kg",
+        "PushFurniture: cannot move heavy furniture",
+        "SliceObject: cannot cut or slice items",
+        "PourObject: cannot pour liquids"
+      ],
+      "reasoning": "a) GOAL STATE: The living room should be comfortable for resting, with water and essentials nearby. b) PRIORITY: Ensure comfort and accessibility to water within the time limit. c) MY ROOM: Arrange the sofa and blanket for comfort, and bring water to the living room. d) FOR OTHERS: The water pitcher and mug can be used in the living room."
+    },
+    "R3": {
+      "agent": "R3",
+      "capability": "I am mobile and can carry light objects up to 5 kg.",
+      "can_do": [
+        "PickupLightObject: lift objects under 5 kg",
+        "PassReceiveObject: exchange objects with others",
+        "ToggleObject: turn on/off lights, TV, appliances"
+      ],
+      "has_items": [
+        "white bed (left side, image 1)",
+        "green pillow (on white bed, image 1)",
+        "black and white blanket (on white bed, image 1)",
+        "wooden nightstand (next to white bed, image 1)",
+        "lamp (on wooden nightstand, image 1)",
+        "alarm clock (on wooden nightstand, image 1)",
+        "laptop (on desk, image 1)",
+        "red chair (in front of desk, image 1)",
+        "dumbbell (next to desk, image 1)",
+        "wooden desk (against wall, image 1)",
+        "cardboard box (floor, image 2)",
+        "blue cloth (floor, image 2)",
+        "orange bottle (on shelf, image 2)",
+        "books (on shelf, image 2)",
+        "wooden dresser (below shelf, image 2)",
+        "water bottles (on shelf, image 2)"
+      ],
+      "need_from_others": [
+        "Provide tissues or medications if needed"
+      ],
+      "intends": [
+        "move green pillow from white bed to wooden nightstand",
+        "move black and white blanket from white bed to wooden nightstand",
+        "move water bottles from shelf to wooden nightstand",
+        "turn on lamp on wooden nightstand"
+      ],
+      "suggests": [
+        "water bottles (on shelf, image 2)"
+      ],
+      "obs_scope": "I can observe and interact with objects in the bedroom.",
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift objects over 5 kg",
+        "PushFurniture: cannot move heavy furniture",
+        "SliceObject: cannot cut or slice objects",
+        "PourObject: cannot pour liquids"
+      ],
+      "reasoning": "a) GOAL STATE: The room must be comfortable for rest, with water and essentials accessible. b) PRIORITY: Ensure the bed is ready for rest and water is within reach. c) MY ROOM: Arrange bed items and place water nearby. d) FOR OTHERS: Water bottles could be useful in another room."
+    },
+    "R4": {
+      "agent": "R4",
+      "capability": "I am mobile and can carry light objects up to 5 kg.",
+      "can_do": [
+        "PickupLightObject: move light items",
+        "PassReceiveObject: exchange items with others",
+        "ToggleObject: turn on/off lights, TV, appliances"
+      ],
+      "has_items": [
+        "green trash bin (floor, image 1)",
+        "brown towel (wall, image 1)",
+        "toilet paper roll (wall, image 2)",
+        "toilet brush (floor, image 2)"
+      ],
+      "need_from_others": [
+        "Provide water and any additional comfort items like blankets or pillows"
+      ],
+      "intends": [
+        "move brown towel from wall to sink counter"
+      ],
+      "suggests": [
+        "brown towel (wall, image 1)"
+      ],
+      "obs_scope": "I can observe and interact with items in the bathroom only.",
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift heavy items",
+        "PushFurniture: cannot move large furniture",
+        "SliceObject: cannot cut or slice objects",
+        "PourObject: cannot pour liquids"
+      ],
+      "reasoning": "a) GOAL STATE: The room must be comfortable for resting, with access to water and essentials. b) PRIORITY: Ensure comfort and accessibility within the 20-minute deadline. c) MY ROOM: Adjust items to enhance comfort and accessibility. d) FOR OTHERS: Provide items like towels or trash bin if needed elsewhere."
+    }
+  },
+  "local_plans": {
+    "R1": [
+      {
+        "id": "r1_s1",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pour",
+          "object": "green cup",
+          "from": "kettle",
+          "to": "filled with water"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Provide water and snacks for the resting area",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r1_s2",
+        "agent": "R1",
+        "type": "PASS",
+        "action": "pass green cup (counter, image 1) to R2",
+        "item": "green cup (counter, image 1)",
+        "target": "R2",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "offer",
+        "answers": null,
+        "enables": null,
+        "serves": "Provide water and snacks for the resting area",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "R2": [
+      {
+        "id": "r2_s1",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "move",
+          "object": "red blanket",
+          "from": "sofa",
+          "to": "purple sofa"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "living_room",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Set up living room for rest and recovery with water and essentials.",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s2",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "water pitcher",
+          "from": "dining table",
+          "to": "wooden coffee table"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "living_room",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Set up living room for rest and recovery with water and essentials.",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s3",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "blue mug",
+          "from": "dining table",
+          "to": "wooden coffee table"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "living_room",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Set up living room for rest and recovery with water and essentials.",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s4",
+        "agent": "R2",
+        "type": "ASK_HELP",
+        "action": {
+          "verb": "pour",
+          "object": "blue mug",
+          "from": "water pitcher",
+          "to": "filled with water"
+        },
+        "item": null,
+        "target": "R1",
+        "uses": null,
+        "location": "living_room",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Set up living room for rest and recovery with water and essentials.",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [
+          "ASK_HELP '{'verb': 'pour', 'object': 'blue mug', 'from': 'water pitcher', 'to': 'filled with water'}' must name in 'enables' the index of one of YOUR OWN later LOCAL steps that needs it (got 3). If none of your steps needs it, remove this request: that part belongs to whoever does it."
+        ],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "R3": [
+      {
+        "id": "r3_s1",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "move",
+          "object": "green pillow",
+          "from": "white bed",
+          "to": "wooden nightstand"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Set up the bedroom for someone with the flu to rest and recover.",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s2",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "move",
+          "object": "black and white blanket",
+          "from": "white bed",
+          "to": "wooden nightstand"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Set up the bedroom for someone with the flu to rest and recover.",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s3",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "move",
+          "object": "water bottles",
+          "from": "shelf",
+          "to": "wooden nightstand"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Set up the bedroom for someone with the flu to rest and recover.",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s4",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "turn_on",
+          "object": "lamp",
+          "from": "wooden nightstand",
+          "to": "on"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Set up the bedroom for someone with the flu to rest and recover.",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s5",
+        "agent": "R3",
+        "type": "PASS",
+        "action": "pass water bottles (on shelf, image 2) to R4",
+        "item": "water bottles (on shelf, image 2)",
+        "target": "R4",
+        "uses": null,
+        "location": "bedroom",
+        "origin": "offer",
+        "answers": null,
+        "enables": null,
+        "serves": "Set up the bedroom for someone with the flu to rest and recover.",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "R4": [
+      {
+        "id": "r4_s1",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "move",
+          "object": "brown towel",
+          "from": "wall",
+          "to": "sink counter"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Enhance comfort and accessibility in the bathroom for someone with the flu.",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ]
+  },
+  "judgments": [
+    {
+      "agent": "R1",
+      "request": "r2_s4",
+      "decision": "reject",
+      "reason": "I am fixed in place and cannot interact with items in the living room.",
+      "result": "reject"
+    },
+    {
+      "agent": "R3",
+      "request": "r2_s4",
+      "decision": "ignore",
+      "reason": "The request is targeted at R1 and involves pouring, which I cannot do.",
+      "result": "ignore"
+    },
+    {
+      "agent": "R4",
+      "request": "r2_s4",
+      "decision": "ignore",
+      "reason": "The request is targeted at R1 and involves pouring, which I cannot do.",
+      "result": "ignore"
+    },
+    {
+      "agent": "R2",
+      "offer": "r1_s2",
+      "decision": "decline",
+      "reason": "The green cup is not needed as I already have a blue mug for water.",
+      "result": "decline"
+    },
+    {
+      "agent": "R4",
+      "offer": "r3_s5",
+      "decision": "receive",
+      "reason": "",
+      "result": "CANDIDATE",
+      "provider": "r3_s5",
+      "receive": "r4_s2",
+      "use": "r4_s3"
+    }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "r1_s1",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pour",
+          "object": "green cup",
+          "from": "kettle",
+          "to": "filled with water"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Provide water and snacks for the resting area",
+        "prepared_by": null,
+        "status": "dropped",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r1_s2",
+        "agent": "R1",
+        "type": "PASS",
+        "action": "pass green cup (counter, image 1) to R2",
+        "item": "green cup (counter, image 1)",
+        "target": "R2",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "offer",
+        "answers": null,
+        "enables": null,
+        "serves": "Provide water and snacks for the resting area",
+        "prepared_by": "r1_s1",
+        "status": "dropped",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s1",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "move",
+          "object": "red blanket",
+          "from": "sofa",
+          "to": "purple sofa"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "living_room",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Set up living room for rest and recovery with water and essentials.",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "short",
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 1
+      },
+      {
+        "id": "r2_s2",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "water pitcher",
+          "from": "dining table",
+          "to": "wooden coffee table"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "living_room",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Set up living room for rest and recovery with water and essentials.",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "short",
+        "phase": 1,
+        "t_start": 1,
+        "t_end": 2
+      },
+      {
+        "id": "r2_s3",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "blue mug",
+          "from": "dining table",
+          "to": "wooden coffee table"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "living_room",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Set up living room for rest and recovery with water and essentials.",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "short",
+        "phase": 1,
+        "t_start": 2,
+        "t_end": 3
+      },
+      {
+        "id": "r2_s4",
+        "agent": "R2",
+        "type": "ASK_HELP",
+        "action": {
+          "verb": "pour",
+          "object": "blue mug",
+          "from": "water pitcher",
+          "to": "filled with water"
+        },
+        "item": null,
+        "target": "R1",
+        "uses": null,
+        "location": "living_room",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Set up living room for rest and recovery with water and essentials.",
+        "prepared_by": null,
+        "status": "blocked",
+        "violations": [
+          "ASK_HELP '{'verb': 'pour', 'object': 'blue mug', 'from': 'water pitcher', 'to': 'filled with water'}' must name in 'enables' the index of one of YOUR OWN later LOCAL steps that needs it (got 3). If none of your steps needs it, remove this request: that part belongs to whoever does it.",
+          "blocked (declined)"
+        ],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s1",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "move",
+          "object": "green pillow",
+          "from": "white bed",
+          "to": "wooden nightstand"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Set up the bedroom for someone with the flu to rest and recover.",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "short",
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 1
+      },
+      {
+        "id": "r3_s2",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "move",
+          "object": "black and white blanket",
+          "from": "white bed",
+          "to": "wooden nightstand"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Set up the bedroom for someone with the flu to rest and recover.",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "short",
+        "phase": 1,
+        "t_start": 1,
+        "t_end": 2
+      },
+      {
+        "id": "r3_s3",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "move",
+          "object": "water bottles",
+          "from": "shelf",
+          "to": "wooden nightstand"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Set up the bedroom for someone with the flu to rest and recover.",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "short",
+        "phase": 1,
+        "t_start": 2,
+        "t_end": 3
+      },
+      {
+        "id": "r3_s4",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "turn_on",
+          "object": "lamp",
+          "from": "wooden nightstand",
+          "to": "on"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Set up the bedroom for someone with the flu to rest and recover.",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "short",
+        "phase": 1,
+        "t_start": 3,
+        "t_end": 4
+      },
+      {
+        "id": "r3_s5",
+        "agent": "R3",
+        "type": "PASS",
+        "action": "pass water bottles (on shelf, image 2) to R4",
+        "item": "water bottles (on shelf, image 2)",
+        "target": "R4",
+        "uses": null,
+        "location": "bedroom",
+        "origin": "offer",
+        "answers": "r4_s2",
+        "enables": null,
+        "serves": "Set up the bedroom for someone with the flu to rest and recover.",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "medium",
+        "phase": 2,
+        "t_start": 4,
+        "t_end": 5
+      },
+      {
+        "id": "r4_s1",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "move",
+          "object": "brown towel",
+          "from": "wall",
+          "to": "sink counter"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Enhance comfort and accessibility in the bathroom for someone with the flu.",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "short",
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 1
+      },
+      {
+        "id": "r4_s2",
+        "agent": "R4",
+        "type": "RECEIVE",
+        "action": "receive water bottles (on shelf, image 2)",
+        "item": "water bottles (on shelf, image 2)",
+        "target": "R3",
+        "uses": null,
+        "location": "bathroom",
+        "origin": "accept",
+        "answers": null,
+        "enables": "r4_s3",
+        "serves": "offered water bottles (on shelf, image 2)",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "short",
+        "phase": 2,
+        "t_start": 5,
+        "t_end": 6
+      },
+      {
+        "id": "r4_s3",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": "pass water bottles (on shelf, image 2) to R4",
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "accept",
+        "answers": null,
+        "enables": null,
+        "serves": "offered water bottles (on shelf, image 2)",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "medium",
+        "phase": 2,
+        "t_start": 6,
+        "t_end": 7
+      }
+    ],
+    "order": {
+      "R1": [
+        "r1_s1",
+        "r1_s2"
+      ],
+      "R2": [
+        "r2_s1",
+        "r2_s2",
+        "r2_s3",
+        "r2_s4"
+      ],
+      "R3": [
+        "r3_s1",
+        "r3_s2",
+        "r3_s3",
+        "r3_s4",
+        "r3_s5"
+      ],
+      "R4": [
+        "r4_s1",
+        "r4_s2",
+        "r4_s3"
+      ]
+    },
+    "edges": [
+      {
+        "src": "r2_s1",
+        "dst": "r2_s2",
+        "kind": "SEQ",
+        "status": "CONFIRMED",
+        "source": "local",
+        "targeted": false
+      },
+      {
+        "src": "r2_s2",
+        "dst": "r2_s3",
+        "kind": "SEQ",
+        "status": "CONFIRMED",
+        "source": "local",
+        "targeted": false
+      },
+      {
+        "src": "r3_s1",
+        "dst": "r3_s2",
+        "kind": "SEQ",
+        "status": "CONFIRMED",
+        "source": "local",
+        "targeted": false
+      },
+      {
+        "src": "r3_s2",
+        "dst": "r3_s3",
+        "kind": "SEQ",
+        "status": "CONFIRMED",
+        "source": "local",
+        "targeted": false
+      },
+      {
+        "src": "r3_s3",
+        "dst": "r3_s4",
+        "kind": "SEQ",
+        "status": "CONFIRMED",
+        "source": "local",
+        "targeted": false
+      },
+      {
+        "src": "r3_s4",
+        "dst": "r3_s5",
+        "kind": "SEQ",
+        "status": "CONFIRMED",
+        "source": "local",
+        "targeted": false
+      },
+      {
+        "src": "r4_s1",
+        "dst": "r4_s2",
+        "kind": "SEQ",
+        "status": "CONFIRMED",
+        "source": "local",
+        "targeted": false
+      },
+      {
+        "src": "r4_s2",
+        "dst": "r4_s3",
+        "kind": "SEQ",
+        "status": "CONFIRMED",
+        "source": "local",
+        "targeted": false
+      },
+      {
+        "src": "r3_s5",
+        "dst": "r4_s2",
+        "kind": "TRANSFER",
+        "status": "CONFIRMED",
+        "source": "rule",
+        "targeted": true
+      }
+    ],
+    "drops": [
+      {
+        "node": "r1_s2",
+        "agent": "R1",
+        "type": "PASS",
+        "text": "pass green cup (counter, image 1) to R2 (green cup (counter, image 1))",
+        "reason": "offer not taken by R2",
+        "by": "rule"
+      },
+      {
+        "node": "r1_s1",
+        "agent": "R1",
+        "type": "LOCAL",
+        "text": "pour the green cup from kettle to filled with water",
+        "reason": "prepared only for r1_s2, an offer R2 did not take",
+        "by": "rule"
+      }
+    ],
+    "unresolved": [
+      {
+        "request": "r2_s4",
+        "agent": "R2",
+        "text": "pour the blue mug from water pitcher to filled with water",
+        "outcome": "declined",
+        "why": "R1 declined: reject",
+        "by": "rule"
+      }
+    ],
+    "warnings": [],
+    "ops_log": []
+  },
+  "metrics": {
+    "task_id": "task8_abstract",
+    "n_steps_total": 14,
+    "n_steps_active": 11,
+    "n_blocked": 1,
+    "n_dropped": 2,
+    "n_requests": 2,
+    "n_requests_served": 1,
+    "n_collab_edges_final": 1,
+    "confirmed_ratio": 1.0,
+    "selected_by_graph": 0,
+    "selected_by_rule": 1,
+    "capability_violations_after_fix": 0,
+    "n_requests_withdrawn": 0,
+    "n_served_by_own_existing_step": 0,
+    "n_duplicates_merged": 0,
+    "n_duplicates_dropped": 0,
+    "n_redundant_branches_released": 0,
+    "n_requests_moved_later": 0,
+    "n_warnings": 0,
+    "plan_fix_rounds": {
+      "R1": 2,
+      "R2": 2,
+      "R3": 2,
+      "R4": 1
+    },
+    "n_checklist_items": 11,
+    "n_uncovered_checklist": 2,
+    "n_uncovered_essential": 0,
+    "graph_ops_applied": 0,
+    "graph_ops_rejected": 0,
+    "makespan_steps": 7,
+    "makespan_min": 10,
+    "deadline": 20,
+    "deadline_ok": true,
+    "size_source": "graph_llm",
+    "n_size_missing": 0,
+    "n_candidates_from_stage3": 1,
+    "n_order_edges_added": 0,
+    "n_order_pairs_independent": 0,
+    "success_no_blocked": false,
+    "n_requests_declined": 1,
+    "n_requests_failed": 0,
+    "n_requests_moot": 0,
+    "n_blocked_by_decline": 1,
+    "n_blocked_by_failure": 0,
+    "success_no_failure": true,
+    "n_handoff_prep_dropped": 0,
+    "n_offers_made": 2,
+    "n_offers_taken": 1,
+    "n_offers_untaken": 1,
+    "n_preparations_released": 1,
+    "n_help_edges": 0,
+    "n_transfer_edges": 1,
+    "llm_calls": 20,
+    "prompt_tokens": 52853,
+    "completion_tokens": 4889,
+    "config": {
+      "use_edge_proposal": true,
+      "use_graph_llm": true,
+      "max_graph_rounds": 2
+    }
+  },
+  "config": {
+    "use_edge_proposal": true,
+    "use_graph_llm": true,
+    "max_graph_rounds": 2,
+    "deadline_min": 20
+  }
+}
