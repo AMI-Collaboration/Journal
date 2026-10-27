@@ -1,43 +1,45 @@
 [
   {
-    "key": "offer:R1",
-    "system": "You are robot R1, a household robot that sees only its own room.\n\nSTEP 1 — LIST has_items: every clearly visible movable object in your images.\nFormat: \"<color> <noun> (<location>, image <k>)\". NEVER ",
-    "user": "## TASK (serve this only):\nI'm heading to bed in 15 minutes. The house should be quiet and settled — lights down, things put away, and the bedroom ready to sleep in.\nDEADLINE: 15 minutes\n\nYOUR BODY: room=kitchen, mobile=True, payload=5 kg, embodiment=Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture, SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\nApple (in Fridge)\nCup (in SinkBasin)\nEgg (in SinkBasin)\nLettuce (in SinkBasin)\n\nImages attached ",
+    "key": "offer:R4",
+    "system": "You are robot R4, a household robot that sees only its own room.\n\nSTEP 1 — LIST has_items: every clearly visible movable object in your images.\nFormat: \"<color> <noun> (<location>, image <k>)\". NEVER ",
+    "user": "## TASK (serve this only):\nI'm heading to bed in 15 minutes. The house should be quiet and settled — lights down, things put away, and the bedroom ready to sleep in.\nDEADLINE: 15 minutes\n\nYOUR BODY: room=bathroom, mobile=True, payload=5 kg, embodiment=Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture, SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\nCloth (in BathtubBasin)\nCandle (in Cabinet)\nSprayBottle (in Cabinet)\n\nImages attached (2 image(",
     "output": {
       "has_items": [
-        "gray mug (counter, image 1)",
-        "brown loaf (counter, image 1)",
-        "orange fruit (counter, image 1)",
-        "potted plant (counter, image 1)",
-        "red vase (shelf, image 2)",
-        "blue vase (shelf, image 2)",
-        "gray vase (shelf, image 2)"
+        "green towel (on towel rack, image 1)",
+        "red bottle (in bathtub, image 1)",
+        "pink soap (on sink, image 2)",
+        "green bottle (on sink, image 2)",
+        "toothbrush (on sink, image 2)"
       ],
-      "reasoning": "a) GOAL STATE: The house is quiet, lights are off, and the kitchen is tidy. b) PRIORITY: Ensure lights are off and items are put away before the deadline. c) MY ROOM: Turn off lights and put away items on the counter. d) FOR OTHERS: None of my has_items serve another room's needs.",
-      "capability": "I am mobile and can handle light objects.",
+      "reasoning": "a) GOAL STATE: The house should be quiet and settled, with lights down and items put away, and the bedroom ready for sleep. b) PRIORITY: Ensuring the bathroom is tidy and lights are off before the deadline. c) MY ROOM: Turn off lights and ensure items are put away. d) FOR OTHERS: Items like the green towel and soap might be useful for bedtime routines.",
+      "capability": "I am a mobile robot with light object handling capabilities.",
       "can_do": [
-        "PickupLightObject: pick up items under 5 kg",
-        "PassReceiveObject: exchange items with others",
+        "PickupLightObject: pick up objects under 5 kg",
+        "PassReceiveObject: pass or receive objects",
         "ToggleObject: turn on/off lights, TV, appliances"
       ],
       "cannot_do": [
-        "PickupHeavyObject: cannot lift items over 5 kg",
+        "PickupHeavyObject: cannot lift objects over 5 kg",
         "PushFurniture: cannot move heavy furniture",
-        "SliceObject: cannot cut or slice items",
+        "SliceObject: cannot cut or slice objects",
         "PourObject: cannot pour liquids"
       ],
-      "suggests": [],
+      "suggests": [
+        "green towel (on towel rack, image 1)",
+        "pink soap (on sink, image 2)"
+      ],
       "intends": [
-        "move gray mug from counter to shelf",
-        "move brown loaf from counter to shelf",
-        "move orange fruit from counter to shelf",
-        "turn off ceiling lights"
+        "turn off ceiling light",
+        "move pink soap from sink to cabinet",
+        "move green bottle from sink to cabinet",
+        "move toothbrush from sink to cabinet"
       ],
       "need_from_others": [
-        "Turn off lights in other rooms",
-        "Ensure bedroom is ready for sleep"
+        "Receive: Cloth (in BathtubBasin)",
+        "Receive: Candle (in Cabinet)",
+        "Receive: SprayBottle (in Cabinet)"
       ],
-      "obs_scope": "I can observe and interact with items in the kitchen only."
+      "obs_scope": "I can observe and interact with objects in the bathroom."
     }
   },
   {
@@ -46,39 +48,87 @@
     "user": "## TASK (serve this only):\nI'm heading to bed in 15 minutes. The house should be quiet and settled — lights down, things put away, and the bedroom ready to sleep in.\nDEADLINE: 15 minutes\n\nYOUR BODY: room=living_room, mobile=True, payload=5 kg, embodiment=Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture, SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\n(none)\n\nImages attached (2 image(s)), image 1 to 2.",
     "output": {
       "has_items": [
-        "black TV (on TV stand, image 1)",
-        "brown TV stand (against wall, image 1)",
-        "blue trash bin (near fireplace, image 1)",
-        "white fireplace (against wall, image 1)",
-        "red sofa (center of room, image 1)",
-        "yellow armchair (center of room, image 1)",
-        "floor lamp (near sofa, image 1)",
-        "table lamp (on side table, image 1)",
-        "side table (near window, image 1)",
-        "dining table (near window, image 2)",
-        "dining chairs (around dining table, image 2)"
+        "black TV (TV stand, image 1)",
+        "blue bin (floor, image 1)",
+        "floor lamp (floor, image 1)",
+        "table lamp (console table, image 1)",
+        "beige armchair (floor, image 1)",
+        "red sofa (floor, image 1)",
+        "dining table (floor, image 2)",
+        "dining chair (floor, image 2)"
       ],
-      "reasoning": "a) GOAL STATE: The house should be quiet and settled, with lights down and things put away. b) PRIORITY: Ensuring the lights are turned off and the room is quiet. c) MY ROOM: Turn off the floor lamp and table lamp. d) FOR OTHERS: No items from my room are needed elsewhere.",
-      "capability": "I can move around the living room and interact with light objects.",
+      "reasoning": "a) GOAL STATE: The house should be quiet, with lights off and items put away, and the bedroom ready for sleep. b) PRIORITY: Turning off lights and ensuring quietness are most important given the deadline. c) MY ROOM: Turn off the floor lamp and table lamp. d) FOR OTHERS: The blue bin might be useful for organizing or tidying up.",
+      "capability": "I am a mobile robot with a light payload capacity.",
       "can_do": [
-        "PickupLightObject: lift small items",
-        "PassReceiveObject: transfer items",
+        "PickupLightObject: pick up objects up to 5 kg",
+        "PassReceiveObject: pass or receive objects",
         "ToggleObject: turn on/off lights, TV, appliances"
       ],
       "cannot_do": [
-        "PickupHeavyObject: too heavy for me",
-        "PushFurniture: cannot move large items",
-        "SliceObject: cannot cut items",
+        "PickupHeavyObject: cannot lift objects over 5 kg",
+        "PushFurniture: cannot move furniture",
+        "SliceObject: cannot cut or slice objects",
         "PourObject: cannot pour liquids"
       ],
-      "suggests": [],
-      "intends": [
-        "ToggleObject: turn off floor lamp",
-        "ToggleObject: turn off table lamp",
-        "ToggleObject: turn off TV"
+      "suggests": [
+        "blue bin (floor, image 1)"
       ],
-      "need_from_others": [],
+      "intends": [
+        "turn off floor lamp",
+        "turn off table lamp"
+      ],
+      "need_from_others": [
+        "Ensure bedroom is ready for sleep",
+        "Put away items in other rooms"
+      ],
       "obs_scope": "I can observe and interact with items in the living room."
+    }
+  },
+  {
+    "key": "offer:R1",
+    "system": "You are robot R1, a household robot that sees only its own room.\n\nSTEP 1 — LIST has_items: every clearly visible movable object in your images.\nFormat: \"<color> <noun> (<location>, image <k>)\". NEVER ",
+    "user": "## TASK (serve this only):\nI'm heading to bed in 15 minutes. The house should be quiet and settled — lights down, things put away, and the bedroom ready to sleep in.\nDEADLINE: 15 minutes\n\nYOUR BODY: room=kitchen, mobile=True, payload=5 kg, embodiment=Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture, SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\nApple (in Fridge)\nCup (in SinkBasin)\nEgg (in SinkBasin)\nLettuce (in SinkBasin)\n\nImages attached ",
+    "output": {
+      "has_items": [
+        "black stool (near counter, image 1)",
+        "brown mug (on counter, image 1)",
+        "potted plant (on counter, image 1)",
+        "red apple (on counter, image 1)",
+        "toaster (on counter, image 1)",
+        "coffee maker (on counter, image 1)",
+        "black stool (near counter, image 1)",
+        "blue recycling bin (near fridge, image 2)",
+        "red vase (on shelf, image 2)",
+        "blue vase (on shelf, image 2)",
+        "fridge (near counter, image 2)",
+        "microwave (on counter, image 2)"
+      ],
+      "reasoning": "a) GOAL STATE: The house is quiet, lights are off, and the bedroom is ready for sleep. b) PRIORITY: Ensure lights are off and items are put away within 15 minutes. c) MY ROOM: Turn off lights and put away items like the brown mug and red apple. d) FOR OTHERS: The red apple could be useful in the kitchen or dining area.",
+      "capability": "I am a mobile robot with light object handling capabilities.",
+      "can_do": [
+        "PickupLightObject: pick up objects under 5 kg",
+        "PassReceiveObject: pass and receive objects",
+        "ToggleObject: turn on/off lights, TV, appliances"
+      ],
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift objects over 5 kg",
+        "PushFurniture: cannot move furniture",
+        "SliceObject: cannot cut or slice objects",
+        "PourObject: cannot pour liquids"
+      ],
+      "suggests": [
+        "red apple (on counter, image 1)"
+      ],
+      "intends": [
+        "turn off ceiling lights",
+        "move brown mug from counter to shelf",
+        "move red apple from counter to fridge"
+      ],
+      "need_from_others": [
+        "Ensure bedroom lights are off",
+        "Ensure bedroom is ready for sleep"
+      ],
+      "obs_scope": "I can observe and interact with items in the kitchen only."
     }
   },
   {
@@ -88,93 +138,124 @@
     "output": {
       "has_items": [
         "brown laundry basket (floor, image 1)",
-        "wooden desk (near wall, image 1)",
+        "wooden desk (against wall, image 1)",
         "black laptop (on wooden desk, image 1)",
-        "blue chair (near wooden desk, image 1)",
+        "blue chair (in front of wooden desk, image 1)",
         "black alarm clock (on wooden desk, image 1)",
-        "blue trash bin (near wooden desk, image 1)",
-        "blue bed (near wall, image 2)",
-        "blue blanket (on blue bed, image 2)",
-        "wooden dresser (near window, image 2)",
+        "blue trash bin (next to wooden desk, image 1)",
+        "single bed (against wall, image 2)",
+        "blue blanket (on single bed, image 2)",
+        "wooden dresser (under window, image 2)",
         "green lamp (on wooden dresser, image 2)",
-        "brown cardboard box (floor, image 2)",
+        "cardboard box (floor, image 2)",
         "brown football (floor, image 2)",
-        "brown baseball bat (wall, image 2)"
+        "brown baseball bat (leaning against wall, image 2)"
       ],
-      "reasoning": "a) GOAL STATE: The bedroom should be quiet, dark, and tidy for sleeping. b) PRIORITY: Ensure lights are off and items are put away within 15 minutes. c) MY ROOM: Turn off the green lamp and ensure items are organized. d) FOR OTHERS: None of my has_items serve another room's needs.",
-      "capability": "I am a mobile robot capable of handling heavy objects and moving furniture.",
+      "reasoning": "a) GOAL STATE: The bedroom should be quiet, with lights off and items put away for sleep. b) PRIORITY: Ensure lights are off and items are organized within 15 minutes. c) MY ROOM: Turn off the green lamp and organize visible items. d) FOR OTHERS: No items need to be moved to another room.",
+      "capability": "I am a mobile robot capable of moving and organizing items within the bedroom.",
       "can_do": [
-        "PickupLightObject: handle small items",
-        "PickupHeavyObject: handle large items",
-        "PushFurniture: rearrange furniture",
-        "PassReceiveObject: exchange items with others",
+        "PickupLightObject: move small items",
+        "PickupHeavyObject: move larger items",
+        "PushFurniture: adjust furniture",
+        "PassReceiveObject: exchange items",
         "ToggleObject: turn on/off lights, TV, appliances"
       ],
       "cannot_do": [
-        "SliceObject: cannot cut or slice items",
-        "PourObject: cannot pour liquids"
+        "SliceObject: cannot cut or divide items",
+        "PourObject: cannot handle liquids"
       ],
       "suggests": [],
       "intends": [
-        "ToggleObject: turn off green lamp (on wooden dresser, image 2)",
-        "PickupLightObject: move black laptop from wooden desk to wooden dresser",
-        "PickupLightObject: move brown football from floor to wooden dresser",
-        "PickupLightObject: move brown baseball bat from wall to wooden dresser",
-        "PickupLightObject: move brown cardboard box from floor to wooden dresser"
+        "turn off green lamp",
+        "move brown laundry basket to corner",
+        "place black laptop inside wooden desk",
+        "push blue chair under wooden desk",
+        "move brown football to corner",
+        "move brown baseball bat to corner"
       ],
       "need_from_others": [],
       "obs_scope": "I can observe and interact with items in the bedroom."
     }
   },
   {
-    "key": "offer:R4",
-    "system": "You are robot R4, a household robot that sees only its own room.\n\nSTEP 1 — LIST has_items: every clearly visible movable object in your images.\nFormat: \"<color> <noun> (<location>, image <k>)\". NEVER ",
-    "user": "## TASK (serve this only):\nI'm heading to bed in 15 minutes. The house should be quiet and settled — lights down, things put away, and the bedroom ready to sleep in.\nDEADLINE: 15 minutes\n\nYOUR BODY: room=bathroom, mobile=True, payload=5 kg, embodiment=Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture, SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\nCloth (in BathtubBasin)\nCandle (in Cabinet)\nSprayBottle (in Cabinet)\n\nImages attached (2 image(",
+    "key": "plan:R1",
+    "system": "You are robot R1 in the kitchen. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
+    "user": "## TASK:\nI'm heading to bed in 15 minutes. The house should be quiet and settled — lights down, things put away, and the bedroom ready to sleep in.\nDEADLINE: 15 minutes\n\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am a mobile robot with light object handling capabilities.\",\n \"can_do\": [\n  \"PickupLightObject: pick up objects under 5 kg\",\n  \"PassReceiveObject: pass and receive objects\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"black stool (near counter, image",
     "output": {
-      "has_items": [
-        "green towel (on towel rack, image 1)",
-        "red soap (in bathtub, image 1)",
-        "pink soap (on sink, image 2)",
-        "green bottle (on sink, image 2)"
+      "reasoning": "a) The goal is to ensure the house is quiet and settled for sleep, which includes turning off lights and putting away items. b) My priority is to turn off the kitchen ceiling lights and put away the brown mug and red apple. c) I need to pass the red apple to another robot if it is needed elsewhere. d) I will ensure the kitchen is ready by turning off lights and organizing items.",
+      "goals": [
+        {
+          "goal": "Ensure kitchen is quiet and settled for sleep",
+          "priority": "high",
+          "in_my_room": true
+        }
       ],
-      "reasoning": "a) GOAL STATE: The house should be quiet and settled with lights down and the bedroom ready for sleep. b) PRIORITY: Ensure lights are off and items are put away to create a calm environment. c) MY ROOM: Turn off lights and ensure items are in their proper places. d) FOR OTHERS: The green towel and soaps might be useful for bedtime routines in the bathroom.",
-      "capability": "I am a mobile robot with a light payload capacity.",
-      "can_do": [
-        "PickupLightObject: move small items",
-        "PassReceiveObject: transfer items to/from others",
-        "ToggleObject: turn on/off lights, TV, appliances"
+      "checklist": [
+        {
+          "object": "kitchen ceiling lights",
+          "change": "turn off",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "brown mug",
+          "change": "move to shelf",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "red apple",
+          "change": "move to fridge",
+          "weight": "light",
+          "how": "LOCAL"
+        }
       ],
-      "cannot_do": [
-        "PickupHeavyObject: cannot lift heavy items",
-        "PushFurniture: cannot move furniture",
-        "SliceObject: cannot cut items",
-        "PourObject: cannot pour liquids"
-      ],
-      "suggests": [
-        "green towel (on towel rack, image 1)",
-        "red soap (in bathtub, image 1)",
-        "pink soap (on sink, image 2)"
-      ],
-      "intends": [
-        "turn off ceiling light (image 1)",
-        "turn off ceiling light (image 2)"
-      ],
-      "need_from_others": [
-        "Ensure bedroom lights are off",
-        "Ensure items in bedroom are put away"
-      ],
-      "obs_scope": "I can observe and interact with items in the bathroom."
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_off",
+            "object": "kitchen ceiling lights",
+            "from": "on",
+            "to": "off"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "brown mug",
+            "from": "counter",
+            "to": "shelf"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "red apple",
+            "from": "counter",
+            "to": "fridge"
+          },
+          "uses": 0,
+          "serves": 1
+        }
+      ]
     }
   },
   {
     "key": "plan:R2",
     "system": "You are robot R2 in the living_room. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessibl",
-    "user": "## TASK:\nI'm heading to bed in 15 minutes. The house should be quiet and settled — lights down, things put away, and the bedroom ready to sleep in.\nDEADLINE: 15 minutes\n\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I can move around the living room and interact with light objects.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items\",\n  \"PassReceiveObject: transfer items\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"black TV (on TV stand, image 1)\",\n  \"brown TV ",
+    "user": "## TASK:\nI'm heading to bed in 15 minutes. The house should be quiet and settled — lights down, things put away, and the bedroom ready to sleep in.\nDEADLINE: 15 minutes\n\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am a mobile robot with a light payload capacity.\",\n \"can_do\": [\n  \"PickupLightObject: pick up objects up to 5 kg\",\n  \"PassReceiveObject: pass or receive objects\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"black TV (TV stand, image 1)\",\n  \"blue bin ",
     "output": {
-      "reasoning": "a) The goal is to ensure the living room is quiet and settled with lights turned off. b) Priority is high for turning off lights and TV to prepare for bedtime. c) In my room, I need to turn off the floor lamp, table lamp, and TV. d) No items from my room are needed elsewhere, and no help is required from other rooms.",
+      "reasoning": "a) The goal is to ensure the house is quiet and settled, with lights off and items put away. b) My priority is to turn off the lights in the living room to contribute to a quiet environment. c) I will turn off the floor lamp and table lamp in the living room. d) I will offer the blue bin to other robots for organizing or tidying up in other rooms.",
       "goals": [
         {
-          "goal": "Turn off all lights and TV in the living room.",
+          "goal": "Turn off lights in the living room",
           "priority": "high",
           "in_my_room": true
         }
@@ -191,12 +272,6 @@
           "change": "turn off",
           "weight": "light",
           "how": "LOCAL"
-        },
-        {
-          "object": "black TV",
-          "change": "turn off",
-          "weight": "light",
-          "how": "LOCAL"
         }
       ],
       "steps": [
@@ -205,7 +280,7 @@
           "action": {
             "verb": "turn_off",
             "object": "floor lamp",
-            "from": "near sofa",
+            "from": "floor",
             "to": "off"
           },
           "uses": 0,
@@ -216,22 +291,17 @@
           "action": {
             "verb": "turn_off",
             "object": "table lamp",
-            "from": "on side table",
+            "from": "console table",
             "to": "off"
           },
           "uses": 0,
           "serves": 1
         },
         {
-          "type": "LOCAL",
-          "action": {
-            "verb": "turn_off",
-            "object": "black TV",
-            "from": "on TV stand",
-            "to": "off"
-          },
-          "uses": 0,
-          "serves": 1
+          "type": "PASS",
+          "item": "blue bin",
+          "target": "R3",
+          "serves": 0
         }
       ]
     }
@@ -239,26 +309,38 @@
   {
     "key": "plan:R4",
     "system": "You are robot R4 in the bathroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, ",
-    "user": "## TASK:\nI'm heading to bed in 15 minutes. The house should be quiet and settled — lights down, things put away, and the bedroom ready to sleep in.\nDEADLINE: 15 minutes\n\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I am a mobile robot with a light payload capacity.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PassReceiveObject: transfer items to/from others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"green towel (on towel rack, image 1)\",\n  \"red s",
+    "user": "## TASK:\nI'm heading to bed in 15 minutes. The house should be quiet and settled — lights down, things put away, and the bedroom ready to sleep in.\nDEADLINE: 15 minutes\n\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I am a mobile robot with light object handling capabilities.\",\n \"can_do\": [\n  \"PickupLightObject: pick up objects under 5 kg\",\n  \"PassReceiveObject: pass or receive objects\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"green towel (on towel rack, image",
     "output": {
-      "reasoning": "a) The house should be quiet and settled with lights down and the bedroom ready for sleep. b) My priority is to ensure the bathroom lights are off and items are in their proper places. c) I will turn off the bathroom ceiling lights and suggest items that might be needed for bedtime routines. d) I will pass the green towel and soaps to other robots if needed for bedtime routines.",
+      "reasoning": "a) The house should be quiet and settled, with lights down and items put away, and the bedroom ready for sleep. b) My priority is to ensure the bathroom is tidy and lights are off before the deadline. c) I will turn off the bathroom ceiling light and put away items on the sink. d) I will pass the green towel and pink soap to other robots if needed for bedtime routines.",
       "goals": [
         {
-          "goal": "Turn off bathroom ceiling lights",
+          "goal": "Turn off bathroom ceiling light and tidy up the sink area.",
           "priority": "high",
           "in_my_room": true
         }
       ],
       "checklist": [
         {
-          "object": "ceiling light (image 1)",
+          "object": "ceiling light",
           "change": "turn off",
           "weight": "light",
           "how": "LOCAL"
         },
         {
-          "object": "ceiling light (image 2)",
-          "change": "turn off",
+          "object": "pink soap",
+          "change": "move to cabinet",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "green bottle",
+          "change": "move to cabinet",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "toothbrush",
+          "change": "move to cabinet",
           "weight": "light",
           "how": "LOCAL"
         }
@@ -269,7 +351,7 @@
           "action": {
             "verb": "turn_off",
             "object": "ceiling light",
-            "from": "image 1",
+            "from": "on",
             "to": "off"
           },
           "uses": 0,
@@ -278,64 +360,10 @@
         {
           "type": "LOCAL",
           "action": {
-            "verb": "turn_off",
-            "object": "ceiling light",
-            "from": "image 2",
-            "to": "off"
-          },
-          "uses": 0,
-          "serves": 1
-        }
-      ]
-    }
-  },
-  {
-    "key": "plan:R1",
-    "system": "You are robot R1 in the kitchen. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nI'm heading to bed in 15 minutes. The house should be quiet and settled — lights down, things put away, and the bedroom ready to sleep in.\nDEADLINE: 15 minutes\n\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am mobile and can handle light objects.\",\n \"can_do\": [\n  \"PickupLightObject: pick up items under 5 kg\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"gray mug (counter, image 1)\",\n  \"brown loaf (counte",
-    "output": {
-      "reasoning": "a) The house should be quiet and settled, which means turning off lights and putting away items in the kitchen. b) My priority is to ensure the kitchen is tidy and the lights are off before the deadline. c) In my room, I need to move items from the counter to the shelf and turn off the ceiling lights. d) I do not need to pass any items to other rooms, nor do I need to receive any items from others.",
-      "goals": [
-        {
-          "goal": "Turn off kitchen ceiling lights and tidy up the counter.",
-          "priority": "high",
-          "in_my_room": true
-        }
-      ],
-      "checklist": [
-        {
-          "object": "gray mug",
-          "change": "move from counter to shelf",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "brown loaf",
-          "change": "move from counter to shelf",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "orange fruit",
-          "change": "move from counter to shelf",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "ceiling lights",
-          "change": "turn off",
-          "weight": "light",
-          "how": "LOCAL"
-        }
-      ],
-      "steps": [
-        {
-          "type": "LOCAL",
-          "action": {
             "verb": "move",
-            "object": "gray mug",
-            "from": "counter",
-            "to": "shelf"
+            "object": "pink soap",
+            "from": "sink",
+            "to": "cabinet"
           },
           "uses": 0,
           "serves": 1
@@ -344,9 +372,9 @@
           "type": "LOCAL",
           "action": {
             "verb": "move",
-            "object": "brown loaf",
-            "from": "counter",
-            "to": "shelf"
+            "object": "green bottle",
+            "from": "sink",
+            "to": "cabinet"
           },
           "uses": 0,
           "serves": 1
@@ -355,20 +383,9 @@
           "type": "LOCAL",
           "action": {
             "verb": "move",
-            "object": "orange fruit",
-            "from": "counter",
-            "to": "shelf"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "turn_off",
-            "object": "ceiling lights",
-            "from": "kitchen",
-            "to": "off"
+            "object": "toothbrush",
+            "from": "sink",
+            "to": "cabinet"
           },
           "uses": 0,
           "serves": 1
@@ -379,12 +396,12 @@
   {
     "key": "plan:R3",
     "system": "You are robot R3 in the bedroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nI'm heading to bed in 15 minutes. The house should be quiet and settled — lights down, things put away, and the bedroom ready to sleep in.\nDEADLINE: 15 minutes\n\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am a mobile robot capable of handling heavy objects and moving furniture.\",\n \"can_do\": [\n  \"PickupLightObject: handle small items\",\n  \"PickupHeavyObject: handle large items\",\n  \"PushFurniture: rearrange furniture\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject:",
+    "user": "## TASK:\nI'm heading to bed in 15 minutes. The house should be quiet and settled — lights down, things put away, and the bedroom ready to sleep in.\nDEADLINE: 15 minutes\n\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am a mobile robot capable of moving and organizing items within the bedroom.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PickupHeavyObject: move larger items\",\n  \"PushFurniture: adjust furniture\",\n  \"PassReceiveObject: exchange items\",\n  \"ToggleObject: turn on/off li",
     "output": {
-      "reasoning": "a) GOAL STATE: The bedroom should be quiet, dark, and tidy for sleeping. b) PRIORITY: Ensure lights are off and items are put away within 15 minutes. c) MY ROOM: Turn off the green lamp and ensure items are organized. d) FOR OTHERS: None of my has_items serve another room's needs.",
+      "reasoning": "a) The bedroom should be quiet and ready for sleep, which means turning off lights and organizing items. b) The priority is to ensure lights are off and items are organized within 15 minutes. c) My tasks include turning off the green lamp and organizing items in the bedroom. d) No items need to be moved to another room, and no help is needed from other robots.",
       "goals": [
         {
-          "goal": "Bedroom is quiet, dark, and tidy for sleeping.",
+          "goal": "Bedroom is quiet and ready for sleep",
           "priority": "high",
           "in_my_room": true
         }
@@ -397,26 +414,32 @@
           "how": "LOCAL"
         },
         {
+          "object": "brown laundry basket",
+          "change": "move to corner",
+          "weight": "heavy",
+          "how": "LOCAL"
+        },
+        {
           "object": "black laptop",
-          "change": "move to wooden dresser",
+          "change": "place inside wooden desk",
           "weight": "light",
           "how": "LOCAL"
         },
         {
+          "object": "blue chair",
+          "change": "push under wooden desk",
+          "weight": "heavy",
+          "how": "LOCAL"
+        },
+        {
           "object": "brown football",
-          "change": "move to wooden dresser",
+          "change": "move to corner",
           "weight": "light",
           "how": "LOCAL"
         },
         {
           "object": "brown baseball bat",
-          "change": "move to wooden dresser",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "brown cardboard box",
-          "change": "move to wooden dresser",
+          "change": "move to corner",
           "weight": "light",
           "how": "LOCAL"
         }
@@ -436,10 +459,21 @@
         {
           "type": "LOCAL",
           "action": {
+            "verb": "move",
+            "object": "brown laundry basket",
+            "from": "floor",
+            "to": "corner"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
             "verb": "pick_up",
             "object": "black laptop",
             "from": "wooden desk",
-            "to": "wooden dresser"
+            "to": "inside wooden desk"
           },
           "uses": 0,
           "serves": 1
@@ -447,10 +481,21 @@
         {
           "type": "LOCAL",
           "action": {
-            "verb": "pick_up",
+            "verb": "push",
+            "object": "blue chair",
+            "from": "in front of wooden desk",
+            "to": "under wooden desk"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
             "object": "brown football",
             "from": "floor",
-            "to": "wooden dresser"
+            "to": "corner"
           },
           "uses": 0,
           "serves": 1
@@ -458,21 +503,10 @@
         {
           "type": "LOCAL",
           "action": {
-            "verb": "pick_up",
+            "verb": "move",
             "object": "brown baseball bat",
-            "from": "wall",
-            "to": "wooden dresser"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "pick_up",
-            "object": "brown cardboard box",
-            "from": "floor",
-            "to": "wooden dresser"
+            "from": "leaning against wall",
+            "to": "corner"
           },
           "uses": 0,
           "serves": 1
@@ -483,12 +517,12 @@
   {
     "key": "plan:R2:fix",
     "system": "You are robot R2 in the living_room. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessibl",
-    "user": "## TASK:\nI'm heading to bed in 15 minutes. The house should be quiet and settled — lights down, things put away, and the bedroom ready to sleep in.\nDEADLINE: 15 minutes\n\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I can move around the living room and interact with light objects.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items\",\n  \"PassReceiveObject: transfer items\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"black TV (on TV stand, image 1)\",\n  \"brown TV ",
+    "user": "## TASK:\nI'm heading to bed in 15 minutes. The house should be quiet and settled — lights down, things put away, and the bedroom ready to sleep in.\nDEADLINE: 15 minutes\n\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am a mobile robot with a light payload capacity.\",\n \"can_do\": [\n  \"PickupLightObject: pick up objects up to 5 kg\",\n  \"PassReceiveObject: pass or receive objects\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"black TV (TV stand, image 1)\",\n  \"blue bin ",
     "output": {
-      "reasoning": "a) The goal is to ensure the living room is quiet and settled with lights turned off. b) Priority is high for turning off lights and TV to prepare for bedtime. c) In my room, I need to turn off the floor lamp, table lamp, and TV. d) No items from my room are needed elsewhere, and no help is required from other rooms.",
+      "reasoning": "a) The goal is to ensure the house is quiet and settled, with lights off and items put away. b) My priority is to turn off the lights in the living room to contribute to a quiet environment. c) I will turn off the floor lamp and table lamp in the living room. d) I will offer the blue bin to other robots for organizing or tidying up in other rooms.",
       "goals": [
         {
-          "goal": "Turn off all lights and TV in the living room.",
+          "goal": "Turn off lights in the living room",
           "priority": "high",
           "in_my_room": true
         }
@@ -505,12 +539,6 @@
           "change": "turn off",
           "weight": "light",
           "how": "LOCAL"
-        },
-        {
-          "object": "black TV",
-          "change": "turn off",
-          "weight": "light",
-          "how": "LOCAL"
         }
       ],
       "steps": [
@@ -519,7 +547,7 @@
           "action": {
             "verb": "turn_off",
             "object": "floor lamp",
-            "from": "near sofa",
+            "from": "floor",
             "to": "off"
           },
           "uses": 0,
@@ -530,7 +558,61 @@
           "action": {
             "verb": "turn_off",
             "object": "table lamp",
-            "from": "on side table",
+            "from": "console table",
+            "to": "off"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "PASS",
+          "item": "blue bin",
+          "target": "R3",
+          "serves": 0
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R1:fix",
+    "system": "You are robot R1 in the kitchen. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
+    "user": "## TASK:\nI'm heading to bed in 15 minutes. The house should be quiet and settled — lights down, things put away, and the bedroom ready to sleep in.\nDEADLINE: 15 minutes\n\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am a mobile robot with light object handling capabilities.\",\n \"can_do\": [\n  \"PickupLightObject: pick up objects under 5 kg\",\n  \"PassReceiveObject: pass and receive objects\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"black stool (near counter, image",
+    "output": {
+      "reasoning": "a) The goal is to ensure the house is quiet and settled for sleep, which includes turning off lights and putting away items. b) My priority is to turn off the kitchen ceiling lights and put away the brown mug and red apple. c) I need to pass the red apple to another robot if it is needed elsewhere. d) I will ensure the kitchen is ready by turning off lights and organizing items.",
+      "goals": [
+        {
+          "goal": "Ensure kitchen is quiet and settled for sleep",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "kitchen ceiling lights",
+          "change": "turn off",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "brown mug",
+          "change": "move to shelf",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "red apple",
+          "change": "move to fridge",
+          "weight": "light",
+          "how": "LOCAL"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_off",
+            "object": "kitchen ceiling lights",
+            "from": "on",
             "to": "off"
           },
           "uses": 0,
@@ -539,10 +621,21 @@
         {
           "type": "LOCAL",
           "action": {
-            "verb": "turn_off",
-            "object": "black TV",
-            "from": "on TV stand",
-            "to": "off"
+            "verb": "move",
+            "object": "brown mug",
+            "from": "counter",
+            "to": "shelf"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "red apple",
+            "from": "counter",
+            "to": "fridge"
           },
           "uses": 0,
           "serves": 0
@@ -553,26 +646,38 @@
   {
     "key": "plan:R4:fix",
     "system": "You are robot R4 in the bathroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, ",
-    "user": "## TASK:\nI'm heading to bed in 15 minutes. The house should be quiet and settled — lights down, things put away, and the bedroom ready to sleep in.\nDEADLINE: 15 minutes\n\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I am a mobile robot with a light payload capacity.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PassReceiveObject: transfer items to/from others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"green towel (on towel rack, image 1)\",\n  \"red s",
+    "user": "## TASK:\nI'm heading to bed in 15 minutes. The house should be quiet and settled — lights down, things put away, and the bedroom ready to sleep in.\nDEADLINE: 15 minutes\n\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I am a mobile robot with light object handling capabilities.\",\n \"can_do\": [\n  \"PickupLightObject: pick up objects under 5 kg\",\n  \"PassReceiveObject: pass or receive objects\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"green towel (on towel rack, image",
     "output": {
-      "reasoning": "a) The house should be quiet and settled with lights down and the bedroom ready for sleep. b) My priority is to ensure the bathroom lights are off and items are in their proper places. c) I will turn off the bathroom ceiling lights to contribute to a calm environment. d) I will pass the green towel and soaps to other robots if needed for bedtime routines.",
+      "reasoning": "a) The house should be quiet and settled, with lights down and items put away, and the bedroom ready for sleep. b) My priority is to ensure the bathroom is tidy and lights are off before the deadline. c) I will turn off the bathroom ceiling light and put away items on the sink. d) I will pass the green towel and pink soap to other robots if needed for bedtime routines.",
       "goals": [
         {
-          "goal": "Turn off bathroom ceiling lights",
+          "goal": "Turn off bathroom ceiling light and tidy up the sink area.",
           "priority": "high",
           "in_my_room": true
         }
       ],
       "checklist": [
         {
-          "object": "ceiling light (image 1)",
+          "object": "ceiling light",
           "change": "turn off",
           "weight": "light",
           "how": "LOCAL"
         },
         {
-          "object": "ceiling light (image 2)",
-          "change": "turn off",
+          "object": "pink soap",
+          "change": "move to cabinet",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "green bottle",
+          "change": "move to cabinet",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "toothbrush",
+          "change": "move to cabinet",
           "weight": "light",
           "how": "LOCAL"
         }
@@ -583,7 +688,7 @@
           "action": {
             "verb": "turn_off",
             "object": "ceiling light",
-            "from": "image 1",
+            "from": "on",
             "to": "off"
           },
           "uses": 0,
@@ -592,64 +697,10 @@
         {
           "type": "LOCAL",
           "action": {
-            "verb": "turn_off",
-            "object": "ceiling light",
-            "from": "image 2",
-            "to": "off"
-          },
-          "uses": 0,
-          "serves": 0
-        }
-      ]
-    }
-  },
-  {
-    "key": "plan:R1:fix",
-    "system": "You are robot R1 in the kitchen. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nI'm heading to bed in 15 minutes. The house should be quiet and settled — lights down, things put away, and the bedroom ready to sleep in.\nDEADLINE: 15 minutes\n\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am mobile and can handle light objects.\",\n \"can_do\": [\n  \"PickupLightObject: pick up items under 5 kg\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"gray mug (counter, image 1)\",\n  \"brown loaf (counte",
-    "output": {
-      "reasoning": "a) The house should be quiet and settled, which means turning off lights and putting away items in the kitchen. b) My priority is to ensure the kitchen is tidy and the lights are off before the deadline. c) In my room, I need to move items from the counter to the shelf and turn off the ceiling lights. d) I do not need to pass any items to other rooms, nor do I need to receive any items from others.",
-      "goals": [
-        {
-          "goal": "Turn off kitchen ceiling lights and tidy up the counter.",
-          "priority": "high",
-          "in_my_room": true
-        }
-      ],
-      "checklist": [
-        {
-          "object": "gray mug",
-          "change": "move from counter to shelf",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "brown loaf",
-          "change": "move from counter to shelf",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "orange fruit",
-          "change": "move from counter to shelf",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "ceiling lights",
-          "change": "turn off",
-          "weight": "light",
-          "how": "LOCAL"
-        }
-      ],
-      "steps": [
-        {
-          "type": "LOCAL",
-          "action": {
             "verb": "move",
-            "object": "gray mug",
-            "from": "counter",
-            "to": "shelf"
+            "object": "pink soap",
+            "from": "sink",
+            "to": "cabinet"
           },
           "uses": 0,
           "serves": 0
@@ -658,9 +709,9 @@
           "type": "LOCAL",
           "action": {
             "verb": "move",
-            "object": "brown loaf",
-            "from": "counter",
-            "to": "shelf"
+            "object": "green bottle",
+            "from": "sink",
+            "to": "cabinet"
           },
           "uses": 0,
           "serves": 0
@@ -669,20 +720,9 @@
           "type": "LOCAL",
           "action": {
             "verb": "move",
-            "object": "orange fruit",
-            "from": "counter",
-            "to": "shelf"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "turn_off",
-            "object": "ceiling lights",
-            "from": "kitchen",
-            "to": "off"
+            "object": "toothbrush",
+            "from": "sink",
+            "to": "cabinet"
           },
           "uses": 0,
           "serves": 0
@@ -693,12 +733,12 @@
   {
     "key": "plan:R3:fix",
     "system": "You are robot R3 in the bedroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nI'm heading to bed in 15 minutes. The house should be quiet and settled — lights down, things put away, and the bedroom ready to sleep in.\nDEADLINE: 15 minutes\n\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am a mobile robot capable of handling heavy objects and moving furniture.\",\n \"can_do\": [\n  \"PickupLightObject: handle small items\",\n  \"PickupHeavyObject: handle large items\",\n  \"PushFurniture: rearrange furniture\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject:",
+    "user": "## TASK:\nI'm heading to bed in 15 minutes. The house should be quiet and settled — lights down, things put away, and the bedroom ready to sleep in.\nDEADLINE: 15 minutes\n\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am a mobile robot capable of moving and organizing items within the bedroom.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PickupHeavyObject: move larger items\",\n  \"PushFurniture: adjust furniture\",\n  \"PassReceiveObject: exchange items\",\n  \"ToggleObject: turn on/off li",
     "output": {
-      "reasoning": "a) GOAL STATE: The bedroom should be quiet, dark, and tidy for sleeping. b) PRIORITY: Ensure lights are off and items are put away within 15 minutes. c) MY ROOM: Turn off the green lamp and ensure items are organized. d) FOR OTHERS: None of my has_items serve another room's needs.",
+      "reasoning": "a) The bedroom should be quiet and ready for sleep, which means turning off lights and organizing items. b) The priority is to ensure lights are off and items are organized within 15 minutes. c) My tasks include turning off the green lamp and organizing items in the bedroom. d) No items need to be moved to another room, and no help is needed from other robots.",
       "goals": [
         {
-          "goal": "Bedroom is quiet, dark, and tidy for sleeping.",
+          "goal": "Bedroom is quiet and ready for sleep",
           "priority": "high",
           "in_my_room": true
         }
@@ -711,26 +751,32 @@
           "how": "LOCAL"
         },
         {
+          "object": "brown laundry basket",
+          "change": "move to corner",
+          "weight": "heavy",
+          "how": "LOCAL"
+        },
+        {
           "object": "black laptop",
-          "change": "move to wooden dresser",
+          "change": "place inside wooden desk",
           "weight": "light",
           "how": "LOCAL"
         },
         {
+          "object": "blue chair",
+          "change": "push under wooden desk",
+          "weight": "heavy",
+          "how": "LOCAL"
+        },
+        {
           "object": "brown football",
-          "change": "move to wooden dresser",
+          "change": "move to corner",
           "weight": "light",
           "how": "LOCAL"
         },
         {
           "object": "brown baseball bat",
-          "change": "move to wooden dresser",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "brown cardboard box",
-          "change": "move to wooden dresser",
+          "change": "move to corner",
           "weight": "light",
           "how": "LOCAL"
         }
@@ -750,10 +796,21 @@
         {
           "type": "LOCAL",
           "action": {
+            "verb": "move",
+            "object": "brown laundry basket",
+            "from": "floor",
+            "to": "corner"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
             "verb": "pick_up",
             "object": "black laptop",
             "from": "wooden desk",
-            "to": "wooden dresser"
+            "to": "inside wooden desk"
           },
           "uses": 0,
           "serves": 0
@@ -761,10 +818,21 @@
         {
           "type": "LOCAL",
           "action": {
-            "verb": "pick_up",
+            "verb": "push",
+            "object": "blue chair",
+            "from": "in front of wooden desk",
+            "to": "under wooden desk"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
             "object": "brown football",
             "from": "floor",
-            "to": "wooden dresser"
+            "to": "corner"
           },
           "uses": 0,
           "serves": 0
@@ -772,26 +840,30 @@
         {
           "type": "LOCAL",
           "action": {
-            "verb": "pick_up",
+            "verb": "move",
             "object": "brown baseball bat",
-            "from": "wall",
-            "to": "wooden dresser"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "pick_up",
-            "object": "brown cardboard box",
-            "from": "floor",
-            "to": "wooden dresser"
+            "from": "leaning against wall",
+            "to": "corner"
           },
           "uses": 0,
           "serves": 0
         }
       ]
+    }
+  },
+  {
+    "key": "propose:R3",
+    "system": "You are robot R3. Judge other robots' requests and offers.\n\nFIRST: check your own plan. If you already do what an ASK_HELP asks → \"already_doing\" + covered_by.\nDUPLICATE REQUESTS: if you're already se",
+    "user": "TASK: I'm heading to bed in 15 minutes. The house should be quiet and settled — lights down, things put away, and the bedroom ready to sleep in.\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am a mobile robot capable of moving and organizing items within the bedroom.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PickupHeavyObject: move larger items\",\n  \"PushFurniture: adjust furniture\",\n  \"PassReceiveObject: exchange items\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],",
+    "output": {
+      "offers": [
+        {
+          "offer": "r2_s3",
+          "decision": "decline",
+          "reason": "The blue bin is not needed for my current tasks or goals."
+        }
+      ],
+      "judgments": []
     }
   },
   {
@@ -809,11 +881,12 @@
         "r3_s2": "medium",
         "r4_s2": "short",
         "r1_s3": "short",
-        "r2_s3": "short",
-        "r3_s3": "medium",
-        "r1_s4": "short",
+        "r3_s3": "short",
+        "r4_s3": "short",
         "r3_s4": "medium",
-        "r3_s5": "medium"
+        "r4_s4": "short",
+        "r3_s5": "medium",
+        "r3_s6": "medium"
       }
     }
   }

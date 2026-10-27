@@ -25,7 +25,10 @@ _WORDING = """WORDING RULES:
 _ESSENTIAL = """TEAM GOAL: ESSENTIAL work first — what the task cannot succeed without.
 Think beyond literal words: "watch a movie" → TV on + sofa arranged + lighting adjusted + snacks.
 "guest coming" → seating ready + drinks prepared + surfaces clear.
-"home workout" → floor cleared + equipment out + water nearby + shower ready after."""
+"home workout" → floor cleared + equipment out + water nearby + shower ready after.
+USE THE FULL DEADLINE: if the deadline allows more time than your current plan uses, add more
+useful work. A plan that finishes in 5 min when 30 min is available is leaving value on the table.
+More robots = more parallel work = more can be done within the same deadline."""
 
 _SPACE_RULES = """SPACE RULES:
 - Every robot works only in its OWN room unless doing HELP/PASS/RECEIVE.

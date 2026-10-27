@@ -5,41 +5,86 @@
     "user": "## TASK (serve this only):\nSomeone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nDEADLINE: 20 minutes\n\nYOUR BODY: room=living_room, mobile=False, payload=not specified (judge from your embodiment), embodiment=Gripper. CAN: PickupLightObject, SliceObject, PourObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture. This robot is FIXED IN PLACE and can never move",
     "output": {
       "has_items": [
-        "green recycling bin (floor, image 1)",
-        "brown boots (floor, image 2)",
-        "black TV (wall, image 1)",
-        "purple sofa (center, image 1)",
+        "white vase (dining table, image 1)",
+        "black bowl (dining table, image 1)",
+        "gray plate (dining table, image 1)",
         "red blanket (sofa, image 1)",
-        "white vase (table, image 1)",
-        "black bowl (table, image 1)",
-        "open book (table, image 1)",
-        "floor lamp (near sofa, image 1)"
+        "floor lamp (near sofa, image 1)",
+        "TV (wall, image 1)",
+        "green recycling bin (near stairs, image 1)",
+        "pair of boots (near stairs, image 2)"
       ],
-      "reasoning": "a) GOAL STATE: The living room must be comfortable for rest, with access to water and essentials. b) PRIORITY: Ensure the sofa is ready for resting and essentials like water are accessible. c) MY ROOM: Arrange the red blanket on the purple sofa and ensure the floor lamp is on for soft lighting. d) FOR OTHERS: The white vase can be used for water if needed.",
-      "capability": "I am a fixed robot with a gripper for handling light objects.",
+      "reasoning": "a) The room must be comfortable for resting, with water and essentials accessible. b) Prioritize comfort and access to water within the deadline. c) Arrange items for comfort and hydration using my has_items. d) Suggest items like the white vase for water to another room.",
+      "capability": "I am fixed in place with a gripper for handling light objects.",
       "can_do": [
-        "PickupLightObject: handle small items like books or bowls",
-        "SliceObject: cut items if needed",
+        "PickupLightObject: lift small items",
+        "SliceObject: cut soft items",
         "PourObject: pour liquids",
-        "PassReceiveObject: exchange items with mobile robots",
+        "PassReceiveObject: exchange items with others",
         "ToggleObject: turn on/off lights, TV, appliances"
       ],
       "cannot_do": [
-        "PickupHeavyObject: cannot lift heavy items like furniture",
-        "PushFurniture: cannot move large furniture",
-        "Move: cannot relocate to another room"
+        "PickupHeavyObject: too heavy for my gripper",
+        "PushFurniture: cannot move large items",
+        "Move: fixed in place, cannot relocate"
       ],
       "suggests": [
-        "white vase (table, image 1)"
+        "white vase (dining table, image 1)"
       ],
       "intends": [
-        "arrange red blanket on purple sofa",
-        "turn on floor lamp"
+        "PickupLightObject: pick up red blanket from sofa",
+        "ToggleObject: turn on floor lamp near sofa",
+        "PassReceiveObject: pass white vase to another robot for water"
       ],
       "need_from_others": [
-        "Bring water to fill the white vase for drinking."
+        "Receive water in white vase"
       ],
-      "obs_scope": "I can observe and interact with items in the living room only."
+      "obs_scope": "I can observe and interact with items in the living room where I am fixed."
+    }
+  },
+  {
+    "key": "offer:R2",
+    "system": "You are robot R2, a household robot that sees only its own room.\n\nSTEP 1 — LIST has_items: every clearly visible movable object in your images.\nFormat: \"<color> <noun> (<location>, image <k>)\". NEVER ",
+    "user": "## TASK (serve this only):\nSomeone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nDEADLINE: 20 minutes\n\nYOUR BODY: room=kitchen, mobile=True, payload=5 kg, embodiment=Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture, SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\nPan (in Cabinet)\nTomato (in Fridge)\nMug (in SinkBasin)\n\n",
+    "output": {
+      "has_items": [
+        "green cup (counter, image 1)",
+        "loaf of bread (counter, image 2)",
+        "potted plant (counter, image 1)",
+        "black bowl (counter, image 1)",
+        "black plate (counter, image 2)",
+        "toaster (counter, image 1)",
+        "coffee maker (counter, image 1)",
+        "knife block (counter, image 1)",
+        "cutting board (counter, image 1)",
+        "blender (counter, image 1)",
+        "microwave (counter, image 1)"
+      ],
+      "reasoning": "a) GOAL STATE: The room must be comfortable for rest, with water and essentials accessible. b) PRIORITY: Ensure essentials like water and a comfortable resting area are ready within the deadline. c) MY ROOM: Provide a cup for water and ensure the kitchen is tidy. d) FOR OTHERS: The green cup can be used for water in another room.",
+      "capability": "I am a mobile robot capable of light object manipulation.",
+      "can_do": [
+        "PickupLightObject: move light items",
+        "PassReceiveObject: transfer items to/from others",
+        "ToggleObject: turn on/off lights, TV, appliances"
+      ],
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift heavy items",
+        "PushFurniture: cannot move furniture",
+        "SliceObject: cannot cut items",
+        "PourObject: cannot pour liquids"
+      ],
+      "suggests": [
+        "green cup (for water)"
+      ],
+      "intends": [
+        "move green cup from counter to pass to another room"
+      ],
+      "need_from_others": [
+        "Provide a comfortable resting area",
+        "Ensure water is available in the green cup",
+        "Provide any additional essentials like tissues or blankets"
+      ],
+      "obs_scope": "I can observe and interact with items in the kitchen."
     }
   },
   {
@@ -51,42 +96,39 @@
         "silver knife (counter, image 1)",
         "silver kettle (counter, image 1)",
         "black toaster (counter, image 1)",
-        "black pot (shelf, image 1)",
-        "green bottle (counter, image 2)",
-        "red coffee maker (counter, image 2)",
-        "silver microwave (counter, image 2)",
-        "silver tongs (counter, image 2)",
+        "black pan (shelf, image 1)",
         "green glass (counter, image 2)",
+        "black coffee maker (counter, image 2)",
+        "silver microwave (counter, image 2)",
         "silver pot (counter, image 2)",
-        "salt shaker (counter, image 2)",
-        "pepper shaker (counter, image 2)"
+        "silver knife (counter, image 2)",
+        "green bottle (counter, image 2)",
+        "wooden stool (floor, image 2)"
       ],
-      "reasoning": "a) The room must be comfortable for rest, with water and basic needs accessible. b) Ensuring water and comfort are prioritized given the time limit. c) I can provide water using the silver kettle and green glass. d) The green glass and silver kettle can be used in another room for water access.",
-      "capability": "I can manipulate light objects and pass them to others.",
+      "reasoning": "a) The room must be comfortable for resting, with water and essentials accessible. b) Ensuring water and basic needs are prioritized due to the short deadline. c) I can prepare water and pass items like the green glass and kettle. d) The green glass and kettle can be used in another room for water access.",
+      "capability": "I am a fixed robot with a gripper, able to manipulate light objects.",
       "can_do": [
         "PickupLightObject: lift small items",
         "SliceObject: cut with a knife",
         "PourObject: pour liquids",
-        "PassReceiveObject: hand over items",
+        "PassReceiveObject: exchange items with others",
         "ToggleObject: turn on/off lights, TV, appliances"
       ],
       "cannot_do": [
         "PickupHeavyObject: too heavy for my gripper",
-        "PushFurniture: fixed in place, cannot move furniture"
+        "PushFurniture: immobile and cannot move furniture"
       ],
       "suggests": [
-        "green glass",
-        "silver kettle"
+        "green glass (counter, image 2)",
+        "silver kettle (counter, image 1)"
       ],
       "intends": [
-        "PickupLightObject: lift silver kettle",
-        "PourObject: fill silver kettle with water",
-        "ToggleObject: turn on silver kettle",
-        "PassReceiveObject: hand over green glass",
-        "PassReceiveObject: hand over silver kettle"
+        "PassReceiveObject: pass green glass to another robot",
+        "PassReceiveObject: pass silver kettle to another robot"
       ],
       "need_from_others": [
-        "Receive: another robot to collect green glass and silver kettle"
+        "Receive: a mug for water",
+        "Receive: any comfort items like blankets or pillows"
       ],
       "obs_scope": "I can only observe and interact with items in the kitchen."
     }
@@ -99,81 +141,35 @@
       "has_items": [
         "purple sofa (center, image 1)",
         "red blanket (on purple sofa, image 1)",
-        "wooden coffee table (in front of purple sofa, image 2)",
-        "floor lamp (left side, image 2)",
-        "television (wall, image 2)",
+        "wooden coffee table (center, image 2)",
+        "floor lamp (left, image 2)",
         "green pillow (on purple sofa, image 2)",
+        "TV (wall, image 2)",
         "laptop (on wooden coffee table, image 2)"
       ],
-      "reasoning": "a) GOAL STATE: The room must be comfortable for resting, with access to water and essentials. b) PRIORITY: Ensure comfort and accessibility within the 20-minute deadline. c) MY ROOM: Arrange the purple sofa and red blanket for resting, adjust lighting. d) FOR OTHERS: No items needed from my room for other rooms.",
-      "capability": "I am mobile and can handle light objects up to 5 kg.",
+      "reasoning": "a) GOAL STATE: The room must be comfortable for resting, with access to water and essentials. b) PRIORITY: Ensure comfort and accessibility within the time limit. c) MY ROOM: Arrange sofa and lighting for comfort, and provide blanket and pillow. d) FOR OTHERS: No items needed from my room for other rooms.",
+      "capability": "I am a mobile robot with light object handling capabilities.",
       "can_do": [
-        "PickupLightObject: move light items like pillows and blankets",
-        "PassReceiveObject: exchange objects with others",
+        "PickupLightObject: move small items like pillows and blankets",
+        "PassReceiveObject: exchange items with others",
         "ToggleObject: turn on/off lights, TV, appliances"
       ],
       "cannot_do": [
-        "PickupHeavyObject: cannot move heavy furniture",
-        "PushFurniture: cannot rearrange large items",
+        "PickupHeavyObject: cannot lift heavy furniture",
+        "PushFurniture: cannot rearrange large furniture",
         "SliceObject: cannot cut or prepare food",
-        "PourObject: cannot handle liquids"
+        "PourObject: cannot pour liquids"
       ],
       "suggests": [],
       "intends": [
         "move green pillow from purple sofa to wooden coffee table",
-        "arrange red blanket on purple sofa for comfort",
-        "turn on floor lamp for soft lighting"
+        "move red blanket from purple sofa to wooden coffee table",
+        "turn on floor lamp"
       ],
       "need_from_others": [
-        "Provide water and any necessary medications or snacks"
+        "Provide water and any basic necessities like tissues or medication."
       ],
       "obs_scope": "I can observe and interact with items in the living room."
-    }
-  },
-  {
-    "key": "offer:R2",
-    "system": "You are robot R2, a household robot that sees only its own room.\n\nSTEP 1 — LIST has_items: every clearly visible movable object in your images.\nFormat: \"<color> <noun> (<location>, image <k>)\". NEVER ",
-    "user": "## TASK (serve this only):\nSomeone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nDEADLINE: 20 minutes\n\nYOUR BODY: room=kitchen, mobile=True, payload=5 kg, embodiment=Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture, SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\nPan (in Cabinet)\nTomato (in Fridge)\nMug (in SinkBasin)\n\n",
-    "output": {
-      "has_items": [
-        "green cup (counter, image 1)",
-        "loaf of bread (counter, image 2)",
-        "black bowl (counter, image 1)",
-        "potted plant (counter, image 1)",
-        "knife (counter, image 1)",
-        "toaster (counter, image 1)",
-        "coffee maker (counter, image 1)",
-        "bottle (counter, image 1)",
-        "plate (counter, image 2)",
-        "microwave (counter, image 1)"
-      ],
-      "reasoning": "a) GOAL STATE: The room should be comfortable for resting, with water and essentials accessible. b) PRIORITY: Ensure the essentials for comfort and hydration are ready within the time limit. c) MY ROOM: Move the green cup and bottle for water access. d) FOR OTHERS: The green cup and bottle can be used in the resting area for hydration.",
-      "capability": "I am a mobile robot capable of light object manipulation.",
-      "can_do": [
-        "PickupLightObject: move small items",
-        "PassReceiveObject: transfer items",
-        "ToggleObject: turn on/off lights, TV, appliances"
-      ],
-      "cannot_do": [
-        "PickupHeavyObject: cannot lift heavy items",
-        "PushFurniture: cannot move large furniture",
-        "SliceObject: cannot cut or slice items",
-        "PourObject: cannot pour liquids"
-      ],
-      "suggests": [
-        "green cup",
-        "bottle"
-      ],
-      "intends": [
-        "move green cup from counter to resting area",
-        "move bottle from counter to resting area"
-      ],
-      "need_from_others": [
-        "Provide a comfortable resting area with a bed or sofa",
-        "Ensure the resting area has a blanket and pillow",
-        "Provide tissues and any necessary medication"
-      ],
-      "obs_scope": "I can observe and interact with items in the kitchen only."
     }
   },
   {
@@ -183,21 +179,16 @@
     "output": {
       "has_items": [
         "green trash bin (floor, image 1)",
-        "brown towel (towel rack, image 1)",
-        "double sink (counter, image 1)",
-        "mirror (above sink, image 1)",
-        "shower (left side, image 1)",
-        "toilet (next to bathtub, image 2)",
-        "bathtub (next to toilet, image 2)",
-        "toilet paper (next to toilet, image 2)",
-        "toilet brush (next to toilet, image 2)"
+        "brown towel (wall, image 1)",
+        "toilet paper roll (wall, image 2)",
+        "toilet brush (floor, image 2)"
       ],
-      "reasoning": "a) The room must be comfortable for rest, with access to water and essentials. b) Ensuring comfort and accessibility to water is most important. c) The brown towel can be used for comfort or drying. d) The bathroom items are primarily for this room's needs.",
-      "capability": "I can move around and handle objects up to 20 kg.",
+      "reasoning": "a) The room must be comfortable for resting with essentials like water and tissues accessible. b) Prioritize comfort and accessibility of essentials within the deadline. c) I can adjust the brown towel and ensure the green trash bin is ready. d) The bathroom items are not directly useful for other rooms' needs.",
+      "capability": "I can move around the bathroom and handle objects up to 20 kg.",
       "can_do": [
-        "PickupLightObject: move small items",
-        "PickupHeavyObject: move larger items",
-        "PushFurniture: rearrange furniture",
+        "PickupLightObject: handle small items",
+        "PickupHeavyObject: handle larger items",
+        "PushFurniture: adjust furniture",
         "PassReceiveObject: exchange items with others",
         "ToggleObject: turn on/off lights, TV, appliances"
       ],
@@ -205,19 +196,17 @@
         "SliceObject: cannot cut or slice items",
         "PourObject: cannot pour liquids"
       ],
-      "suggests": [
-        "brown towel (towel rack, image 1)"
-      ],
+      "suggests": [],
       "intends": [
-        "move brown towel from towel rack to bathtub",
-        "ensure bathtub is clean and accessible",
-        "check water access in bathtub"
+        "move green trash bin to near the sink",
+        "adjust brown towel on wall for easy access"
       ],
       "need_from_others": [
-        "Provide a glass or bottle of water for hydration",
-        "Provide tissues or paper towels for hygiene"
+        "RECEIVE: water bottle for hydration",
+        "RECEIVE: blanket for comfort",
+        "RECEIVE: tissues for hygiene"
       ],
-      "obs_scope": "I can observe and interact with items in the bathroom."
+      "obs_scope": "I can observe and interact with items within the bathroom only."
     }
   },
   {
@@ -226,62 +215,63 @@
     "user": "## TASK (serve this only):\nSomeone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nDEADLINE: 20 minutes\n\nYOUR BODY: room=bedroom, mobile=True, payload=20 kg, embodiment=Mobile_Heavy. CAN: PickupLightObject, PickupHeavyObject, PushFurniture, PassReceiveObject. CANNOT: SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\n(none)\n\nImages attached (2 image(s)), image 1 to 2.",
     "output": {
       "has_items": [
-        "white and black blanket (bed, image 1)",
-        "green pillow (bed, image 1)",
-        "wooden bed (left side, image 1)",
-        "wooden nightstand (next to bed, image 1)",
-        "lamp (on nightstand, image 1)",
-        "alarm clock (on nightstand, image 1)",
+        "white bed (left side, image 1)",
+        "green pillow (on white bed, image 1)",
+        "black and white blanket (on white bed, image 1)",
+        "wooden nightstand (next to white bed, image 1)",
+        "lamp (on wooden nightstand, image 1)",
+        "alarm clock (on wooden nightstand, image 1)",
         "wooden desk (right side, image 1)",
-        "laptop (on desk, image 1)",
-        "red chair (in front of desk, image 1)",
-        "dumbbell (floor near desk, image 1)",
-        "wooden shelf (above desk, image 1)",
-        "wooden dresser (below window, image 2)",
-        "wooden cabinet (below shelf, image 2)",
+        "laptop (on wooden desk, image 1)",
+        "red chair (in front of wooden desk, image 1)",
+        "dumbbell (next to wooden desk, image 1)",
         "cardboard box (floor, image 2)",
         "blue cloth (floor, image 2)",
         "orange bottle (on shelf, image 2)",
-        "white bottles (on shelf, image 2)",
-        "black bag (floor, image 2)"
+        "yellow book (on shelf, image 2)",
+        "wooden dresser (below shelf, image 2)"
       ],
-      "reasoning": "a) GOAL STATE: The room must be comfortable for resting, with easy access to water and essentials. b) PRIORITY: Ensuring the bed is ready for rest and water is accessible. c) MY ROOM: Arrange the bed and ensure essentials like water are nearby. d) FOR OTHERS: None of my has_items are needed in another room.",
-      "capability": "I am a mobile robot capable of moving and arranging objects up to 20 kg.",
+      "reasoning": "a) The room must be comfortable for rest, with easy access to water and essentials. b) Comfort and accessibility are priorities given the short deadline. c) I will adjust the bed and ensure essentials are nearby. d) The orange bottle might serve another room's needs.",
+      "capability": "I am mobile and can carry objects up to 20 kg.",
       "can_do": [
         "PickupLightObject: move small items",
         "PickupHeavyObject: move larger items",
-        "PushFurniture: rearrange furniture",
+        "PushFurniture: adjust furniture",
         "PassReceiveObject: exchange items with others",
         "ToggleObject: turn on/off lights, TV, appliances"
       ],
       "cannot_do": [
-        "SliceObject: cannot cut or slice items",
+        "SliceObject: cannot cut or divide objects",
         "PourObject: cannot pour liquids"
       ],
       "suggests": [
         "orange bottle (on shelf, image 2)"
       ],
       "intends": [
-        "move green pillow from bed to wooden dresser",
-        "move white and black blanket from bed to wooden dresser",
+        "move green pillow from white bed to wooden dresser",
+        "move black and white blanket from white bed to wooden dresser",
         "move orange bottle from shelf to wooden nightstand",
-        "turn on lamp on wooden nightstand"
+        "move alarm clock from wooden nightstand to wooden dresser",
+        "move lamp from wooden nightstand to wooden dresser",
+        "move laptop from wooden desk to wooden dresser",
+        "move red chair from in front of wooden desk to next to white bed",
+        "move dumbbell from next to wooden desk to cardboard box"
       ],
       "need_from_others": [
-        "Provide a water bottle or glass of water"
+        "Provide water bottle for bedside"
       ],
-      "obs_scope": "I can observe and interact with objects in the bedroom."
+      "obs_scope": "I can observe and interact with items in the bedroom."
     }
   },
   {
     "key": "plan:R2",
     "system": "You are robot R2 in the kitchen. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nSomeone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am a mobile robot capable of light object manipulation.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PassReceiveObject: transfer items\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"green cup (coun",
+    "user": "## TASK:\nSomeone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am a mobile robot capable of light object manipulation.\",\n \"can_do\": [\n  \"PickupLightObject: move light items\",\n  \"PassReceiveObject: transfer items to/from others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"",
     "output": {
-      "reasoning": "a) The room should be comfortable for resting, with water and essentials accessible. b) Priority is to ensure the essentials for comfort and hydration are ready within the time limit. c) In my room, I will move the green cup and bottle for water access. d) For others, the green cup and bottle can be used in the resting area for hydration.",
+      "reasoning": "a) The room must be comfortable for rest, with water and essentials accessible. b) Priority is to ensure essentials like water and a comfortable resting area are ready within the deadline. c) In my room, I will provide a cup for water and ensure the kitchen is tidy. d) For others, the green cup can be used for water in another room.",
       "goals": [
         {
-          "goal": "Provide hydration essentials for the resting area.",
+          "goal": "Provide a green cup for water to another room",
           "priority": "high",
           "in_my_room": true
         }
@@ -289,13 +279,7 @@
       "checklist": [
         {
           "object": "green cup",
-          "change": "move to resting area",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "bottle",
-          "change": "move to resting area",
+          "change": "move to another room for water",
           "weight": "light",
           "how": "LOCAL"
         }
@@ -307,21 +291,16 @@
             "verb": "pick_up",
             "object": "green cup",
             "from": "counter",
-            "to": "resting area"
+            "to": "pass to another room"
           },
           "uses": 0,
           "serves": 1
         },
         {
-          "type": "LOCAL",
-          "action": {
-            "verb": "pick_up",
-            "object": "bottle",
-            "from": "counter",
-            "to": "resting area"
-          },
-          "uses": 0,
-          "serves": 1
+          "type": "PASS",
+          "item": "green cup",
+          "target": "R1",
+          "serves": 0
         }
       ]
     }
@@ -329,38 +308,87 @@
   {
     "key": "plan:R1",
     "system": "You are robot R1 in the kitchen. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nSomeone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I can manipulate light objects and pass them to others.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items\",\n  \"SliceObject: cut with a knife\",\n  \"PourObject: pour liquids\",\n  \"PassReceiveObject: hand over items\",\n  \"ToggleObject: turn on/of",
+    "user": "## TASK:\nSomeone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am a fixed robot with a gripper, able to manipulate light objects.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items\",\n  \"SliceObject: cut with a knife\",\n  \"PourObject: pour liquids\",\n  \"PassReceiveObject: exchange items with others\",\n  \"",
     "output": {
-      "reasoning": "a) The room must be comfortable for rest, with water and basic needs accessible. b) Ensuring water and comfort are prioritized given the time limit. c) I can provide water using the silver kettle and green glass. d) The green glass and silver kettle can be used in another room for water access.",
+      "reasoning": "a) The room must be comfortable for resting, with water and essentials accessible. b) Ensuring water and basic needs are prioritized due to the short deadline. c) I can prepare water and pass items like the green glass and kettle. d) The green glass and kettle can be used in another room for water access.",
       "goals": [
         {
-          "goal": "Provide water for the resting area using the silver kettle and green glass.",
+          "goal": "provide water and essentials for the resting area",
           "priority": "high",
           "in_my_room": true
         }
       ],
       "checklist": [
         {
-          "object": "silver kettle",
-          "change": "filled with water and turned on",
+          "object": "green glass",
+          "change": "pass to another robot",
           "weight": "light",
-          "how": "LOCAL"
+          "how": "PASS"
         },
         {
-          "object": "green glass",
-          "change": "handed over for use in another room",
+          "object": "silver kettle",
+          "change": "pass to another robot",
           "weight": "light",
           "how": "PASS"
         }
       ],
       "steps": [
         {
+          "type": "PASS",
+          "item": "green glass",
+          "target": "R2",
+          "serves": 1
+        },
+        {
+          "type": "PASS",
+          "item": "silver kettle",
+          "target": "R2",
+          "serves": 1
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R4",
+    "system": "You are robot R4 in the living_room. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessibl",
+    "user": "## TASK:\nSomeone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I am a mobile robot with light object handling capabilities.\",\n \"can_do\": [\n  \"PickupLightObject: move small items like pillows and blankets\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject: turn on/off lights, TV, appliance",
+    "output": {
+      "reasoning": "a) GOAL STATE: The living room must be comfortable for resting, with access to water and essentials. b) PRIORITY: Ensure comfort and accessibility within the time limit. c) MY ROOM: Arrange sofa and lighting for comfort, and provide blanket and pillow. d) FOR OTHERS: No items needed from my room for other rooms.",
+      "goals": [
+        {
+          "goal": "Set up living room for rest and recovery",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "green pillow",
+          "change": "move to wooden coffee table",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "red blanket",
+          "change": "move to wooden coffee table",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "floor lamp",
+          "change": "turn on",
+          "weight": "light",
+          "how": "LOCAL"
+        }
+      ],
+      "steps": [
+        {
           "type": "LOCAL",
           "action": {
-            "verb": "pick_up",
-            "object": "silver kettle",
-            "from": "counter",
-            "to": "counter"
+            "verb": "move",
+            "object": "green pillow",
+            "from": "purple sofa",
+            "to": "wooden coffee table"
           },
           "uses": 0,
           "serves": 1
@@ -368,36 +396,24 @@
         {
           "type": "LOCAL",
           "action": {
-            "verb": "pour",
-            "object": "silver kettle",
-            "from": "counter",
-            "to": "filled with water"
+            "verb": "move",
+            "object": "red blanket",
+            "from": "purple sofa",
+            "to": "wooden coffee table"
           },
-          "uses": 1,
-          "serves": 2
+          "uses": 0,
+          "serves": 1
         },
         {
           "type": "LOCAL",
           "action": {
-            "verb": "toggle",
-            "object": "silver kettle",
-            "from": "off",
+            "verb": "turn_on",
+            "object": "floor lamp",
+            "from": "left",
             "to": "on"
           },
-          "uses": 2,
-          "serves": 3
-        },
-        {
-          "type": "PASS",
-          "item": "green glass",
-          "target": "R2",
-          "serves": 0
-        },
-        {
-          "type": "PASS",
-          "item": "silver kettle",
-          "target": "R2",
-          "serves": 0
+          "uses": 0,
+          "serves": 1
         }
       ]
     }
@@ -405,12 +421,12 @@
   {
     "key": "plan:R3",
     "system": "You are robot R3 in the living_room. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessibl",
-    "user": "## TASK:\nSomeone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am a fixed robot with a gripper for handling light objects.\",\n \"can_do\": [\n  \"PickupLightObject: handle small items like books or bowls\",\n  \"SliceObject: cut items if needed\",\n  \"PourObject: pour liquids\",\n  \"PassReceiveObject: exchange items",
+    "user": "## TASK:\nSomeone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am fixed in place with a gripper for handling light objects.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items\",\n  \"SliceObject: cut soft items\",\n  \"PourObject: pour liquids\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleOb",
     "output": {
-      "reasoning": "a) GOAL STATE: The living room must be comfortable for rest, with access to water and essentials. b) PRIORITY: Ensure the sofa is ready for resting and essentials like water are accessible. c) MY ROOM: Arrange the red blanket on the purple sofa and ensure the floor lamp is on for soft lighting. d) FOR OTHERS: The white vase can be used for water if needed.",
+      "reasoning": "a) The living room must be comfortable for resting, with essentials like a blanket and water. b) Prioritize comfort by arranging the red blanket and adjusting lighting. c) Use the white vase to provide water, collaborating with other robots to fill it. d) Suggest the white vase for water to other rooms, ensuring hydration is available.",
       "goals": [
         {
-          "goal": "Prepare the living room for a comfortable resting environment with access to water.",
+          "goal": "set up living room for rest and recovery",
           "priority": "high",
           "in_my_room": true
         }
@@ -418,7 +434,7 @@
       "checklist": [
         {
           "object": "red blanket",
-          "change": "arrange on purple sofa",
+          "change": "move to sofa",
           "weight": "light",
           "how": "LOCAL"
         },
@@ -430,19 +446,30 @@
         },
         {
           "object": "white vase",
-          "change": "fill with water",
+          "change": "pass for water",
           "weight": "light",
-          "how": "ASK_HELP"
+          "how": "PASS"
         }
       ],
       "steps": [
         {
           "type": "LOCAL",
           "action": {
-            "verb": "move",
+            "verb": "pick_up",
             "object": "red blanket",
             "from": "sofa",
-            "to": "arranged on purple sofa"
+            "to": "sofa"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "red blanket",
+            "from": "sofa",
+            "to": "sofa"
           },
           "uses": 0,
           "serves": 1
@@ -459,150 +486,10 @@
           "serves": 1
         },
         {
-          "type": "ASK_HELP",
-          "action": {
-            "verb": "fill",
-            "object": "white vase",
-            "to": "filled with water"
-          },
-          "target": "R2",
-          "enables": 0,
-          "serves": 1
-        }
-      ]
-    }
-  },
-  {
-    "key": "plan:R4",
-    "system": "You are robot R4 in the living_room. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessibl",
-    "user": "## TASK:\nSomeone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I am mobile and can handle light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: move light items like pillows and blankets\",\n  \"PassReceiveObject: exchange objects with others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],",
-    "output": {
-      "reasoning": "a) The goal is to create a comfortable resting environment in the living room for someone with the flu. This involves arranging the sofa with a blanket and pillow, and ensuring soft lighting. b) The priority is high due to the 20-minute deadline. c) In my room, I need to arrange the sofa and adjust the lighting. d) I need to receive water from another robot to complete the setup.",
-      "goals": [
-        {
-          "goal": "Create a comfortable resting area in the living room.",
-          "priority": "high",
-          "in_my_room": true
-        }
-      ],
-      "checklist": [
-        {
-          "object": "green pillow",
-          "change": "move to wooden coffee table",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "red blanket",
-          "change": "arrange on purple sofa",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "floor lamp",
-          "change": "turn on for soft lighting",
-          "weight": "light",
-          "how": "LOCAL"
-        }
-      ],
-      "steps": [
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "move",
-            "object": "green pillow",
-            "from": "purple sofa",
-            "to": "wooden coffee table"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "arrange",
-            "object": "red blanket",
-            "from": "on purple sofa",
-            "to": "on purple sofa"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "turn_on",
-            "object": "floor lamp",
-            "from": "left side",
-            "to": "on"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "RECEIVE",
-          "item": "green glass",
-          "target": "R1",
-          "serves": 1
-        }
-      ]
-    }
-  },
-  {
-    "key": "plan:R6",
-    "system": "You are robot R6 in the bathroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, ",
-    "user": "## TASK:\nSomeone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R6\",\n \"capability\": \"I can move around and handle objects up to 20 kg.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PickupHeavyObject: move larger items\",\n  \"PushFurniture: rearrange furniture\",\n  \"PassReceiveObject: exchange items with others\",\n  \"To",
-    "output": {
-      "reasoning": "a) The bathroom must be comfortable for rest and provide easy access to water and essentials. b) Ensuring the bathtub is clean and accessible is crucial for hygiene and comfort. c) The brown towel can be used for comfort or drying. d) The bathroom items are primarily for this room's needs, and collaboration with other robots is needed for water and tissues.",
-      "goals": [
-        {
-          "goal": "ensure the bathroom is ready for someone with the flu to rest and recover",
-          "priority": "high",
-          "in_my_room": true
-        }
-      ],
-      "checklist": [
-        {
-          "object": "brown towel",
-          "change": "move to bathtub",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "bathtub",
-          "change": "check water access",
-          "weight": "heavy",
-          "how": "LOCAL"
-        }
-      ],
-      "steps": [
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "move",
-            "object": "brown towel",
-            "from": "towel rack",
-            "to": "bathtub"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "check",
-            "object": "bathtub",
-            "from": "bathtub",
-            "to": "ensure water access"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
           "type": "PASS",
-          "item": "brown towel",
-          "target": "R5",
-          "serves": 0
+          "item": "white vase",
+          "target": "R2",
+          "serves": 1
         }
       ]
     }
@@ -610,12 +497,12 @@
   {
     "key": "plan:R2:fix",
     "system": "You are robot R2 in the kitchen. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nSomeone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am a mobile robot capable of light object manipulation.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PassReceiveObject: transfer items\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"green cup (coun",
+    "user": "## TASK:\nSomeone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am a mobile robot capable of light object manipulation.\",\n \"can_do\": [\n  \"PickupLightObject: move light items\",\n  \"PassReceiveObject: transfer items to/from others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"",
     "output": {
-      "reasoning": "a) The room should be comfortable for resting, with water and essentials accessible. b) Priority is to ensure the essentials for comfort and hydration are ready within the time limit. c) In my room, I will move the green cup and bottle for water access. d) For others, the green cup and bottle can be used in the resting area for hydration.",
+      "reasoning": "a) The room must be comfortable for rest, with water and essentials accessible. b) Priority is to ensure essentials like water and a comfortable resting area are ready within the deadline. c) In my room, I will provide a cup for water and ensure the kitchen is tidy. d) For others, the green cup can be used for water in another room.",
       "goals": [
         {
-          "goal": "Provide hydration essentials for the resting area.",
+          "goal": "Provide a green cup for water to another room",
           "priority": "high",
           "in_my_room": true
         }
@@ -623,13 +510,7 @@
       "checklist": [
         {
           "object": "green cup",
-          "change": "move to resting area",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "bottle",
-          "change": "move to resting area",
+          "change": "move to another room for water",
           "weight": "light",
           "how": "LOCAL"
         }
@@ -641,120 +522,16 @@
             "verb": "pick_up",
             "object": "green cup",
             "from": "counter",
-            "to": "resting area"
+            "to": "pass to another room"
           },
           "uses": 0,
           "serves": 0
         },
         {
-          "type": "LOCAL",
-          "action": {
-            "verb": "pick_up",
-            "object": "bottle",
-            "from": "counter",
-            "to": "resting area"
-          },
-          "uses": 0,
-          "serves": 0
-        }
-      ]
-    }
-  },
-  {
-    "key": "plan:R5",
-    "system": "You are robot R5 in the bedroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nSomeone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R5\",\n \"capability\": \"I am a mobile robot capable of moving and arranging objects up to 20 kg.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PickupHeavyObject: move larger items\",\n  \"PushFurniture: rearrange furniture\",\n  \"PassReceiveObject: exchange it",
-    "output": {
-      "reasoning": "a) The room must be comfortable for resting, with easy access to water and essentials. b) Priority is ensuring the bed is ready for rest and water is accessible. c) In my room, I will arrange the bed and ensure essentials like water are nearby. d) I will request a water bottle from another robot since I cannot pour liquids.",
-      "goals": [
-        {
-          "goal": "Set up the bedroom for someone with the flu to rest and recover.",
-          "priority": "high",
-          "in_my_room": true
-        }
-      ],
-      "checklist": [
-        {
-          "object": "green pillow",
-          "change": "move to wooden dresser",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "white and black blanket",
-          "change": "move to wooden dresser",
-          "weight": "heavy",
-          "how": "LOCAL"
-        },
-        {
-          "object": "orange bottle",
-          "change": "move to wooden nightstand",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "lamp",
-          "change": "turn on",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "green glass",
-          "change": "receive for water",
-          "weight": "light",
-          "how": "RECEIVE"
-        }
-      ],
-      "steps": [
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "move",
-            "object": "green pillow",
-            "from": "bed",
-            "to": "wooden dresser"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "move",
-            "object": "white and black blanket",
-            "from": "bed",
-            "to": "wooden dresser"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "move",
-            "object": "orange bottle",
-            "from": "shelf",
-            "to": "wooden nightstand"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "turn_on",
-            "object": "lamp",
-            "from": "on nightstand",
-            "to": "on"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "RECEIVE",
-          "item": "green glass",
+          "type": "PASS",
+          "item": "green cup",
           "target": "R1",
-          "serves": 1
+          "serves": 0
         }
       ]
     }
@@ -762,64 +539,31 @@
   {
     "key": "plan:R1:fix",
     "system": "You are robot R1 in the kitchen. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nSomeone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I can manipulate light objects and pass them to others.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items\",\n  \"SliceObject: cut with a knife\",\n  \"PourObject: pour liquids\",\n  \"PassReceiveObject: hand over items\",\n  \"ToggleObject: turn on/of",
+    "user": "## TASK:\nSomeone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am a fixed robot with a gripper, able to manipulate light objects.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items\",\n  \"SliceObject: cut with a knife\",\n  \"PourObject: pour liquids\",\n  \"PassReceiveObject: exchange items with others\",\n  \"",
     "output": {
-      "reasoning": "a) The room must be comfortable for rest, with water and basic needs accessible. b) Ensuring water and comfort are prioritized given the time limit. c) I can provide water using the silver kettle and green glass. d) The green glass and silver kettle can be used in another room for water access.",
+      "reasoning": "a) The room must be comfortable for resting, with water and essentials accessible. b) Ensuring water and basic needs are prioritized due to the short deadline. c) I can prepare water and pass items like the green glass and kettle. d) The green glass and kettle can be used in another room for water access.",
       "goals": [
         {
-          "goal": "Provide water for the resting area using the silver kettle and green glass.",
+          "goal": "provide water and essentials for the resting area",
           "priority": "high",
           "in_my_room": true
         }
       ],
       "checklist": [
         {
-          "object": "silver kettle",
-          "change": "filled with water and turned on",
+          "object": "green glass",
+          "change": "pass to another robot",
           "weight": "light",
-          "how": "LOCAL"
+          "how": "PASS"
         },
         {
-          "object": "green glass",
-          "change": "handed over for use in another room",
+          "object": "silver kettle",
+          "change": "pass to another robot",
           "weight": "light",
           "how": "PASS"
         }
       ],
       "steps": [
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "pick_up",
-            "object": "silver kettle",
-            "from": "counter",
-            "to": "sink"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "pour",
-            "object": "silver kettle",
-            "from": "sink",
-            "to": "filled with water"
-          },
-          "uses": 1,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "toggle",
-            "object": "silver kettle",
-            "from": "off",
-            "to": "on"
-          },
-          "uses": 2,
-          "serves": 0
-        },
         {
           "type": "PASS",
           "item": "green glass",
@@ -836,24 +580,48 @@
     }
   },
   {
-    "key": "plan:R6:fix",
+    "key": "plan:R6",
     "system": "You are robot R6 in the bathroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, ",
-    "user": "## TASK:\nSomeone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R6\",\n \"capability\": \"I can move around and handle objects up to 20 kg.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PickupHeavyObject: move larger items\",\n  \"PushFurniture: rearrange furniture\",\n  \"PassReceiveObject: exchange items with others\",\n  \"To",
+    "user": "## TASK:\nSomeone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R6\",\n \"capability\": \"I can move around the bathroom and handle objects up to 20 kg.\",\n \"can_do\": [\n  \"PickupLightObject: handle small items\",\n  \"PickupHeavyObject: handle larger items\",\n  \"PushFurniture: adjust furniture\",\n  \"PassReceiveObject: exchange items with ",
     "output": {
-      "reasoning": "a) The bathroom must be comfortable for rest and provide easy access to water and essentials. b) Ensuring the bathtub is clean and accessible is crucial for hygiene and comfort. c) The brown towel can be used for comfort or drying. d) The bathroom items are primarily for this room's needs, and collaboration with other robots is needed for water and tissues.",
+      "reasoning": "a) The bathroom must be set up to be comfortable for someone with the flu, with essentials like water and tissues accessible. b) I will ensure the green trash bin is positioned conveniently and the brown towel is adjusted for easy access. c) I need to receive a water bottle, blanket, and tissues from other robots to complete the setup. d) My actions focus on making the bathroom a supportive environment for rest and recovery.",
       "goals": [
         {
-          "goal": "ensure the bathroom is ready for someone with the flu to rest and recover",
+          "goal": "set up bathroom for flu recovery",
           "priority": "high",
           "in_my_room": true
         }
       ],
       "checklist": [
+        {
+          "object": "green trash bin",
+          "change": "move to near the sink",
+          "weight": "light",
+          "how": "LOCAL"
+        },
         {
           "object": "brown towel",
-          "change": "move to bathtub",
+          "change": "adjust on wall for easy access",
           "weight": "light",
           "how": "LOCAL"
+        },
+        {
+          "object": "water bottle",
+          "change": "receive for hydration",
+          "weight": "light",
+          "how": "RECEIVE"
+        },
+        {
+          "object": "blanket",
+          "change": "receive for comfort",
+          "weight": "light",
+          "how": "RECEIVE"
+        },
+        {
+          "object": "tissues",
+          "change": "receive for hygiene",
+          "weight": "light",
+          "how": "RECEIVE"
         }
       ],
       "steps": [
@@ -861,71 +629,41 @@
           "type": "LOCAL",
           "action": {
             "verb": "move",
+            "object": "green trash bin",
+            "from": "floor",
+            "to": "near the sink"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "adjust",
             "object": "brown towel",
-            "from": "towel rack",
-            "to": "bathtub"
+            "from": "wall",
+            "to": "wall for easy access"
           },
           "uses": 0,
-          "serves": 0
+          "serves": 1
         },
         {
-          "type": "PASS",
-          "item": "brown towel",
+          "type": "RECEIVE",
+          "item": "water bottle",
           "target": "R5",
-          "serves": 0
-        }
-      ]
-    }
-  },
-  {
-    "key": "plan:R3:fix",
-    "system": "You are robot R3 in the living_room. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessibl",
-    "user": "## TASK:\nSomeone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am a fixed robot with a gripper for handling light objects.\",\n \"can_do\": [\n  \"PickupLightObject: handle small items like books or bowls\",\n  \"SliceObject: cut items if needed\",\n  \"PourObject: pour liquids\",\n  \"PassReceiveObject: exchange items",
-    "output": {
-      "reasoning": "a) GOAL STATE: The living room must be comfortable for rest, with access to water and essentials. b) PRIORITY: Ensure the sofa is ready for resting and essentials like water are accessible. c) MY ROOM: Arrange the red blanket on the purple sofa and ensure the floor lamp is on for soft lighting. d) FOR OTHERS: The white vase can be used for water if needed.",
-      "goals": [
-        {
-          "goal": "Prepare the living room for a comfortable resting environment with access to water.",
-          "priority": "high",
-          "in_my_room": true
-        }
-      ],
-      "checklist": [
-        {
-          "object": "red blanket",
-          "change": "arrange on purple sofa",
-          "weight": "light",
-          "how": "LOCAL"
+          "serves": 1
         },
         {
-          "object": "floor lamp",
-          "change": "turn on",
-          "weight": "light",
-          "how": "LOCAL"
-        }
-      ],
-      "steps": [
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "move",
-            "object": "red blanket",
-            "from": "sofa",
-            "to": "arranged on purple sofa"
-          },
-          "uses": 0,
-          "serves": 0
+          "type": "RECEIVE",
+          "item": "blanket",
+          "target": "R3",
+          "serves": 1
         },
         {
-          "type": "LOCAL",
-          "action": {
-            "verb": "turn_on",
-            "object": "floor lamp",
-            "from": "near sofa",
-            "to": "on"
-          },
-          "uses": 0,
-          "serves": 0
+          "type": "RECEIVE",
+          "item": "tissues",
+          "target": "R2",
+          "serves": 1
         }
       ]
     }
@@ -933,12 +671,12 @@
   {
     "key": "plan:R4:fix",
     "system": "You are robot R4 in the living_room. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessibl",
-    "user": "## TASK:\nSomeone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I am mobile and can handle light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: move light items like pillows and blankets\",\n  \"PassReceiveObject: exchange objects with others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],",
+    "user": "## TASK:\nSomeone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I am a mobile robot with light object handling capabilities.\",\n \"can_do\": [\n  \"PickupLightObject: move small items like pillows and blankets\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject: turn on/off lights, TV, appliance",
     "output": {
-      "reasoning": "a) The goal is to create a comfortable resting environment in the living room for someone with the flu. This involves arranging the sofa with a blanket and pillow, and ensuring soft lighting. b) The priority is high due to the 20-minute deadline. c) In my room, I need to arrange the sofa and adjust the lighting. d) I need to receive water from another robot to complete the setup.",
+      "reasoning": "a) GOAL STATE: The living room must be comfortable for resting, with access to water and essentials. b) PRIORITY: Ensure comfort and accessibility within the time limit. c) MY ROOM: Arrange sofa and lighting for comfort, and provide blanket and pillow. d) FOR OTHERS: No items needed from my room for other rooms.",
       "goals": [
         {
-          "goal": "Create a comfortable resting area in the living room.",
+          "goal": "Set up living room for rest and recovery",
           "priority": "high",
           "in_my_room": true
         }
@@ -952,13 +690,13 @@
         },
         {
           "object": "red blanket",
-          "change": "arrange on purple sofa for comfort",
+          "change": "move to wooden coffee table",
           "weight": "light",
           "how": "LOCAL"
         },
         {
           "object": "floor lamp",
-          "change": "turn on for soft lighting",
+          "change": "turn on",
           "weight": "light",
           "how": "LOCAL"
         }
@@ -978,10 +716,10 @@
         {
           "type": "LOCAL",
           "action": {
-            "verb": "arrange",
+            "verb": "move",
             "object": "red blanket",
-            "from": "on purple sofa",
-            "to": "arranged on purple sofa for comfort"
+            "from": "purple sofa",
+            "to": "wooden coffee table"
           },
           "uses": 0,
           "serves": 0
@@ -991,44 +729,44 @@
           "action": {
             "verb": "turn_on",
             "object": "floor lamp",
-            "from": "left side",
+            "from": "left",
             "to": "on"
           },
           "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "RECEIVE",
-          "item": "green glass",
-          "target": "R1",
           "serves": 0
         }
       ]
     }
   },
   {
-    "key": "plan:R1:fix",
-    "system": "You are robot R1 in the kitchen. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nSomeone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I can manipulate light objects and pass them to others.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items\",\n  \"SliceObject: cut with a knife\",\n  \"PourObject: pour liquids\",\n  \"PassReceiveObject: hand over items\",\n  \"ToggleObject: turn on/of",
+    "key": "plan:R3:fix",
+    "system": "You are robot R3 in the living_room. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessibl",
+    "user": "## TASK:\nSomeone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am fixed in place with a gripper for handling light objects.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items\",\n  \"SliceObject: cut soft items\",\n  \"PourObject: pour liquids\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleOb",
     "output": {
-      "reasoning": "a) The room must be comfortable for rest, with water and basic needs accessible. b) Ensuring water and comfort are prioritized given the time limit. c) I can provide water using the silver kettle and green glass. d) The green glass and silver kettle can be used in another room for water access.",
+      "reasoning": "a) The living room must be comfortable for resting, with essentials like a blanket and water. b) Prioritize comfort by arranging the red blanket and adjusting lighting. c) Use the white vase to provide water, collaborating with other robots to fill it. d) Suggest the white vase for water to other rooms, ensuring hydration is available.",
       "goals": [
         {
-          "goal": "Provide water for the resting area using the silver kettle and green glass.",
+          "goal": "set up living room for rest and recovery",
           "priority": "high",
           "in_my_room": true
         }
       ],
       "checklist": [
         {
-          "object": "silver kettle",
-          "change": "filled with water and turned on",
+          "object": "red blanket",
+          "change": "move to sofa",
           "weight": "light",
           "how": "LOCAL"
         },
         {
-          "object": "green glass",
-          "change": "handed over for use in another room",
+          "object": "floor lamp",
+          "change": "turn on",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "white vase",
+          "change": "pass for water",
           "weight": "light",
           "how": "PASS"
         }
@@ -1038,9 +776,9 @@
           "type": "LOCAL",
           "action": {
             "verb": "pick_up",
-            "object": "silver kettle",
-            "from": "counter",
-            "to": "sink"
+            "object": "red blanket",
+            "from": "sofa",
+            "to": "dining table"
           },
           "uses": 0,
           "serves": 0
@@ -1048,25 +786,62 @@
         {
           "type": "LOCAL",
           "action": {
-            "verb": "pour",
-            "object": "silver kettle",
-            "from": "sink",
-            "to": "filled with water"
+            "verb": "put_down",
+            "object": "red blanket",
+            "from": "dining table",
+            "to": "sofa"
           },
-          "uses": 1,
+          "uses": 0,
           "serves": 0
         },
         {
           "type": "LOCAL",
           "action": {
-            "verb": "toggle",
-            "object": "silver kettle",
-            "from": "off",
+            "verb": "turn_on",
+            "object": "floor lamp",
+            "from": "near sofa",
             "to": "on"
           },
-          "uses": 2,
+          "uses": 0,
           "serves": 0
         },
+        {
+          "type": "PASS",
+          "item": "white vase",
+          "target": "R2",
+          "serves": 0
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R1:fix",
+    "system": "You are robot R1 in the kitchen. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
+    "user": "## TASK:\nSomeone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am a fixed robot with a gripper, able to manipulate light objects.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items\",\n  \"SliceObject: cut with a knife\",\n  \"PourObject: pour liquids\",\n  \"PassReceiveObject: exchange items with others\",\n  \"",
+    "output": {
+      "reasoning": "a) The room must be comfortable for resting, with water and essentials accessible. b) Ensuring water and basic needs are prioritized due to the short deadline. c) I can prepare water and pass items like the green glass and kettle. d) The green glass and kettle can be used in another room for water access.",
+      "goals": [
+        {
+          "goal": "provide water and essentials for the resting area",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "green glass",
+          "change": "pass to another robot",
+          "weight": "light",
+          "how": "PASS"
+        },
+        {
+          "object": "silver kettle",
+          "change": "pass to another robot",
+          "weight": "light",
+          "how": "PASS"
+        }
+      ],
+      "steps": [
         {
           "type": "PASS",
           "item": "green glass",
@@ -1083,14 +858,14 @@
     }
   },
   {
-    "key": "plan:R5:fix",
+    "key": "plan:R5",
     "system": "You are robot R5 in the bedroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nSomeone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R5\",\n \"capability\": \"I am a mobile robot capable of moving and arranging objects up to 20 kg.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PickupHeavyObject: move larger items\",\n  \"PushFurniture: rearrange furniture\",\n  \"PassReceiveObject: exchange it",
+    "user": "## TASK:\nSomeone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R5\",\n \"capability\": \"I am mobile and can carry objects up to 20 kg.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PickupHeavyObject: move larger items\",\n  \"PushFurniture: adjust furniture\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleOb",
     "output": {
-      "reasoning": "a) The room must be comfortable for resting, with easy access to water and essentials. b) Priority is ensuring the bed is ready for rest and water is accessible. c) In my room, I will arrange the bed and ensure essentials like water are nearby. d) I will request a water bottle from another robot since I cannot pour liquids.",
+      "reasoning": "a) The room must be comfortable for rest, with easy access to water and essentials. b) Comfort and accessibility are priorities given the short deadline. c) I will adjust the bed and ensure essentials are nearby. d) The orange bottle might serve another room's needs.",
       "goals": [
         {
-          "goal": "Set up the bedroom for someone with the flu to rest and recover.",
+          "goal": "Set up the bedroom for a person with the flu to rest and recover.",
           "priority": "high",
           "in_my_room": true
         }
@@ -1103,9 +878,9 @@
           "how": "LOCAL"
         },
         {
-          "object": "white and black blanket",
+          "object": "black and white blanket",
           "change": "move to wooden dresser",
-          "weight": "heavy",
+          "weight": "light",
           "how": "LOCAL"
         },
         {
@@ -1115,14 +890,245 @@
           "how": "LOCAL"
         },
         {
+          "object": "alarm clock",
+          "change": "move to wooden dresser",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
           "object": "lamp",
+          "change": "move to wooden dresser",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "laptop",
+          "change": "move to wooden dresser",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "red chair",
+          "change": "move to next to white bed",
+          "weight": "heavy",
+          "how": "LOCAL"
+        },
+        {
+          "object": "dumbbell",
+          "change": "move to cardboard box",
+          "weight": "heavy",
+          "how": "LOCAL"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "green pillow",
+            "from": "white bed",
+            "to": "wooden dresser"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "black and white blanket",
+            "from": "white bed",
+            "to": "wooden dresser"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "orange bottle",
+            "from": "shelf",
+            "to": "wooden nightstand"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "alarm clock",
+            "from": "wooden nightstand",
+            "to": "wooden dresser"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "lamp",
+            "from": "wooden nightstand",
+            "to": "wooden dresser"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "laptop",
+            "from": "wooden desk",
+            "to": "wooden dresser"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "red chair",
+            "from": "in front of wooden desk",
+            "to": "next to white bed"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "dumbbell",
+            "from": "next to wooden desk",
+            "to": "cardboard box"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "PASS",
+          "item": "orange bottle",
+          "target": "R1",
+          "serves": 0
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R3:fix",
+    "system": "You are robot R3 in the living_room. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessibl",
+    "user": "## TASK:\nSomeone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am fixed in place with a gripper for handling light objects.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items\",\n  \"SliceObject: cut soft items\",\n  \"PourObject: pour liquids\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleOb",
+    "output": {
+      "reasoning": "a) The living room must be comfortable for resting, with essentials like a blanket and water. b) Prioritize comfort by arranging the red blanket and adjusting lighting. c) Use the white vase to provide water, collaborating with other robots to fill it. d) Suggest the white vase for water to other rooms, ensuring hydration is available.",
+      "goals": [
+        {
+          "goal": "set up living room for rest and recovery",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "red blanket",
+          "change": "move to sofa",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "floor lamp",
           "change": "turn on",
           "weight": "light",
           "how": "LOCAL"
         },
         {
-          "object": "green glass",
-          "change": "receive for water",
+          "object": "white vase",
+          "change": "pass for water",
+          "weight": "light",
+          "how": "PASS"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "red blanket",
+            "from": "sofa",
+            "to": "dining table"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "red blanket",
+            "from": "dining table",
+            "to": "sofa"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "floor lamp",
+            "from": "near sofa",
+            "to": "on"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "PASS",
+          "item": "white vase",
+          "target": "R2",
+          "serves": 0
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R6:fix",
+    "system": "You are robot R6 in the bathroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, ",
+    "user": "## TASK:\nSomeone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R6\",\n \"capability\": \"I can move around the bathroom and handle objects up to 20 kg.\",\n \"can_do\": [\n  \"PickupLightObject: handle small items\",\n  \"PickupHeavyObject: handle larger items\",\n  \"PushFurniture: adjust furniture\",\n  \"PassReceiveObject: exchange items with ",
+    "output": {
+      "reasoning": "a) The bathroom must be set up to be comfortable for someone with the flu, with essentials like water and tissues accessible. b) I will ensure the green trash bin is positioned conveniently and the brown towel is adjusted for easy access. c) I need to receive a water bottle and blanket from other robots to complete the setup. d) My actions focus on making the bathroom a supportive environment for rest and recovery.",
+      "goals": [
+        {
+          "goal": "set up bathroom for flu recovery",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "green trash bin",
+          "change": "move to near the sink",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "brown towel",
+          "change": "move to towel rack",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "water bottle",
+          "change": "receive for hydration",
+          "weight": "light",
+          "how": "RECEIVE"
+        },
+        {
+          "object": "blanket",
+          "change": "receive for comfort",
           "weight": "light",
           "how": "RECEIVE"
         }
@@ -1132,8 +1138,186 @@
           "type": "LOCAL",
           "action": {
             "verb": "move",
+            "object": "green trash bin",
+            "from": "floor",
+            "to": "near the sink"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "brown towel",
+            "from": "wall",
+            "to": "towel rack"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "RECEIVE",
+          "item": "water bottle",
+          "target": "R1",
+          "serves": 0
+        },
+        {
+          "type": "RECEIVE",
+          "item": "red blanket",
+          "target": "R3",
+          "serves": 0
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R6:fix",
+    "system": "You are robot R6 in the bathroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, ",
+    "user": "## TASK:\nSomeone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R6\",\n \"capability\": \"I can move around the bathroom and handle objects up to 20 kg.\",\n \"can_do\": [\n  \"PickupLightObject: handle small items\",\n  \"PickupHeavyObject: handle larger items\",\n  \"PushFurniture: adjust furniture\",\n  \"PassReceiveObject: exchange items with ",
+    "output": {
+      "reasoning": "a) The bathroom must be set up to be comfortable for someone with the flu, with essentials like water and tissues accessible. b) I will ensure the green trash bin is positioned conveniently and the brown towel is adjusted for easy access. c) I need to receive a water bottle and blanket from other robots to complete the setup. d) My actions focus on making the bathroom a supportive environment for rest and recovery.",
+      "goals": [
+        {
+          "goal": "set up bathroom for flu recovery",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "green trash bin",
+          "change": "move to near the sink",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "brown towel",
+          "change": "adjust on wall for easy access",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "green bottle",
+          "change": "receive for hydration",
+          "weight": "light",
+          "how": "RECEIVE"
+        },
+        {
+          "object": "red blanket",
+          "change": "receive for comfort",
+          "weight": "light",
+          "how": "RECEIVE"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "green trash bin",
+            "from": "floor",
+            "to": "near the sink"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "adjust",
+            "object": "brown towel",
+            "from": "wall",
+            "to": "wall for easy access"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "RECEIVE",
+          "item": "green bottle",
+          "target": "R1",
+          "serves": 0
+        },
+        {
+          "type": "RECEIVE",
+          "item": "red blanket",
+          "target": "R3",
+          "serves": 0
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R5:fix",
+    "system": "You are robot R5 in the bedroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
+    "user": "## TASK:\nSomeone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R5\",\n \"capability\": \"I am mobile and can carry objects up to 20 kg.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PickupHeavyObject: move larger items\",\n  \"PushFurniture: adjust furniture\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleOb",
+    "output": {
+      "reasoning": "a) The room must be comfortable for rest, with easy access to water and essentials. b) Comfort and accessibility are priorities given the short deadline. c) I will adjust the bed and ensure essentials are nearby. d) The orange bottle might serve another room's needs.",
+      "goals": [
+        {
+          "goal": "Set up the bedroom for a person with the flu to rest and recover.",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "green pillow",
+          "change": "move to wooden dresser",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "black and white blanket",
+          "change": "move to wooden dresser",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "orange bottle",
+          "change": "move to wooden nightstand",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "alarm clock",
+          "change": "move to wooden dresser",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "lamp",
+          "change": "move to wooden dresser",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "laptop",
+          "change": "move to wooden dresser",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "red chair",
+          "change": "move to next to white bed",
+          "weight": "heavy",
+          "how": "LOCAL"
+        },
+        {
+          "object": "dumbbell",
+          "change": "move to cardboard box",
+          "weight": "heavy",
+          "how": "LOCAL"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
             "object": "green pillow",
-            "from": "bed",
+            "from": "white bed",
             "to": "wooden dresser"
           },
           "uses": 0,
@@ -1143,8 +1327,8 @@
           "type": "LOCAL",
           "action": {
             "verb": "move",
-            "object": "white and black blanket",
-            "from": "bed",
+            "object": "black and white blanket",
+            "from": "white bed",
             "to": "wooden dresser"
           },
           "uses": 0,
@@ -1164,17 +1348,61 @@
         {
           "type": "LOCAL",
           "action": {
-            "verb": "turn_on",
-            "object": "lamp",
-            "from": "on nightstand",
-            "to": "on"
+            "verb": "move",
+            "object": "alarm clock",
+            "from": "wooden nightstand",
+            "to": "wooden dresser"
           },
           "uses": 0,
           "serves": 0
         },
         {
-          "type": "RECEIVE",
-          "item": "green glass",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "lamp",
+            "from": "wooden nightstand",
+            "to": "wooden dresser"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "laptop",
+            "from": "wooden desk",
+            "to": "wooden dresser"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "red chair",
+            "from": "in front of wooden desk",
+            "to": "next to white bed"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "dumbbell",
+            "from": "next to wooden desk",
+            "to": "cardboard box"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "PASS",
+          "item": "orange bottle",
           "target": "R1",
           "serves": 0
         }
@@ -1184,12 +1412,12 @@
   {
     "key": "plan:R5:fix",
     "system": "You are robot R5 in the bedroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nSomeone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R5\",\n \"capability\": \"I am a mobile robot capable of moving and arranging objects up to 20 kg.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PickupHeavyObject: move larger items\",\n  \"PushFurniture: rearrange furniture\",\n  \"PassReceiveObject: exchange it",
+    "user": "## TASK:\nSomeone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R5\",\n \"capability\": \"I am mobile and can carry objects up to 20 kg.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PickupHeavyObject: move larger items\",\n  \"PushFurniture: adjust furniture\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleOb",
     "output": {
-      "reasoning": "a) The room must be comfortable for resting, with easy access to water and essentials. b) Priority is ensuring the bed is ready for rest and water is accessible. c) In my room, I will arrange the bed and ensure essentials like water are nearby. d) I will request a water bottle from another robot since I cannot pour liquids.",
+      "reasoning": "a) The room must be comfortable for rest, with easy access to water and essentials. b) Comfort and accessibility are priorities given the short deadline. c) I will adjust the bed and ensure essentials are nearby. d) The orange bottle might serve another room's needs.",
       "goals": [
         {
-          "goal": "Set up the bedroom for someone with the flu to rest and recover.",
+          "goal": "Set up the bedroom for a person with the flu to rest and recover.",
           "priority": "high",
           "in_my_room": true
         }
@@ -1202,9 +1430,9 @@
           "how": "LOCAL"
         },
         {
-          "object": "white and black blanket",
+          "object": "black and white blanket",
           "change": "move to wooden dresser",
-          "weight": "heavy",
+          "weight": "light",
           "how": "LOCAL"
         },
         {
@@ -1214,16 +1442,34 @@
           "how": "LOCAL"
         },
         {
-          "object": "lamp",
-          "change": "turn on",
+          "object": "alarm clock",
+          "change": "move to wooden dresser",
           "weight": "light",
           "how": "LOCAL"
         },
         {
-          "object": "green glass",
-          "change": "receive for water",
+          "object": "lamp",
+          "change": "move to wooden dresser",
           "weight": "light",
-          "how": "RECEIVE"
+          "how": "LOCAL"
+        },
+        {
+          "object": "laptop",
+          "change": "move to wooden dresser",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "red chair",
+          "change": "move to next to white bed",
+          "weight": "heavy",
+          "how": "LOCAL"
+        },
+        {
+          "object": "dumbbell",
+          "change": "move to cardboard box",
+          "weight": "heavy",
+          "how": "LOCAL"
         }
       ],
       "steps": [
@@ -1232,7 +1478,7 @@
           "action": {
             "verb": "move",
             "object": "green pillow",
-            "from": "bed",
+            "from": "white bed",
             "to": "wooden dresser"
           },
           "uses": 0,
@@ -1242,8 +1488,8 @@
           "type": "LOCAL",
           "action": {
             "verb": "move",
-            "object": "white and black blanket",
-            "from": "bed",
+            "object": "black and white blanket",
+            "from": "white bed",
             "to": "wooden dresser"
           },
           "uses": 0,
@@ -1263,57 +1509,63 @@
         {
           "type": "LOCAL",
           "action": {
-            "verb": "turn_on",
-            "object": "lamp",
-            "from": "on nightstand",
-            "to": "on"
+            "verb": "move",
+            "object": "alarm clock",
+            "from": "wooden nightstand",
+            "to": "wooden dresser"
           },
           "uses": 0,
           "serves": 0
         },
         {
-          "type": "RECEIVE",
-          "item": "green glass",
-          "target": "R1",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "lamp",
+            "from": "wooden nightstand",
+            "to": "wooden dresser"
+          },
+          "uses": 0,
           "serves": 0
-        }
-      ]
-    }
-  },
-  {
-    "key": "propose:R1",
-    "system": "You are robot R1. Judge other robots' requests and offers.\n\nFIRST: check your own plan. If you already do what an ASK_HELP asks → \"already_doing\" + covered_by.\nDUPLICATE REQUESTS: if you're already se",
-    "user": "TASK: Someone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I can manipulate light objects and pass them to others.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items\",\n  \"SliceObject: cut with a knife\",\n  \"PourObject: pour liquids\",\n  \"PassReceiveObject: hand over items\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"",
-    "output": {
-      "offers": [],
-      "judgments": [
-        {
-          "request": "r4_s4",
-          "decision": "accept",
-          "reason": "R4 is requesting the green glass, which aligns with my plan to pass it to another robot.",
-          "action": "PassReceiveObject: hand over green glass",
-          "uses": 3,
-          "insert_after": "r1_s4"
         },
         {
-          "request": "r5_s5",
-          "decision": "reject",
-          "reason": "I am already passing the green glass to R4, and I cannot fulfill multiple requests for the same item simultaneously."
-        }
-      ]
-    }
-  },
-  {
-    "key": "propose:R4",
-    "system": "You are robot R4. Judge other robots' requests and offers.\n\nFIRST: check your own plan. If you already do what an ASK_HELP asks → \"already_doing\" + covered_by.\nDUPLICATE REQUESTS: if you're already se",
-    "user": "TASK: Someone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I am mobile and can handle light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: move light items like pillows and blankets\",\n  \"PassReceiveObject: exchange objects with others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"purpl",
-    "output": {
-      "offers": [],
-      "judgments": [
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "laptop",
+            "from": "wooden desk",
+            "to": "wooden dresser"
+          },
+          "uses": 0,
+          "serves": 0
+        },
         {
-          "request": "r5_s5",
-          "decision": "ignore",
-          "reason": "The request is not directed at me and does not involve any items I possess."
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "red chair",
+            "from": "in front of wooden desk",
+            "to": "next to white bed"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "dumbbell",
+            "from": "next to wooden desk",
+            "to": "cardboard box"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "PASS",
+          "item": "orange bottle",
+          "target": "R1",
+          "serves": 0
         }
       ]
     }
@@ -1321,32 +1573,88 @@
   {
     "key": "propose:R2",
     "system": "You are robot R2. Judge other robots' requests and offers.\n\nFIRST: check your own plan. If you already do what an ASK_HELP asks → \"already_doing\" + covered_by.\nDUPLICATE REQUESTS: if you're already se",
-    "user": "TASK: Someone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am a mobile robot capable of light object manipulation.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PassReceiveObject: transfer items\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"green cup (counter, image 1)\",\n  \"loaf o",
+    "user": "TASK: Someone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am a mobile robot capable of light object manipulation.\",\n \"can_do\": [\n  \"PickupLightObject: move light items\",\n  \"PassReceiveObject: transfer items to/from others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"green cup (counter, image",
     "output": {
       "offers": [
         {
-          "offer": "r1_s4",
+          "offer": "r1_s1",
           "decision": "decline",
-          "reason": "I already have a green cup for water."
+          "reason": "already have a green cup for water"
         },
         {
-          "offer": "r1_s5",
+          "offer": "r1_s2",
           "decision": "receive",
-          "action": "pass silver kettle from counter to resting area",
+          "action": "pass silver kettle (counter, image 1) to R1",
           "uses": 0,
           "insert_after": "r2_s2"
+        },
+        {
+          "offer": "r3_s4",
+          "decision": "decline",
+          "reason": "white vase not needed for current goals"
         }
       ],
       "judgments": [
         {
-          "request": "r4_s4",
+          "request": "r6_s3",
           "decision": "ignore",
-          "reason": "The request is for R1, not R2."
+          "reason": "not relevant to current tasks"
         },
         {
-          "request": "r5_s5",
+          "request": "r6_s4",
           "decision": "ignore",
-          "reason": "The request is for R1, not R2."
+          "reason": "not relevant to current tasks"
+        }
+      ]
+    }
+  },
+  {
+    "key": "propose:R4",
+    "system": "You are robot R4. Judge other robots' requests and offers.\n\nFIRST: check your own plan. If you already do what an ASK_HELP asks → \"already_doing\" + covered_by.\nDUPLICATE REQUESTS: if you're already se",
+    "user": "TASK: Someone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I am a mobile robot with light object handling capabilities.\",\n \"can_do\": [\n  \"PickupLightObject: move small items like pillows and blankets\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  ",
+    "output": {
+      "offers": [],
+      "judgments": [
+        {
+          "request": "r6_s4",
+          "decision": "volunteer",
+          "reason": "I can pass the red blanket to R3 as it is within my capabilities and current location.",
+          "item": "red blanket",
+          "insert_after": "r4_s2"
+        }
+      ]
+    }
+  },
+  {
+    "key": "propose:R1",
+    "system": "You are robot R1. Judge other robots' requests and offers.\n\nFIRST: check your own plan. If you already do what an ASK_HELP asks → \"already_doing\" + covered_by.\nDUPLICATE REQUESTS: if you're already se",
+    "user": "TASK: Someone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am a fixed robot with a gripper, able to manipulate light objects.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items\",\n  \"SliceObject: cut with a knife\",\n  \"PourObject: pour liquids\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject: turn on/off",
+    "output": {
+      "offers": [
+        {
+          "offer": "r2_s2",
+          "decision": "decline",
+          "reason": "The green cup is not needed as I already have a green glass for water."
+        },
+        {
+          "offer": "r5_s9",
+          "decision": "decline",
+          "reason": "The orange bottle is not needed for my current tasks."
+        }
+      ],
+      "judgments": [
+        {
+          "request": "r6_s3",
+          "decision": "accept",
+          "reason": "I can pass the green bottle to R6 as it is within my capability.",
+          "action": "PassReceiveObject: pass green bottle to R6",
+          "uses": 3,
+          "insert_after": "r1_s2"
+        },
+        {
+          "request": "r6_s4",
+          "decision": "ignore",
+          "reason": "The request is not targeted at me and involves an item I do not possess."
         }
       ]
     }
@@ -1354,39 +1662,19 @@
   {
     "key": "propose:R3",
     "system": "You are robot R3. Judge other robots' requests and offers.\n\nFIRST: check your own plan. If you already do what an ASK_HELP asks → \"already_doing\" + covered_by.\nDUPLICATE REQUESTS: if you're already se",
-    "user": "TASK: Someone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am a fixed robot with a gripper for handling light objects.\",\n \"can_do\": [\n  \"PickupLightObject: handle small items like books or bowls\",\n  \"SliceObject: cut items if needed\",\n  \"PourObject: pour liquids\",\n  \"PassReceiveObject: exchange items with mobile robots\",\n  \"",
+    "user": "TASK: Someone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am fixed in place with a gripper for handling light objects.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items\",\n  \"SliceObject: cut soft items\",\n  \"PourObject: pour liquids\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject: turn on/off lights,",
     "output": {
       "offers": [],
       "judgments": [
         {
-          "request": "r4_s4",
+          "request": "r6_s3",
           "decision": "ignore",
           "reason": "The request is targeted at R1, not R3."
         },
         {
-          "request": "r5_s5",
-          "decision": "ignore",
-          "reason": "The request is targeted at R1, not R3."
-        }
-      ]
-    }
-  },
-  {
-    "key": "propose:R6",
-    "system": "You are robot R6. Judge other robots' requests and offers.\n\nFIRST: check your own plan. If you already do what an ASK_HELP asks → \"already_doing\" + covered_by.\nDUPLICATE REQUESTS: if you're already se",
-    "user": "TASK: Someone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nYOUR OFFER: {\n \"agent\": \"R6\",\n \"capability\": \"I can move around and handle objects up to 20 kg.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PickupHeavyObject: move larger items\",\n  \"PushFurniture: rearrange furniture\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject: turn on/off l",
-    "output": {
-      "offers": [],
-      "judgments": [
-        {
-          "request": "r4_s4",
-          "decision": "ignore",
-          "reason": "The request is targeted at R1, not R6."
-        },
-        {
-          "request": "r5_s5",
-          "decision": "ignore",
-          "reason": "The request is targeted at R1, not R6."
+          "request": "r6_s4",
+          "decision": "reject",
+          "reason": "R3 is already using the red blanket for its current plan to set up a comfortable resting area."
         }
       ]
     }
@@ -1394,20 +1682,19 @@
   {
     "key": "propose:R5",
     "system": "You are robot R5. Judge other robots' requests and offers.\n\nFIRST: check your own plan. If you already do what an ASK_HELP asks → \"already_doing\" + covered_by.\nDUPLICATE REQUESTS: if you're already se",
-    "user": "TASK: Someone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nYOUR OFFER: {\n \"agent\": \"R5\",\n \"capability\": \"I am a mobile robot capable of moving and arranging objects up to 20 kg.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PickupHeavyObject: move larger items\",\n  \"PushFurniture: rearrange furniture\",\n  \"PassReceiveObject: exchange items with others\",\n  \"Togg",
+    "user": "TASK: Someone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nYOUR OFFER: {\n \"agent\": \"R5\",\n \"capability\": \"I am mobile and can carry objects up to 20 kg.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PickupHeavyObject: move larger items\",\n  \"PushFurniture: adjust furniture\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject: turn on/off lights,",
     "output": {
-      "offers": [
-        {
-          "offer": "r6_s2",
-          "decision": "decline",
-          "reason": "The brown towel is not needed for the current goal of setting up a comfortable resting area in the bedroom."
-        }
-      ],
+      "offers": [],
       "judgments": [
         {
-          "request": "r4_s4",
+          "request": "r6_s3",
           "decision": "ignore",
-          "reason": "The request is for R1 to receive the green glass, which does not involve R5."
+          "reason": "The request is for R1, and I do not have a green bottle."
+        },
+        {
+          "request": "r6_s4",
+          "decision": "ignore",
+          "reason": "The request is for R3, and I do not have a red blanket."
         }
       ]
     }
@@ -1415,18 +1702,13 @@
   {
     "key": "graph:1",
     "system": "You are the graph integrator. You do NOT plan or allocate — every step was written by the robot that executes it.\nTurn CANDIDATE collaborations into one consistent joint plan.\n\nOperations (use only wi",
-    "user": "TASK: Someone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nJOINT PLAN: {\n \"R1\": [\n  {\n   \"id\": \"r1_s1\",\n   \"agent\": \"R1\",\n   \"type\": \"LOCAL\",\n   \"action\": {\n    \"verb\": \"pick_up\",\n    \"object\": \"silver kettle\",\n    \"from\": \"counter\",\n    \"to\": \"sink\"\n   }\n  },\n  {\n   \"id\": \"r1_s2\",\n   \"agent\": \"R1\",\n   \"type\": \"LOCAL\",\n   \"action\": {\n    \"verb\": \"pour\",\n    \"object\": \"sil",
+    "user": "TASK: Someone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nJOINT PLAN: {\n \"R1\": [\n  {\n   \"id\": \"r1_s2\",\n   \"agent\": \"R1\",\n   \"type\": \"PASS\",\n   \"action\": \"pass silver kettle (counter, image 1) to R2\",\n   \"item\": \"silver kettle (counter, image 1)\",\n   \"target\": \"R2\"\n  }\n ],\n \"R2\": [\n  {\n   \"id\": \"r2_s1\",\n   \"agent\": \"R2\",\n   \"type\": \"LOCAL\",\n   \"action\": {\n    \"verb\": \"pic",
     "output": {
       "ops": [
         {
           "op": "drop",
-          "node": "r4_s2",
-          "why": "Duplicate work with R3's action of arranging the red blanket."
-        },
-        {
-          "op": "drop",
           "node": "r4_s3",
-          "why": "Duplicate work with R3's action of turning on the floor lamp."
+          "why": "DUPLICATE_WORK: Both R3 and R4 are turning on the same floor lamp in the living room. Keeping R3's action as it is already in place."
         }
       ]
     }
@@ -1437,22 +1719,24 @@
     "user": "TASK: Someone with the flu needs a place to rest and recover. I need a room set up within 20 minutes — comfortable to rest in, with easy access to water and any basics they might need.\nROBOTS: {\n \"R1\": {\n  \"room\": \"kitchen\",\n  \"mobile\": false,\n  \"body\": \"Gripper. CAN: PickupLightObject, SliceObject, PourObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture. This robot is FIXED IN PLACE and can never move to another room. To pass an item to another robot, that other robot must come ",
     "output": {
       "sizes": {
-        "r1_s1": "short",
+        "r1_s2": "short",
         "r2_s1": "short",
         "r3_s1": "short",
         "r4_s1": "short",
         "r5_s1": "short",
         "r6_s1": "short",
-        "r1_s2": "short",
-        "r2_s2": "short",
+        "r2_s3": "short",
         "r3_s2": "short",
+        "r4_s2": "short",
         "r5_s2": "short",
-        "r1_s3": "short",
+        "r2_s4": "short",
+        "r3_s3": "short",
         "r5_s3": "short",
-        "r1_s5": "medium",
         "r5_s4": "short",
-        "r2_s3": "medium",
-        "r2_s4": "medium"
+        "r5_s5": "short",
+        "r5_s6": "short",
+        "r5_s7": "medium",
+        "r5_s8": "short"
       }
     }
   }
