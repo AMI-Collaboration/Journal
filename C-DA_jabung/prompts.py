@@ -4,484 +4,236 @@ from __future__ import annotations
 import json
 
 
-
 def _j(x) -> str:
     return json.dumps(x, ensure_ascii=False, indent=1)
 
 
 # ================================================================ Shared rules
-# NOTE: no curly braces in these blocks (they are concatenated into .format() templates).
-_WORDING = """WORDING RULES (every field):
-- EXACT NAMES: refer to an object by exactly its has_items name, without the parenthesis.
-  The same object has the same name everywhere.
-- CONCRETE ACTIONS: verb + exact object + destination or end state,
-  e.g. "push the wooden bookshelf against the east wall".
-- BANNED WORDS — writing any of these causes your plan to be rejected:
-  Too vague: help with, assist, prepare, handle, ensure, take care of, tidy up, organize,
-  arrange, coordinate, mark, as needed, if necessary, etc., all, other, remaining, everything.
-  Vague locations: "out of sight", "accessible location", "safe location", "optimal position",
-  "appropriate place", "nearby", "somewhere", "a spot", "brightly lit", "dim", "secure location",
+_WORDING = """WORDING RULES:
+- EXACT NAMES: use the exact has_items name everywhere.
+- BANNED WORDS (plan rejected if used): help with, assist, prepare, handle, ensure, take care of,
+  tidy up, organize, arrange, coordinate, as needed, if necessary, etc., all, other, remaining,
+  everything, "out of sight", "accessible location", "safe location", "optimal position",
+  "appropriate place", "nearby", "somewhere", "brightly lit", "dim", "secure location",
   "comfortable position", "workout area", "snack area", "resting area".
-  If you use any banned word, your plan will be REJECTED and you must rewrite.
+- CONCRETE DESTINATIONS: every move/place/put_down must name real furniture from has_items.
+  CORRECT: "move mug from counter to cabinet shelf"   WRONG: "move mug to safe location"
+- PHYSICAL ACTIONS ONLY: decompose abstract goals into atomic simulator steps.
+  CORRECT: "turn off ceiling lamp" + "turn on floor lamp"   WRONG: "dim the lights"
+- ONE OBJECT, ONE STEP, ONCE."""
 
-- CONCRETE DESTINATIONS (mandatory): every move/place/put_down action must name a specific
-  real furniture or object as destination from your has_items.
-  CORRECT: "move the mug from the counter to the cabinet shelf"
-  WRONG: "move the mug to a safe location" / "move the mug out of sight"
+_ESSENTIAL = """TEAM GOAL: ESSENTIAL work first — what the task cannot succeed without.
+Think beyond literal words: "watch a movie" → TV on + sofa arranged + lighting adjusted + snacks.
+"guest coming" → seating ready + drinks prepared + surfaces clear.
+"home workout" → floor cleared + equipment out + water nearby + shower ready after."""
 
-- PHYSICAL ACTIONS ONLY (mandatory): decompose abstract goals into atomic physical steps.
-  CORRECT: "turn off the ceiling lamp" + "turn on the floor lamp" (for dim lighting)
-  WRONG: "dim the lights" / "adjust lighting to optimal"
-  CORRECT: "move the book from the desk to the cabinet" (for tidying)
-  WRONG: "tidy up the desk" / "organize the workspace"
-  Any action with no direct physical counterpart in the simulator will be REJECTED.
-- ONE OBJECT, ONE STEP, ONCE: one object per step. Never write the same action twice in
-  different words."""
-
-_ESSENTIAL = """TEAM GOAL: the robots are a team. ESSENTIAL work comes first: what the task cannot succeed without.
-Ask for other rooms' objects or help only when a step really needs them, not because they would be
-nice to have. Do not invent work unrelated to the task.
-WHAT COUNTS AS ESSENTIAL: everything the task sentence asks for. A general phrase like "make sure
-everything else is ready" is also a requirement: read it as what this activity normally needs.
-Decide this from the TASK itself. The examples in this prompt are deliberately about unrelated
-objects; never take an object from an example."""
-
-_SPACE_RULES = """SPACE RULES (space-separated home):
-- Every robot works only in its OWN room. You never go to another room on your own initiative,
-  even if you are mobile.
-- There are exactly two kinds of collaboration:
-  * CAPABILITY: work in your room that your body cannot do (too heavy, out of reach, needs a
-    different tool) -> ASK_HELP to a robot whose body can. Say exactly what it should do.
-    If the object that needs capability work (e.g. SliceObject, PourObject) is in YOUR room but
-    the capable robot is in ANOTHER room: first PASS the object to that robot, then ASK_HELP it
-    to perform the action, then RECEIVE the result back. Any mobile robot can carry the object
-    between rooms. Never use "wait for None" — always identify a specific capable robot as target.
-  * OBJECT: you need an object that is in another room -> RECEIVE from that room's robot.
-- Who moves an object between rooms is decided by the bodies, not by a request:
-  * mobile giver -> the giver brings it (its PASS includes bringing it);
-  * fixed giver -> a mobile receiver collects it (its RECEIVE includes collecting it);
-  * two fixed robots cannot exchange objects.
-  Never ask a third robot to carry an object.
-- A mobile robot leaves its room only to do a HELP, to bring an object it gives, or to collect an
-  object it receives from a fixed robot."""
+_SPACE_RULES = """SPACE RULES:
+- Every robot works only in its OWN room unless doing HELP/PASS/RECEIVE.
+- Two collaboration types only:
+  CAPABILITY: body can't do it → ASK_HELP target robot. If object is here but capable robot
+  is elsewhere: PASS object → ASK_HELP → RECEIVE result.
+  OBJECT: need object from another room → RECEIVE.
+- Mobile giver brings the object. Fixed giver hands over; mobile receiver collects.
+- Never ask a third robot to carry."""
 
 
 # ================================================================ Stage 1: Offer
-OFFER_SYSTEM = """You are robot {agent}, one of several heterogeneous household robots.
-Each robot sees only its own room. Nobody, including a central system, sees everything.
-You cannot explore: reason only from your images, the text about areas you cannot see, and your body.
+OFFER_SYSTEM = """You are robot {agent}, a household robot that sees only its own room.
 
-Write an OFFER: what YOU can contribute to THIS task, which part YOU intend to take, and what you need.
+STEP 1 — LIST has_items: every clearly visible movable object in your images.
+Format: "<color> <noun> (<location>, image <k>)". NEVER infer unlisted objects.
+If you see an apple, do NOT add banana. Only what you directly see.
 
-WORK IN THIS ORDER (the JSON fields follow the same order):
- 1. LOOK FIRST -> "has_items". Before thinking about the task, list every movable object you can
-    CLEARLY see in your images. Do not filter by relevance and do not guess: if an object is partly
-    hidden or you are not sure what it is, leave it out. NEVER infer or assume objects that are not
-    visible — if you see an apple, do not add banana or pear. Only list what you can directly see.
-    This list is the only way other robots learn what exists in your room, so a wrong entry misleads the whole team.
-    Format: "<color/material> <specific noun> (<where it is>, image <k>)", one object per entry,
-    e.g. "striped cotton rug (under the bookshelf, image 2)". Use a specific noun
-    ("bookshelf", not "furniture"; "plate", not "dishes").
- 2. THEN THINK -> "reasoning" (1-2 sentences each):
-    a) GOAL STATE: when this task is done, what must be true in the house?
-    b) PRIORITY: which of those matter most (stated priorities, the people it is for, the deadline)?
-    c) MY ROOM: which important changes happen in MY room, using objects from my has_items?
-    d) MY OBJECTS FOR OTHERS: which of my has_items could serve the task in another room?
-    For your own room use ONLY your has_items. About other rooms you know ONLY the text under
-    "ABOUT AREAS YOU CANNOT SEE".
- 3. THEN FILL the remaining fields.
+STEP 2 — REASONING (one sentence each):
+a) GOAL STATE: what must be true when task is done? Think beyond literal words.
+b) PRIORITY: what matters most given the deadline?
+c) MY ROOM: which changes happen here using my has_items?
+d) FOR OTHERS: which of my has_items serve another room's needs?
 
-FIELDS:
-- "capability": one sentence about your embodiment.
-- "can_do": general body abilities relevant to this task, with limits (e.g. "push floor furniture
-  up to 20 kg"). At most 5. No step-by-step plan here.
-  All mobile and gripper robots can toggle switches and buttons (turn_on, turn_off) on any
-  appliance or lamp in their room — always include "ToggleObject (turn on/off lights, TV,
-  appliances)" in can_do unless your embodiment truly prevents it.
-- "cannot_do": task-relevant actions your body cannot perform, and why.
-- "suggests": objects from YOUR has_items that the task in another room NEEDS, each with its use and
-  place (e.g. "Ceramic plate: serving food on the dining table"). Be GENEROUS — list any object that
-  could possibly help the task, even if you are not sure it is needed. Other robots will decide.
-- "intends": concrete steps you will do in YOUR room, in execution order, each once, using only your
-  has_items. May be EMPTY if nothing important happens in your room (has_items and suggests are still
-  required). If you can prepare an object for another room (slice, pour, pick up), include it here
-  so other robots know you will handle it.
-- "need_from_others": what you need from other robots. You do not know their objects yet, so describe
-  the need by FUNCTION and state, not by an object name (e.g. "a flat light container to hold soil",
-  "a robot that can push a 40 kg cabinet"). Do not repeat an item from "intends".
-- "obs_scope": what you can and cannot observe.
+STEP 3 — FILL FIELDS:
+- capability: one sentence about your body.
+- can_do: body abilities with limits (max 5). ALWAYS include "ToggleObject: turn on/off lights,
+  TV, appliances" unless physically impossible.
+- cannot_do: what your body truly cannot do and why.
+- suggests: your has_items useful in other rooms. Be GENEROUS.
+- intends: concrete steps YOU will do in YOUR room, in order.
+- need_from_others: describe by FUNCTION not object name.
+- obs_scope: what you can/cannot observe.
 
-""" + _WORDING + """
+""" + _WORDING + "\n" + _ESSENTIAL + "\n" + _SPACE_RULES + """
 
-""" + _ESSENTIAL + """
+Return JSON:
+{{"has_items": [...], "reasoning": "a)... b)... c)... d)...", "capability": "...",
+ "can_do": [...], "cannot_do": [...], "suggests": [...], "intends": [...],
+ "need_from_others": [...], "obs_scope": "..."}}"""
 
-""" + _SPACE_RULES + """
-
-BEFORE RETURNING, check silently and fix:
-- every object you name for your room is in your has_items;
-- no banned word; no action written twice; nothing copied between can_do, intends and need_from_others.
-
-Return JSON (fields in this order):
-{{
- "has_items": ["<color/material> <specific noun> (<where it is>, image <k>)", ...],
- "reasoning": "a) ... b) ... c) ... d) ...",
- "capability": "one sentence about your embodiment",
- "can_do": ["general body ability with its limit", ...],
- "cannot_do": ["task-relevant action you cannot perform, and why", ...],
- "suggests": ["Object: what it could be used for in this task", ...],
- "intends": ["concrete step you will do, in order", ...],
- "need_from_others": ["needed function/state, not an object name", ...],
- "obs_scope": "what you can and cannot observe"
-}}"""
-
-OFFER_USER = """## PRIMARY OBJECTIVE — Read this first and keep it in mind throughout:
+OFFER_USER = """## TASK (serve this only):
 {task}
 DEADLINE: {deadline} minutes
-Every decision you make must serve this objective. Do not plan work unrelated to it.
 
-YOUR BODY:
-- room: {room}
-- mobile (can leave its room): {mobile}
-- payload: {payload}
-- embodiment: {embodiment}
+YOUR BODY: room={room}, mobile={mobile}, payload={payload}, embodiment={embodiment}
 
 ABOUT AREAS YOU CANNOT SEE:
 {instruction}
 
-Your camera images are attached ({n_img} image(s)), in order as image 1 to image {n_img}."""
+Images attached ({n_img} image(s)), image 1 to {n_img}."""
+
 
 # ================================================================ Stage 2: Local Plan
-PLAN_SYSTEM = """You are robot {agent}. Make YOUR OWN local plan for YOUR part of the shared task.
-Nobody assigns you work, and you do not assign work to others.
+PLAN_SYSTEM = """You are robot {agent} in the {room}. Write YOUR part of the shared plan.
 
-GROUNDING: an object exists only if it appears in a has_items list (yours, or another robot's public
-offer). Never name an object because the task would need it. If an essential object is in no has_items
-list, it does not exist: say so in "reasoning" and do not plan with it.
-Your "intends" from the Offer is only a DRAFT: turn it into steps once. Do not write a step for it
-and then the same work again in other words.
+━━━ CRITICAL RULES (violation = plan rejected) ━━━
+1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, safe location,
+   comfortable, workout area, snack area — and all words in WORDING RULES below.
+2. EVERY destination must be real furniture from has_items. "to the cabinet", not "somewhere safe".
+3. EVERY pick_up must be followed by put_down, PASS, or use. No orphan pick_ups.
+4. NEVER move object from and to the same place ("sofa to sofa" = rejected).
+5. PHYSICAL ACTIONS ONLY. "turn off ceiling lamp + turn on floor lamp" not "dim the lights".
+6. Every robot needs ≥2 steps. Use idle capacity for PASS or collaboration.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-STEP 1 - TASK REASONING ("reasoning"):
- a) FINISHED STATE: what is different in the house when the task is done?
-    Think beyond the literal words. "watch a movie" implies: TV on, sofa arranged, lighting dimmed,
-    snacks ready. "guest coming" implies: seating ready, drinks prepared, surfaces clear, welcoming.
-    "home workout" implies: floor space cleared, equipment out, water nearby, shower ready after.
-    Always infer the FULL set of physical conditions needed for the activity to happen comfortably.
- b) ESSENTIAL vs NICE-TO-HAVE: which changes does the task require (including what it asks to have
-    "ready"), and which are only extras?
- c) WHERE: in which room does each change happen?
- d) YOUR ROOM: for each essential change in YOUR room, can YOUR body do it? If not, it STILL has to
-    happen: ASK_HELP a robot whose body can (see the profiles). Never leave essential work out
-    because your body cannot do it.
-Then write "goals": each with "goal", "priority" (high = essential, medium/low = nice-to-have) and
-"in_my_room". Only goals of the TASK, not general housekeeping.
-Be AMBITIOUS: if your room has multiple objects that need attention for the task, plan ALL of them.
-Do not stop after one or two steps if more work is needed. Use your full capacity.
+PLAN IN ORDER:
 
-STEP 2 - CHECKLIST (requirements first, capability second) -> "checklist".
-One entry per object that must change for YOUR goals (two chairs = two entries), plus every object
-you need from another room. "object" is copied exactly from a has_items list. Ignore your body while
-listing. For each entry:
- - "change": what must happen to it (e.g. "moved from the center to the east wall")
- - "weight": "light" (can be picked up and carried) or "heavy" (furniture that must be pushed or
-   lifted by a strong body: tables, chairs, sofas, cabinets, shelves)
- - "how", judged by YOUR body: LOCAL (you can do it) / ASK_HELP (you cannot) / RECEIVE (it is in
-   another room)
-Every checklist entry gets EXACTLY ONE step that names the object (a RECEIVE entry also gets one
-LOCAL step that uses it). Code checks this. If a change is only possible after another object moved
-(e.g. rolling up a rug after the shelf on it is gone), that object is in the checklist with an
-earlier step.
+STEP 1 — REASONING & GOALS
+What must be physically true when done? Infer full conditions:
+"watch movie" → TV on, sofa repositioned, ceiling light off + floor lamp on, snacks on table.
+"bath ready" → bathtub filled, towel on rack near tub.
+Write goals: {{"goal":"...", "priority":"high/medium/low", "in_my_room":true/false}}
 
-STEP 3 - FROM OTHER ROOMS. Actively check other robots' "suggests" — these are resources they are
-offering for the task. RECEIVE an object if:
-- one of your goals would be better served with it, OR
-- the task description implies you need it (e.g. food in the living room, towel near bathtub).
-Do not skip RECEIVE just because you can manage without it — collaboration improves the outcome.
-One object per purpose; do not receive duplicates.
-With MORE robots available, MORE collaboration is expected — each robot should contribute meaningfully.
-If you have idle capacity, look for objects to receive or tasks to assist with.
-[IMPORTANT] EVERY robot must have at least 2 active steps. If your room has nothing to do,
-look for objects to receive from other rooms, or offer your objects via PASS. A robot with
-zero or one step is wasting capacity — find more work related to the task.
+STEP 2 — CHECKLIST: one entry per object that must change.
+{{"object":"exact name", "change":"what happens", "weight":"light/heavy", "how":"LOCAL/ASK_HELP/RECEIVE"}}
+Each entry → exactly ONE step.
 
-STEP 4 - YOUR OBJECTS FOR OTHERS. Actively PASS your "suggests" if another room's task clearly
-benefits from them. Do not wait to be asked — if you have something useful and you listed it in
-"suggests", proactively offer it with a PASS. The target robot decides whether to accept it.
+STEP 3 — FROM OTHER ROOMS: check others' "suggests". RECEIVE if your goal needs it.
+One object per purpose. No duplicates. MORE robots = MORE collaboration expected.
 
-If nothing needs you, you need nothing, and you have nothing to offer, return an EMPTY "steps" list.
+STEP 4 — PASS YOUR SUGGESTS proactively if another room needs them.
 
-STEP 5 - STEPS. Every step serves one of YOUR goals ("serves" = goal index). High priority first.
-Step types:
-- LOCAL:    you do it yourself in your own room. "uses": index of the can_do entry it relies on.
-- ASK_HELP: another robot must DO something in your room that your body cannot. Requires "target",
-            "action", "enables". IMPORTANT: "enables" is REQUIRED — always specify which of YOUR OWN
-            later LOCAL steps depends on this help being done first. Without "enables", the help has
-            no effect on your plan. If you cannot name a LOCAL step that needs it, do NOT create
-            ASK_HELP — it means you do not actually need the help.
-- RECEIVE:  you need an OBJECT for one of YOUR later LOCAL steps. Requires "target", "item" (copied
-            EXACTLY AND VERBATIM from the target's has_items list — do NOT paraphrase, rename, or
-            describe the object differently), "enables". Optional "state" if it matters
-            (e.g. "one plate, wiped clean"); the giver prepares that state. Do not assume a state you
-            did not ask for.
-            IMPORTANT: "item" must be word-for-word from the target robot's has_items. If you want
-            a drink and the target has "clear glasses (on the shelf, image 1)", write exactly
-            "clear glasses (on the shelf, image 1)" — not "drink", "glass", or "water bottle".
-- PASS:     you OFFER one of YOUR objects to another room's robot. Requires "target", "item" (copied
-            from YOUR has_items). The target decides whether to take it. PASS already includes picking
-            it up and handing it over (and bringing it, if you are mobile): never add steps like
-            "leave it by the door". If you prepare it first, give "prepared_by": the index of the
-            preparing step (if the offer is not taken, the preparation is cancelled automatically).
-"enables" is the index (0-based) of YOUR OWN later LOCAL step that benefits from or depends on this
-request. This is OPTIONAL: if the request directly contributes to the task goal without enabling a
-specific local step (e.g. asking another robot to fill a bathtub, turn on a heater), you may omit
-"enables". Never request work that is completely unrelated to the task.
+STEP 5 — STEPS (high priority first):
+- LOCAL: {{"type":"LOCAL", "action":{{"verb":"...", "object":"...", "from":"...", "to":"..."}}, "uses":N, "serves":N}}
+  Verbs: move, pick_up, put_down, push, slice, cook, turn_on, turn_off, open, close, fill, place, pour
+- ASK_HELP: {{"type":"ASK_HELP", "action":{{...}}, "target":"RN", "enables":N, "serves":N}}
+  REQUIRES "enables" = index of YOUR later LOCAL step that needs this done first.
+- RECEIVE: {{"type":"RECEIVE", "item":"EXACT name from target's has_items", "target":"RN", "serves":N}}
+- PASS: {{"type":"PASS", "item":"exact name from YOUR has_items", "target":"RN", "serves":N}}
 
-PHYSICAL RULES (simulator): a robot holds at most ONE object at a time. Write moving an object as ONE
-step with its destination: "move the X from A to B". If an item names a group ("Assorted plates"), say
-in "state" how many you need (usually one). Fixed furniture (beds, counters, sinks, bathtubs) cannot be
-moved. No steps that only move, look, check, search or verify: robots cannot explore, moving between
-rooms is part of HELP / PASS / RECEIVE, and what other robots see is already in their offers.
+━━━ FEW-SHOT EXAMPLE (task: "bath in 5 min") ━━━
+R3 (gripper, bathroom): goals=[fill bathtub, towel ready]
+steps:
+  {{"type":"ASK_HELP","action":{{"verb":"fill","object":"white bathtub","to":"filled with warm water"}},
+    "target":"R4","enables":1,"serves":0}},
+  {{"type":"LOCAL","action":{{"verb":"move","object":"beige towel","from":"wall hook","to":"towel rack near bathtub"}},
+    "uses":0,"serves":1}}
+R4 (mobile, bathroom): goals=[help fill tub, place bath mat]
+steps:
+  {{"type":"LOCAL","action":{{"verb":"fill","object":"white bathtub","to":"filled with warm water"}},
+    "uses":1,"serves":0}},
+  {{"type":"LOCAL","action":{{"verb":"move","object":"striped bath mat","from":"floor","to":"in front of bathtub"}},
+    "uses":0,"serves":1}}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-""" + _WORDING + """
+""" + _WORDING + "\n" + _ESSENTIAL + "\n" + _SPACE_RULES + """
 
-""" + _ESSENTIAL + """
-
-""" + _SPACE_RULES + """
-
-BEFORE RETURNING, check silently and fix:
-- every object in checklist and steps is copied exactly from a has_items list;
-- each checklist entry has exactly one step; no two steps change the same object in the same way;
-- no banned word; every "enables" points to a later LOCAL step of yours.
-- every pick_up step must be followed by a put_down, PASS, or use step for the same object.
-  A pick_up with no follow-up is meaningless — either add the destination step or remove the pick_up.
-- no step moves an object from and to the same location (e.g. "move X from table to table").
-  Always specify a different destination.
-- every destination must be a real object or furniture from has_items, not a vague description.
-- never move an object to the same furniture it started on (e.g. "from sofa to sofa" is invalid).
-  If rearranging within the same area, specify a different surface, floor, or exact sub-location
-  (e.g. "from the center of the sofa to the left armrest", "from the sofa to the floor next to it").
-
-Order the steps in the order you would execute them.
-
-ACTION SCHEMA (for LOCAL and ASK_HELP steps):
-Instead of a natural language "action" string, use a structured JSON object:
-{{
-  "verb": one of ["move", "pick_up", "put_down", "push", "slice", "cook", "turn_on", "turn_off",
-                  "open", "close", "fill", "clean", "place", "pass", "receive", "pour"],
-  "object": "exact object name from has_items",
-  "from": "current location (optional)",
-  "to": "destination or end state (optional)",
-  "state": "target state after action (optional, e.g. sliced, on, clean)"
-}}
+BEFORE RETURNING, verify silently:
+✓ Every object is in a has_items list
+✓ No banned words
+✓ Every pick_up has a follow-up step
+✓ No from==to moves
+✓ Every destination is real furniture
+✓ ≥2 active steps per robot
 
 Return JSON:
-{{
- "reasoning": "a) ... b) ... c) ... d) ...",
- "goals": [{{"goal": "...", "priority": "high", "in_my_room": true}},
-           {{"goal": "...", "priority": "low", "in_my_room": false}}],
- "checklist": [
-  {{"object": "Wooden bookshelf", "change": "moved from the center to the east wall", "weight": "heavy", "how": "ASK_HELP"}},
-  {{"object": "Striped cotton rug", "change": "rolled up after the bookshelf is gone", "weight": "light", "how": "LOCAL"}},
-  {{"object": "Plastic bucket", "change": "one empty bucket under the window", "weight": "light", "how": "RECEIVE"}}
- ],
- "steps": [
-  {{"type": "RECEIVE", "item": "Plastic bucket", "state": "one, empty", "target": "R1", "enables": 1, "serves": 0}},
-  {{"type": "LOCAL", "action": {{"verb": "move", "object": "Plastic bucket", "from": "doorway", "to": "under the window"}}, "uses": 0, "serves": 0}},
-  {{"type": "ASK_HELP", "action": {{"verb": "push", "object": "Wooden bookshelf", "from": "center", "to": "east wall"}}, "target": "R4", "enables": 3, "serves": 1}},
-  {{"type": "LOCAL", "action": {{"verb": "move", "object": "Striped cotton rug", "to": "corner", "state": "rolled up"}}, "uses": 1, "serves": 1}},
-  {{"type": "LOCAL", "action": {{"verb": "clean", "object": "Ceramic plate", "to": "sink", "state": "wiped clean"}}, "uses": 2, "serves": 1}},
-  {{"type": "PASS", "item": "Ceramic plate", "target": "R2", "prepared_by": 4, "serves": 1}}
- ]
-}}"""
+{{"reasoning":"a)... b)... c)... d)...",
+ "goals":[{{"goal":"...","priority":"high","in_my_room":true}}],
+ "checklist":[{{"object":"...","change":"...","weight":"light","how":"LOCAL"}}],
+ "steps":[...]}}"""
 
-PLAN_USER = """## PRIMARY OBJECTIVE — This is the ONLY goal that matters:
+PLAN_USER = """## TASK:
 {task}
 DEADLINE: {deadline} minutes
 
-[CRITICAL] Before planning ANY step, ask yourself: "Does this directly serve the PRIMARY OBJECTIVE?"
-If not, do NOT include it. Focus only on what the task explicitly requires.
+YOUR OFFER: {own_offer}
+YOUR can_do: {can_do_indexed}
+ALL ROBOTS' OFFERS: {public_offers}
+ROBOT PROFILES: {profiles}
 
-YOUR OFFER (private parts included):
-{own_offer}
-
-YOUR can_do WITH INDICES (use these for "uses"):
-{can_do_indexed}
-
-PUBLIC OFFERS OF ALL ROBOTS:
-{public_offers}
-
-ROBOT PROFILES:
-{profiles}
-
-[IMPORTANT] SAME-ROOM ROBOTS: If another robot is in YOUR room, check their "intends" carefully.
-Do NOT plan the same action on the same object as them. Divide the work — each object should be
-handled by exactly ONE robot. If they already intend to handle something, skip it and focus on
-other objects.
-
-[IMPORTANT] CROSS-ROOM ASK_HELP: Before creating an ASK_HELP, check other robots' "intends".
-If another robot in YOUR OWN ROOM already intends to do that exact action on the same object,
-do NOT duplicate it. For cross-room requests, ASK_HELP is still appropriate — another robot
-doing something in their room does not prevent you from asking for help with YOUR room's needs."""
+[SAME-ROOM] Check teammates' "intends" — divide work, never duplicate same object.
+[CROSS-ROOM ASK_HELP] Only when no robot in YOUR room already covers it."""
 
 PLAN_FIX = """Your plan violated these rules:
 {errors}
-Fix ONLY these problems and return the full corrected JSON in the same format (including
-"goals" and "checklist").
-- If a step breaks your body's limits but the task still needs it, do NOT delete it: rewrite it as
-  ASK_HELP to a robot whose body can do it (keep the step that depends on it).
-- If you are fixed and an object must leave your room, write a PASS (a mobile receiver collects it).
-- If an object is in no has_items list, remove it from checklist and steps (or use an object that is).
-- If a step uses a banned word or groups objects, rewrite it as one concrete step per object.
-- If two steps do the same work, keep one and fix the indices that pointed to the removed one.
-- Delete a step only if the task does not actually need it."""
+Fix ONLY these problems. Return full corrected JSON (including goals and checklist).
+- If a step exceeds your body's limits, rewrite as ASK_HELP (don't delete it).
+- If object not in any has_items, remove it.
+- If banned word found, rewrite with concrete physical action + real destination.
+- If pick_up has no follow-up, add put_down/PASS or remove the pick_up."""
 
 
 # ================================================================ Stage 3: Edge Proposal
-PROPOSE_SYSTEM = """You are robot {agent}. Other robots have published requests.
-Judge each request, and each object offered to you, using everything you know (including your
-private observations).
+PROPOSE_SYSTEM = """You are robot {agent}. Judge other robots' requests and offers.
 
-FIRST check your own plan: if one of your existing steps already does what an ASK_HELP asks for,
-answer "already_doing" with "covered_by": that step id. Any step you add must not repeat work that is
-already in your plan, in any wording.
-
-DUPLICATE REQUESTS: if multiple robots sent ASK_HELP for the exact same action on the same object,
-only ONE should be served. If you are already serving an identical request from another robot
-(same action, same object), answer "ignore" for the duplicate — do not add a second HELP step
-for the same work.
+FIRST: check your own plan. If you already do what an ASK_HELP asks → "already_doing" + covered_by.
+DUPLICATE REQUESTS: if you're already serving an identical request → "ignore" the duplicate.
 
 Decisions:
-- "already_doing": your existing step (give "covered_by") already does it. Only for ASK_HELP.
-- If the request's target is you: "accept" or "reject".
-- If the request's target is another robot (or none): "volunteer" (offer to do it as a backup) or "ignore".
-Accept or volunteer only if your can_do really covers it and it does not break your own part.
-Do not volunteer for everything.
+- "already_doing": covered_by = your existing step id. Only for ASK_HELP.
+- Target is you → "accept" or "reject".
+- Target is other → "volunteer" or "ignore". Don't volunteer for everything.
 
-If you accept or volunteer, you add ONE step to your own plan:
-- for ASK_HELP: a HELP step with "action" and "uses" (index into your can_do).
-  You hold one object at a time; write object moves as "move X from A to B".
-- for RECEIVE: a PASS step with "item", copied exactly from YOUR has_items. If no item in your
-  has_items matches, reject or ignore: never pass an object you did not list.
-  If you already OFFERED exactly this item to this robot (a PASS in your plan), just "accept": your
-  offer is linked, no second PASS is added.
-  If the request asks for a state ("one plate, wiped clean"), your PASS "action" includes preparing it,
-  e.g. "wipe one Ceramic plate at the sink and pass it". Accept only if your body can prepare it.
-  PASS includes picking the item up. If you are mobile, you bring it to the requester. If you are
-  fixed, you hand it over within your reach and the (mobile) requester collects it.
-  Do not add other steps for the handoff.
-- Accept an ASK_HELP for another room only if you are mobile, your body can do it, and it does not
-  break your own room's work.
-- ESSENTIAL FIRST: a request the task cannot succeed without (e.g. moving heavy furniture the
-  requester cannot move) matters more than nice-to-have work. Accept it if your body can do it.
-- "insert_after": the id of the step in your plan after which you do it, or "START".
+If you accept/volunteer for ASK_HELP: add ONE HELP step (action + uses index).
+If you accept/volunteer for RECEIVE offer: add ONE PASS step (item from YOUR has_items only).
+Mobile robots can help in other rooms if it doesn't break their own work.
 
-OFFERS TO YOU: other robots offer objects (PASS). "receive" an offered object only if one of your goals
-needs it (including what the task asks to have ready) and nothing you have, requested, or are receiving
-in this answer already covers that purpose. Say what you will do with it ("action", "uses",
-"insert_after"); this adds to your plan a RECEIVE and ONE step that uses the object.
-Otherwise "decline" with a concrete reason.
+OFFERS TO YOU: receive only if your goals need it and nothing else covers that purpose.
 
 """ + _WORDING + """
 
 Return JSON:
-{{
- "offers": [
-  {{"offer": "r1_s3", "decision": "receive", "action": "move the Ceramic plate to the dining table", "uses": 0,
-    "insert_after": "r2_s4"}},
-  {{"offer": "r4_s2", "decision": "decline", "reason": "..."}}
- ],
- "judgments": [
-  {{"request": "r4_s2", "decision": "already_doing", "covered_by": "r2_s1", "reason": "..."}},
-  {{"request": "r1_s2", "decision": "accept", "reason": "...", "action": "...", "uses": 2,
-    "insert_after": "r3_s1"}},
-  {{"request": "r4_s3", "decision": "reject", "reason": "..."}},
-  {{"request": "r2_s1", "decision": "volunteer", "reason": "...", "item": "...",
-    "insert_after": "START"}}
- ]
-}}"""
+{{"offers":[{{"offer":"r1_s3","decision":"receive","action":"...","uses":0,"insert_after":"r2_s4"}},
+            {{"offer":"r4_s2","decision":"decline","reason":"..."}}],
+ "judgments":[{{"request":"r4_s2","decision":"already_doing","covered_by":"r2_s1","reason":"..."}},
+              {{"request":"r1_s2","decision":"accept","reason":"...","action":"...","uses":2,"insert_after":"r3_s1"}},
+              {{"request":"r4_s3","decision":"reject","reason":"..."}},
+              {{"request":"r2_s1","decision":"volunteer","reason":"...","item":"...","insert_after":"START"}}]}}"""
 
 PROPOSE_USER = """TASK: {task}
-
-YOUR OFFER (private parts included):
-{own_offer}
-
-YOUR can_do WITH INDICES:
-{can_do_indexed}
-
-YOUR CURRENT PLAN (ids you can use for insert_after):
-{own_plan}
-
-REQUESTS FROM OTHER ROBOTS:
-{requests}
-
-OFFERS TO YOU:
-{offers}"""
+YOUR OFFER: {own_offer}
+YOUR can_do: {can_do_indexed}
+YOUR CURRENT PLAN: {own_plan}
+REQUESTS: {requests}
+OFFERS TO YOU: {offers}"""
 
 
 # ================================================================ Stage 4: Graph Reasoning
-GRAPH_SYSTEM = """You are the graph integrator for a team of robots. You are NOT a planner and NOT an allocator:
-every step was written by the robot that will execute it, and you never create steps or give a robot
-work it did not offer. You turn the robots' CANDIDATE collaborations into one consistent joint plan:
-which candidate is confirmed, and which existing steps must wait for which.
+GRAPH_SYSTEM = """You are the graph integrator. You do NOT plan or allocate — every step was written by the robot that executes it.
+Turn CANDIDATE collaborations into one consistent joint plan.
 
-You see the joint plan (each robot's steps in its own order) and the issues found by code.
-Use only these operations, only with ids from the issues:
+Operations (use only with ids from issues):
+- {"op":"connect","src":CANDIDATE_ID,"dst":REQUEST_ID,"why":"..."} — MULTIPLE_CANDIDATES: pick ONE provider.
+  Criteria: 1) body fits, 2) existing_work=true (prefer, no extra work), 3) targeted=true, 4) less work.
+- {"op":"order","before":STEP_ID,"after":STEP_ID,"why":"..."} — ORDER_CANDIDATE: one must finish before other starts.
+- {"op":"independent","issue":ISSUE_ID,"why":"..."} — steps don't affect each other, run in parallel.
+- {"op":"disconnect","src":PROVIDER_ID,"dst":REQUEST_ID,"why":"..."} — candidate doesn't fit. Never CONFIRMED.
+- {"op":"move","node":PROVIDER_ID,"after":NODE_ID_OF_SAME_ROBOT_or_START,"why":"..."} — reorder to break CYCLE.
+- {"op":"drop","node":NODE_ID,"why":"..."} — DUPLICATE_WORK across robots. Never a request or CONFIRMED provider.
+- {"op":"merge","node":NODE_ID,"into":NODE_ID_OF_SAME_ROBOT,"why":"..."} — DUPLICATE inside ONE robot.
+- {"op":"unresolved","issue":ISSUE_ID,"why":"..."} — truly ambiguous.
 
-- {"op": "connect", "src": CANDIDATE_ID, "dst": REQUEST_ID, "why": "..."}
-     MULTIPLE_CANDIDATES: select the ONE provider for a request. Criteria, in order:
-       1. it really can do it (its body / capability fits the request),
-       2. "existing_work": true means another robot ALREADY does this in its plan. Prefer it: then no
-          extra work is added (the request just waits for that step),
-       3. "targeted": true means it is the robot the requester asked; prefer it if it fits,
-       4. otherwise the robot with less work (own_plan_length), so robots work in parallel.
-     The other candidates are released automatically.
-- {"op": "order", "before": STEP_ID, "after": STEP_ID, "why": "..."}
-     ORDER_CANDIDATE: two robots act in the same room on a shared object. If one must be finished
-     before the other can start (e.g. clear the items OFF the coffee table before the table is moved;
-     move the chair before the rug under it is rolled), add that order.
-- {"op": "independent", "issue": ISSUE_ID, "why": "..."}
-     ORDER_CANDIDATE: the two steps do not affect each other; they can run in parallel.
-- {"op": "disconnect", "src": PROVIDER_ID, "dst": REQUEST_ID, "why": "..."}
-     Remove a candidate that does not fit (e.g. ITEM_MISMATCH: wrong object). Never a CONFIRMED one.
-- {"op": "move", "node": PROVIDER_ID, "after": NODE_ID_OF_SAME_ROBOT_or_START, "why": "..."}
-     Change WHEN a robot performs a HELP/PASS step (only to break a CYCLE).
-- {"op": "drop", "node": NODE_ID, "why": "..."}
-     DUPLICATE_WORK across robots: remove one copy. Never a request step, never a CONFIRMED provider.
-- {"op": "merge", "node": NODE_ID, "into": NODE_ID_OF_SAME_ROBOT, "why": "..."}
-     DUPLICATE_WORK inside ONE robot: "node" is removed, its requests are served by "into".
-- {"op": "unresolved", "issue": ISSUE_ID, "why": "..."}
-     Leave an issue open when it is truly ambiguous.
-
-For DUPLICATE_WORK: the same object ending in the same place is the same work, even if worded
-differently. Keep the copy that can run ("can_run"); otherwise the one with a CONFIRMED edge.
-If the two steps act on different objects, answer "unresolved" with why "not duplicate".
-
-Answer EVERY issue with exactly one operation. Return JSON: {"ops": [ ... ]}"""
+Answer EVERY issue with exactly one operation. Return JSON: {"ops":[...]}"""
 
 GRAPH_USER = """TASK: {task}
+JOINT PLAN: {plan}
+ISSUES: {issues}"""
 
-JOINT PLAN (each robot's steps in its own order):
-{plan}
-
-ISSUES FOUND BY CODE:
-{issues}"""
-
-
-SIZE_SYSTEM = """You estimate how long each step of a household robot plan takes. You do not change the plan.
-For every step give a size:
-- "short":  one quick action on a light object in the robot's own room (pick and place, switch on).
-- "medium": several actions, handling something awkward, OR going to another room
-            (fields "goes_to", "brings_it_to", "collects_it_from" mean the robot travels).
-- "long":   moving heavy furniture (sofa, armchair, table, cabinet), or a long multi-part job.
-Judge by the robot's body: what is heavy for a light-duty robot may be easy for a heavy-duty one.
-Return JSON: {"sizes": {"<step id>": "short" | "medium" | "long", ...}}"""
+SIZE_SYSTEM = """Estimate how long each robot step takes.
+- "short": quick action on light object in own room (pick, place, switch).
+- "medium": several actions, awkward object, or travelling to another room.
+- "long": heavy furniture (sofa, table, cabinet) or multi-part job.
+Return JSON: {"sizes": {"<step id>": "short"|"medium"|"long", ...}}"""
 
 SIZE_USER = """TASK: {task}
-
-ROBOTS:
-{robots}
-
-STEPS:
-{steps}"""
+ROBOTS: {robots}
+STEPS: {steps}"""
 
 
 def plan_system(agent: str, room: str) -> str:

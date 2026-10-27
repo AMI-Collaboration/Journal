@@ -59,7 +59,12 @@ def render(g: PlanGraph) -> str:
                  key=lambda i: (g.nodes[i].phase or 0, g.nodes[i].t_start, g.nodes[i].agent, i))
     ms = g.makespan_min()
     ok = "OK" if ms <= g.cfg.deadline_min else "MISSED"
-    lines = [f"### Joint Plan — {g.cfg.task_id}  (about {ms} min / deadline {g.cfg.deadline_min} min: {ok})", ""]
+    # 로봇 정보 헤더
+    robot_info = []
+    for a in sorted(g.cfg.agents, key=lambda x: x.id):
+        robot_info.append(f"{a.id}:{a.profile.embodiment.split('.')[0]}({a.profile.room})")
+    lines = [f"### Joint Plan — {g.cfg.task_id}  (about {ms} min / deadline {g.cfg.deadline_min} min: {ok})",
+             f"### Robots: {', '.join(robot_info)}", ""]
     last = None
     for i in act:
         ph = g.nodes[i].phase or 0
