@@ -2,14 +2,14 @@
   "cda": {
     "name": "CDA",
     "track_a_llm_judge": {
-      "TF": 4,
-      "TF_reason": "The plan only partially fulfills the task. While one window in the kitchen is closed and several loose items are secured, no doors are closed, living room windows are ignored, and many loose items in both rooms remain unsecured.",
+      "TF": 6,
+      "TF_reason": "The plan partially fulfills the task by securing several loose items (knife, plant, laptop, pillow, bread, vase, fruits) and closing one window. However, it misses closing other potential windows and doors, and contains some redundant or confusing actions.",
       "GF": 6,
-      "GF_reason": "Most actions use valid objects, but there are some hallucinations (e.g., 'orange fruit' when no orange exists in the kitchen). Additionally, R4 attempts to pass an object to itself, which is physically nonsensical.",
+      "GF_reason": "Most actions are physically executable and use objects present in the rooms. However, R4 performs a self-pass ('pass laptop to R4'), which is a logical and physical violation.",
       "SC": 7,
-      "SC_reason": "The sequence is mostly coherent, but R4's action to pass the laptop to itself after receiving it from R3 is a logical and sequential error.",
+      "SC_reason": "The sequence of R3 passing the laptop and R4 receiving it is correctly ordered. However, R4 then attempts to pass the laptop to itself, which breaks logical coherence.",
       "CQ": 3,
-      "CQ_reason": "Collaboration has severe issues. R4 performs a 'self-pass' (passing the laptop to itself), which is highly inappropriate. Furthermore, passing the laptop between R3 and R4 in the same room is unnecessary when either could have just secured it directly."
+      "CQ_reason": "Collaboration is poorly executed. R3 and R4 are in the same room, making the pass of the laptop largely unnecessary since either could secure it locally. Furthermore, R4 attempts a self-pass, which is a severe collaboration error."
     },
     "track_b_gc": 0.0,
     "track_b_state_detail": {
@@ -24,13 +24,13 @@
     "name": "Centralized",
     "track_a_llm_judge": {
       "TF": 4,
-      "TF_reason": "The plan only partially addresses the task. It attempts to close windows and doors in the living room but completely ignores the bedroom, bathroom, and kitchen. It secures a few loose objects but leaves many others unsecured.",
+      "TF_reason": "The plan partially addresses the task by attempting to close windows and doors in the living room and picking up some loose objects. However, it completely ignores securing other rooms (bedroom, bathroom, kitchen) and wastes time passing objects instead of securing them.",
       "GF": 2,
-      "GF_reason": "Severe violations exist. R1 and R3 pick up and hold multiple objects simultaneously (3 each), which violates physical constraints. The plan also includes vague, ungrounded references like 'red object' and 'light objects (e.g., cushions, small decor)' instead of specific objects from the room lists.",
-      "SC": 3,
-      "SC_reason": "Multiple logical and formatting violations. Step IDs are duplicated for R3 and R4 (e.g., R4 has two r4_s1 and two r4_s2 steps). R3 asks R4 to come to the living room, but R4 is already there. R4 lacks specific RECEIVE actions for the three objects passed by R3.",
-      "CQ": 3,
-      "CQ_reason": "Collaboration is largely unnecessary and inefficient. Instead of securing objects locally, R1 and R3 pass multiple objects to R2 and R4 without clear justification. Additionally, R3 requests R4 to move to a room R4 is already in."
+      "GF_reason": "Severe grounding and capability violations: R1 and R3 pick up and hold multiple objects simultaneously. The plan includes vague/hallucinated objects like 'red object' and 'light objects (e.g., cushions, small decor)'. R1 attempts to pass objects to R2, but R2 has already moved to another room.",
+      "SC": 2,
+      "SC_reason": "Critical sequencing errors: Multiple duplicate step IDs (e.g., r3_s1, r4_s1, r4_s2) are assigned to different actions. R1 passes objects to R2, but R2 has no corresponding RECEIVE action. R3 asks R4 to come to the living room, but R4 is already there.",
+      "CQ": 2,
+      "CQ_reason": "Collaboration is illogical and poorly executed. Passing kitchen items (tomato, apple) to another robot in the living room does not help secure them. R1's PASS lacks a RECEIVE from R2, and R3 passes objects to R4 unnecessarily when they could just be placed in a secure location directly."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -39,14 +39,14 @@
   "independent": {
     "name": "Independent",
     "track_a_llm_judge": {
-      "TF": 5,
-      "TF_reason": "The robots attempt to fulfill the task by closing windows and securing some loose items (tomato, apple, remote, pillow, etc.). However, many loose items in the rooms are ignored, and there are redundant actions on the same objects (e.g., apple, dish sponge), meaning the task is only partially completed.",
+      "TF": 3,
+      "TF_reason": "The plan fails to address two out of the four rooms (bedroom and bathroom are completely ignored). It also relies heavily on vague actions and hallucinated receptacles to achieve its goals.",
       "GF": 2,
-      "GF_reason": "The plan contains severe grounding violations. It uses many vague expressions that are not executable by robots (e.g., 'Secure the lamp by ensuring it is stable', 'Move any small, loose items', 'Ensure all doors... are closed', 'double-check the windows'). It also hallucinates multiple instances of objects (e.g., 'other apple') when only one exists in the room.",
-      "SC": 2,
-      "SC_reason": "Critical state and ordering violations occur because robots in the same room do not track each other's actions. R2 picks up and places the apple and dish sponge, but later R1 attempts to pick up the exact same objects from their original locations. These subsequent actions are physically impossible.",
-      "CQ": 3,
-      "CQ_reason": "While explicit cross-room collaboration is not strictly required, the implicit coordination between robots sharing the same room (R1/R2 in the kitchen) completely fails. They do not divide the labor effectively, leading to conflicting actions on the same objects."
+      "GF_reason": "Severe grounding violations. The plan uses many vague expressions ('Secure the lamp by ensuring...', 'Move any small, loose items...', 'Ensure all doors...', 'Ensure all cabinet doors...'). It also hallucinates receptacles like 'cabinet' in the kitchen (should be ShelvingUnit) and 'drawer' in the living room, as well as an 'other apple' that does not exist.",
+      "SC": 3,
+      "SC_reason": "Multiple sequential and logical conflicts. R1 and R2 both attempt to close the same window simultaneously. They also conflict over the same objects, with R1 and R2 both picking up the single 'Apple' and 'DishSponge' at different times without passing them.",
+      "CQ": 2,
+      "CQ_reason": "Poor task distribution and lack of coordination. All four robots are clustered in just two rooms (kitchen and living room), leaving the bedroom and bathroom completely unattended. Furthermore, robots in the same rooms do not coordinate, leading to redundant actions and object conflicts."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -56,13 +56,13 @@
     "name": "LaMMA-P",
     "track_a_llm_judge": {
       "TF": 2,
-      "TF_reason": "The plan correctly identifies the high-level goals of the task (closing windows/doors, securing loose items) and respects the time limit, but completely fails to achieve them using concrete actions on real objects from the environment.",
+      "TF_reason": "The plan attempts to address the task goals (closing windows/doors, securing loose items) but fails to use any concrete objects from the provided room lists, relying entirely on abstract placeholders.",
       "GF": 1,
-      "GF_reason": "Severe grounding violations. The plan consists entirely of vague expressions ('first window', 'first door', 'loose items inside', 'secure location') and hallucinated objects rather than interacting with specific items listed in the rooms.",
-      "SC": 7,
-      "SC_reason": "The abstract sequence of actions is logically coherent (e.g., identify -> go to -> pick up -> put in secure location), but the lack of grounded objects makes the sequence practically unexecutable.",
+      "GF_reason": "Severe grounding violations. The plan consists entirely of vague expressions ('first window', 'first door', 'loose items inside', 'secure location') and does not interact with any specific, verifiable objects from the environment.",
+      "SC": 5,
+      "SC_reason": "The abstract sequence of actions (identify, go to, pick up, put) is logically ordered, but the complete lack of object grounding makes the sequence physically unexecutable.",
       "CQ": 3,
-      "CQ_reason": "There is no explicit collaboration or coordination between the robots. While parallel execution is a valid approach for a time-sensitive house-wide task, the robots do not assign specific rooms or share information, leading to an uncoordinated effort."
+      "CQ_reason": "There is no explicit collaboration between the agents. They operate independently in parallel using abstract templates, with no coordination or communication to manage the environment effectively."
     },
     "track_b_gc": 0.0,
     "track_b_state_detail": {
@@ -77,13 +77,13 @@
     "name": "SMART-LLM",
     "track_a_llm_judge": {
       "TF": 2,
-      "TF_reason": "The plan attempts to fulfill the task by closing windows/doors and securing loose items, but almost all actions are performed on hallucinated objects (Window1-3, FrontDoor, BackDoor, GarageDoor, GardenChair, Umbrella, Bicycle, Garage, Cabinet) that do not exist in the provided room lists. Thus, the core goals are largely unachieved in the actual environment.",
-      "GF": 1,
-      "GF_reason": "Severe grounding violations. The plan is dominated by hallucinated objects (windows, doors, outdoor furniture, garage, cabinet) that are not present in the actual object lists for any room.",
-      "SC": 9,
-      "SC_reason": "The sequential coherence of the actions is logical (Go to -> Pick up -> Go to -> Put in; Go to -> Close), with no prerequisite violations among the planned steps.",
-      "CQ": 7,
-      "CQ_reason": "No explicit collaboration (PASS/HELP) is used, which is acceptable as the robots can work in parallel to secure different parts of the house. However, the lack of any cross-room coordination or communication limits the score."
+      "TF_reason": "The plan attempts to fulfill the task by closing windows/doors and securing loose items, but almost all actions are performed on hallucinated objects (Window1-3, FrontDoor, BackDoor, GarageDoor, Cabinet, GardenChair, Umbrella, Bicycle, Garage) that do not exist in the environment.",
+      "GF": 0,
+      "GF_reason": "Severe grounding violations. The plan is entirely dominated by hallucinated objects and locations that are not present in the actual room lists.",
+      "SC": 8,
+      "SC_reason": "The sequence of actions (go to, pick up, put in) is logically ordered and respects basic prerequisites, despite the objects being hallucinated.",
+      "CQ": 5,
+      "CQ_reason": "No collaboration is present in the plan. While independent execution could theoretically work for securing a house, the complete lack of coordination or communication in a multi-room emergency scenario is suboptimal."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",

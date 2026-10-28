@@ -3,13 +3,13 @@
     "name": "CDA",
     "track_a_llm_judge": {
       "TF": 0,
-      "TF_reason": "The plan fails to achieve any of the required goals. The bathtub filling is blocked due to a dependency cycle, and the attempt to bring a towel from the bedroom relies on a hallucinated object (there is no towel in the bedroom).",
+      "TF_reason": "The plan fails to achieve any of the required goals. The bathtub filling actions are blocked due to a dependency cycle, and the attempt to provide a towel relies on a hallucinated object in the bedroom.",
       "GF": 2,
-      "GF_reason": "R2 hallucinates a 'blue towel' on the desk in the bedroom, which does not exist in the provided object list. Additionally, the plan attempts to interact with a bathtub, which is not explicitly listed in the bathroom objects (though implied by the task, the hallucination in the bedroom is a severe grounding failure).",
+      "GF_reason": "Severe grounding violations exist. R2 hallucinates a 'blue towel' in the bedroom (which does not exist in the room's object list). R3 and R4 also hallucinate specific rugs and towel racks that are not in the provided object list.",
       "SC": 2,
-      "SC_reason": "There is a critical dependency cycle where R3 and R4 ask each other for help to fill the bathtub, which blocks the execution of all bathroom-related tasks.",
+      "SC_reason": "The plan contains a critical dependency cycle where R3 and R4 ask each other for help to fill the bathtub, resulting in unresolved dependencies and blocked actions that prevent task execution.",
       "CQ": 1,
-      "CQ_reason": "Collaboration is severely flawed. R3 and R4 create an unresolved circular request (asking each other for help for the exact same task), which completely halts the core objective."
+      "CQ_reason": "Collaboration is severely flawed. R3 and R4 create a circular request for help, leading to a deadlock. There is no effective coordination to complete the task."
     },
     "track_b_gc": 0.0,
     "track_b_state_detail": {
@@ -23,14 +23,14 @@
   "central": {
     "name": "Centralized",
     "track_a_llm_judge": {
-      "TF": 1,
-      "TF_reason": "The primary goal of filling the bathtub with warm water is completely ignored (no robot interacts with the faucet). The secondary goal of having a towel nearby is technically addressed, but the plan exceeds the 5-minute deadline and relies on hallucinated objects.",
+      "TF": 2,
+      "TF_reason": "The primary goal of filling the bathtub with warm water is completely ignored (no interaction with the Faucet). The secondary goal of having a towel nearby is addressed, but the plan exceeds the 5-minute deadline, taking 10 minutes.",
       "GF": 2,
-      "GF_reason": "The plan contains multiple hallucinated objects (shelf, thermostat, towel rack, bath mat) and uses vague expressions ('within reach', 'nearby surface', 'Ensure').",
+      "GF_reason": "Severe violations including multiple hallucinated objects (thermostat, bath mat, shelf, towel rack) and vague actions ('within reach', 'nearby surface', 'Ensure the bath mat is properly positioned').",
       "SC": 3,
-      "SC_reason": "Severe ordering violations: R3 attempts to receive a towel from R2 in the [0-5 min] block before R2 has even received it from R1 or passed it. R3 then has a duplicate receive action in the [5-10 min] block.",
+      "SC_reason": "Critical ordering violations: R3 attempts to receive the towel from R2 in the [0-5 min] block before R2 has even received it from R1 (which happens in the [5-10 min] block). R3's receive action is also duplicated.",
       "CQ": 2,
-      "CQ_reason": "Collaboration is completely unnecessary and highly inefficient. There is already a towel in the bathroom, yet R1, R2, and R3 engage in a complex, multi-room bucket brigade to transport a towel, while R4 simultaneously handles another towel in the bathroom. The PASS/RECEIVE sequence is also broken across time blocks."
+      "CQ_reason": "Collaboration is completely unnecessary and highly inefficient. There is already a towel in the bathroom, which R4 handles locally. The complex chain of passing a towel between R1, R2, and R3 across rooms is redundant and poorly synchronized."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -55,14 +55,14 @@
   "lamma_p": {
     "name": "LaMMA-P",
     "track_a_llm_judge": {
-      "TF": 6,
-      "TF_reason": "The plan attempts to fulfill the goals by turning on the faucet and moving a towel. However, it relies on several hallucinated objects (bathroom heater, towel rack) to achieve these goals.",
-      "GF": 4,
-      "GF_reason": "The plan includes multiple hallucinated objects that are not in the room's actual object list, such as 'bathroom heater' and 'towel rack'.",
-      "SC": 7,
-      "SC_reason": "The sequence is mostly logical, but there is a redundant action (opening the faucet and then turning on the faucet).",
+      "TF": 5,
+      "TF_reason": "The plan attempts to fulfill the task goals (filling a bathtub and preparing a towel), but relies on several hallucinated objects (bathroom heater, bathtub, towel rack) that do not exist in the room, which prevents successful execution.",
+      "GF": 3,
+      "GF_reason": "Severe grounding violations due to the use of multiple hallucinated objects: 'bathroom heater', 'bathtub', and 'towel rack' are not in the actual objects list.",
+      "SC": 8,
+      "SC_reason": "The sequence of actions is mostly logical, but there is a minor redundancy in opening the faucet and then turning it on immediately after.",
       "CQ": 10,
-      "CQ_reason": "The task is self-contained within the bathroom and can be completed by a single robot, so collaboration is not required and correctly omitted."
+      "CQ_reason": "The task is self-contained within a single room and can be completed by one robot. No collaboration is required, and none was unnecessarily included."
     },
     "track_b_gc": 0.0,
     "track_b_state_detail": {
@@ -77,13 +77,13 @@
     "name": "SMART-LLM",
     "track_a_llm_judge": {
       "TF": 3,
-      "TF_reason": "The plan misses the 5-minute deadline, as the core actions (filling the bathtub, placing the towel) are scheduled in the 5-10 minute block. Additionally, it relies on hallucinated objects like 'Heater' and 'TowelHolder' to achieve the goals.",
-      "GF": 2,
-      "GF_reason": "Severe grounding violations due to the use of hallucinated objects that do not exist in the room list, specifically 'Heater', 'TowelHolder', and 'Bathtub' (though Faucet is present, the others are completely absent).",
-      "SC": 8,
-      "SC_reason": "The sequence of actions is mostly logical, with robots navigating to objects before interacting with them, and opening the faucet before waiting and closing it.",
-      "CQ": 6,
-      "CQ_reason": "No explicit collaboration (like PASS or HELP) is used, which is acceptable for a single-room task where agents can work in parallel. However, the parallel execution failed to meet the time constraint."
+      "TF_reason": "The plan fails to meet the 5-minute deadline, as the core actions (filling the bathtub, placing the towel) are scheduled in the 5-10 minute block. Additionally, it relies on hallucinated objects like the Heater and TowelHolder.",
+      "GF": 3,
+      "GF_reason": "The plan includes several hallucinated objects that do not exist in the room's actual object list, specifically the Heater and TowelHolder. The Bathtub is also not explicitly listed, though Faucet is.",
+      "SC": 9,
+      "SC_reason": "The sequence of actions is logically ordered. Robots navigate to objects before interacting with them, and the sequence of opening the faucet, waiting, and closing it is correct.",
+      "CQ": 5,
+      "CQ_reason": "There is no explicit collaboration (like PASS or HELP) between the robots. While deploying multiple robots allows for parallel execution, it is largely unnecessary for this simple single-room task, and they still fail to meet the deadline."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
