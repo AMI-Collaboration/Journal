@@ -2,14 +2,14 @@
   "cda": {
     "name": "CDA",
     "track_a_llm_judge": {
-      "TF": 6,
-      "TF_reason": "The plan partially fulfills the goals. It prepares food (toast, apple) and tidies the living room (moving laptop, pillow, and paper). However, there are hallucinations (e.g., 'table' in the kitchen) and redundant/conflicting actions that detract from full completion.",
+      "TF": 7,
+      "TF_reason": "The plan addresses the main goals: preparing quick food (bread in toaster, apple on plate) and tidying the living room (moving laptop, pillow, and reading materials). However, there are some execution errors and potential object conflicts (e.g., treating 'white paper' and 'magazine' as separate objects when only 'Newspaper' exists).",
       "GF": 4,
-      "GF_reason": "Several feasibility issues exist: 'table' is hallucinated in the kitchen (not in the object list). R3 picks up both a plate and an apple, violating the single-object holding constraint for Mobile_Light robots. 'White paper' and 'magazine' likely both refer to the single 'Newspaper' in the living room.",
-      "SC": 3,
-      "SC_reason": "Severe sequential and logical errors: R2 moves the apple to the table in [0-5 min], but R3 later picks up the same apple from the counter. R2 receives a mug from R1 but then acts as if the mug is on the counter. R3 and R4 have redundant pick/place actions (e.g., R3 picks up bread to toaster, then places bread to toaster).",
-      "CQ": 5,
-      "CQ_reason": "Collaboration is limited to R1 passing a mug to R2 in the kitchen. This collaboration is largely unnecessary as both robots are in the same room and R2 could likely pick up the mug itself. No cross-room collaboration was attempted, which is acceptable for this task, but the single-room collaboration was inefficient."
+      "GF_reason": "Several feasibility issues exist: R3 holds multiple objects simultaneously (plate and apple). R2 moves the apple to the table, but R3 later tries to pick up the same apple from the counter. R2 uses the 'pass' action to place a mug on a table. 'White paper' and 'magazine' likely both refer to the single 'Newspaper', causing a hallucination/conflict.",
+      "SC": 4,
+      "SC_reason": "There are significant sequential and logical errors: R2 moves the apple to the table, but R3 subsequently tries to pick it up from the counter. R3's actions with the bread are redundant ('pick up... to toaster' followed by 'place... to toaster'). R4's pick up and put down actions are split awkwardly.",
+      "CQ": 6,
+      "CQ_reason": "Collaboration is mostly limited to a single PASS/RECEIVE between R1 (Gripper) and R2 (Mobile) in the kitchen. While valid since the Gripper cannot move, it is somewhat unnecessary as R2 could have just picked up the mug itself if it was within reach, or R3 could have handled it. No cross-room collaboration was attempted, which is acceptable since the room tasks are independent."
     },
     "track_b_gc": 0.0,
     "track_b_state_detail": {
@@ -55,14 +55,14 @@
   "lamma_p": {
     "name": "LaMMA-P",
     "track_a_llm_judge": {
-      "TF": 4,
-      "TF_reason": "The plan addresses the core goals of preparing a quick meal and tidying the living room within the 10-minute deadline. However, it relies heavily on vague and hallucinated objects rather than specific items from the room lists, significantly reducing task fulfillment.",
-      "GF": 2,
-      "GF_reason": "Severe grounding violations. The plan uses numerous vague expressions ('misplaced items', 'designated spots', 'trash', 'snack item', 'cleaning supplies', 'surfaces') and hallucinates objects not in the environment ('cleaning cloth', 'dining table'). Additionally, R4 slices bread without a knife.",
-      "SC": 5,
-      "SC_reason": "Several sequential and physical coherence issues exist: R4 slices bread without first acquiring a knife, R4 appears to hold both the bread and the snack item simultaneously without placing the bread down, and R3 picks up multiple 'misplaced items' at once.",
-      "CQ": 10,
-      "CQ_reason": "Collaboration is not required for this task, as the goals in the kitchen and living room are completely independent. The agents correctly divide the labor by room and work in parallel without forcing unnecessary interactions."
+      "TF": 3,
+      "TF_reason": "The plan correctly identifies the goals (preparing food and tidying the living room) and respects the 10-minute deadline. However, it fails to achieve these goals using concrete objects from the environment, relying heavily on vague categories ('snack item', 'misplaced items', 'trash') and hallucinated objects ('dining table', 'cleaning cloth').",
+      "GF": 1,
+      "GF_reason": "Severe grounding violations. The plan is dominated by vague expressions ('misplaced items', 'designated spots', 'trash', 'snack item', 'cleaning supplies', 'cleaning cloth', 'surfaces') and hallucinated objects ('dining table') that do not exist in the provided room lists.",
+      "SC": 4,
+      "SC_reason": "Several sequential and logical errors: R4 slices bread without ever picking up a knife; R3 picks up 'misplaced items' (plural), violating the single-object holding constraint; R4 places a snack on the bread without explicitly placing the bread down first, implying holding multiple objects.",
+      "CQ": 9,
+      "CQ_reason": "The task consists of two independent sub-tasks in different rooms. The agents correctly work in parallel without forcing unnecessary cross-room collaboration, which is highly efficient and appropriate for the 10-minute deadline."
     },
     "track_b_gc": 0.0,
     "track_b_state_detail": {
@@ -76,14 +76,14 @@
   "smart_llm": {
     "name": "SMART-LLM",
     "track_a_llm_judge": {
-      "TF": 8,
-      "TF_reason": "The plan successfully addresses the main goals within the 10-minute deadline: R2 prepares a quick meal (toast) in the kitchen, and R4 tidies the living room by putting away the newspaper. However, it relies on a couple of hallucinated objects/locations at the end.",
-      "GF": 6,
-      "GF_reason": "The plan contains grounding violations: 'CounterTop' in the kitchen and 'Floor' in the living room are hallucinated (not in the provided object lists). Additionally, 'Clean Floor' is not a standard object-directed action.",
+      "TF": 7,
+      "TF_reason": "The plan addresses the main goals: preparing a quick meal (toast) and tidying the living room (putting away the newspaper). However, it relies on some hallucinated objects and actions (CounterTop, Floor, Clean Floor).",
+      "GF": 4,
+      "GF_reason": "There are several grounding violations: 'CounterTop' and 'Floor' are not in the provided object lists. 'Toast' is used as a new object instead of the toasted 'Bread'. 'Clean Floor' is not a standard valid action.",
       "SC": 9,
-      "SC_reason": "The sequence of actions is highly coherent. R2 correctly follows the steps to make toast (put bread in, switch on, wait, switch off, pick up). R4's tidying actions are also logically ordered.",
+      "SC_reason": "The sequence of actions is mostly logical. R2 correctly operates the toaster, and R4 correctly picks up and places the newspaper. The only minor issue is treating 'Toast' as a distinct object to pick up rather than the original 'Bread'.",
       "CQ": 10,
-      "CQ_reason": "Collaboration is not required for this task, as the goals in the kitchen and living room are independent and can be completed by individual robots. The plan correctly avoids unnecessary collaboration."
+      "CQ_reason": "Collaboration is not required for this task, as the goals in the kitchen and living room are independent. The robots correctly work in parallel without unnecessary interaction."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",

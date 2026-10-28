@@ -2,14 +2,14 @@
   "cda": {
     "name": "CDA",
     "track_a_llm_judge": {
-      "TF": 4,
-      "TF_reason": "The plan partially sets up the bedroom for resting (arranging a chair, turning on a lamp, moving a dumbbell out of the way), but fails to deliver water and basics to the bedroom. The cross-room transfer of water items (kettle, cup, bottle) from the kitchen to the bedroom fails, leaving the core requirement unfulfilled.",
+      "TF": 3,
+      "TF_reason": "The plan fails to achieve the core goal of providing easy access to water and basics in the bedroom. While some tidying occurs in the bedroom (moving a chair, turning on a lamp), the water (kettle, cup) never reaches the bedroom. The robot hallucinates 'bottles' and 'yellow fruit' in the bedroom to fulfill the goal, which does not count.",
       "GF": 4,
-      "GF_reason": "There are several hallucinations of objects not present in the rooms: 'red blanket' in the living room, and 'bottles' and 'yellow fruit' in the bedroom. Additionally, robots use vague descriptions like 'an accessible position near the toilet'.",
-      "SC": 6,
-      "SC_reason": "The sequence has some logical flow, but R3 and R4 manipulate the same hallucinated 'red blanket' in the same time block. R5 attempts to receive items that were never properly passed or promised to it, leading to blocked actions.",
+      "GF_reason": "There are significant hallucinations in the plan. The robots interact with a 'red blanket' in the living room, and 'bottles' and 'yellow fruit' in the bedroom, none of which exist in the actual object lists for those rooms.",
+      "SC": 7,
+      "SC_reason": "The sequence of actions is mostly logical, with pick-up and put-down actions ordered correctly. However, R2 passes the kettle to the pass area without any robot receiving it, and R5 attempts to receive items that were never passed to it.",
       "CQ": 3,
-      "CQ_reason": "Collaboration is required to move water from the kitchen to the bedroom, but it is poorly executed. Kitchen robots move items to the pass area without coordinating a handoff to the bedroom robots. R5's receive requests are declined because the collaboration was not properly established."
+      "CQ_reason": "Collaboration is highly ineffective. The necessary cross-room collaboration to bring water from the kitchen to the bedroom fails, as R5's receive requests are blocked due to improper passing. Additionally, R3 and R4 engage in unnecessary collaboration to move a hallucinated blanket within the same room."
     },
     "track_b_gc": 0.0,
     "track_b_state_detail": {
@@ -23,14 +23,14 @@
   "central": {
     "name": "Centralized",
     "track_a_llm_judge": {
-      "TF": 3,
-      "TF_reason": "The plan attempts to set up the bedroom with water, snacks, and comfort items. However, it relies on hallucinated objects and fails to deliver items correctly due to severe collaboration and sequencing errors, leaving the core goals largely unachieved.",
+      "TF": 4,
+      "TF_reason": "The plan correctly identifies the goals (water, snacks, pillows, tissues) for a flu recovery room. However, due to severe hallucinations (e.g., tissues in the bathroom, blankets) and broken collaboration steps, most of these goals are not successfully achieved.",
       "GF": 2,
-      "GF_reason": "The plan contains multiple hallucinations, including blankets in the bedroom, tissues and hand sanitizer in the bathroom, and a water bottle. Additionally, R4 executes a vague action ('Ensure the bathroom is tidy').",
+      "GF_reason": "Severe grounding violations. Hallucinated objects include 'blankets' in the bedroom, 'tissues' and 'hand sanitizer' in the bathroom (TissueBox is in the living room), and 'water bottle'. R1 holds multiple objects (mug and plate) simultaneously and uses a knife and plate without picking them up. R4 has a vague action ('Ensure the bathroom is tidy').",
       "SC": 2,
-      "SC_reason": "Critical ordering violations exist: R2 receives items from R1 in the 5-10 min block, but R1 passes them in the 15-20 min block. R3 receives items from R2, but R2 never executes a corresponding PASS action.",
+      "SC_reason": "Critical ordering violations make the plan impossible. R2 receives items from R1 in [5-10 min] before R1 passes them in [15-20 min]. R3 receives a water bottle and tissues from R2, but R2 never passes them, and R2 never even acquired tissues. R1 slices a tomato without first picking up a knife.",
       "CQ": 2,
-      "CQ_reason": "Collaboration is highly uncoordinated. PASS and RECEIVE actions are completely mismatched in timing and content. R2 never passes items to R3 despite R3 expecting to receive them, and R3 expects tissues from R2 which R2 never acquired."
+      "CQ_reason": "Collaboration is required to move items between rooms, but the execution is completely broken. There are RECEIVE actions without corresponding PASS actions, timing mismatches (receiving before passing), and R3 expects tissues from R2 when R4 was the one handling hallucinated tissues in the bathroom."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -40,13 +40,13 @@
     "name": "Independent",
     "track_a_llm_judge": {
       "TF": 4,
-      "TF_reason": "The plan attempts to set up a resting room (bedroom) and prepare water/food, but fails to deliver the items to the resting room. Several required items are hallucinated (blanket, water bottle), and the cross-room delivery is incomplete.",
+      "TF_reason": "The plan attempts to set up the bedroom and prepare water/food, but fails to deliver the prepared items to the resting room because the PASS action is never received. Several required items are hallucinated (blanket, water bottle).",
       "GF": 2,
-      "GF_reason": "Severe violations exist: multiple hallucinated objects (blanket in living room and bedroom, water bottle in bedroom, glass in kitchen, cup/glass in bathroom), vague actions ('Ensure sink area is clear', 'Check that the trash bin is empty', 'Ensure the bathroom is tidy'), and R1 attempting to hold and pass multiple objects simultaneously.",
-      "SC": 4,
-      "SC_reason": "Critical ordering and structural violations: R1 executes a PASS action without any corresponding RECEIVE action from another robot. R2 uses a 'PassReceiveObject' action to simply move items locally rather than actually collaborating.",
+      "GF_reason": "Severe violations: multiple hallucinated objects (blanket, water bottle, glass, towel rack), vague actions ('Ensure the sink area is clear', 'Check that the trash bin is empty'), and R1 holding multiple objects simultaneously to pass.",
+      "SC": 2,
+      "SC_reason": "Critical ordering and logical violations: R1 passes objects with no corresponding RECEIVE; R1 uses a glass and plate without picking them up; R4 places a glass it never picked up; R1 slices a tomato without a knife.",
       "CQ": 1,
-      "CQ_reason": "Collaboration is required to move water and supplies to the bedroom, but it completely fails. R1 passes objects to an unspecified 'another robot' with no receiver, and R2 misuses a collaboration primitive for a local action."
+      "CQ_reason": "Collaboration is required to move items to the bedroom, but it completely fails. R1's PASS has no target or RECEIVE counterpart. R2 misuses a 'PassReceiveObject' action as a local placement action."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -76,14 +76,14 @@
   "smart_llm": {
     "name": "SMART-LLM",
     "track_a_llm_judge": {
-      "TF": 3,
-      "TF_reason": "The plan attempts to fulfill the task by providing water, tissues, and a comfortable environment. However, almost all core actions rely on hallucinated objects (extra blanket, Glass, Medications, Television, curtains), meaning the required goals are largely not achieved with real objects.",
+      "TF": 2,
+      "TF_reason": "The plan attempts to fulfill the task by providing water, medications, tissues, and a blanket. However, almost all of these goals are attempted using hallucinated objects (e.g., 'extra blanket', 'Medications', 'Television'), meaning the core requirements are largely unachieved with the actual objects available in the environment.",
       "GF": 1,
-      "GF_reason": "Severe grounding violations. The plan includes numerous hallucinated objects (extra blanket, Glass, Medicine Cabinet, Medications, Tissues in the kitchen, Television, curtains). It also uses vague, non-executable actions like 'Fill Glass with water', 'Ensure TV is working', and 'Adjust curtains for comfortable lighting'.",
-      "SC": 3,
-      "SC_reason": "Critical sequencing and logical errors. R1 places an 'extra blanket' without ever picking it up. R1 also goes to the Window (located in the bedroom) immediately after interacting with the TV in the Living Room, without navigating back to the bedroom.",
-      "CQ": 3,
-      "CQ_reason": "There is no explicit collaboration (e.g., PASS/RECEIVE) between the agents. Both robots independently travel across multiple rooms to fetch items for the bedroom. While independent parallel work is possible, the lack of coordination leads to inefficient cross-room travel for both robots."
+      "GF_reason": "The plan contains severe grounding violations. Numerous objects are hallucinated ('extra blanket', 'Medicine Cabinet', 'Medications', 'Television', 'curtains'). Additionally, there are several vague and unexecutable actions such as 'Fill Glass with water' (without using a Faucet), 'Ensure TV is working', and 'Adjust curtains for comfortable lighting'.",
+      "SC": 5,
+      "SC_reason": "There are sequential errors, most notably R1 placing an 'extra blanket' on the bed without ever picking it up. Other actions follow a basic logical sequence but are heavily compromised by the vague nature of the steps.",
+      "CQ": 5,
+      "CQ_reason": "The robots work in parallel to gather items for the bedroom, which is an acceptable division of labor. However, there is no direct collaboration (e.g., PASS/RECEIVE) utilized, even though cross-room item gathering could have benefited from it."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",

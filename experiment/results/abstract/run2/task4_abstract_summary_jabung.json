@@ -2,14 +2,14 @@
   "cda": {
     "name": "CDA",
     "track_a_llm_judge": {
-      "TF": 6,
-      "TF_reason": "The plan addresses the core goals by arranging seating (pushing sofa and armchair, placing a cushion) and bringing refreshments (wine, bread) to the living room. However, the execution is flawed due to hallucinated objects and severe sequencing errors that prevent successful completion.",
-      "GF": 4,
-      "GF_reason": "There are multiple hallucinated objects that do not exist in the rooms (e.g., 'blue book', 'brown teddy bear', 'glass vase'). Additionally, R4 attempts to put down the wine glass and bread before it has actually received them, violating physical constraints.",
-      "SC": 3,
-      "SC_reason": "Critical ordering violations occur. In the [5-10 min] block, R4 puts down the wine glass and loaf of bread onto the coffee table, but it does not receive these items from R1 until the [10-15 min] block.",
-      "CQ": 6,
-      "CQ_reason": "Cross-room collaboration is correctly identified as necessary, and R1 appropriately passes items to R4 in the living room. However, the collaboration is poorly synchronized, leading to R4 attempting to use items before the transfer is complete."
+      "TF": 9,
+      "TF_reason": "The plan successfully fulfills the task goals. It makes the living room comfortable to sit in by arranging the sofa, armchair, and cushion, and provides something to offer the guest by bringing bread, a wine bottle, and a wine glass to the coffee table. The deadline is respected.",
+      "GF": 5,
+      "GF_reason": "There are several feasibility issues: R4 interacts with a hallucinated 'glass vase' and attempts to pick up a remote control while presumably already holding the vase. R5 and R6 perform isolated actions (picking up a laptop and a trash bin) and then do nothing with them, leaving them holding objects indefinitely.",
+      "SC": 7,
+      "SC_reason": "The sequence of passing and receiving between R1 and R3 is well-coordinated across time blocks. However, R4 picks up a vase and then a remote control without putting the first object down, violating single-gripper constraints.",
+      "CQ": 8,
+      "CQ_reason": "Collaboration between R1 (kitchen) and R3 (living room) is necessary and effectively executed to transport food and drinks. R4's blocked receive requests are safely handled by the system. However, R5 and R6 are activated for no collaborative or task-relevant purpose."
     },
     "track_b_gc": 0.0,
     "track_b_state_detail": {
@@ -24,13 +24,13 @@
     "name": "Centralized",
     "track_a_llm_judge": {
       "TF": 6,
-      "TF_reason": "The plan partially fulfills the task by arranging seating in the living room and bringing an apple as a snack for the guest. However, it includes vague actions and redundant steps that detract from the overall execution.",
-      "GF": 3,
-      "GF_reason": "The plan contains multiple violations: vague expressions ('any light objects', 'Check the bathroom surfaces', 'inspect', 'Ensure', 'if needed'), and hallucinated objects (a 'bed' in the bedroom and a 'cabinet' in the bathroom, neither of which are in the provided object lists).",
+      "TF_reason": "The plan partially fulfills the task by arranging seating in the living room and providing an apple as a snack. However, it includes vague actions and redundant/unclear steps (like bringing a 'snack' after already passing the apple).",
+      "GF": 2,
+      "GF_reason": "Severe violations exist. The plan uses many vague expressions ('any light objects', 'Check', 'inspect', 'snack', 'Ensure', 'if needed'). It hallucinates a 'cabinet' in the bathroom. R1 passes a 'snack' it never picked up, and R4 attempts to pass objects without a specific receiver.",
       "SC": 3,
-      "SC_reason": "There are severe sequential and logical errors, including action ID collisions (r1_s1 and r2_s1 are reused). R1 passes an apple, then later passes 'the snack' without picking it up. R2 receives the apple but never places it, and R4 initiates passes that have no corresponding receive actions.",
+      "SC_reason": "Critical ordering and logical violations: R1 passes a 'snack' it never picked up; R4 initiates PASS actions without any corresponding RECEIVE actions from other robots; and action IDs are incorrectly reused (e.g., r1_s1 and r2_s1 appear multiple times).",
       "CQ": 4,
-      "CQ_reason": "Collaboration between R1 and R2 to bring the apple to the living room is appropriate for the task. However, the collaboration quality is degraded by R1's redundant pass of 'the snack' and R4's open-ended, unreceived passes to 'another robot'."
+      "CQ_reason": "Collaboration is poorly executed. While R1 passing the apple to R2 is appropriate, R1's second pass of a 'snack' is redundant and ungrounded. R4's PASS actions are completely invalid as they lack a target robot and a corresponding RECEIVE action."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -39,14 +39,14 @@
   "independent": {
     "name": "Independent",
     "track_a_llm_judge": {
-      "TF": 4,
-      "TF_reason": "The plan partially addresses the goals by preparing a snack (tomato and lettuce on a plate) and making the living room comfortable (moving chairs, turning on lamp). However, the snack is never actually delivered to the living room, and several actions involve hallucinated objects.",
+      "TF": 5,
+      "TF_reason": "The plan attempts to fulfill the goals by preparing a seating area in the living room and preparing a mug and food (tomato, lettuce) in the kitchen. However, the food choice is unusual for a guest, and the plan relies on several hallucinated objects and vague actions, limiting its actual effectiveness.",
       "GF": 2,
-      "GF_reason": "Severe violations: R1 holds multiple objects simultaneously (mug and tomato). R2 interacts with a hallucinated 'vase' and attempts to retrieve a snack from the kitchen without navigating there. R3 interacts with a hallucinated 'teddy bear'. R4 interacts with a vague 'small green object'. Multiple vague actions like 'ensure sofa cushions are neatly arranged' and 'ensure bathroom is tidy'.",
-      "SC": 4,
-      "SC_reason": "R4 attempts to pass an object but there is no corresponding receive action from any other robot. R2 attempts to retrieve an item from another room without prior navigation or collaboration steps.",
+      "GF_reason": "Severe grounding and feasibility violations: R1 holds multiple objects simultaneously (mug and tomato). There are multiple hallucinated objects ('vase', 'teddy bear', 'small green object'). The plan includes vague and conditional actions ('Ensure sofa cushions are neatly arranged', 'Retrieve a light snack... (if available)', 'ensure bathroom is tidy'). R2 attempts to retrieve an item from the kitchen while located in the living room.",
+      "SC": 3,
+      "SC_reason": "Critical sequencing errors: R4 attempts to pass an object, but there is no corresponding receive action from any other robot. R2 attempts to retrieve a snack from the kitchen without ever navigating there or receiving it from R1. R1 picks up two objects in the first time block before placing either in the second.",
       "CQ": 2,
-      "CQ_reason": "Collaboration is required to move the snack from the kitchen to the living room, but the robots fail to coordinate this. R2 attempts a vague 'retrieve' action instead of a proper PASS/RECEIVE with R1. R4 initiates a PASS action with no receiver."
+      "CQ_reason": "Collaboration is highly dysfunctional. R4 initiates a pass with no receiver. R2 needs a snack from the kitchen but fails to collaborate with R1 to get it, instead attempting an impossible local retrieval. Cross-room coordination is missing where it is explicitly needed."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -56,13 +56,13 @@
     "name": "LaMMA-P",
     "track_a_llm_judge": {
       "TF": 4,
-      "TF_reason": "The plan correctly identifies the goals (preparing a seating area and getting a refreshment) and structures the tasks well within the 15-minute deadline. However, it fails to use specific objects from the environment, relying heavily on vague terms, which means the goals are not concretely achieved.",
+      "TF_reason": "The plan correctly identifies the high-level goals (preparing a seating area, getting a refreshment, and cleaning up), but fails to achieve them using concrete, real objects from the environment, relying instead on vague placeholders.",
       "GF": 2,
-      "GF_reason": "Severe grounding violations. The plan uses vague and ungrounded expressions for almost all objects and locations, such as 'seating area', 'clutter', 'refreshment', 'storage', and 'serving area', instead of specific objects from the room lists (e.g., Sofa, Bottle, Box, CoffeeTable).",
+      "GF_reason": "Severe grounding violations. The plan uses vague and hallucinated object names throughout, such as 'seating area', 'refreshment', 'serving area', 'clutter', and 'storage', none of which map to specific objects in the provided room lists.",
       "SC": 9,
-      "SC_reason": "The sequence of actions is logical and respects basic physical dependencies (e.g., opening the fridge before picking up an item, picking up an item before placing it).",
+      "SC_reason": "The sequential coherence of the abstract actions is logical. Prerequisites are respected (e.g., opening the fridge before picking up an item, picking up before placing).",
       "CQ": 7,
-      "CQ_reason": "Explicit collaboration (like passing objects) is not strictly required for this task, and the agents effectively divide the labor (R2 and R5 handling the living room in parallel, R4 handling the kitchen). However, the lack of coordination to bring the refreshment to the actual guest seating area slightly reduces the score."
+      "CQ_reason": "No direct collaboration (like passing objects) is used, which is acceptable here since the sub-tasks (preparing the living room and getting food in the kitchen) can be completed independently and in parallel to meet the 15-minute deadline."
     },
     "track_b_gc": 0.0,
     "track_b_state_detail": {

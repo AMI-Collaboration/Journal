@@ -1,0 +1,82 @@
+{
+  "cda": {
+    "name": "CDA",
+    "track_a_llm_judge": {
+      "TF": 2,
+      "TF_reason": "The plan fails to achieve the goal of emptying the trash cans. R1 and R4 pick up items but do nothing with them. R2 puts a trash bag on the coffee table instead of disposing of it. Only R2 attempts to move items outside, but it moves the entire trash can rather than just the trash.",
+      "GF": 4,
+      "GF_reason": "There are multiple hallucinations: 'trash bag' in the kitchen and 'brown cardboard tubes' in the living room are not in the object lists. R3 also attempts to pick up a second 'black trash bag' when only one GarbageBag exists in the bedroom.",
+      "SC": 5,
+      "SC_reason": "The sequence has issues: R1 and R4 pick up objects and then halt indefinitely. R3 picks up a second trash bag while holding nothing (or after passing the first), but does nothing with it. R2 moves a trash can outside and then receives an object from R3, which implies teleportation or awkward spatial transitions.",
+      "CQ": 3,
+      "CQ_reason": "Collaboration is unnecessary for this task, as each robot could empty its own room's trash. Furthermore, the collaboration that does occur (R3 passing a trash bag to R2) results in the trash bag being placed on a coffee table, which is counterproductive to the task."
+    },
+    "track_b_gc": 0,
+    "track_b_state_detail": {},
+    "object_grounding": "N/A"
+  },
+  "central": {
+    "name": "Centralized",
+    "track_a_llm_judge": {
+      "TF": 3,
+      "TF_reason": "The task is only partially attempted. R1 and R2 collect some trash, but R3 and R4 only pick up trash bags and never dispose of them or transfer them to a collection point. The trash cans are not fully emptied.",
+      "GF": 4,
+      "GF_reason": "There are several grounding issues: R1 collects 'light trash items' (vague), R2 executes a nonsensical 'Move to R2's location', and R4 picks up a 'trash bag' in the bathroom which is not in the actual object list (only GarbageCan is).",
+      "SC": 3,
+      "SC_reason": "Severe sequencing issues: R2 performs a self-pass ('Hand over the trash to R2'), and R3 and R4 initiate PASS actions that are never matched with corresponding RECEIVE actions by R2.",
+      "CQ": 2,
+      "CQ_reason": "Collaboration is highly flawed. There is a self-pass by R2, and R3 and R4 attempt to pass items to R2 without R2 ever receiving them. The coordination is broken and incomplete."
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": "N/A"
+  },
+  "independent": {
+    "name": "Independent",
+    "track_a_llm_judge": {
+      "TF": 2,
+      "TF_reason": "The task of emptying the trash cans is not fulfilled. All robots either get stuck asking for help, waiting at doors, or performing vague actions without actually disposing of the trash.",
+      "GF": 4,
+      "GF_reason": "Several grounding issues exist: R1 uses a vague action ('Ensure the trash can is empty'), R2 interacts with hallucinated 'light trash', and R1 performs a [HELP] action without any actual partner present.",
+      "SC": 3,
+      "SC_reason": "Sequential coherence is poor. R1 executes a [HELP] action without any other robot participating. R2, R3, and R4 initiate requests or wait for interactions that never occur, leaving their action sequences unresolved.",
+      "CQ": 1,
+      "CQ_reason": "Collaboration is completely dysfunctional. Multiple robots use [ASK_HELP] or wait for a handoff, but no robot ever responds or coordinates with them. R1's [HELP] action is a self-contained hallucination of collaboration."
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": "N/A"
+  },
+  "lamma_p": {
+    "name": "LaMMA-P",
+    "track_a_llm_judge": {
+      "TF": 3,
+      "TF_reason": "The plan is highly abstract and fails to address all 4 GarbageCans across the 4 rooms. By pairing up the robots, they only attempt to empty two trash cans, leaving the task incomplete. The 'disposal area' is also not defined.",
+      "GF": 2,
+      "GF_reason": "The plan is full of vague expressions ('trash cans in the environment', 'disposal area', 'original location') and lacks grounding to specific objects or rooms. It also assumes robots can assist each other without specifying navigation to the same room.",
+      "SC": 6,
+      "SC_reason": "The abstract sequence of actions (identify -> move -> lift -> carry -> empty -> return) is logically ordered, but the lack of spatial grounding makes the physical execution of this sequence questionable.",
+      "CQ": 3,
+      "CQ_reason": "Collaboration is forced and unnecessary. Lifting a standard GarbageCan does not typically require two robots. By unnecessarily pairing up, the robots fail to distribute themselves efficiently to handle the 4 separate trash cans in 4 different rooms."
+    },
+    "track_b_gc": 0,
+    "track_b_state_detail": {},
+    "object_grounding": "N/A"
+  },
+  "smart_llm": {
+    "name": "SMART-LLM",
+    "track_a_llm_judge": {
+      "TF": 4,
+      "TF_reason": "The plan attempts to empty trash cans but uses generic, hallucinated names instead of the actual objects in the rooms (e.g., GarbageCan). It also only addresses 3 trash cans when there are 4 in the environment.",
+      "GF": 2,
+      "GF_reason": "Severe violations: The plan uses hallucinated objects and locations ('TrashCan1', 'trash', 'DisposalArea'). Additionally, R1 picks up trash from TrashCan3 while already holding trash from TrashCan1, violating the constraint of holding multiple objects.",
+      "SC": 4,
+      "SC_reason": "R1 attempts to pick up a second object (trash from TrashCan3) before dropping the first object it picked up, which is a physical sequence violation.",
+      "CQ": 5,
+      "CQ_reason": "Independent execution is acceptable for this task, but the robots fail to coordinate effectively to cover all four rooms, leaving one trash can unaddressed."
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": "N/A"
+  }
+}

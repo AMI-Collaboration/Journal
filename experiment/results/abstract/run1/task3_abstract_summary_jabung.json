@@ -2,14 +2,14 @@
   "cda": {
     "name": "CDA",
     "track_a_llm_judge": {
-      "TF": 2,
-      "TF_reason": "The plan fails to meet the 5-minute deadline, taking 10 minutes instead. It also relies heavily on hallucinated objects to clear the 'desk' (which itself is not in the room list), meaning the core goal of making the area presentable is not achieved with real objects.",
-      "GF": 1,
-      "GF_reason": "Severe grounding violations. The plan hallucinates numerous objects not present in the rooms, including 'ceiling light', 'table lamp', 'brown book' (in bedroom), 'black and white board', 'blue pen', 'white phone', 'blue USB drive', 'brown bowl', 'desk', and 'bed'.",
-      "SC": 4,
-      "SC_reason": "There are redundant actions (e.g., R1 and R2 both turn on the floor lamp in the living room). Additionally, R3 performs an unrealistic number of physical actions (moving 4 different objects) in the second 5-minute block.",
+      "TF": 5,
+      "TF_reason": "The plan partially fulfills the task by turning on lights in the bedroom and attempting to organize the desk area (moving the chair and trash bin). However, it hallucinates objects to clear from the desk (USB drive, pen) and R2's actions in the living room are largely irrelevant to the bedroom video call.",
+      "GF": 3,
+      "GF_reason": "There are several grounding and capability violations: R3 hallucinates a 'blue USB drive' and a 'blue pen', R2 hallucinates a 'wooden cabinet' in the living room, and R3 attempts to pick up a second object (pen) while already holding the first (USB drive) without putting it down.",
+      "SC": 6,
+      "SC_reason": "Sequential coherence is violated by R3, which picks up a second object (blue pen) while its gripper is already occupied by the USB drive, without an intermediate put-down action.",
       "CQ": 5,
-      "CQ_reason": "No collaboration is used. While cross-room collaboration might not be strictly required since there is a laptop in the bedroom, the robots operate entirely independently, and the lack of coordination leads to redundant actions on the same objects (e.g., floor lamp)."
+      "CQ_reason": "No collaboration is present. While cross-room collaboration is not strictly required since the bedroom has its own laptop and furniture, R2's isolated actions in the living room do not contribute meaningfully to the main task in the bedroom."
     },
     "track_b_gc": 0.0,
     "track_b_state_detail": {
@@ -23,14 +23,14 @@
   "central": {
     "name": "Centralized",
     "track_a_llm_judge": {
-      "TF": 2,
-      "TF_reason": "The plan misses the 5-minute deadline, as many critical actions (adjusting the laptop, moving the chair) occur in the 5-10 minute block. Additionally, it relies heavily on hallucinated objects (notebook, pen, phone, monitors) to make the desk presentable.",
+      "TF": 3,
+      "TF_reason": "The plan misses the 5-minute deadline for core tasks like adjusting the laptop and moving the chair, which are scheduled in the [5-10 min] block. Additionally, it relies on hallucinated objects (notebook, pen, phone, monitors) to make the desk presentable.",
       "GF": 2,
-      "GF_reason": "Severe violations exist. The plan hallucinates multiple objects (notebook, pen, phone, monitors) that are not in the room list. It also uses vague expressions like 'any light objects' and 'necessary items'.",
+      "GF_reason": "Severe violations due to hallucinated objects (notebook, pen, phone, monitors) and highly vague expressions ('any light objects', 'necessary items', 'received items'). Robots cannot execute actions on unspecified objects.",
       "SC": 4,
-      "SC_reason": "There are logical contradictions, such as R2 moving to the bedroom and then immediately moving to the living room in the same time block. The plan also has redundant actions, like R3 adjusting the laptop multiple times.",
+      "SC_reason": "There are contradictory movements (R2 moves to the bedroom, then immediately asks for help to move to the living room in the same block). R3 also performs redundant actions on the laptop in the second block.",
       "CQ": 3,
-      "CQ_reason": "The collaboration between R1 and R2 involves passing vague, unidentified objects from the living room to the bedroom, which is completely unnecessary since the bedroom already contains a laptop, chair, and lamps. R3 asking R4 to move the chair is the only potentially valid collaboration, but overall coordination is poor."
+      "CQ_reason": "Collaboration is largely unnecessary and poorly executed. Bringing unspecified items from the living room is not required for the task. R2 misuses the ASK_HELP action to move itself, and the HELP actions are vague."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -39,14 +39,14 @@
   "independent": {
     "name": "Independent",
     "track_a_llm_judge": {
-      "TF": 3,
-      "TF_reason": "The plan attempts to fulfill the goals, but many actions occur after the 5-minute deadline. Additionally, it relies on hallucinated objects (notebook, pen, phone) to achieve the presentable desk goal.",
-      "GF": 1,
-      "GF_reason": "Severe violations of grounding. The plan hallucinates multiple objects (notebook, pen, phone, window blinds) and uses many vague expressions ('any clutter', 'any small items', 'ensure', 'check', 'test'). Many actions are not valid physical robot primitives.",
-      "SC": 3,
-      "SC_reason": "The sequence lacks physical coherence due to the vague nature of the actions. Multiple robots act on the laptop and desk area simultaneously and redundantly without clear state tracking or logical progression.",
-      "CQ": 2,
-      "CQ_reason": "There is no explicit collaboration (no PASS/RECEIVE/HELP). Instead, four robots perform uncoordinated, redundant local actions on the same conceptual goals, leading to inefficiency and confusion."
+      "TF": 4,
+      "TF_reason": "The plan misses the 5-minute deadline by scheduling half of the actions in the [5-10 min] block. While it attempts to fulfill the goals (turning on lights, tidying), it relies heavily on hallucinated objects (notebook, pen, phone) and vague actions.",
+      "GF": 2,
+      "GF_reason": "Severe grounding violations. The plan includes hallucinated objects (notebook, pen, phone, window blinds) and is dominated by vague, unexecutable instructions such as 'any clutter', 'ensure', 'check', 'any small items', and 'test'.",
+      "SC": 4,
+      "SC_reason": "Multiple robots are assigned to interact with the same objects (e.g., R2, R3, and R4 all interact with a laptop; R3 and R4 both adjust a chair at the desk) without any coordination, leading to physical conflicts and redundant sequencing.",
+      "CQ": 3,
+      "CQ_reason": "No explicit collaboration (PASS/RECEIVE/HELP) is used, which is acceptable for a self-contained task. However, the multi-agent assignment is highly inappropriate, as multiple robots redundantly and independently attempt to perform the same local tasks on the same objects."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -56,13 +56,13 @@
     "name": "LaMMA-P",
     "track_a_llm_judge": {
       "TF": 2,
-      "TF_reason": "The plan fails to meet the 5-minute deadline, extending into the 5-10 minute block. It also relies entirely on hallucinated objects (desk, light switch, camera, microphone, router) rather than using the actual objects available in the rooms (e.g., FloorLamp or DeskLamp for lighting, Laptop for the video call).",
+      "TF_reason": "The plan fails to meet the 5-minute deadline for setting up the camera, microphone, and router. Furthermore, it relies heavily on hallucinated objects rather than utilizing the actual objects available in the rooms (e.g., using the Laptop for the video call or the DeskLamp/FloorLamp for lighting).",
       "GF": 1,
-      "GF_reason": "Severe grounding violations. The plan hallucinates numerous objects not present in the environment (light switch, camera, microphone, router). It also uses vague expressions ('items on desk', 'designated places', 'Ensure router is on') and implies picking up multiple items at once.",
+      "GF_reason": "Severe grounding violations. The plan hallucinates numerous objects ('desk', 'light switch', 'camera and microphone', 'router') and uses vague expressions ('items on desk', 'designated places', 'ensure router is on').",
       "SC": 5,
-      "SC_reason": "While the chronological order of the hallucinated actions makes basic sense (go to object -> interact with object), the plan violates physical constraints by attempting to pick up multiple unspecified 'items' in a single step and scheduling actions past the deadline.",
+      "SC_reason": "The sequence of abstract actions is somewhat logical chronologically, but the actions themselves are too high-level and ungrounded for standard robot execution.",
       "CQ": 3,
-      "CQ_reason": "There is no collaboration between the robots. While cross-room object transfer wasn't strictly necessary, the independent actions are poorly coordinated and rely on hallucinated capabilities and objects without any meaningful multi-agent teamwork."
+      "CQ_reason": "Multiple robots are assigned independent tasks in parallel, but there is no actual multi-agent collaboration (like PASS or HELP) despite the complex, multi-room nature of the prompt. The parallel assignment is also entirely ungrounded."
     },
     "track_b_gc": 0.0,
     "track_b_state_detail": {
@@ -77,13 +77,13 @@
     "name": "SMART-LLM",
     "track_a_llm_judge": {
       "TF": 2,
-      "TF_reason": "The plan misses the 5-minute deadline, as most critical actions are scheduled in the [5-10 min] block. Additionally, it relies on hallucinated objects (Desk, LightSwitch, Newspaper) to achieve the goals, meaning the task is largely unfulfilled.",
+      "TF_reason": "The task has a strict 5-minute deadline, but almost all critical actions (turning on the laptop, turning on lights, cleaning) are scheduled in the [5-10 min] block, missing the deadline. Additionally, the plan relies on hallucinated objects like 'Desk', 'LightSwitch', and 'Newspaper' which do not exist in the environment.",
       "GF": 2,
-      "GF_reason": "Severe grounding violations due to the hallucination of multiple objects not present in the room lists (Desk, LightSwitch, Newspaper). 'Clean Desk surface' is also a vague, non-primitive action.",
+      "GF_reason": "Severe grounding violations. The plan interacts with 'Desk', 'LightSwitch', and 'Newspaper', none of which are present in the actual room object lists (which contain alternatives like CoffeeTable/SideTable, FloorLamp/DeskLamp, and Book).",
       "SC": 8,
-      "SC_reason": "The sequence of actions is mostly logical, though R4 performs a high number of actions in a single 5-minute block.",
-      "CQ": 7,
-      "CQ_reason": "No explicit collaboration (PASS/RECEIVE) is used, which is acceptable since the task can be completed independently by robots in the same room. However, the independent multi-agent execution is poorly coordinated with the deadline."
+      "SC_reason": "The sequence of actions for each robot is logically ordered (e.g., going to an object before interacting with it, picking up before putting down), though the physical execution is flawed due to hallucinations.",
+      "CQ": 5,
+      "CQ_reason": "No explicit collaboration (PASS/RECEIVE/HELP) is used. While the robots work in parallel on different sub-tasks, the lack of coordination and the failure to meet the deadline suggests poor overall multi-agent planning for this time-sensitive task."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",

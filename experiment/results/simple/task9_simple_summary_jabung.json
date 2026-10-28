@@ -1,0 +1,82 @@
+{
+  "cda": {
+    "name": "CDA",
+    "track_a_llm_judge": {
+      "TF": 4,
+      "TF_reason": "The plan attempts to fulfill the goals by moving dishes and arranging the bed. However, the dishes are only moved and not actually washed (no use of sponge or soap). Furthermore, the destination for the dishes (sink) is hallucinated, meaning the core goal of washing dishes is not achieved.",
+      "GF": 3,
+      "GF_reason": "There are significant hallucinations in the plan. The 'sink' in the kitchen is not in the provided object list, making all of R2's placement actions unexecutable. Additionally, 'plastic container', 'bedsheet', and 'blanket' are hallucinated objects not present in the room lists.",
+      "SC": 9,
+      "SC_reason": "The sequence of actions is mostly logical, with robots picking up objects before moving or placing them. The number of actions per time block is physically realistic.",
+      "CQ": 8,
+      "CQ_reason": "The tasks in the kitchen and bedroom are independent, and the plan correctly avoids unnecessary cross-room collaboration. R3 and R4 work together on the bed, which is acceptable, though there is slight redundancy in both interacting with a blanket."
+    },
+    "track_b_gc": 0,
+    "track_b_state_detail": {},
+    "object_grounding": "N/A"
+  },
+  "central": {
+    "name": "Centralized",
+    "track_a_llm_judge": {
+      "TF": 4,
+      "TF_reason": "The plan attempts to address the goals of washing dishes and making the bed using some real objects (mug, fork, spoon, dish sponge, bed, pillows). However, it relies heavily on hallucinated objects (sink basin, drying rack) to complete the washing task, and the execution is highly disjointed.",
+      "GF": 2,
+      "GF_reason": "Severe violations exist. The plan hallucinates objects like 'sink basin' and 'drying rack' which are not in the room list. It includes vague actions such as 'Ensure the bed is neatly made' and 'Confirm the bed is made'. Furthermore, R3 appears to be in two places at once, assisting in both the kitchen and bedroom simultaneously.",
+      "SC": 1,
+      "SC_reason": "Critical ordering and logical violations. Action IDs are heavily reused and executed out of order (e.g., R4 finishes making the bed in the 5-10 min block, but then 'Starts making the bed' again in the 15-20 min block with action r4_s1). R2 and R3 also have multiple overlapping actions with the same IDs in the same time blocks.",
+      "CQ": 2,
+      "CQ_reason": "Collaboration is poorly executed and largely unnecessary. R1 passing small items (mug, fork, spoon) to R2 in the same room is inefficient. R3's collaboration is chaotic, as it attempts to help R2 in the kitchen and R4 in the bedroom at the same time, leading to a physically impossible sequence."
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": "N/A"
+  },
+  "independent": {
+    "name": "Independent",
+    "track_a_llm_judge": {
+      "TF": 4,
+      "TF_reason": "The plan only partially addresses the task. It washes a few items (Mug, Fork, Spoon) but misses many other dishes and utensils (Bowl, Cup, Plate, Pot, Pan, Knife, etc.). Making the bed is attempted, but the plan suffers from severe redundancy and interference between robots.",
+      "GF": 2,
+      "GF_reason": "Severe grounding violations. Robots hallucinate objects not in the room list ('sink basin', 'tap', 'drying rack', 'bedspread', 'sheets', 'blankets'). R4 uses vague expressions ('Assess the bed to identify any light objects...'). Multiple robots attempt to hold the same objects simultaneously.",
+      "SC": 2,
+      "SC_reason": "Critical sequential violations. R1 and R2 both try to pick up the same DishSponge. R2 picks up the Mug, but R1 attempts to scrub and place it. R1 scrubs and rinses the Fork and Spoon without ever picking them up.",
+      "CQ": 2,
+      "CQ_reason": "Collaboration is highly uncoordinated. R1/R2 and R3/R4 operate in the same rooms on the exact same objects without any communication or division of labor, leading to redundant and conflicting actions rather than effective teamwork."
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": "N/A"
+  },
+  "lamma_p": {
+    "name": "LaMMA-P",
+    "track_a_llm_judge": {
+      "TF": 3,
+      "TF_reason": "The plan attempts to address the task goals but fails to use concrete objects from the environment, relying entirely on vague expressions like 'dirty dishes and utensils', 'bed sheets', and 'pillows and blankets'.",
+      "GF": 1,
+      "GF_reason": "Severe violations: The plan uses vague and hallucinated objects ('dirty dishes', 'drying rack', 'bed sheets'). Furthermore, robot R4 is assigned to perform multiple conflicting actions simultaneously in different locations (e.g., going to the sink and going to pillows in the 10-15 min block).",
+      "SC": 1,
+      "SC_reason": "Critical ordering and assignment violations. R4 is given two parallel, conflicting sequences of actions (one for dishes, one for the bed) in the same time blocks, making execution impossible.",
+      "CQ": 4,
+      "CQ_reason": "While the two sub-tasks (kitchen and bedroom) are independent and do not strictly require cross-room collaboration, the workload distribution is completely broken, with R4 assigned to do almost everything in both rooms simultaneously while R1 does almost nothing."
+    },
+    "track_b_gc": 0,
+    "track_b_state_detail": {},
+    "object_grounding": "N/A"
+  },
+  "smart_llm": {
+    "name": "SMART-LLM",
+    "track_a_llm_judge": {
+      "TF": 4,
+      "TF_reason": "The plan attempts to fulfill the goals of washing dishes and making the bed, but relies heavily on hallucinated objects (Sink, Faucet, CounterTop, Blanket) which are not present in the actual room lists. Therefore, the goals are not validly achieved.",
+      "GF": 2,
+      "GF_reason": "Severe grounding violations. R2 interacts with 'Sink', 'Faucet', and 'CounterTop' in the kitchen, which do not exist in the provided object list. R3 interacts with 'Blanket' in the bedroom, which is also hallucinated.",
+      "SC": 5,
+      "SC_reason": "The sequence of putting items into the sink is logical. However, when taking items out of the sink after washing, R2 goes to the CounterTop with the Plate, but then subsequently picks up the Fork, Knife, Spoon, and Cup without first navigating back to the Sink where they were placed.",
+      "CQ": 10,
+      "CQ_reason": "The tasks in the kitchen and bedroom are completely independent and self-contained. The agents correctly work in parallel without forcing unnecessary collaboration."
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": "N/A"
+  }
+}

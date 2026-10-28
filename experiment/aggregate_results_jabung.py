@@ -84,7 +84,7 @@ if args.task.startswith("mat_"):
 elif "abstract" in args.task:
     results_dir = os.path.join(HERE, "results", "abstract", f"run{args.run}")
 elif "simple" in args.task:
-    results_dir = os.path.join(HERE, "results", "run1")
+    results_dir = os.path.join(HERE, "results", "simple")
     _simple_cda_dir = os.path.join(HERE, "results", "simple")
 else:
     results_dir = os.path.join(HERE, "results", "run1")

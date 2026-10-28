@@ -81,7 +81,16 @@ class PDDLUtils:
         """
         controller = None
         try:
-            controller = ai2thor.controller.Controller(scene=f"FloorPlan{floor_plan}")
+            controller = ai2thor.controller.Controller(scene=f"FloorPlan{floor_plan}", width=1280, height=720, renderDepthImage=False)
+            # 초기 화면 저장
+            import numpy as np
+            from PIL import Image
+            import os
+            frame = controller.last_event.frame
+            img = Image.fromarray(frame)
+            os.makedirs("/home/user/journal_co/ai2thor_frames", exist_ok=True)
+            img.save("/home/user/journal_co/ai2thor_frames/frame_init.png")
+            print(f"[SCREENSHOT] 초기 화면 저장: frame_init.png")
             obj = [obj["objectType"] for obj in controller.last_event.metadata["objects"]]
             obj_mass = [obj["mass"] for obj in controller.last_event.metadata["objects"]]
             return PDDLUtils.convert_to_dict_objprop(obj, obj_mass)
