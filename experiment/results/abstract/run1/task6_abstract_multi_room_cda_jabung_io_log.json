@@ -1,5 +1,48 @@
 [
   {
+    "key": "offer:R1",
+    "system": "You are robot R1, a household robot that sees only its own room.\n\nSTEP 1 — LIST has_items: every clearly visible movable object in your images.\nFormat: \"<color> <noun> (<location>, image <k>)\". NEVER ",
+    "user": "## TASK (serve this only):\nI'm planning a home workout in 20 minutes. Clear some floor space for me, put out anything I'd need for exercising, make sure I have something to drink, and get the bathroom ready for a shower afterwards.\nDEADLINE: 20 minutes\n\nYOUR BODY: room=kitchen, mobile=True, payload=5 kg, embodiment=Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture, SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\nEgg (in Fridge)\nLettuce (in Fr",
+    "output": {
+      "has_items": [
+        "brown microwave (counter, image 1)",
+        "blue soap dispenser (counter, image 1)",
+        "green sponge (counter, image 1)",
+        "white plate (shelf, image 1)",
+        "clear glasses (shelf, image 1)",
+        "silver pot (stove, image 2)",
+        "red apple (counter, image 2)",
+        "silver spoon (counter, image 2)",
+        "green plant (counter, image 2)"
+      ],
+      "reasoning": "a) The floor must be clear, exercise equipment available, a drink ready, and the bathroom prepared for a shower. b) Clearing space and preparing exercise items are crucial due to the workout. c) I can provide a drink using the clear glasses. d) The bathroom needs items I cannot provide.",
+      "capability": "I am a mobile robot capable of moving light objects and passing items.",
+      "can_do": [
+        "PickupLightObject: move small items",
+        "PassReceiveObject: transfer items to/from others",
+        "ToggleObject: turn on/off lights, TV, appliances"
+      ],
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift heavy items",
+        "PushFurniture: cannot move furniture",
+        "SliceObject: cannot cut or slice items",
+        "PourObject: cannot pour liquids"
+      ],
+      "suggests": [
+        "clear glasses (shelf, image 1)"
+      ],
+      "intends": [
+        "move clear glasses from shelf to counter"
+      ],
+      "need_from_others": [
+        "Clear floor space",
+        "Provide exercise equipment",
+        "Prepare bathroom for shower"
+      ],
+      "obs_scope": "I can observe and interact with items in the kitchen only."
+    }
+  },
+  {
     "key": "offer:R4",
     "system": "You are robot R4, a household robot that sees only its own room.\n\nSTEP 1 — LIST has_items: every clearly visible movable object in your images.\nFormat: \"<color> <noun> (<location>, image <k>)\". NEVER ",
     "user": "## TASK (serve this only):\nI'm planning a home workout in 20 minutes. Clear some floor space for me, put out anything I'd need for exercising, make sure I have something to drink, and get the bathroom ready for a shower afterwards.\nDEADLINE: 20 minutes\n\nYOUR BODY: room=bathroom, mobile=True, payload=5 kg, embodiment=Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture, SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\n(none)\n\nImages attached (2 im",
@@ -9,32 +52,29 @@
         "white sink (right side, image 1)",
         "glass shower (right side, image 2)"
       ],
-      "reasoning": "a) The bathroom must be ready for a shower after the workout. b) Preparing the bathroom for a shower is crucial given the deadline. c) I can ensure the bathroom is ready by checking the shower and sink. d) I cannot assist with clearing floor space or providing exercise equipment, but I can suggest items for hydration.",
-      "capability": "I am a mobile robot capable of light tasks in the bathroom.",
+      "reasoning": "a) GOAL STATE: Floor space clear, exercise items ready, drink available, bathroom ready for shower. b) PRIORITY: Ensure bathroom is ready for a shower. c) MY ROOM: Prepare the shower area. d) FOR OTHERS: None of my has_items serve another room's needs.",
+      "capability": "I am mobile and can handle light objects.",
       "can_do": [
         "PickupLightObject: move small items",
-        "PassReceiveObject: transfer items",
+        "PassReceiveObject: transfer items to/from others",
         "ToggleObject: turn on/off lights, TV, appliances"
       ],
       "cannot_do": [
-        "PickupHeavyObject: cannot move heavy items",
-        "PushFurniture: cannot rearrange large furniture",
-        "SliceObject: cannot cut or prepare food",
+        "PickupHeavyObject: cannot lift heavy items",
+        "PushFurniture: cannot move large furniture",
+        "SliceObject: cannot cut or divide objects",
         "PourObject: cannot pour liquids"
       ],
-      "suggests": [
-        "Ensure water bottle is available for hydration in the workout area."
-      ],
+      "suggests": [],
       "intends": [
-        "Check glass shower for readiness.",
-        "Ensure white sink is functional for post-workout use."
+        "ToggleObject: turn on shower in glass shower",
+        "ToggleObject: turn off shower in glass shower"
       ],
       "need_from_others": [
-        "Clear floor space in workout area.",
-        "Provide exercise equipment.",
-        "Ensure water bottle is available."
+        "RECEIVE: exercise equipment",
+        "RECEIVE: drink"
       ],
-      "obs_scope": "I can observe and interact with items in the bathroom only."
+      "obs_scope": "I can only observe the bathroom."
     }
   },
   {
@@ -46,44 +86,51 @@
         "blue blanket (bed, image 1)",
         "brown teddy bear (bed, image 1)",
         "green pillow (bed, image 1)",
-        "black laptop (desk, image 1)",
+        "laptop (desk, image 1)",
         "black dumbbell (desk, image 1)",
         "lamp (desk, image 1)",
         "book (desk, image 1)",
         "chair (desk, image 1)",
-        "basketball (floor, image 2)",
+        "white paper (table, image 2)",
+        "black pen (table, image 2)",
+        "orange racket (floor, image 2)",
         "black dumbbell (floor, image 2)",
-        "badminton racket (floor, image 2)",
+        "brown basketball (floor, image 2)",
+        "white laundry basket (corner, image 2)",
         "green trash bin (floor, image 2)",
-        "white laundry basket (floor, image 2)"
+        "red clock (dresser, image 2)"
       ],
-      "reasoning": "a) GOAL STATE: Floor space is clear, exercise equipment is accessible, a drink is available, and the bathroom is ready for a shower. b) PRIORITY: Clearing floor space and ensuring exercise equipment is ready. c) MY ROOM: Move items like the basketball and dumbbell to clear space. d) FOR OTHERS: Suggest the black dumbbell and basketball for workout use.",
+      "reasoning": "a) GOAL STATE: Floor space clear, exercise items ready, drink available, bathroom ready for shower. b) PRIORITY: Clear floor space and prepare exercise items first. c) MY ROOM: Move items from the floor to clear space. d) FOR OTHERS: None of my items serve another room's needs.",
       "capability": "I am mobile and can carry light objects up to 5 kg.",
       "can_do": [
-        "PickupLightObject: move small items",
-        "PassReceiveObject: exchange items with others",
+        "PickupLightObject: lift objects under 5 kg",
+        "PassReceiveObject: transfer objects to/from others",
         "ToggleObject: turn on/off lights, TV, appliances"
       ],
       "cannot_do": [
-        "PickupHeavyObject: cannot lift heavy items like furniture",
-        "PushFurniture: cannot move furniture",
-        "SliceObject: cannot cut or slice objects",
+        "PickupHeavyObject: cannot lift objects over 5 kg",
+        "PushFurniture: cannot move heavy furniture",
+        "SliceObject: cannot cut or slice items",
         "PourObject: cannot pour liquids"
       ],
       "suggests": [
+        "black dumbbell (desk, image 1)",
         "black dumbbell (floor, image 2)",
-        "basketball (floor, image 2)"
+        "orange racket (floor, image 2)",
+        "brown basketball (floor, image 2)"
       ],
       "intends": [
-        "move basketball from floor to bed",
-        "move black dumbbell from floor to bed",
-        "move badminton racket from floor to bed"
+        "move orange racket from floor to table",
+        "move black dumbbell from floor to table",
+        "move brown basketball from floor to table",
+        "move white paper from table to desk",
+        "move black pen from table to desk"
       ],
       "need_from_others": [
         "Provide a drink for hydration",
         "Prepare the bathroom for a shower"
       ],
-      "obs_scope": "I can observe and interact with items in the bedroom only."
+      "obs_scope": "I can observe and interact with items in the bedroom."
     }
   },
   {
@@ -92,21 +139,25 @@
     "user": "## TASK (serve this only):\nI'm planning a home workout in 20 minutes. Clear some floor space for me, put out anything I'd need for exercising, make sure I have something to drink, and get the bathroom ready for a shower afterwards.\nDEADLINE: 20 minutes\n\nYOUR BODY: room=living_room, mobile=True, payload=20 kg, embodiment=Mobile_Heavy. CAN: PickupLightObject, PickupHeavyObject, PushFurniture, PassReceiveObject. CANNOT: SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\n(none)\n\nImages attached (",
     "output": {
       "has_items": [
-        "gray sofa (living_room, image 2)",
-        "red pillow (living_room, image 2)",
-        "glass coffee table (living_room, image 2)",
-        "yellow bottle (living_room, image 2)",
-        "floor lamp (living_room, image 2)",
-        "TV (living_room, image 2)",
-        "brown chairs (living_room, image 2)",
         "black desk (living_room, image 1)",
-        "laptop (living_room, image 1)",
-        "desk lamp (living_room, image 1)",
-        "keys (living_room, image 1)",
-        "notebook (living_room, image 1)"
+        "laptop (black desk, image 1)",
+        "lamp (black desk, image 1)",
+        "chair (black desk, image 1)",
+        "keys (black desk, image 1)",
+        "book (black desk, image 1)",
+        "trash bin (living_room, image 1)",
+        "gray sofa (living_room, image 2)",
+        "red pillow (gray sofa, image 2)",
+        "glass coffee table (living_room, image 2)",
+        "vase (glass coffee table, image 2)",
+        "yellow bottle (glass coffee table, image 2)",
+        "TV (living_room, image 2)",
+        "floor lamp (living_room, image 2)",
+        "armchair (living_room, image 2)",
+        "red chairs (living_room, image 2)"
       ],
-      "reasoning": "a) GOAL STATE: Floor space clear, exercise items ready, drink available, bathroom ready for shower. b) PRIORITY: Clear floor space and prepare exercise items quickly. c) MY ROOM: Move furniture to clear space, ensure drink is accessible. d) FOR OTHERS: Yellow bottle may serve as a drink.",
-      "capability": "I am mobile and can move heavy objects.",
+      "reasoning": "a) GOAL STATE: Floor space clear, exercise items out, drink ready, bathroom ready for shower. b) PRIORITY: Clear floor space and prepare exercise items first. c) MY ROOM: Move furniture and objects to clear space. d) FOR OTHERS: Yellow bottle could serve as a drink.",
+      "capability": "I am a mobile robot capable of moving objects and furniture.",
       "can_do": [
         "PickupLightObject: move small items",
         "PickupHeavyObject: move large items",
@@ -115,132 +166,34 @@
         "ToggleObject: turn on/off lights, TV, appliances"
       ],
       "cannot_do": [
-        "SliceObject: cannot cut or divide items",
-        "PourObject: cannot pour liquids"
+        "SliceObject: cannot cut or open items",
+        "PourObject: cannot pour drinks"
       ],
       "suggests": [
-        "yellow bottle (living_room, image 2)"
+        "yellow bottle (glass coffee table, image 2)"
       ],
       "intends": [
-        "Push gray sofa to wall",
-        "Move glass coffee table to corner",
-        "Place yellow bottle on glass coffee table",
-        "Turn on floor lamp"
+        "move red chairs to dining room",
+        "move glass coffee table to dining room",
+        "move vase to black desk",
+        "move yellow bottle to black desk",
+        "move red pillow to armchair",
+        "push gray sofa against wall",
+        "push armchair against wall"
       ],
       "need_from_others": [
+        "Provide exercise equipment",
         "Prepare bathroom for shower"
       ],
       "obs_scope": "I can observe and interact with items in the living room."
     }
   },
   {
-    "key": "offer:R1",
-    "system": "You are robot R1, a household robot that sees only its own room.\n\nSTEP 1 — LIST has_items: every clearly visible movable object in your images.\nFormat: \"<color> <noun> (<location>, image <k>)\". NEVER ",
-    "user": "## TASK (serve this only):\nI'm planning a home workout in 20 minutes. Clear some floor space for me, put out anything I'd need for exercising, make sure I have something to drink, and get the bathroom ready for a shower afterwards.\nDEADLINE: 20 minutes\n\nYOUR BODY: room=kitchen, mobile=True, payload=5 kg, embodiment=Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture, SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\nEgg (in Fridge)\nLettuce (in Fr",
-    "output": {
-      "has_items": [
-        "brown microwave (counter, image 1)",
-        "blue soap dispenser (counter, image 1)",
-        "green sponge (counter, image 1)",
-        "white plate (shelf, image 1)",
-        "clear glass (shelf, image 1)",
-        "clear glass (shelf, image 1)",
-        "clear glass (shelf, image 1)",
-        "clear glass (shelf, image 1)",
-        "clear glass (shelf, image 1)",
-        "white bowl (shelf, image 1)",
-        "potted plant (counter, image 2)",
-        "red apple (counter, image 2)",
-        "metal pot (stove, image 2)",
-        "wooden cutting board (wall, image 2)",
-        "silver knife (counter, image 2)"
-      ],
-      "reasoning": "a) GOAL STATE: Floor space is clear, exercise items are ready, a drink is available, and the bathroom is ready for a shower. b) PRIORITY: Clearing floor space and preparing exercise items quickly. c) MY ROOM: Provide a drink using clear glass and red apple. d) FOR OTHERS: None of my items serve another room's needs directly.",
-      "capability": "I am mobile and can carry light objects up to 5 kg.",
-      "can_do": [
-        "PickupLightObject: carry objects up to 5 kg",
-        "PassReceiveObject: transfer objects to/from others",
-        "ToggleObject: turn on/off lights, TV, appliances"
-      ],
-      "cannot_do": [
-        "PickupHeavyObject: cannot lift heavy items",
-        "PushFurniture: cannot move large furniture",
-        "SliceObject: cannot cut or slice items",
-        "PourObject: cannot pour liquids"
-      ],
-      "suggests": [],
-      "intends": [
-        "PickupLightObject: pick up clear glass from shelf",
-        "PickupLightObject: pick up red apple from counter",
-        "PassReceiveObject: pass clear glass and red apple to another robot for drink preparation"
-      ],
-      "need_from_others": [
-        "ClearFloorSpace: move furniture to clear floor space",
-        "PrepareExerciseItems: bring exercise equipment",
-        "PrepareBathroom: ready the bathroom for a shower"
-      ],
-      "obs_scope": "I can observe and interact with items in the kitchen only."
-    }
-  },
-  {
-    "key": "plan:R4",
-    "system": "You are robot R4 in the bathroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, ",
-    "user": "## TASK:\nI'm planning a home workout in 20 minutes. Clear some floor space for me, put out anything I'd need for exercising, make sure I have something to drink, and get the bathroom ready for a shower afterwards.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I am a mobile robot capable of light tasks in the bathroom.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PassReceiveObject: transfer items\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_",
-    "output": {
-      "reasoning": "a) The bathroom must be ready for a shower after the workout, which includes ensuring the glass shower is functional. b) Preparing the bathroom for a shower is crucial given the deadline. c) I can ensure the bathroom is ready by checking the shower and sink. d) I cannot assist with clearing floor space or providing exercise equipment, but I can suggest items for hydration.",
-      "goals": [
-        {
-          "goal": "Ensure bathroom is ready for a shower after workout.",
-          "priority": "high",
-          "in_my_room": true
-        }
-      ],
-      "checklist": [
-        {
-          "object": "glass shower",
-          "change": "check for readiness",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "white sink",
-          "change": "ensure functionality",
-          "weight": "light",
-          "how": "LOCAL"
-        }
-      ],
-      "steps": [
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "check",
-            "object": "glass shower",
-            "from": "right side",
-            "to": "functional"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "check",
-            "object": "white sink",
-            "from": "right side",
-            "to": "functional"
-          },
-          "uses": 0,
-          "serves": 1
-        }
-      ]
-    }
-  },
-  {
     "key": "plan:R1",
     "system": "You are robot R1 in the kitchen. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nI'm planning a home workout in 20 minutes. Clear some floor space for me, put out anything I'd need for exercising, make sure I have something to drink, and get the bathroom ready for a shower afterwards.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: carry objects up to 5 kg\",\n  \"PassReceiveObject: transfer objects to/from others\",\n  \"ToggleObject: turn on/off lights, TV, appli",
+    "user": "## TASK:\nI'm planning a home workout in 20 minutes. Clear some floor space for me, put out anything I'd need for exercising, make sure I have something to drink, and get the bathroom ready for a shower afterwards.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am a mobile robot capable of moving light objects and passing items.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PassReceiveObject: transfer items to/from others\",\n  \"ToggleObject: turn on/off lights, ",
     "output": {
-      "reasoning": "a) GOAL STATE: Floor space is clear, exercise items are ready, a drink is available, and the bathroom is ready for a shower. b) PRIORITY: Clearing floor space and preparing exercise items quickly. c) MY ROOM: Provide a drink using clear glass and red apple. d) FOR OTHERS: None of my items serve another room's needs directly.",
+      "reasoning": "a) The task requires clearing floor space, providing exercise equipment, ensuring a drink is available, and preparing the bathroom for a shower. b) I can provide a drink using the clear glasses from the kitchen. c) R2 can handle clearing the floor space and moving furniture in the living room. d) R3 can provide exercise equipment from the bedroom. e) R4 can prepare the bathroom for a shower.",
       "goals": [
         {
           "goal": "Provide a drink for hydration",
@@ -250,85 +203,8 @@
       ],
       "checklist": [
         {
-          "object": "clear glass",
-          "change": "picked up and passed for drink preparation",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "red apple",
-          "change": "picked up and passed for drink preparation",
-          "weight": "light",
-          "how": "LOCAL"
-        }
-      ],
-      "steps": [
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "pick_up",
-            "object": "clear glass",
-            "from": "shelf",
-            "to": "hand"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "pick_up",
-            "object": "red apple",
-            "from": "counter",
-            "to": "hand"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "PASS",
-          "item": "clear glass",
-          "target": "R3",
-          "serves": 1
-        },
-        {
-          "type": "PASS",
-          "item": "red apple",
-          "target": "R3",
-          "serves": 1
-        }
-      ]
-    }
-  },
-  {
-    "key": "plan:R3",
-    "system": "You are robot R3 in the bedroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nI'm planning a home workout in 20 minutes. Clear some floor space for me, put out anything I'd need for exercising, make sure I have something to drink, and get the bathroom ready for a shower afterwards.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"",
-    "output": {
-      "reasoning": "a) GOAL STATE: The bedroom floor is clear for workout, exercise equipment is accessible, a drink is available, and the bathroom is ready for a shower. b) PRIORITY: Clearing floor space and ensuring exercise equipment is ready. c) MY ROOM: Move items like the basketball and dumbbell to clear space. d) FOR OTHERS: Suggest the black dumbbell and basketball for workout use.",
-      "goals": [
-        {
-          "goal": "clear floor space and make exercise equipment accessible",
-          "priority": "high",
-          "in_my_room": true
-        }
-      ],
-      "checklist": [
-        {
-          "object": "basketball",
-          "change": "move to bed",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "black dumbbell",
-          "change": "move to bed",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "badminton racket",
-          "change": "move to bed",
+          "object": "clear glasses",
+          "change": "move from shelf to counter",
           "weight": "light",
           "how": "LOCAL"
         }
@@ -338,9 +214,133 @@
           "type": "LOCAL",
           "action": {
             "verb": "move",
-            "object": "basketball",
+            "object": "clear glasses",
+            "from": "shelf",
+            "to": "counter"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "PASS",
+          "item": "clear glasses",
+          "target": "R4",
+          "serves": 1
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R4",
+    "system": "You are robot R4 in the bathroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, ",
+    "user": "## TASK:\nI'm planning a home workout in 20 minutes. Clear some floor space for me, put out anything I'd need for exercising, make sure I have something to drink, and get the bathroom ready for a shower afterwards.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I am mobile and can handle light objects.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PassReceiveObject: transfer items to/from others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_ite",
+    "output": {
+      "reasoning": "a) The task requires preparing the bathroom for a shower after a workout. b) My priority is to ensure the shower is ready. c) I will turn on the shower in the glass shower to prepare it for use. d) I need to receive exercise equipment and a drink from other robots to complete the task.",
+      "goals": [
+        {
+          "goal": "Prepare the bathroom for a shower",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "glass shower",
+          "change": "turn on shower",
+          "weight": "light",
+          "how": "LOCAL"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "shower",
+            "from": "glass shower",
+            "to": "on"
+          },
+          "uses": 1,
+          "serves": 0
+        },
+        {
+          "type": "RECEIVE",
+          "item": "exercise equipment",
+          "target": "R3",
+          "serves": 0
+        },
+        {
+          "type": "RECEIVE",
+          "item": "drink",
+          "target": "R2",
+          "serves": 0
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R3",
+    "system": "You are robot R3 in the bedroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
+    "user": "## TASK:\nI'm planning a home workout in 20 minutes. Clear some floor space for me, put out anything I'd need for exercising, make sure I have something to drink, and get the bathroom ready for a shower afterwards.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift objects under 5 kg\",\n  \"PassReceiveObject: transfer objects to/from others\",\n  \"ToggleObject: turn on/off lights, TV, applia",
+    "output": {
+      "reasoning": "a) GOAL STATE: Floor space clear, exercise items ready, drink available, bathroom ready for shower. b) PRIORITY: Clear floor space and prepare exercise items first. c) MY ROOM: Move items from the floor to clear space. d) FOR OTHERS: I need a drink and the bathroom prepared for a shower, which requires collaboration with R1 and R4.",
+      "goals": [
+        {
+          "goal": "clear floor space and prepare exercise items",
+          "priority": "high",
+          "in_my_room": true
+        },
+        {
+          "goal": "receive a drink for hydration",
+          "priority": "medium",
+          "in_my_room": false
+        },
+        {
+          "goal": "prepare bathroom for shower",
+          "priority": "medium",
+          "in_my_room": false
+        }
+      ],
+      "checklist": [
+        {
+          "object": "orange racket",
+          "change": "move to table",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "black dumbbell",
+          "change": "move to table",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "brown basketball",
+          "change": "move to table",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "white paper",
+          "change": "move to desk",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "black pen",
+          "change": "move to desk",
+          "weight": "light",
+          "how": "LOCAL"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "orange racket",
             "from": "floor",
-            "to": "bed"
+            "to": "table"
           },
           "uses": 0,
           "serves": 1
@@ -351,7 +351,7 @@
             "verb": "move",
             "object": "black dumbbell",
             "from": "floor",
-            "to": "bed"
+            "to": "table"
           },
           "uses": 0,
           "serves": 1
@@ -360,23 +360,51 @@
           "type": "LOCAL",
           "action": {
             "verb": "move",
-            "object": "badminton racket",
+            "object": "brown basketball",
             "from": "floor",
-            "to": "bed"
+            "to": "table"
           },
           "uses": 0,
           "serves": 1
         },
         {
-          "type": "PASS",
-          "item": "black dumbbell",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "white paper",
+            "from": "table",
+            "to": "desk"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "black pen",
+            "from": "table",
+            "to": "desk"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "RECEIVE",
+          "item": "clear glasses",
           "target": "R1",
           "serves": 1
         },
         {
-          "type": "PASS",
-          "item": "basketball",
-          "target": "R1",
+          "type": "ASK_HELP",
+          "action": {
+            "verb": "ToggleObject",
+            "object": "glass shower",
+            "from": "off",
+            "to": "on"
+          },
+          "target": "R4",
+          "enables": 0,
           "serves": 1
         }
       ]
@@ -385,50 +413,68 @@
   {
     "key": "plan:R2",
     "system": "You are robot R2 in the living_room. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessibl",
-    "user": "## TASK:\nI'm planning a home workout in 20 minutes. Clear some floor space for me, put out anything I'd need for exercising, make sure I have something to drink, and get the bathroom ready for a shower afterwards.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am mobile and can move heavy objects.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PickupHeavyObject: move large items\",\n  \"PushFurniture: rearrange furniture\",\n  \"PassReceiveObject: exchange items\",\n  ",
+    "user": "## TASK:\nI'm planning a home workout in 20 minutes. Clear some floor space for me, put out anything I'd need for exercising, make sure I have something to drink, and get the bathroom ready for a shower afterwards.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am a mobile robot capable of moving objects and furniture.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PickupHeavyObject: move large items\",\n  \"PushFurniture: rearrange furniture\",\n  \"PassReceiveObject",
     "output": {
-      "reasoning": "a) The living room needs to be prepared for a workout by clearing space and ensuring a drink is available. b) High priority is given to clearing the floor space and setting up the drink. c) My tasks involve moving furniture and placing the drink in the living room. d) The yellow bottle will be used as a drink, and I will pass it to R4 for bathroom preparation.",
+      "reasoning": "a) The goal is to clear the living room floor space, provide a drink, and prepare for a workout and shower. b) Priority is to clear the floor space and ensure a drink is available. c) In my room, I will move furniture and objects to clear space and provide a drink. d) I will pass the yellow bottle to another robot for hydration needs.",
       "goals": [
         {
-          "goal": "Clear floor space and prepare drink for workout.",
+          "goal": "Clear floor space for workout and provide a drink.",
           "priority": "high",
           "in_my_room": true
         }
       ],
       "checklist": [
         {
-          "object": "gray sofa",
-          "change": "pushed to wall",
+          "object": "red chairs",
+          "change": "move to dining room",
           "weight": "heavy",
           "how": "LOCAL"
         },
         {
           "object": "glass coffee table",
-          "change": "moved to corner",
+          "change": "move to dining room",
           "weight": "heavy",
           "how": "LOCAL"
         },
         {
-          "object": "yellow bottle",
-          "change": "placed on glass coffee table",
+          "object": "vase",
+          "change": "move to black desk",
           "weight": "light",
           "how": "LOCAL"
         },
         {
           "object": "yellow bottle",
-          "change": "passed to R4",
+          "change": "move to black desk",
           "weight": "light",
-          "how": "PASS"
+          "how": "LOCAL"
+        },
+        {
+          "object": "red pillow",
+          "change": "move to armchair",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "gray sofa",
+          "change": "push against wall",
+          "weight": "heavy",
+          "how": "LOCAL"
+        },
+        {
+          "object": "armchair",
+          "change": "push against wall",
+          "weight": "heavy",
+          "how": "LOCAL"
         }
       ],
       "steps": [
         {
           "type": "LOCAL",
           "action": {
-            "verb": "push",
-            "object": "gray sofa",
+            "verb": "move",
+            "object": "red chairs",
             "from": "living_room",
-            "to": "wall"
+            "to": "dining room"
           },
           "uses": 0,
           "serves": 0
@@ -439,7 +485,7 @@
             "verb": "move",
             "object": "glass coffee table",
             "from": "living_room",
-            "to": "corner"
+            "to": "dining room"
           },
           "uses": 0,
           "serves": 0
@@ -447,10 +493,54 @@
         {
           "type": "LOCAL",
           "action": {
-            "verb": "place",
+            "verb": "move",
+            "object": "vase",
+            "from": "glass coffee table",
+            "to": "black desk"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
             "object": "yellow bottle",
+            "from": "glass coffee table",
+            "to": "black desk"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "red pillow",
+            "from": "gray sofa",
+            "to": "armchair"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "push",
+            "object": "gray sofa",
             "from": "living_room",
-            "to": "glass coffee table"
+            "to": "against wall"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "push",
+            "object": "armchair",
+            "from": "living_room",
+            "to": "against wall"
           },
           "uses": 0,
           "serves": 0
@@ -458,6 +548,48 @@
         {
           "type": "PASS",
           "item": "yellow bottle",
+          "target": "R3",
+          "serves": 0
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R1:fix",
+    "system": "You are robot R1 in the kitchen. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
+    "user": "## TASK:\nI'm planning a home workout in 20 minutes. Clear some floor space for me, put out anything I'd need for exercising, make sure I have something to drink, and get the bathroom ready for a shower afterwards.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am a mobile robot capable of moving light objects and passing items.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PassReceiveObject: transfer items to/from others\",\n  \"ToggleObject: turn on/off lights, ",
+    "output": {
+      "reasoning": "a) The task requires clearing floor space, providing exercise equipment, ensuring a drink is available, and preparing the bathroom for a shower. b) I can provide a drink using the clear glasses from the kitchen. c) R2 can handle clearing the floor space and moving furniture in the living room. d) R3 can provide exercise equipment from the bedroom. e) R4 can prepare the bathroom for a shower.",
+      "goals": [
+        {
+          "goal": "Provide a drink for hydration",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "clear glasses",
+          "change": "move from shelf to counter",
+          "weight": "light",
+          "how": "LOCAL"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "clear glasses",
+            "from": "shelf",
+            "to": "counter"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "PASS",
+          "item": "clear glasses",
           "target": "R4",
           "serves": 0
         }
@@ -467,20 +599,20 @@
   {
     "key": "plan:R4:fix",
     "system": "You are robot R4 in the bathroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, ",
-    "user": "## TASK:\nI'm planning a home workout in 20 minutes. Clear some floor space for me, put out anything I'd need for exercising, make sure I have something to drink, and get the bathroom ready for a shower afterwards.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I am a mobile robot capable of light tasks in the bathroom.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PassReceiveObject: transfer items\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_",
+    "user": "## TASK:\nI'm planning a home workout in 20 minutes. Clear some floor space for me, put out anything I'd need for exercising, make sure I have something to drink, and get the bathroom ready for a shower afterwards.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I am mobile and can handle light objects.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PassReceiveObject: transfer items to/from others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_ite",
     "output": {
-      "reasoning": "a) The bathroom must be ready for a shower after the workout. b) Preparing the bathroom for a shower is crucial given the deadline. c) I can ensure the bathroom is ready by placing a towel in the bathroom. d) I cannot assist with clearing floor space or providing exercise equipment, but I can suggest items for hydration.",
+      "reasoning": "a) The task requires preparing the bathroom for a shower after a workout. b) My priority is to ensure the shower is ready. c) I will turn on the shower in the glass shower to prepare it for use. d) I need to receive exercise equipment and a drink from other robots to complete the task.",
       "goals": [
         {
-          "goal": "Ensure bathroom is ready for a shower after workout.",
+          "goal": "Prepare the bathroom for a shower",
           "priority": "high",
           "in_my_room": true
         }
       ],
       "checklist": [
         {
-          "object": "beige towel",
-          "change": "move to towel rack",
+          "object": "glass shower",
+          "change": "turn on shower",
           "weight": "light",
           "how": "LOCAL"
         }
@@ -489,77 +621,24 @@
         {
           "type": "LOCAL",
           "action": {
-            "verb": "move",
-            "object": "beige towel",
-            "from": "wall hook",
-            "to": "towel rack near glass shower"
+            "verb": "turn_on",
+            "object": "shower",
+            "from": "glass shower",
+            "to": "on"
           },
-          "uses": 0,
-          "serves": 0
-        }
-      ]
-    }
-  },
-  {
-    "key": "plan:R1:fix",
-    "system": "You are robot R1 in the kitchen. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nI'm planning a home workout in 20 minutes. Clear some floor space for me, put out anything I'd need for exercising, make sure I have something to drink, and get the bathroom ready for a shower afterwards.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: carry objects up to 5 kg\",\n  \"PassReceiveObject: transfer objects to/from others\",\n  \"ToggleObject: turn on/off lights, TV, appli",
-    "output": {
-      "reasoning": "a) GOAL STATE: Floor space is clear, exercise items are ready, a drink is available, and the bathroom is ready for a shower. b) PRIORITY: Clearing floor space and preparing exercise items quickly. c) MY ROOM: Provide a drink using clear glass and red apple. d) FOR OTHERS: None of my items serve another room's needs directly.",
-      "goals": [
-        {
-          "goal": "Provide a drink for hydration",
-          "priority": "high",
-          "in_my_room": true
-        }
-      ],
-      "checklist": [
-        {
-          "object": "clear glass",
-          "change": "picked up and passed for drink preparation",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "red apple",
-          "change": "picked up and passed for drink preparation",
-          "weight": "light",
-          "how": "LOCAL"
-        }
-      ],
-      "steps": [
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "pick_up",
-            "object": "clear glass",
-            "from": "shelf",
-            "to": "hand"
-          },
-          "uses": 0,
+          "uses": 1,
           "serves": 0
         },
         {
-          "type": "LOCAL",
-          "action": {
-            "verb": "pick_up",
-            "object": "red apple",
-            "from": "counter",
-            "to": "hand"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "PASS",
-          "item": "clear glass",
+          "type": "RECEIVE",
+          "item": "black dumbbell (desk, image 1)",
           "target": "R3",
           "serves": 0
         },
         {
-          "type": "PASS",
-          "item": "red apple",
-          "target": "R3",
+          "type": "RECEIVE",
+          "item": "yellow bottle (glass coffee table, image 2)",
+          "target": "R2",
           "serves": 0
         }
       ]
@@ -568,32 +647,54 @@
   {
     "key": "plan:R3:fix",
     "system": "You are robot R3 in the bedroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nI'm planning a home workout in 20 minutes. Clear some floor space for me, put out anything I'd need for exercising, make sure I have something to drink, and get the bathroom ready for a shower afterwards.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"",
+    "user": "## TASK:\nI'm planning a home workout in 20 minutes. Clear some floor space for me, put out anything I'd need for exercising, make sure I have something to drink, and get the bathroom ready for a shower afterwards.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift objects under 5 kg\",\n  \"PassReceiveObject: transfer objects to/from others\",\n  \"ToggleObject: turn on/off lights, TV, applia",
     "output": {
-      "reasoning": "a) GOAL STATE: The bedroom floor is clear for workout, exercise equipment is accessible, a drink is available, and the bathroom is ready for a shower. b) PRIORITY: Clearing floor space and ensuring exercise equipment is ready. c) MY ROOM: Move items like the basketball and dumbbell to clear space. d) FOR OTHERS: Suggest the black dumbbell and basketball for workout use.",
+      "reasoning": "a) GOAL STATE: Floor space clear, exercise items ready, drink available, bathroom ready for shower. b) PRIORITY: Clear floor space and prepare exercise items first. c) MY ROOM: Move items from the floor to clear space. d) FOR OTHERS: I need a drink and the bathroom prepared for a shower, which requires collaboration with R1 and R4.",
       "goals": [
         {
-          "goal": "clear floor space and make exercise equipment accessible",
+          "goal": "clear floor space and prepare exercise items",
           "priority": "high",
           "in_my_room": true
+        },
+        {
+          "goal": "receive a drink for hydration",
+          "priority": "medium",
+          "in_my_room": false
+        },
+        {
+          "goal": "prepare bathroom for shower",
+          "priority": "medium",
+          "in_my_room": false
         }
       ],
       "checklist": [
         {
-          "object": "basketball",
-          "change": "move to bed",
+          "object": "orange racket",
+          "change": "move to table",
           "weight": "light",
           "how": "LOCAL"
         },
         {
           "object": "black dumbbell",
-          "change": "move to bed",
+          "change": "move to table",
           "weight": "light",
           "how": "LOCAL"
         },
         {
-          "object": "badminton racket",
-          "change": "move to bed",
+          "object": "brown basketball",
+          "change": "move to table",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "white paper",
+          "change": "move to desk",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "black pen",
+          "change": "move to desk",
           "weight": "light",
           "how": "LOCAL"
         }
@@ -603,12 +704,12 @@
           "type": "LOCAL",
           "action": {
             "verb": "move",
-            "object": "basketball",
+            "object": "orange racket",
             "from": "floor",
-            "to": "bed"
+            "to": "table"
           },
           "uses": 0,
-          "serves": 0
+          "serves": 1
         },
         {
           "type": "LOCAL",
@@ -616,197 +717,189 @@
             "verb": "move",
             "object": "black dumbbell",
             "from": "floor",
-            "to": "bed"
+            "to": "table"
           },
           "uses": 0,
-          "serves": 0
+          "serves": 1
         },
         {
           "type": "LOCAL",
           "action": {
             "verb": "move",
-            "object": "badminton racket",
+            "object": "brown basketball",
             "from": "floor",
-            "to": "bed"
+            "to": "table"
           },
           "uses": 0,
-          "serves": 0
+          "serves": 1
         },
         {
-          "type": "PASS",
-          "item": "black dumbbell",
-          "target": "R1",
-          "serves": 0
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "white paper",
+            "from": "table",
+            "to": "desk"
+          },
+          "uses": 0,
+          "serves": 1
         },
         {
-          "type": "PASS",
-          "item": "basketball",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "black pen",
+            "from": "table",
+            "to": "desk"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "RECEIVE",
+          "item": "clear glasses",
           "target": "R1",
-          "serves": 0
+          "serves": 1
         }
       ]
     }
   },
   {
-    "key": "plan:R2:fix",
-    "system": "You are robot R2 in the living_room. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessibl",
-    "user": "## TASK:\nI'm planning a home workout in 20 minutes. Clear some floor space for me, put out anything I'd need for exercising, make sure I have something to drink, and get the bathroom ready for a shower afterwards.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am mobile and can move heavy objects.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PickupHeavyObject: move large items\",\n  \"PushFurniture: rearrange furniture\",\n  \"PassReceiveObject: exchange items\",\n  ",
+    "key": "plan:R3:fix",
+    "system": "You are robot R3 in the bedroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
+    "user": "## TASK:\nI'm planning a home workout in 20 minutes. Clear some floor space for me, put out anything I'd need for exercising, make sure I have something to drink, and get the bathroom ready for a shower afterwards.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift objects under 5 kg\",\n  \"PassReceiveObject: transfer objects to/from others\",\n  \"ToggleObject: turn on/off lights, TV, applia",
     "output": {
-      "reasoning": "a) The living room needs to be prepared for a workout by clearing space and ensuring a drink is available. b) High priority is given to clearing the floor space and setting up the drink. c) My tasks involve moving furniture and placing the drink in the living room. d) The yellow bottle will be used as a drink, and I will pass it to R4 for bathroom preparation.",
+      "reasoning": "a) GOAL STATE: Floor space clear, exercise items ready, drink available, bathroom ready for shower. b) PRIORITY: Clear floor space and prepare exercise items first. c) MY ROOM: Move items from the floor to clear space. d) FOR OTHERS: I need a drink and the bathroom prepared for a shower, which requires collaboration with R1 and R4.",
       "goals": [
         {
-          "goal": "Clear floor space and prepare drink for workout.",
+          "goal": "clear floor space and prepare exercise items",
           "priority": "high",
           "in_my_room": true
+        },
+        {
+          "goal": "receive a drink for hydration",
+          "priority": "medium",
+          "in_my_room": false
+        },
+        {
+          "goal": "prepare bathroom for shower",
+          "priority": "medium",
+          "in_my_room": false
         }
       ],
       "checklist": [
         {
-          "object": "gray sofa",
-          "change": "pushed to wall",
-          "weight": "heavy",
-          "how": "LOCAL"
-        },
-        {
-          "object": "glass coffee table",
-          "change": "moved to corner",
-          "weight": "heavy",
-          "how": "LOCAL"
-        },
-        {
-          "object": "yellow bottle",
-          "change": "placed on glass coffee table",
+          "object": "orange racket",
+          "change": "move to table",
           "weight": "light",
           "how": "LOCAL"
         },
         {
-          "object": "yellow bottle",
-          "change": "passed to R4",
+          "object": "black dumbbell",
+          "change": "move to table",
           "weight": "light",
-          "how": "PASS"
+          "how": "LOCAL"
+        },
+        {
+          "object": "brown basketball",
+          "change": "move to table",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "white paper",
+          "change": "move to desk",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "black pen",
+          "change": "move to desk",
+          "weight": "light",
+          "how": "LOCAL"
         }
       ],
       "steps": [
         {
           "type": "LOCAL",
           "action": {
-            "verb": "push",
-            "object": "gray sofa",
-            "from": "living_room",
-            "to": "wall"
+            "verb": "move",
+            "object": "orange racket",
+            "from": "floor",
+            "to": "table"
           },
           "uses": 0,
-          "serves": 0
+          "serves": 1
         },
         {
           "type": "LOCAL",
           "action": {
             "verb": "move",
-            "object": "glass coffee table",
-            "from": "living_room",
-            "to": "corner"
+            "object": "black dumbbell",
+            "from": "floor",
+            "to": "table"
           },
           "uses": 0,
-          "serves": 0
+          "serves": 1
         },
         {
           "type": "LOCAL",
           "action": {
-            "verb": "place",
-            "object": "yellow bottle",
-            "from": "living_room",
-            "to": "glass coffee table"
+            "verb": "move",
+            "object": "brown basketball",
+            "from": "floor",
+            "to": "table"
           },
           "uses": 0,
-          "serves": 0
+          "serves": 1
         },
         {
-          "type": "PASS",
-          "item": "yellow bottle",
-          "target": "R4",
-          "serves": 0
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "white paper",
+            "from": "table",
+            "to": "desk"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "black pen",
+            "from": "table",
+            "to": "desk"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "RECEIVE",
+          "item": "clear glasses",
+          "target": "R1",
+          "serves": 1
         }
       ]
     }
   },
   {
-    "key": "plan:R2:fix",
-    "system": "You are robot R2 in the living_room. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessibl",
-    "user": "## TASK:\nI'm planning a home workout in 20 minutes. Clear some floor space for me, put out anything I'd need for exercising, make sure I have something to drink, and get the bathroom ready for a shower afterwards.\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am mobile and can move heavy objects.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PickupHeavyObject: move large items\",\n  \"PushFurniture: rearrange furniture\",\n  \"PassReceiveObject: exchange items\",\n  ",
+    "key": "propose:R2",
+    "system": "You are robot R2. Judge other robots' requests and offers.\n\nFIRST: check your own plan. If you already do what an ASK_HELP asks → \"already_doing\" + covered_by.\nDUPLICATE REQUESTS: if you're already se",
+    "user": "TASK: I'm planning a home workout in 20 minutes. Clear some floor space for me, put out anything I'd need for exercising, make sure I have something to drink, and get the bathroom ready for a shower afterwards.\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am a mobile robot capable of moving objects and furniture.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PickupHeavyObject: move large items\",\n  \"PushFurniture: rearrange furniture\",\n  \"PassReceiveObject: exchange items\",\n  \"Tog",
     "output": {
-      "reasoning": "a) The living room needs to be prepared for a workout by clearing space and ensuring a drink is available. b) High priority is given to clearing the floor space and setting up the drink. c) My tasks involve moving furniture and placing the drink in the living room. d) The yellow bottle will be used as a drink, and I will pass it to R4 for bathroom preparation.",
-      "goals": [
+      "offers": [],
+      "judgments": [
         {
-          "goal": "Clear floor space and prepare drink for workout.",
-          "priority": "high",
-          "in_my_room": true
-        }
-      ],
-      "checklist": [
-        {
-          "object": "gray sofa",
-          "change": "pushed to wall",
-          "weight": "heavy",
-          "how": "LOCAL"
+          "request": "r4_s2",
+          "decision": "ignore",
+          "reason": "The request is for R3, and I am not involved."
         },
         {
-          "object": "glass coffee table",
-          "change": "moved to corner",
-          "weight": "heavy",
-          "how": "LOCAL"
-        },
-        {
-          "object": "yellow bottle",
-          "change": "placed on glass coffee table",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "yellow bottle",
-          "change": "passed to R4",
-          "weight": "light",
-          "how": "PASS"
-        }
-      ],
-      "steps": [
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "push",
-            "object": "gray sofa",
-            "from": "living_room",
-            "to": "wall"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "move",
-            "object": "glass coffee table",
-            "from": "living_room",
-            "to": "corner"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "place",
-            "object": "yellow bottle",
-            "from": "living_room",
-            "to": "glass coffee table"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "PASS",
-          "item": "yellow bottle",
-          "target": "R4",
-          "serves": 0
+          "request": "r4_s3",
+          "decision": "reject",
+          "reason": "I am already planning to pass the yellow bottle to R3, not R4."
         }
       ]
     }
@@ -814,58 +907,75 @@
   {
     "key": "propose:R4",
     "system": "You are robot R4. Judge other robots' requests and offers.\n\nFIRST: check your own plan. If you already do what an ASK_HELP asks → \"already_doing\" + covered_by.\nDUPLICATE REQUESTS: if you're already se",
-    "user": "TASK: I'm planning a home workout in 20 minutes. Clear some floor space for me, put out anything I'd need for exercising, make sure I have something to drink, and get the bathroom ready for a shower afterwards.\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I am a mobile robot capable of light tasks in the bathroom.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PassReceiveObject: transfer items\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"white toilet",
+    "user": "TASK: I'm planning a home workout in 20 minutes. Clear some floor space for me, put out anything I'd need for exercising, make sure I have something to drink, and get the bathroom ready for a shower afterwards.\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I am mobile and can handle light objects.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PassReceiveObject: transfer items to/from others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"white toilet (l",
     "output": {
       "offers": [
         {
-          "offer": "r2_s4",
+          "offer": "r1_s2",
           "decision": "decline",
-          "reason": "The yellow bottle is not needed for my current tasks in the bathroom."
+          "reason": "I do not need clear glasses for hydration as I am already set to receive a yellow bottle from R2."
         }
       ],
-      "judgments": []
+      "judgments": [
+        {
+          "request": "r3_s6",
+          "decision": "ignore",
+          "reason": "The request is not targeted at me and does not align with my current needs or capabilities."
+        }
+      ]
     }
   },
   {
     "key": "propose:R1",
     "system": "You are robot R1. Judge other robots' requests and offers.\n\nFIRST: check your own plan. If you already do what an ASK_HELP asks → \"already_doing\" + covered_by.\nDUPLICATE REQUESTS: if you're already se",
-    "user": "TASK: I'm planning a home workout in 20 minutes. Clear some floor space for me, put out anything I'd need for exercising, make sure I have something to drink, and get the bathroom ready for a shower afterwards.\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: carry objects up to 5 kg\",\n  \"PassReceiveObject: transfer objects to/from others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": ",
+    "user": "TASK: I'm planning a home workout in 20 minutes. Clear some floor space for me, put out anything I'd need for exercising, make sure I have something to drink, and get the bathroom ready for a shower afterwards.\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am a mobile robot capable of moving light objects and passing items.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PassReceiveObject: transfer items to/from others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has",
     "output": {
-      "offers": [
+      "offers": [],
+      "judgments": [
         {
-          "offer": "r3_s4",
-          "decision": "decline",
-          "reason": "I cannot clear floor space or handle exercise equipment as it doesn't align with my current tasks."
+          "request": "r3_s6",
+          "decision": "reject",
+          "reason": "R1 can only interact with items in the kitchen, and the request is for the bedroom."
         },
         {
-          "offer": "r3_s5",
-          "decision": "decline",
-          "reason": "I cannot clear floor space or handle exercise equipment as it doesn't align with my current tasks."
+          "request": "r4_s2",
+          "decision": "ignore",
+          "reason": "The request is targeted at R3, not R1."
+        },
+        {
+          "request": "r4_s3",
+          "decision": "ignore",
+          "reason": "The request is targeted at R2, not R1."
         }
-      ],
-      "judgments": []
+      ]
     }
   },
   {
     "key": "propose:R3",
     "system": "You are robot R3. Judge other robots' requests and offers.\n\nFIRST: check your own plan. If you already do what an ASK_HELP asks → \"already_doing\" + covered_by.\nDUPLICATE REQUESTS: if you're already se",
-    "user": "TASK: I'm planning a home workout in 20 minutes. Clear some floor space for me, put out anything I'd need for exercising, make sure I have something to drink, and get the bathroom ready for a shower afterwards.\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"blue bla",
+    "user": "TASK: I'm planning a home workout in 20 minutes. Clear some floor space for me, put out anything I'd need for exercising, make sure I have something to drink, and get the bathroom ready for a shower afterwards.\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift objects under 5 kg\",\n  \"PassReceiveObject: transfer objects to/from others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [",
     "output": {
       "offers": [
         {
-          "offer": "r1_s3",
+          "offer": "r2_s8",
           "decision": "receive",
-          "action": "pass clear glass (shelf, image 1) to R3",
-          "uses": 0,
+          "action": "receive yellow bottle (glass coffee table, image 2)",
+          "uses": 1,
           "insert_after": "r3_s5"
-        },
-        {
-          "offer": "r1_s4",
-          "decision": "decline",
-          "reason": "The clear glass is sufficient for hydration, no need for an additional item."
         }
       ],
-      "judgments": []
+      "judgments": [
+        {
+          "request": "r4_s2",
+          "decision": "reject",
+          "reason": "The black dumbbell (desk, image 1) is not needed in the bathroom and is part of the exercise setup."
+        },
+        {
+          "request": "r4_s3",
+          "decision": "ignore",
+          "reason": "The request is not targeted at me."
+        }
+      ]
     }
   },
   {
@@ -875,17 +985,22 @@
     "output": {
       "sizes": {
         "r1_s1": "short",
-        "r2_s1": "long",
+        "r2_s1": "medium",
         "r3_s1": "short",
         "r4_s1": "short",
-        "r1_s2": "short",
         "r2_s2": "long",
         "r3_s2": "short",
-        "r1_s3": "medium",
         "r2_s3": "short",
         "r3_s3": "short",
-        "r3_s6": "short",
-        "r3_s7": "medium"
+        "r2_s4": "short",
+        "r3_s4": "short",
+        "r2_s5": "short",
+        "r3_s5": "short",
+        "r2_s6": "long",
+        "r2_s7": "medium",
+        "r2_s8": "medium",
+        "r3_s7": "short",
+        "r3_s8": "short"
       }
     }
   }

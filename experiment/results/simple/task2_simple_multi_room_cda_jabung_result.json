@@ -3,62 +3,70 @@
   "mode": "multi_room",
   "model": "gpt-4o",
   "task_text": "Turn off the room light, turn on faucet",
-  "joint_plan_text": "### Joint Plan — task2_simple  (about 5 min / deadline 10 min: OK)\n### Robots: R1:Mobile_Light(bedroom), R2:Mobile_Light(bathroom)\n\n[0-5 min]\n- R1 [LOCAL] turn off the white ceiling lamp from the ceiling  (r1_s1)\n- R2 [LOCAL] turn off the white room light switch from the wall  (r2_s1)\n- R2 [LOCAL] turn on the silver faucet from the sink  (r2_s2)",
-  "joint_plan_full": "### Joint Plan — task2_simple  (about 5 min / deadline 10 min: OK)\n### Robots: R1:Mobile_Light(bedroom), R2:Mobile_Light(bathroom)\n\n\n[0-5 min]\n- R1 [LOCAL] turn_off the white ceiling lamp from ceiling to off  (r1_s1)\n- R2 [LOCAL] turn_off the white room light switch from wall to off position  (r2_s1)\n- R2 [LOCAL] turn_on the silver faucet from sink to on position  (r2_s2)",
+  "joint_plan_text": "### Joint Plan — task2_simple  (about 5 min / deadline 10 min: OK)\n### Robots: R1:Mobile_Light(bedroom), R2:Mobile_Light(bathroom)\n\n[0-5 min]\n- R1 [LOCAL] toggle the ceiling light from on to off  (r1_s1)\n- R2 [LOCAL] toggle the white light switch from on to off  (r2_s1)\n- R2 [LOCAL] toggle the metal faucet from off to on  (r2_s2)",
+  "joint_plan_full": "### Joint Plan — task2_simple  (about 5 min / deadline 10 min: OK)\n### Robots: R1:Mobile_Light(bedroom), R2:Mobile_Light(bathroom)\n\n\n[0-5 min]\n- R1 [LOCAL] toggle the ceiling light from on to off  (r1_s1)\n- R2 [LOCAL] toggle the white light switch from on to off  (r2_s1)\n- R2 [LOCAL] toggle the metal faucet from off to on  (r2_s2)",
   "offers": {
     "R1": {
       "agent": "R1",
-      "capability": "I am a mobile robot with the ability to interact with light objects and toggle switches.",
+      "capability": "I am mobile and can carry light objects up to 5 kg.",
       "can_do": [
-        "PickupLightObject: pick up objects under 5 kg",
-        "PassReceiveObject: pass or receive objects",
-        "ToggleObject: turn on/off lights, TV, appliances"
+        "PickupLightObject: lift pillows, blankets, small items",
+        "PassReceiveObject: transfer items to/from other robots",
+        "ToggleObject: turn on/off lights, appliances"
       ],
       "has_items": [
-        "white ceiling lamp (ceiling, image 1)",
-        "silver faucet (sink, image 2)"
+        "blue pillow (bed, image 1)",
+        "white blanket (bed, image 1)",
+        "wooden nightstand (beside bed, image 1)",
+        "metal lamp (nightstand, image 1)",
+        "ceiling light (ceiling, image 1)",
+        "gray rug (floor, image 2)",
+        "wooden dresser (against wall, image 2)"
       ],
-      "need_from_others": [],
+      "need_from_others": [
+        "R2 to turn on the faucet in the bathroom"
+      ],
       "intends": [
-        "ToggleObject: turn off white ceiling lamp",
-        "ToggleObject: turn on silver faucet"
+        "toggle ceiling light from on to off"
       ],
       "suggests": [],
-      "obs_scope": "I can observe and interact with objects in my room, specifically the ceiling lamp and faucet.",
+      "obs_scope": "I can observe and interact with items in the bedroom only.",
       "cannot_do": [
-        "PickupHeavyObject: cannot pick up objects over 5 kg",
-        "PushFurniture: cannot move furniture",
-        "SliceObject: cannot cut or slice objects",
-        "PourObject: cannot pour liquids"
+        "PickupHeavyObject: cannot lift heavy furniture",
+        "PushFurniture: cannot push furniture",
+        "SliceObject: cannot slice food",
+        "PourObject: cannot pour water"
       ],
-      "reasoning": "a) The ceiling lamp must be off and the faucet must be on. b) The most important task is to ensure the ceiling lamp is turned off and the faucet is turned on within the deadline. c) I will turn off the white ceiling lamp and turn on the silver faucet in my room. d) None of my has_items serve another room's needs."
+      "reasoning": "a) The goal is to have the room light off and the faucet on. b) The bedroom must contribute by ensuring the ceiling light is off. c) I can turn off the ceiling light in the bedroom. d) Turning off the ceiling light is the top priority since the deadline is short. e) No items from my room are needed in other rooms."
     },
     "R2": {
       "agent": "R2",
-      "capability": "I am a mobile robot with light object handling abilities.",
+      "capability": "I am mobile and can carry light objects up to 5 kg.",
       "can_do": [
-        "PickupLightObject: handle light items",
-        "PassReceiveObject: exchange items",
-        "ToggleObject: turn on/off lights, TV, appliances"
+        "PickupLightObject: lift towels, small items",
+        "PassReceiveObject: transfer items to/from other robots",
+        "ToggleObject: turn on/off lights, faucet"
       ],
       "has_items": [
-        "silver faucet (sink, image 1)",
-        "white room light switch (wall, image 2)"
+        "metal faucet (sink, image 1)",
+        "white towel (towel rack, image 2)",
+        "blue bottle (shelf, image 1)",
+        "white light switch (wall, image 2)"
       ],
       "need_from_others": [],
       "intends": [
-        "turn off white room light switch",
-        "turn on silver faucet"
+        "toggle white light switch from on to off",
+        "toggle metal faucet from off to on"
       ],
       "suggests": [],
-      "obs_scope": "I can observe and interact with objects in the bathroom.",
+      "obs_scope": "I can observe and interact with items in the bathroom only.",
       "cannot_do": [
-        "PickupHeavyObject: cannot lift heavy items",
-        "PushFurniture: cannot move furniture",
-        "SliceObject: cannot cut objects",
-        "PourObject: cannot pour liquids"
+        "PickupHeavyObject: cannot lift heavy furniture",
+        "PushFurniture: cannot push furniture",
+        "SliceObject: cannot slice food",
+        "PourObject: cannot pour precisely"
       ],
-      "reasoning": "a) The room light must be off, and the faucet must be on. b) The priority is to complete both tasks within the 10-minute deadline. c) I will turn off the white room light switch and turn on the silver faucet. d) No items in my room are needed for other rooms."
+      "reasoning": "a) The goal is to have the room light off and the faucet running. b) The bathroom needs to provide a dark environment with running water. c) I will turn off the light using the light switch and turn on the faucet. d) Both actions are essential for the task."
     }
   },
   "local_plans": {
@@ -68,9 +76,9 @@
         "agent": "R1",
         "type": "LOCAL",
         "action": {
-          "verb": "turn_off",
-          "object": "white ceiling lamp",
-          "from": "ceiling",
+          "verb": "toggle",
+          "object": "ceiling light",
+          "from": "on",
           "to": "off"
         },
         "item": null,
@@ -80,7 +88,7 @@
         "origin": "local",
         "answers": null,
         "enables": null,
-        "serves": "Turn off the white ceiling lamp in the bedroom",
+        "serves": "Toggle the ceiling light off in the bedroom",
         "prepared_by": null,
         "status": "active",
         "violations": [],
@@ -96,10 +104,10 @@
         "agent": "R2",
         "type": "LOCAL",
         "action": {
-          "verb": "turn_off",
-          "object": "white room light switch",
-          "from": "wall",
-          "to": "off position"
+          "verb": "toggle",
+          "object": "white light switch",
+          "from": "on",
+          "to": "off"
         },
         "item": null,
         "target": null,
@@ -108,7 +116,7 @@
         "origin": "local",
         "answers": null,
         "enables": null,
-        "serves": "Turn off the white room light switch and turn on the silver faucet",
+        "serves": "turn off the bathroom light and turn on the faucet",
         "prepared_by": null,
         "status": "active",
         "violations": [],
@@ -122,10 +130,10 @@
         "agent": "R2",
         "type": "LOCAL",
         "action": {
-          "verb": "turn_on",
-          "object": "silver faucet",
-          "from": "sink",
-          "to": "on position"
+          "verb": "toggle",
+          "object": "metal faucet",
+          "from": "off",
+          "to": "on"
         },
         "item": null,
         "target": null,
@@ -134,7 +142,7 @@
         "origin": "local",
         "answers": null,
         "enables": null,
-        "serves": "Turn off the white room light switch and turn on the silver faucet",
+        "serves": "turn off the bathroom light and turn on the faucet",
         "prepared_by": null,
         "status": "active",
         "violations": [],
@@ -153,9 +161,9 @@
         "agent": "R1",
         "type": "LOCAL",
         "action": {
-          "verb": "turn_off",
-          "object": "white ceiling lamp",
-          "from": "ceiling",
+          "verb": "toggle",
+          "object": "ceiling light",
+          "from": "on",
           "to": "off"
         },
         "item": null,
@@ -165,7 +173,7 @@
         "origin": "local",
         "answers": null,
         "enables": null,
-        "serves": "Turn off the white ceiling lamp in the bedroom",
+        "serves": "Toggle the ceiling light off in the bedroom",
         "prepared_by": null,
         "status": "active",
         "violations": [],
@@ -179,10 +187,10 @@
         "agent": "R2",
         "type": "LOCAL",
         "action": {
-          "verb": "turn_off",
-          "object": "white room light switch",
-          "from": "wall",
-          "to": "off position"
+          "verb": "toggle",
+          "object": "white light switch",
+          "from": "on",
+          "to": "off"
         },
         "item": null,
         "target": null,
@@ -191,7 +199,7 @@
         "origin": "local",
         "answers": null,
         "enables": null,
-        "serves": "Turn off the white room light switch and turn on the silver faucet",
+        "serves": "turn off the bathroom light and turn on the faucet",
         "prepared_by": null,
         "status": "active",
         "violations": [],
@@ -205,10 +213,10 @@
         "agent": "R2",
         "type": "LOCAL",
         "action": {
-          "verb": "turn_on",
-          "object": "silver faucet",
-          "from": "sink",
-          "to": "on position"
+          "verb": "toggle",
+          "object": "metal faucet",
+          "from": "off",
+          "to": "on"
         },
         "item": null,
         "target": null,
@@ -217,7 +225,7 @@
         "origin": "local",
         "answers": null,
         "enables": null,
-        "serves": "Turn off the white room light switch and turn on the silver faucet",
+        "serves": "turn off the bathroom light and turn on the faucet",
         "prepared_by": null,
         "status": "active",
         "violations": [],
@@ -272,7 +280,7 @@
     "n_requests_moved_later": 0,
     "n_warnings": 0,
     "plan_fix_rounds": {
-      "R1": 0,
+      "R1": 1,
       "R2": 1
     },
     "n_checklist_items": 3,
@@ -303,15 +311,15 @@
     "n_preparations_released": 0,
     "n_help_edges": 0,
     "n_transfer_edges": 0,
-    "llm_calls": 6,
-    "prompt_tokens": 10090,
-    "completion_tokens": 1194,
+    "llm_calls": 7,
+    "prompt_tokens": 19949,
+    "completion_tokens": 1367,
     "config": {
       "use_edge_proposal": true,
       "use_graph_llm": true,
       "max_graph_rounds": 2
     },
-    "wall_time_sec": 7.8
+    "wall_time_sec": 8.8
   },
   "config": {
     "use_edge_proposal": true,

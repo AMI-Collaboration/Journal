@@ -7,10 +7,16 @@
     r4 - mobile_heavy
     kitchen - room
     living_room - room
-    cup - item
-    plate - item
-    keys - item
-    wallet - item
+    brown_bread - item
+    green_apple - item
+    red_apple - item
+    white_magazine - item
+    purple_pillow - item
+    red_flowers - item
+    black_laptop - item
+    black_mug - item
+    floor_lamp - item
+    bowl - item
   )
   (:init
     (agent-at r1 kitchen)
@@ -25,17 +31,23 @@
     (can-access r2 living_room)
     (can-access r4 kitchen)
     (can-access r4 living_room)
-    (object-at cup kitchen)
-    (object-at plate kitchen)
-    (object-at keys living_room)
-    (object-at wallet living_room)
+    (object-at brown_bread kitchen)
+    (object-at green_apple kitchen)
+    (object-at red_apple kitchen)
+    (object-at white_magazine living_room)
+    (object-at purple_pillow living_room)
+    (object-at red_flowers living_room)
+    (object-at black_laptop living_room)
+    (object-at black_mug kitchen)
+    (object-at floor_lamp living_room)
+    (object-at bowl kitchen)
+    (is-on floor_lamp)
   )
   (:goal
     (and
-      (object-at cup r1)
-      (object-at plate r1)
-      (object-at keys r4)
-      (object-at wallet r4)
+      (is-sliced brown_bread)
+      (object-at bowl living_room)
+      (is-off floor_lamp)
     )
   )
 )

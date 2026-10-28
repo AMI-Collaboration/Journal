@@ -1,47 +1,5 @@
 [
   {
-    "key": "offer:R2",
-    "system": "You are robot R2, a household robot that sees only its own room.\n\nSTEP 1 — LIST has_items: every clearly visible movable object in your images.\nFormat: \"<color> <noun> (<location>, image <k>)\". NEVER ",
-    "user": "## TASK (serve this only):\nI want to take a bath in 5 minutes. The bathroom should be ready — bathtub filled with warm water, and I'll need something to dry off with nearby.\nDEADLINE: 5 minutes\n\nYOUR BODY: room=bedroom, mobile=True, payload=5 kg, embodiment=Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture, SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\n(none)\n\nImages attached (2 image(s)), image 1 to 2.",
-    "output": {
-      "has_items": [
-        "red pillow (bed, image 1)",
-        "yellow and blue blanket (bed, image 1)",
-        "red and blue blanket (bed, image 1)",
-        "brown basket (floor, image 1)",
-        "lamp (desk, image 2)",
-        "clock (desk, image 2)",
-        "laptop (desk, image 2)",
-        "mug (desk, image 2)",
-        "trophy (desk, image 2)"
-      ],
-      "reasoning": "a) GOAL STATE: Bathtub filled with warm water and a towel nearby. b) PRIORITY: Ensure the bathroom is ready within 5 minutes. c) MY ROOM: Identify if any items can be used as a towel. d) FOR OTHERS: Provide a towel if available.",
-      "capability": "I am a mobile robot capable of moving light objects.",
-      "can_do": [
-        "PickupLightObject: move items like pillows or blankets",
-        "PassReceiveObject: exchange items with others",
-        "ToggleObject: turn on/off lights, TV, appliances"
-      ],
-      "cannot_do": [
-        "PickupHeavyObject: cannot lift heavy items",
-        "PushFurniture: cannot move furniture",
-        "SliceObject: cannot cut or slice items",
-        "PourObject: cannot pour water"
-      ],
-      "suggests": [
-        "brown basket (floor, image 1)"
-      ],
-      "intends": [
-        "move brown basket from floor to bathroom"
-      ],
-      "need_from_others": [
-        "Fill bathtub with warm water",
-        "Provide a towel if brown basket is not suitable"
-      ],
-      "obs_scope": "I can observe and interact with items in the bedroom."
-    }
-  },
-  {
     "key": "offer:R4",
     "system": "You are robot R4, a household robot that sees only its own room.\n\nSTEP 1 — LIST has_items: every clearly visible movable object in your images.\nFormat: \"<color> <noun> (<location>, image <k>)\". NEVER ",
     "user": "## TASK (serve this only):\nI want to take a bath in 5 minutes. The bathroom should be ready — bathtub filled with warm water, and I'll need something to dry off with nearby.\nDEADLINE: 5 minutes\n\nYOUR BODY: room=bathroom, mobile=False, payload=not specified (judge from your embodiment), embodiment=Gripper. CAN: PickupLightObject, SliceObject, PourObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture. This robot is FIXED IN PLACE and can never move to another room. To pass an item to",
@@ -49,30 +7,72 @@
       "has_items": [
         "brown towel (wall, image 1)",
         "blue bottle (shelf, image 2)",
-        "purple bottle (floor, image 2)"
+        "purple bottle (shelf, image 2)",
+        "yellow sponge (shelf, image 2)"
       ],
-      "reasoning": "a) The bathtub must be filled with warm water, and a towel should be accessible for drying off. b) Filling the bathtub with warm water is the top priority due to the time constraint. c) I will use the blue bottle if it contains bath-related liquid and ensure the towel is ready. d) No items are needed from other rooms.",
-      "capability": "I am fixed in place but can manipulate light objects within reach.",
+      "reasoning": "a) The bathtub must be filled with warm water, and a towel should be nearby for drying off. b) Filling the bathtub and placing the towel are most important given the short deadline. c) I can use the blue bottle and the towel for the bath. d) None of my items serve another room's needs.",
+      "capability": "I can manipulate light objects within reach using my gripper.",
       "can_do": [
-        "PickupLightObject: grab small items like bottles and towels",
-        "PourObject: pour liquids from bottles",
-        "PassReceiveObject: hand over items to other robots",
-        "SliceObject: cut small items if needed",
+        "PickupLightObject: grab small items",
+        "SliceObject: cut items",
+        "PourObject: empty contents of bottles",
+        "PassReceiveObject: exchange items with others",
+        "ToggleObject: turn on/off lights, TV, appliances"
+      ],
+      "cannot_do": [
+        "PickupHeavyObject: too heavy for my gripper",
+        "PushFurniture: fixed in place, can't move furniture"
+      ],
+      "suggests": [],
+      "intends": [
+        "PourObject: empty blue bottle into bathtub",
+        "ToggleObject: turn on bathtub faucet",
+        "PickupLightObject: grab brown towel from wall",
+        "PassReceiveObject: place brown towel on sink"
+      ],
+      "need_from_others": [],
+      "obs_scope": "I can observe and interact with items in the bathroom only."
+    }
+  },
+  {
+    "key": "offer:R2",
+    "system": "You are robot R2, a household robot that sees only its own room.\n\nSTEP 1 — LIST has_items: every clearly visible movable object in your images.\nFormat: \"<color> <noun> (<location>, image <k>)\". NEVER ",
+    "user": "## TASK (serve this only):\nI want to take a bath in 5 minutes. The bathroom should be ready — bathtub filled with warm water, and I'll need something to dry off with nearby.\nDEADLINE: 5 minutes\n\nYOUR BODY: room=bedroom, mobile=True, payload=5 kg, embodiment=Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture, SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\n(none)\n\nImages attached (2 image(s)), image 1 to 2.",
+    "output": {
+      "has_items": [
+        "red pillow (bed, image 1)",
+        "blue and yellow blanket (bed, image 1)",
+        "red and blue blanket (bed, image 1)",
+        "brown laundry basket (floor, image 1)",
+        "laptop (desk, image 2)",
+        "lamp (desk, image 2)",
+        "clock (desk, image 2)",
+        "mug (desk, image 2)",
+        "trophy (desk, image 2)"
+      ],
+      "reasoning": "a) GOAL STATE: Bathtub filled with warm water and towel nearby. b) PRIORITY: Ensure the bathroom is ready within 5 minutes. c) MY ROOM: Move a towel if available. d) FOR OTHERS: Brown laundry basket might contain towels.",
+      "capability": "I am mobile and can carry light objects up to 5 kg.",
+      "can_do": [
+        "PickupLightObject: pick up items like towels",
+        "PassReceiveObject: transfer items to/from others",
         "ToggleObject: turn on/off lights, TV, appliances"
       ],
       "cannot_do": [
         "PickupHeavyObject: cannot lift heavy items",
         "PushFurniture: cannot move furniture",
-        "Move: cannot change location"
+        "SliceObject: cannot cut or slice",
+        "PourObject: cannot fill bathtub"
       ],
-      "suggests": [],
+      "suggests": [
+        "brown laundry basket (floor, image 1)"
+      ],
       "intends": [
-        "PourObject: pour blue bottle into bathtub",
-        "ToggleObject: turn on bathtub faucet",
-        "PickupLightObject: move brown towel to bathtub edge"
+        "move brown laundry basket from floor to bathroom"
       ],
-      "need_from_others": [],
-      "obs_scope": "I can observe and interact with items in the bathroom only."
+      "need_from_others": [
+        "FillBathtub: fill bathtub with warm water"
+      ],
+      "obs_scope": "I can observe and interact with items in the bedroom."
     }
   },
   {
@@ -83,35 +83,34 @@
       "has_items": [
         "brown desk (left side, image 1)",
         "brown chair (left side, image 1)",
-        "brown chair (right side, image 1)",
-        "blue trash bin (right side, image 1)",
         "brown desk (right side, image 1)",
-        "laptop (right side, image 1)",
+        "brown chair (right side, image 1)",
+        "blue trash can (right side, image 1)",
         "cardboard box (center, image 1)",
         "bunk bed (center, image 2)",
         "ceiling light (center, image 2)",
-        "brown trash bin (right side, image 2)"
+        "brown trash can (right side, image 2)"
       ],
-      "reasoning": "a) The bathroom must have a filled bathtub with warm water and a towel nearby. b) Filling the bathtub and placing a towel are most important given the deadline. c) No changes occur in my room as I lack the necessary items. d) I have no items that serve the bathroom's needs.",
+      "reasoning": "a) The bathtub must be filled with warm water and a towel should be nearby. b) The most important task is ensuring the bathtub is filled with warm water. c) No changes are needed in my room as it does not contain relevant items. d) None of my items are useful for the bathroom task.",
       "capability": "I am mobile and can carry light objects up to 5 kg.",
       "can_do": [
-        "PickupLightObject: lift objects under 5 kg",
-        "PassReceiveObject: exchange objects with others",
+        "PickupLightObject: pick up objects under 5 kg",
+        "PassReceiveObject: pass or receive objects",
         "ToggleObject: turn on/off lights, TV, appliances"
       ],
       "cannot_do": [
         "PickupHeavyObject: cannot lift objects over 5 kg",
-        "PushFurniture: cannot move heavy furniture",
+        "PushFurniture: cannot move furniture",
         "SliceObject: cannot cut or slice objects",
         "PourObject: cannot pour liquids"
       ],
       "suggests": [],
       "intends": [],
       "need_from_others": [
-        "FillBathtub: fill the bathtub with warm water",
-        "ProvideTowel: place a towel nearby"
+        "Fill bathtub with warm water",
+        "Provide a towel nearby"
       ],
-      "obs_scope": "I can only observe and interact with items in my own room."
+      "obs_scope": "I can only observe and interact with items in the bedroom."
     }
   },
   {
@@ -120,37 +119,35 @@
     "user": "## TASK (serve this only):\nI want to take a bath in 5 minutes. The bathroom should be ready — bathtub filled with warm water, and I'll need something to dry off with nearby.\nDEADLINE: 5 minutes\n\nYOUR BODY: room=bedroom, mobile=False, payload=not specified (judge from your embodiment), embodiment=Gripper. CAN: PickupLightObject, SliceObject, PourObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture. This robot is FIXED IN PLACE and can never move to another room. To pass an item to ",
     "output": {
       "has_items": [
-        "brown desk (left side, image 1)",
-        "brown chair (left side, image 1)",
-        "white lamp (on brown desk, image 1)",
-        "clock (on brown desk, image 1)",
-        "laptop (on brown desk, image 1)",
-        "white mug (on brown desk, image 1)",
-        "smartphone (on brown desk, image 1)",
-        "notebook (on brown desk, image 1)",
-        "blue pen (on brown desk, image 1)",
-        "bunk bed (left side, image 2)",
-        "red and yellow blanket (on bunk bed, image 2)",
-        "mirror (on wall, image 2)"
+        "white mug (desk, image 1)",
+        "blue pen (desk, image 1)",
+        "black phone (desk, image 1)",
+        "brown book (desk, image 1)",
+        "white lamp (desk, image 1)",
+        "brown bowl (desk, image 1)",
+        "brown clock (desk, image 1)",
+        "blue bed (bunk bed, image 2)",
+        "red pillow (bunk bed, image 2)",
+        "red blanket (bunk bed, image 2)"
       ],
-      "reasoning": "a) The bathtub must be filled with warm water, and a towel should be available nearby. b) The most important task is to ensure the bathtub is filled with warm water. c) I cannot make any changes in my room as I don't have the necessary items. d) None of my items serve the bathroom's needs.",
-      "capability": "I am fixed in place and can manipulate light objects within my reach.",
+      "reasoning": "a) GOAL STATE: The bathroom must have a filled bathtub with warm water and a towel nearby. b) PRIORITY: Ensuring the towel is available in the bathroom within 5 minutes. c) MY ROOM: I can pass a towel if it is here, but I don't see one. d) FOR OTHERS: None of my items are directly useful for the bathroom task.",
+      "capability": "I am fixed in place with a gripper to handle light objects.",
       "can_do": [
-        "PickupLightObject: pick up small items",
+        "PickupLightObject: handle small items",
         "SliceObject: cut items",
         "PourObject: pour liquids",
-        "PassReceiveObject: hand over or receive items",
+        "PassReceiveObject: hand over items",
         "ToggleObject: turn on/off lights, TV, appliances"
       ],
       "cannot_do": [
-        "PickupHeavyObject: unable to lift heavy items due to weight",
-        "PushFurniture: cannot move furniture due to being fixed in place"
+        "PickupHeavyObject: too heavy for my gripper",
+        "PushFurniture: I am fixed in place"
       ],
       "suggests": [],
       "intends": [],
       "need_from_others": [
-        "FillBathtub: fill the bathtub with warm water",
-        "ProvideTowel: place a towel near the bathtub"
+        "Bring a towel to the bathroom",
+        "Fill the bathtub with warm water"
       ],
       "obs_scope": "I can only observe and interact with items in my own room."
     }
@@ -161,18 +158,19 @@
     "user": "## TASK (serve this only):\nI want to take a bath in 5 minutes. The bathroom should be ready — bathtub filled with warm water, and I'll need something to dry off with nearby.\nDEADLINE: 5 minutes\n\nYOUR BODY: room=bathroom, mobile=True, payload=20 kg, embodiment=Mobile_Heavy. CAN: PickupLightObject, PickupHeavyObject, PushFurniture, PassReceiveObject. CANNOT: SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\n(none)\n\nImages attached (2 image(s)), image 1 to 2.",
     "output": {
       "has_items": [
-        "white towel (rack, image 1)",
+        "white towel (sink, image 1)",
         "green bath mat (floor, image 1)",
-        "white bathtub (corner, image 2)",
-        "silver faucet (bathtub, image 2)"
+        "white bathtub (left side, image 1)",
+        "shower curtain (bathtub, image 1)",
+        "faucet (bathtub, image 1)"
       ],
-      "reasoning": "a) The bathtub must be filled with warm water, and a towel should be accessible for drying off. b) Filling the bathtub is the priority due to the time constraint. c) I will adjust the faucet to fill the bathtub and ensure the towel is accessible. d) The towel is already in the bathroom, so no need for items from other rooms.",
-      "capability": "I am a mobile robot capable of moving objects and adjusting fixtures.",
+      "reasoning": "a) The bathtub must be filled with warm water, and a towel should be accessible for drying off. b) Filling the bathtub with warm water is the highest priority. c) I will move the white towel to a convenient location and ensure the bathtub is filled. d) No items are needed from other rooms.",
+      "capability": "I can move around the bathroom and manipulate objects.",
       "can_do": [
-        "PickupLightObject: move light items like towels",
-        "PickupHeavyObject: move heavier items",
-        "PushFurniture: adjust furniture positions",
-        "PassReceiveObject: exchange items with others",
+        "PickupLightObject: move small items",
+        "PickupHeavyObject: move large items",
+        "PushFurniture: adjust furniture",
+        "PassReceiveObject: exchange items",
         "ToggleObject: turn on/off lights, TV, appliances"
       ],
       "cannot_do": [
@@ -181,8 +179,8 @@
       ],
       "suggests": [],
       "intends": [
-        "move white towel from rack to bathtub edge",
-        "toggle silver faucet to fill white bathtub"
+        "move white towel from sink to bathtub edge",
+        "turn on faucet to fill white bathtub with warm water"
       ],
       "need_from_others": [],
       "obs_scope": "I can observe and interact with everything in the bathroom."
@@ -195,49 +193,79 @@
     "output": {
       "has_items": [
         "white towel (towel rack, image 1)",
-        "blue bath mat (floor, image 1)",
-        "brown bottle (shelf, image 2)",
-        "purple bottle (shelf, image 2)",
-        "green soap (shelf, image 2)"
+        "bathtub (next to shower curtain, image 1)",
+        "sink (next to toilet, image 1)",
+        "toilet (next to sink, image 1)",
+        "trash bin (next to toilet, image 1)",
+        "shower curtain (next to bathtub, image 1)",
+        "shelf (above floor, image 2)",
+        "bottle (on shelf, image 2)",
+        "soap (on shelf, image 2)"
       ],
-      "reasoning": "a) GOAL STATE: Bathtub filled with warm water and towel nearby. b) PRIORITY: Ensure bathtub is filled and towel is accessible. c) MY ROOM: Place towel within reach of bathtub. d) FOR OTHERS: None of my has_items serve another room's needs.",
+      "reasoning": "a) The bathtub must be filled with warm water, and a towel should be accessible for drying off. b) Filling the bathtub with warm water is the top priority due to the time constraint. c) I will ensure the towel is accessible and the bathtub is ready. d) No items are needed for other rooms.",
       "capability": "I am mobile and can handle light objects.",
       "can_do": [
-        "PickupLightObject: lift light items",
+        "PickupLightObject: lift small items",
         "PassReceiveObject: exchange items with others",
         "ToggleObject: turn on/off lights, TV, appliances"
       ],
       "cannot_do": [
-        "PickupHeavyObject: cannot lift heavy items",
-        "PushFurniture: cannot move furniture",
-        "SliceObject: cannot cut items",
-        "PourObject: cannot pour liquids"
+        "PickupHeavyObject: too heavy for me",
+        "PushFurniture: beyond my strength",
+        "SliceObject: no cutting tools",
+        "PourObject: no pouring capability"
       ],
       "suggests": [],
       "intends": [
-        "move white towel from towel rack to bathtub edge"
+        "move white towel from towel rack to bathtub",
+        "toggle bathtub faucet to fill with warm water"
       ],
       "need_from_others": [
-        "FillBathtub: fill bathtub with warm water"
+        "Ensure bathtub is filled with warm water"
       ],
-      "obs_scope": "I can observe the bathroom and its contents."
+      "obs_scope": "I can observe and interact with items in the bathroom."
+    }
+  },
+  {
+    "key": "plan:R1",
+    "system": "You are robot R1 in the bedroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
+    "user": "## TASK:\nI want to take a bath in 5 minutes. The bathroom should be ready — bathtub filled with warm water, and I'll need something to dry off with nearby.\nDEADLINE: 5 minutes\n\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am fixed in place with a gripper to handle light objects.\",\n \"can_do\": [\n  \"PickupLightObject: handle small items\",\n  \"SliceObject: cut items\",\n  \"PourObject: pour liquids\",\n  \"PassReceiveObject: hand over items\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"ha",
+    "output": {
+      "reasoning": "a) The task requires the bathroom to be ready for a bath, which means the bathtub must be filled with warm water and a towel should be nearby. b) My role is limited to handling light objects and passing them to other robots, as I am fixed in place. c) I do not have a towel in my room to pass to the bathroom, and I cannot fill the bathtub. d) Other robots, particularly those in the bathroom, are better suited to handle the task of filling the bathtub and providing a towel.",
+      "goals": [
+        {
+          "goal": "Ensure the bathroom is ready for a bath with a filled bathtub and a towel nearby.",
+          "priority": "high",
+          "in_my_room": false
+        }
+      ],
+      "checklist": [],
+      "steps": [
+        {
+          "type": "PASS",
+          "item": "red blanket",
+          "target": "R2",
+          "serves": 0
+        },
+        {
+          "type": "PASS",
+          "item": "brown book",
+          "target": "R3",
+          "serves": 0
+        }
+      ]
     }
   },
   {
     "key": "plan:R4",
     "system": "You are robot R4 in the bathroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, ",
-    "user": "## TASK:\nI want to take a bath in 5 minutes. The bathroom should be ready — bathtub filled with warm water, and I'll need something to dry off with nearby.\nDEADLINE: 5 minutes\n\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I am fixed in place but can manipulate light objects within reach.\",\n \"can_do\": [\n  \"PickupLightObject: grab small items like bottles and towels\",\n  \"PourObject: pour liquids from bottles\",\n  \"PassReceiveObject: hand over items to other robots\",\n  \"SliceObject: cut small items",
+    "user": "## TASK:\nI want to take a bath in 5 minutes. The bathroom should be ready — bathtub filled with warm water, and I'll need something to dry off with nearby.\nDEADLINE: 5 minutes\n\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I can manipulate light objects within reach using my gripper.\",\n \"can_do\": [\n  \"PickupLightObject: grab small items\",\n  \"SliceObject: cut items\",\n  \"PourObject: empty contents of bottles\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject: turn on/off lights, ",
     "output": {
-      "reasoning": "a) The bathtub must be filled with warm water, and a towel should be accessible for drying off. b) Filling the bathtub with warm water is the top priority due to the time constraint. c) I will use the blue bottle if it contains bath-related liquid and ensure the towel is ready. d) No items are needed from other rooms.",
+      "reasoning": "a) The task is to prepare the bathroom for a bath, which requires the bathtub to be filled with warm water and a towel to be placed nearby. b) I can manipulate light objects and pour liquids, which allows me to contribute to filling the bathtub and handling the towel. c) R5 and R6 are also in the bathroom and can assist with filling the bathtub and moving the towel. d) I will focus on tasks that are not already covered by R5 and R6, ensuring no duplicate work.",
       "goals": [
         {
-          "goal": "bathtub filled with warm water",
+          "goal": "Fill the bathtub with warm water and place a towel nearby.",
           "priority": "high",
-          "in_my_room": true
-        },
-        {
-          "goal": "brown towel placed at bathtub edge",
-          "priority": "medium",
           "in_my_room": true
         }
       ],
@@ -250,7 +278,7 @@
         },
         {
           "object": "brown towel",
-          "change": "move to bathtub edge",
+          "change": "move to sink",
           "weight": "light",
           "how": "LOCAL"
         }
@@ -270,12 +298,23 @@
         {
           "type": "LOCAL",
           "action": {
-            "verb": "move",
+            "verb": "pick_up",
             "object": "brown towel",
             "from": "wall",
-            "to": "bathtub edge"
+            "to": "gripper"
           },
-          "uses": 0,
+          "uses": 1,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "brown towel",
+            "from": "gripper",
+            "to": "sink"
+          },
+          "uses": 1,
           "serves": 1
         }
       ]
@@ -284,9 +323,9 @@
   {
     "key": "plan:R3",
     "system": "You are robot R3 in the bedroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nI want to take a bath in 5 minutes. The bathroom should be ready — bathtub filled with warm water, and I'll need something to dry off with nearby.\nDEADLINE: 5 minutes\n\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift objects under 5 kg\",\n  \"PassReceiveObject: exchange objects with others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"brown desk (left side, image 1)\",",
+    "user": "## TASK:\nI want to take a bath in 5 minutes. The bathroom should be ready — bathtub filled with warm water, and I'll need something to dry off with nearby.\nDEADLINE: 5 minutes\n\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: pick up objects under 5 kg\",\n  \"PassReceiveObject: pass or receive objects\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"brown desk (left side, image 1)\",\n ",
     "output": {
-      "reasoning": "a) The task requires the bathtub to be filled with warm water and a towel to be placed nearby. b) Since I am in the bedroom and the task is in the bathroom, I cannot directly interact with the necessary items. c) R4 and R6 in the bathroom can handle filling the bathtub and placing the towel. d) I will pass any necessary items if requested by other robots, but currently, there are no items in my room that are needed for the task.",
+      "reasoning": "a) The task requires the bathtub to be filled with warm water and a towel to be nearby. b) Since I am in the bedroom and the task is in the bathroom, I need to coordinate with robots in the bathroom. c) R5 and R6 are already handling the bathtub filling and towel placement, so I will focus on facilitating any needed exchanges. d) My role is to ensure any required items are passed to the bathroom if needed, but currently, no such items are required from my room.",
       "goals": [
         {
           "goal": "Ensure the bathroom is ready for a bath with a filled bathtub and a towel nearby.",
@@ -298,45 +337,15 @@
       "steps": [
         {
           "type": "PASS",
-          "item": "none",
-          "target": "none",
-          "serves": 0
+          "item": "brown towel (wall, image 1)",
+          "target": "R4",
+          "serves": 1
         },
         {
           "type": "PASS",
-          "item": "none",
-          "target": "none",
-          "serves": 0
-        }
-      ]
-    }
-  },
-  {
-    "key": "plan:R1",
-    "system": "You are robot R1 in the bedroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nI want to take a bath in 5 minutes. The bathroom should be ready — bathtub filled with warm water, and I'll need something to dry off with nearby.\nDEADLINE: 5 minutes\n\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am fixed in place and can manipulate light objects within my reach.\",\n \"can_do\": [\n  \"PickupLightObject: pick up small items\",\n  \"SliceObject: cut items\",\n  \"PourObject: pour liquids\",\n  \"PassReceiveObject: hand over or receive items\",\n  \"ToggleObject: turn on/off lights, TV",
-    "output": {
-      "reasoning": "a) The task requires the bathtub to be filled with warm water and a towel to be placed near the bathtub. b) R4 and R6 are in the bathroom and can handle the tasks related to filling the bathtub and placing the towel. c) I am in the bedroom and do not have any items or capabilities that directly contribute to preparing the bathroom. d) Therefore, I will pass any necessary items from my room if needed by other robots, but currently, no such need is indicated.",
-      "goals": [
-        {
-          "goal": "Ensure the bathroom is ready for a bath with the bathtub filled and a towel nearby.",
-          "priority": "high",
-          "in_my_room": false
-        }
-      ],
-      "checklist": [],
-      "steps": [
-        {
-          "type": "PASS",
-          "item": "red and yellow blanket (on bunk bed, image 2)",
-          "target": "R2",
-          "serves": 0
-        },
-        {
-          "type": "PASS",
-          "item": "white mug (on brown desk, image 1)",
-          "target": "R3",
-          "serves": 0
+          "item": "white towel (towel rack, image 1)",
+          "target": "R5",
+          "serves": 1
         }
       ]
     }
@@ -344,19 +353,19 @@
   {
     "key": "plan:R2",
     "system": "You are robot R2 in the bedroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nI want to take a bath in 5 minutes. The bathroom should be ready — bathtub filled with warm water, and I'll need something to dry off with nearby.\nDEADLINE: 5 minutes\n\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am a mobile robot capable of moving light objects.\",\n \"can_do\": [\n  \"PickupLightObject: move items like pillows or blankets\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"red pillow (bed, image",
+    "user": "## TASK:\nI want to take a bath in 5 minutes. The bathroom should be ready — bathtub filled with warm water, and I'll need something to dry off with nearby.\nDEADLINE: 5 minutes\n\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: pick up items like towels\",\n  \"PassReceiveObject: transfer items to/from others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"red pillow (bed, image 1)\",\n  ",
     "output": {
-      "reasoning": "a) The bathroom needs to be ready for a bath, which includes filling the bathtub with warm water and having a towel nearby. b) My priority is to ensure a towel or suitable drying item is available in the bathroom. c) I will move the brown basket from the bedroom to the bathroom as a potential drying item. d) I will pass the brown basket to a bathroom robot if needed.",
+      "reasoning": "a) The goal is to have the bathtub filled with warm water and a towel nearby for drying off. b) The priority is high as the task needs to be completed within 5 minutes. c) In my room, I can move the brown laundry basket to the bathroom, which might contain towels. d) R4 and R5 are already handling the towel and bathtub filling tasks, so I will focus on moving the laundry basket.",
       "goals": [
         {
-          "goal": "Provide a drying item for the bathroom",
-          "priority": "high",
+          "goal": "move brown laundry basket to bathroom",
+          "priority": "medium",
           "in_my_room": true
         }
       ],
       "checklist": [
         {
-          "object": "brown basket",
+          "object": "brown laundry basket",
           "change": "move to bathroom",
           "weight": "light",
           "how": "LOCAL"
@@ -366,49 +375,13 @@
         {
           "type": "LOCAL",
           "action": {
-            "verb": "pick_up",
-            "object": "brown basket",
+            "verb": "move",
+            "object": "brown laundry basket",
             "from": "floor",
-            "to": "myself"
+            "to": "bathroom"
           },
           "uses": 0,
           "serves": 1
-        },
-        {
-          "type": "PASS",
-          "item": "brown basket",
-          "target": "R4",
-          "serves": 0
-        }
-      ]
-    }
-  },
-  {
-    "key": "plan:R3:fix",
-    "system": "You are robot R3 in the bedroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nI want to take a bath in 5 minutes. The bathroom should be ready — bathtub filled with warm water, and I'll need something to dry off with nearby.\nDEADLINE: 5 minutes\n\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift objects under 5 kg\",\n  \"PassReceiveObject: exchange objects with others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"brown desk (left side, image 1)\",",
-    "output": {
-      "reasoning": "a) The task requires the bathtub to be filled with warm water and a towel to be placed nearby. b) Since I am in the bedroom and the task is in the bathroom, I cannot directly interact with the necessary items. c) R4 and R6 in the bathroom can handle filling the bathtub and placing the towel. d) I will pass any necessary items if requested by other robots, but currently, there are no items in my room that are needed for the task.",
-      "goals": [
-        {
-          "goal": "Ensure the bathroom is ready for a bath with a filled bathtub and a towel nearby.",
-          "priority": "high",
-          "in_my_room": false
-        }
-      ],
-      "checklist": [],
-      "steps": [
-        {
-          "type": "PASS",
-          "item": "laptop (right side, image 1)",
-          "target": "R1",
-          "serves": 0
-        },
-        {
-          "type": "PASS",
-          "item": "cardboard box (center, image 1)",
-          "target": "R2",
-          "serves": 0
         }
       ]
     }
@@ -416,12 +389,12 @@
   {
     "key": "plan:R5",
     "system": "You are robot R5 in the bathroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, ",
-    "user": "## TASK:\nI want to take a bath in 5 minutes. The bathroom should be ready — bathtub filled with warm water, and I'll need something to dry off with nearby.\nDEADLINE: 5 minutes\n\nYOUR OFFER: {\n \"agent\": \"R5\",\n \"capability\": \"I am mobile and can handle light objects.\",\n \"can_do\": [\n  \"PickupLightObject: lift light items\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"white towel (towel rack, image 1)\",\n  \"blue bath mat",
+    "user": "## TASK:\nI want to take a bath in 5 minutes. The bathroom should be ready — bathtub filled with warm water, and I'll need something to dry off with nearby.\nDEADLINE: 5 minutes\n\nYOUR OFFER: {\n \"agent\": \"R5\",\n \"capability\": \"I am mobile and can handle light objects.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"white towel (towel rack, image 1)\",\n  \"bathtub (next",
     "output": {
-      "reasoning": "a) The goal is to have the bathtub filled with warm water and a towel placed nearby for drying off. b) The priority is high as the task needs to be completed in 5 minutes. c) In my room, I can move the towel to the bathtub edge. d) I need R6 to fill the bathtub as I cannot pour liquids.",
+      "reasoning": "a) The task requires the bathtub to be filled with warm water and a towel to be placed near the bathtub. b) R6 already intends to fill the bathtub with warm water, so I will not duplicate this effort. c) I will focus on moving the white towel to a convenient location near the bathtub. d) No additional items are needed from other rooms, and no other robots need items from me.",
       "goals": [
         {
-          "goal": "bathtub filled with warm water and towel nearby",
+          "goal": "Ensure the bathroom is ready for a bath with a filled bathtub and a towel nearby.",
           "priority": "high",
           "in_my_room": true
         }
@@ -429,29 +402,12 @@
       "checklist": [
         {
           "object": "white towel",
-          "change": "move to bathtub edge",
+          "change": "move from towel rack to bathtub edge",
           "weight": "light",
           "how": "LOCAL"
-        },
-        {
-          "object": "white bathtub",
-          "change": "fill with warm water",
-          "weight": "heavy",
-          "how": "ASK_HELP"
         }
       ],
       "steps": [
-        {
-          "type": "ASK_HELP",
-          "action": {
-            "verb": "fill",
-            "object": "white bathtub",
-            "to": "filled with warm water"
-          },
-          "target": "R6",
-          "enables": 1,
-          "serves": 0
-        },
         {
           "type": "LOCAL",
           "action": {
@@ -469,26 +425,26 @@
   {
     "key": "plan:R6",
     "system": "You are robot R6 in the bathroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, ",
-    "user": "## TASK:\nI want to take a bath in 5 minutes. The bathroom should be ready — bathtub filled with warm water, and I'll need something to dry off with nearby.\nDEADLINE: 5 minutes\n\nYOUR OFFER: {\n \"agent\": \"R6\",\n \"capability\": \"I am a mobile robot capable of moving objects and adjusting fixtures.\",\n \"can_do\": [\n  \"PickupLightObject: move light items like towels\",\n  \"PickupHeavyObject: move heavier items\",\n  \"PushFurniture: adjust furniture positions\",\n  \"PassReceiveObject: exchange items with others\"",
+    "user": "## TASK:\nI want to take a bath in 5 minutes. The bathroom should be ready — bathtub filled with warm water, and I'll need something to dry off with nearby.\nDEADLINE: 5 minutes\n\nYOUR OFFER: {\n \"agent\": \"R6\",\n \"capability\": \"I can move around the bathroom and manipulate objects.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PickupHeavyObject: move large items\",\n  \"PushFurniture: adjust furniture\",\n  \"PassReceiveObject: exchange items\",\n  \"ToggleObject: turn on/off lights, TV, applianc",
     "output": {
-      "reasoning": "a) The bathroom needs to be ready for a bath, which requires the bathtub to be filled with warm water and a towel to be placed nearby for drying off. b) Filling the bathtub is a priority due to the time constraint. c) I will toggle the faucet to fill the bathtub and move the towel to the bathtub edge. d) The towel is already in the bathroom, so no need for items from other rooms.",
+      "reasoning": "a) The bathroom needs to be ready for a bath, which requires the bathtub to be filled with warm water and a towel to be placed nearby for drying off. b) I will move the white towel from the sink to the bathtub edge to ensure it is within reach after the bath. c) I will turn on the faucet to fill the bathtub with warm water. d) No other robots are needed for this task as all required actions can be performed by me in the bathroom.",
       "goals": [
         {
-          "goal": "bathroom ready for bath",
+          "goal": "Prepare the bathroom for a bath by filling the bathtub with warm water and placing a towel nearby.",
           "priority": "high",
           "in_my_room": true
         }
       ],
       "checklist": [
         {
-          "object": "white bathtub",
-          "change": "filled with warm water",
-          "weight": "heavy",
+          "object": "white towel",
+          "change": "move from sink to bathtub edge",
+          "weight": "light",
           "how": "LOCAL"
         },
         {
-          "object": "white towel",
-          "change": "moved to bathtub edge",
+          "object": "faucet",
+          "change": "turn on to fill white bathtub with warm water",
           "weight": "light",
           "how": "LOCAL"
         }
@@ -497,10 +453,10 @@
         {
           "type": "LOCAL",
           "action": {
-            "verb": "toggle",
-            "object": "silver faucet",
-            "from": "off",
-            "to": "on"
+            "verb": "move",
+            "object": "white towel",
+            "from": "sink",
+            "to": "bathtub edge"
           },
           "uses": 0,
           "serves": 1
@@ -508,10 +464,10 @@
         {
           "type": "LOCAL",
           "action": {
-            "verb": "move",
-            "object": "white towel",
-            "from": "rack",
-            "to": "bathtub edge"
+            "verb": "turn_on",
+            "object": "faucet",
+            "from": "bathtub",
+            "to": "filled with warm water"
           },
           "uses": 0,
           "serves": 1
@@ -520,21 +476,115 @@
     }
   },
   {
-    "key": "plan:R2:fix",
-    "system": "You are robot R2 in the bedroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nI want to take a bath in 5 minutes. The bathroom should be ready — bathtub filled with warm water, and I'll need something to dry off with nearby.\nDEADLINE: 5 minutes\n\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am a mobile robot capable of moving light objects.\",\n \"can_do\": [\n  \"PickupLightObject: move items like pillows or blankets\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"red pillow (bed, image",
+    "key": "plan:R4:fix",
+    "system": "You are robot R4 in the bathroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, ",
+    "user": "## TASK:\nI want to take a bath in 5 minutes. The bathroom should be ready — bathtub filled with warm water, and I'll need something to dry off with nearby.\nDEADLINE: 5 minutes\n\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I can manipulate light objects within reach using my gripper.\",\n \"can_do\": [\n  \"PickupLightObject: grab small items\",\n  \"SliceObject: cut items\",\n  \"PourObject: empty contents of bottles\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject: turn on/off lights, ",
     "output": {
-      "reasoning": "a) The bathroom needs to be ready for a bath, which includes filling the bathtub with warm water and having a towel nearby. b) My priority is to ensure a towel or suitable drying item is available in the bathroom. c) I will move the brown basket from the bedroom to the bathroom as a potential drying item. d) I will pass the brown basket to a bathroom robot if needed.",
+      "reasoning": "a) The task is to prepare the bathroom for a bath, which requires the bathtub to be filled with warm water and a towel to be placed nearby. b) I can manipulate light objects and pour liquids, which allows me to contribute to filling the bathtub and handling the towel. c) R5 and R6 are also in the bathroom and can assist with filling the bathtub and moving the towel. d) I will focus on tasks that are not already covered by R5 and R6, ensuring no duplicate work.",
       "goals": [
         {
-          "goal": "Provide a drying item for the bathroom",
+          "goal": "Fill the bathtub with warm water and place a towel nearby.",
           "priority": "high",
           "in_my_room": true
         }
       ],
       "checklist": [
         {
-          "object": "brown basket",
+          "object": "blue bottle",
+          "change": "pour into bathtub",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "brown towel",
+          "change": "move to sink",
+          "weight": "light",
+          "how": "LOCAL"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pour",
+            "object": "blue bottle",
+            "from": "shelf",
+            "to": "bathtub"
+          },
+          "uses": 1,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "brown towel",
+            "from": "wall",
+            "to": "gripper"
+          },
+          "uses": 1,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "brown towel",
+            "from": "gripper",
+            "to": "sink"
+          },
+          "uses": 1,
+          "serves": 0
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R3:fix",
+    "system": "You are robot R3 in the bedroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
+    "user": "## TASK:\nI want to take a bath in 5 minutes. The bathroom should be ready — bathtub filled with warm water, and I'll need something to dry off with nearby.\nDEADLINE: 5 minutes\n\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: pick up objects under 5 kg\",\n  \"PassReceiveObject: pass or receive objects\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"brown desk (left side, image 1)\",\n ",
+    "output": {
+      "reasoning": "a) The task requires the bathtub to be filled with warm water and a towel to be nearby. b) Since I am in the bedroom and the task is in the bathroom, I need to coordinate with robots in the bathroom. c) R5 and R6 are already handling the bathtub filling and towel placement, so I will focus on facilitating any needed exchanges. d) My role is to ensure any required items are passed to the bathroom if needed, but currently, no such items are required from my room.",
+      "goals": [
+        {
+          "goal": "Ensure the bathroom is ready for a bath with a filled bathtub and a towel nearby.",
+          "priority": "high",
+          "in_my_room": false
+        }
+      ],
+      "checklist": [],
+      "steps": [
+        {
+          "type": "PASS",
+          "item": "blue trash can (right side, image 1)",
+          "target": "R5",
+          "serves": 0
+        },
+        {
+          "type": "PASS",
+          "item": "cardboard box (center, image 1)",
+          "target": "R6",
+          "serves": 0
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R2:fix",
+    "system": "You are robot R2 in the bedroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
+    "user": "## TASK:\nI want to take a bath in 5 minutes. The bathroom should be ready — bathtub filled with warm water, and I'll need something to dry off with nearby.\nDEADLINE: 5 minutes\n\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: pick up items like towels\",\n  \"PassReceiveObject: transfer items to/from others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"red pillow (bed, image 1)\",\n  ",
+    "output": {
+      "reasoning": "a) The goal is to have the bathtub filled with warm water and a towel nearby for drying off. b) The priority is high as the task needs to be completed within 5 minutes. c) In my room, I can move the brown laundry basket to the bathroom, which might contain towels. d) R4 and R5 are already handling the towel and bathtub filling tasks, so I will focus on moving the laundry basket.",
+      "goals": [
+        {
+          "goal": "move brown laundry basket to bathroom",
+          "priority": "medium",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "brown laundry basket",
           "change": "move to bathroom",
           "weight": "light",
           "how": "LOCAL"
@@ -544,18 +594,12 @@
         {
           "type": "LOCAL",
           "action": {
-            "verb": "pick_up",
-            "object": "brown basket",
+            "verb": "move",
+            "object": "brown laundry basket",
             "from": "floor",
-            "to": "myself"
+            "to": "bathroom"
           },
           "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "PASS",
-          "item": "brown basket",
-          "target": "R4",
           "serves": 0
         }
       ]
@@ -564,12 +608,12 @@
   {
     "key": "plan:R5:fix",
     "system": "You are robot R5 in the bathroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, ",
-    "user": "## TASK:\nI want to take a bath in 5 minutes. The bathroom should be ready — bathtub filled with warm water, and I'll need something to dry off with nearby.\nDEADLINE: 5 minutes\n\nYOUR OFFER: {\n \"agent\": \"R5\",\n \"capability\": \"I am mobile and can handle light objects.\",\n \"can_do\": [\n  \"PickupLightObject: lift light items\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"white towel (towel rack, image 1)\",\n  \"blue bath mat",
+    "user": "## TASK:\nI want to take a bath in 5 minutes. The bathroom should be ready — bathtub filled with warm water, and I'll need something to dry off with nearby.\nDEADLINE: 5 minutes\n\nYOUR OFFER: {\n \"agent\": \"R5\",\n \"capability\": \"I am mobile and can handle light objects.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"white towel (towel rack, image 1)\",\n  \"bathtub (next",
     "output": {
-      "reasoning": "a) The goal is to have the bathtub filled with warm water and a towel placed nearby for drying off. b) The priority is high as the task needs to be completed in 5 minutes. c) In my room, I can move the towel to the bathtub edge. d) I need R6 to fill the bathtub as I cannot pour liquids.",
+      "reasoning": "a) The task requires the bathtub to be filled with warm water and a towel to be placed near the bathtub. b) R6 already intends to fill the bathtub with warm water, so I will not duplicate this effort. c) I will focus on moving the white towel to a convenient location near the bathtub. d) No additional items are needed from other rooms, and no other robots need items from me.",
       "goals": [
         {
-          "goal": "bathtub filled with warm water and towel nearby",
+          "goal": "Ensure the bathroom is ready for a bath with a filled bathtub and a towel nearby.",
           "priority": "high",
           "in_my_room": true
         }
@@ -577,29 +621,12 @@
       "checklist": [
         {
           "object": "white towel",
-          "change": "move to bathtub edge",
+          "change": "move from towel rack to bathtub edge",
           "weight": "light",
           "how": "LOCAL"
-        },
-        {
-          "object": "white bathtub",
-          "change": "fill with warm water",
-          "weight": "heavy",
-          "how": "ASK_HELP"
         }
       ],
       "steps": [
-        {
-          "type": "ASK_HELP",
-          "action": {
-            "verb": "fill",
-            "object": "white bathtub",
-            "to": "filled with warm water"
-          },
-          "target": "R6",
-          "enables": 0,
-          "serves": 0
-        },
         {
           "type": "LOCAL",
           "action": {
@@ -617,26 +644,26 @@
   {
     "key": "plan:R6:fix",
     "system": "You are robot R6 in the bathroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, ",
-    "user": "## TASK:\nI want to take a bath in 5 minutes. The bathroom should be ready — bathtub filled with warm water, and I'll need something to dry off with nearby.\nDEADLINE: 5 minutes\n\nYOUR OFFER: {\n \"agent\": \"R6\",\n \"capability\": \"I am a mobile robot capable of moving objects and adjusting fixtures.\",\n \"can_do\": [\n  \"PickupLightObject: move light items like towels\",\n  \"PickupHeavyObject: move heavier items\",\n  \"PushFurniture: adjust furniture positions\",\n  \"PassReceiveObject: exchange items with others\"",
+    "user": "## TASK:\nI want to take a bath in 5 minutes. The bathroom should be ready — bathtub filled with warm water, and I'll need something to dry off with nearby.\nDEADLINE: 5 minutes\n\nYOUR OFFER: {\n \"agent\": \"R6\",\n \"capability\": \"I can move around the bathroom and manipulate objects.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PickupHeavyObject: move large items\",\n  \"PushFurniture: adjust furniture\",\n  \"PassReceiveObject: exchange items\",\n  \"ToggleObject: turn on/off lights, TV, applianc",
     "output": {
-      "reasoning": "a) The bathroom needs to be ready for a bath, which requires the bathtub to be filled with warm water and a towel to be placed nearby for drying off. b) Filling the bathtub is a priority due to the time constraint. c) I will toggle the faucet to fill the bathtub and move the towel to the bathtub edge. d) The towel is already in the bathroom, so no need for items from other rooms.",
+      "reasoning": "a) The bathroom needs to be ready for a bath, which requires the bathtub to be filled with warm water and a towel to be placed nearby for drying off. b) I will move the white towel from the sink to the bathtub edge to ensure it is within reach after the bath. c) I will turn on the faucet to fill the bathtub with warm water. d) No other robots are needed for this task as all required actions can be performed by me in the bathroom.",
       "goals": [
         {
-          "goal": "bathroom ready for bath",
+          "goal": "Prepare the bathroom for a bath by filling the bathtub with warm water and placing a towel nearby.",
           "priority": "high",
           "in_my_room": true
         }
       ],
       "checklist": [
         {
-          "object": "white bathtub",
-          "change": "filled with warm water",
-          "weight": "heavy",
+          "object": "white towel",
+          "change": "move from sink to bathtub edge",
+          "weight": "light",
           "how": "LOCAL"
         },
         {
-          "object": "white towel",
-          "change": "moved to bathtub edge",
+          "object": "faucet",
+          "change": "turn on to fill white bathtub with warm water",
           "weight": "light",
           "how": "LOCAL"
         }
@@ -645,120 +672,9 @@
         {
           "type": "LOCAL",
           "action": {
-            "verb": "toggle",
-            "object": "silver faucet",
-            "from": "off",
-            "to": "on"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
             "verb": "move",
             "object": "white towel",
-            "from": "rack",
-            "to": "bathtub edge"
-          },
-          "uses": 0,
-          "serves": 0
-        }
-      ]
-    }
-  },
-  {
-    "key": "plan:R5:fix",
-    "system": "You are robot R5 in the bathroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, ",
-    "user": "## TASK:\nI want to take a bath in 5 minutes. The bathroom should be ready — bathtub filled with warm water, and I'll need something to dry off with nearby.\nDEADLINE: 5 minutes\n\nYOUR OFFER: {\n \"agent\": \"R5\",\n \"capability\": \"I am mobile and can handle light objects.\",\n \"can_do\": [\n  \"PickupLightObject: lift light items\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"white towel (towel rack, image 1)\",\n  \"blue bath mat",
-    "output": {
-      "reasoning": "a) The goal is to have the bathtub filled with warm water and a towel placed nearby for drying off. b) The priority is high as the task needs to be completed in 5 minutes. c) In my room, I can move the towel to the bathtub edge. d) I need R6 to fill the bathtub as I cannot pour liquids.",
-      "goals": [
-        {
-          "goal": "bathtub filled with warm water and towel nearby",
-          "priority": "high",
-          "in_my_room": true
-        }
-      ],
-      "checklist": [
-        {
-          "object": "white towel",
-          "change": "move to bathtub edge",
-          "weight": "light",
-          "how": "LOCAL"
-        }
-      ],
-      "steps": [
-        {
-          "type": "ASK_HELP",
-          "action": {
-            "verb": "fill",
-            "object": "white bathtub",
-            "to": "filled with warm water"
-          },
-          "target": "R6",
-          "enables": 1,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "move",
-            "object": "white towel",
-            "from": "towel rack",
-            "to": "bathtub edge"
-          },
-          "uses": 0,
-          "serves": 0
-        }
-      ]
-    }
-  },
-  {
-    "key": "plan:R6:fix",
-    "system": "You are robot R6 in the bathroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, ",
-    "user": "## TASK:\nI want to take a bath in 5 minutes. The bathroom should be ready — bathtub filled with warm water, and I'll need something to dry off with nearby.\nDEADLINE: 5 minutes\n\nYOUR OFFER: {\n \"agent\": \"R6\",\n \"capability\": \"I am a mobile robot capable of moving objects and adjusting fixtures.\",\n \"can_do\": [\n  \"PickupLightObject: move light items like towels\",\n  \"PickupHeavyObject: move heavier items\",\n  \"PushFurniture: adjust furniture positions\",\n  \"PassReceiveObject: exchange items with others\"",
-    "output": {
-      "reasoning": "a) The bathroom needs to be ready for a bath, which requires the bathtub to be filled with warm water and a towel to be placed nearby for drying off. b) Filling the bathtub is a priority due to the time constraint. c) I will toggle the faucet to fill the bathtub and move the towel to the bathtub edge. d) The towel is already in the bathroom, so no need for items from other rooms.",
-      "goals": [
-        {
-          "goal": "bathroom ready for bath",
-          "priority": "high",
-          "in_my_room": true
-        }
-      ],
-      "checklist": [
-        {
-          "object": "white bathtub",
-          "change": "filled with warm water",
-          "weight": "heavy",
-          "how": "LOCAL"
-        },
-        {
-          "object": "white towel",
-          "change": "moved to bathtub edge",
-          "weight": "light",
-          "how": "LOCAL"
-        }
-      ],
-      "steps": [
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "toggle",
-            "object": "silver faucet",
-            "from": "off",
-            "to": "on"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "move",
-            "object": "white towel",
-            "from": "rack",
+            "from": "sink",
             "to": "bathtub edge"
           },
           "uses": 0,
@@ -767,102 +683,13 @@
         {
           "type": "LOCAL",
           "action": {
-            "verb": "fill",
-            "object": "white bathtub",
-            "from": "empty",
+            "verb": "turn_on",
+            "object": "faucet",
+            "from": "bathtub",
             "to": "filled with warm water"
           },
           "uses": 0,
           "serves": 0
-        }
-      ]
-    }
-  },
-  {
-    "key": "propose:R1",
-    "system": "You are robot R1. Judge other robots' requests and offers.\n\nFIRST: check your own plan. If you already do what an ASK_HELP asks → \"already_doing\" + covered_by.\nDUPLICATE REQUESTS: if you're already se",
-    "user": "TASK: I want to take a bath in 5 minutes. The bathroom should be ready — bathtub filled with warm water, and I'll need something to dry off with nearby.\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am fixed in place and can manipulate light objects within my reach.\",\n \"can_do\": [\n  \"PickupLightObject: pick up small items\",\n  \"SliceObject: cut items\",\n  \"PourObject: pour liquids\",\n  \"PassReceiveObject: hand over or receive items\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_",
-    "output": {
-      "offers": [
-        {
-          "offer": "r3_s1",
-          "decision": "decline",
-          "reason": "The laptop does not contribute to the task of preparing the bathroom for a bath."
-        }
-      ],
-      "judgments": [
-        {
-          "request": "r5_s1",
-          "decision": "ignore",
-          "reason": "The request is targeted at R6, and I cannot assist with filling the bathtub as I am fixed in place and cannot interact with the bathroom."
-        }
-      ]
-    }
-  },
-  {
-    "key": "propose:R2",
-    "system": "You are robot R2. Judge other robots' requests and offers.\n\nFIRST: check your own plan. If you already do what an ASK_HELP asks → \"already_doing\" + covered_by.\nDUPLICATE REQUESTS: if you're already se",
-    "user": "TASK: I want to take a bath in 5 minutes. The bathroom should be ready — bathtub filled with warm water, and I'll need something to dry off with nearby.\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am a mobile robot capable of moving light objects.\",\n \"can_do\": [\n  \"PickupLightObject: move items like pillows or blankets\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"red pillow (bed, image 1)\",\n  \"yellow and blue",
-    "output": {
-      "offers": [
-        {
-          "offer": "r1_s1",
-          "decision": "decline",
-          "reason": "The red and yellow blanket is not needed for the current task."
-        },
-        {
-          "offer": "r3_s2",
-          "decision": "decline",
-          "reason": "The cardboard box is not suitable for use as a towel."
-        }
-      ],
-      "judgments": [
-        {
-          "request": "r5_s1",
-          "decision": "ignore",
-          "reason": "The request is targeted at R6, not R2."
-        }
-      ]
-    }
-  },
-  {
-    "key": "propose:R3",
-    "system": "You are robot R3. Judge other robots' requests and offers.\n\nFIRST: check your own plan. If you already do what an ASK_HELP asks → \"already_doing\" + covered_by.\nDUPLICATE REQUESTS: if you're already se",
-    "user": "TASK: I want to take a bath in 5 minutes. The bathroom should be ready — bathtub filled with warm water, and I'll need something to dry off with nearby.\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift objects under 5 kg\",\n  \"PassReceiveObject: exchange objects with others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"brown desk (left side, image 1)\",\n  \"brown chair (left si",
-    "output": {
-      "offers": [
-        {
-          "offer": "r1_s2",
-          "decision": "decline",
-          "reason": "The white mug does not contribute to the task of preparing the bathroom for a bath."
-        }
-      ],
-      "judgments": [
-        {
-          "request": "r5_s1",
-          "decision": "ignore",
-          "reason": "The request is targeted at R6, and I cannot interact with the bathroom items or fill the bathtub."
-        }
-      ]
-    }
-  },
-  {
-    "key": "propose:R4",
-    "system": "You are robot R4. Judge other robots' requests and offers.\n\nFIRST: check your own plan. If you already do what an ASK_HELP asks → \"already_doing\" + covered_by.\nDUPLICATE REQUESTS: if you're already se",
-    "user": "TASK: I want to take a bath in 5 minutes. The bathroom should be ready — bathtub filled with warm water, and I'll need something to dry off with nearby.\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I am fixed in place but can manipulate light objects within reach.\",\n \"can_do\": [\n  \"PickupLightObject: grab small items like bottles and towels\",\n  \"PourObject: pour liquids from bottles\",\n  \"PassReceiveObject: hand over items to other robots\",\n  \"SliceObject: cut small items if needed\",\n  \"ToggleOb",
-    "output": {
-      "offers": [
-        {
-          "offer": "r2_s2",
-          "decision": "decline",
-          "reason": "The brown towel I have is sufficient for drying off, and I don't need the brown basket."
-        }
-      ],
-      "judgments": [
-        {
-          "request": "r5_s1",
-          "decision": "ignore",
-          "reason": "The request is targeted at R6, and I am not capable of filling the bathtub with warm water directly."
         }
       ]
     }
@@ -870,29 +697,73 @@
   {
     "key": "propose:R6",
     "system": "You are robot R6. Judge other robots' requests and offers.\n\nFIRST: check your own plan. If you already do what an ASK_HELP asks → \"already_doing\" + covered_by.\nDUPLICATE REQUESTS: if you're already se",
-    "user": "TASK: I want to take a bath in 5 minutes. The bathroom should be ready — bathtub filled with warm water, and I'll need something to dry off with nearby.\nYOUR OFFER: {\n \"agent\": \"R6\",\n \"capability\": \"I am a mobile robot capable of moving objects and adjusting fixtures.\",\n \"can_do\": [\n  \"PickupLightObject: move light items like towels\",\n  \"PickupHeavyObject: move heavier items\",\n  \"PushFurniture: adjust furniture positions\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject: turn ",
+    "user": "TASK: I want to take a bath in 5 minutes. The bathroom should be ready — bathtub filled with warm water, and I'll need something to dry off with nearby.\nYOUR OFFER: {\n \"agent\": \"R6\",\n \"capability\": \"I can move around the bathroom and manipulate objects.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PickupHeavyObject: move large items\",\n  \"PushFurniture: adjust furniture\",\n  \"PassReceiveObject: exchange items\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n",
     "output": {
-      "offers": [],
-      "judgments": [
+      "offers": [
         {
-          "request": "r5_s1",
-          "decision": "already_doing",
-          "covered_by": "r6_s3",
-          "reason": "I am already planning to fill the white bathtub with warm water as part of my current tasks."
+          "offer": "r3_s2",
+          "decision": "decline",
+          "reason": "The cardboard box is not needed for preparing the bathroom for a bath."
         }
-      ]
+      ],
+      "judgments": []
+    }
+  },
+  {
+    "key": "propose:R5",
+    "system": "You are robot R5. Judge other robots' requests and offers.\n\nFIRST: check your own plan. If you already do what an ASK_HELP asks → \"already_doing\" + covered_by.\nDUPLICATE REQUESTS: if you're already se",
+    "user": "TASK: I want to take a bath in 5 minutes. The bathroom should be ready — bathtub filled with warm water, and I'll need something to dry off with nearby.\nYOUR OFFER: {\n \"agent\": \"R5\",\n \"capability\": \"I am mobile and can handle light objects.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"white towel (towel rack, image 1)\",\n  \"bathtub (next to shower curtain, imag",
+    "output": {
+      "offers": [
+        {
+          "offer": "r3_s1",
+          "decision": "decline",
+          "reason": "The blue trash can is not needed to prepare the bathroom for a bath."
+        }
+      ],
+      "judgments": []
+    }
+  },
+  {
+    "key": "propose:R2",
+    "system": "You are robot R2. Judge other robots' requests and offers.\n\nFIRST: check your own plan. If you already do what an ASK_HELP asks → \"already_doing\" + covered_by.\nDUPLICATE REQUESTS: if you're already se",
+    "user": "TASK: I want to take a bath in 5 minutes. The bathroom should be ready — bathtub filled with warm water, and I'll need something to dry off with nearby.\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: pick up items like towels\",\n  \"PassReceiveObject: transfer items to/from others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"red pillow (bed, image 1)\",\n  \"blue and yellow blanket",
+    "output": {
+      "offers": [
+        {
+          "offer": "r1_s1",
+          "decision": "decline",
+          "reason": "The red blanket is not needed for the task of preparing the bathroom for a bath."
+        }
+      ],
+      "judgments": []
+    }
+  },
+  {
+    "key": "propose:R3",
+    "system": "You are robot R3. Judge other robots' requests and offers.\n\nFIRST: check your own plan. If you already do what an ASK_HELP asks → \"already_doing\" + covered_by.\nDUPLICATE REQUESTS: if you're already se",
+    "user": "TASK: I want to take a bath in 5 minutes. The bathroom should be ready — bathtub filled with warm water, and I'll need something to dry off with nearby.\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: pick up objects under 5 kg\",\n  \"PassReceiveObject: pass or receive objects\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"brown desk (left side, image 1)\",\n  \"brown chair (left side",
+    "output": {
+      "offers": [
+        {
+          "offer": "r1_s2",
+          "decision": "decline",
+          "reason": "The brown book is not needed for preparing the bathroom for a bath."
+        }
+      ],
+      "judgments": []
     }
   },
   {
     "key": "graph:1",
     "system": "You are the graph integrator. You do NOT plan or allocate — every step was written by the robot that executes it.\nTurn CANDIDATE collaborations into one consistent joint plan.\n\nOperations (use only wi",
-    "user": "TASK: I want to take a bath in 5 minutes. The bathroom should be ready — bathtub filled with warm water, and I'll need something to dry off with nearby.\nJOINT PLAN: {\n \"R1\": [],\n \"R2\": [\n  {\n   \"id\": \"r2_s1\",\n   \"agent\": \"R2\",\n   \"type\": \"LOCAL\",\n   \"action\": {\n    \"verb\": \"pick_up\",\n    \"object\": \"brown basket\",\n    \"from\": \"floor\",\n    \"to\": \"myself\"\n   }\n  }\n ],\n \"R3\": [],\n \"R4\": [\n  {\n   \"id\": \"r4_s1\",\n   \"agent\": \"R4\",\n   \"type\": \"LOCAL\",\n   \"action\": {\n    \"verb\": \"pour\",\n    \"object\": \"bl",
+    "user": "TASK: I want to take a bath in 5 minutes. The bathroom should be ready — bathtub filled with warm water, and I'll need something to dry off with nearby.\nJOINT PLAN: {\n \"R1\": [],\n \"R2\": [\n  {\n   \"id\": \"r2_s1\",\n   \"agent\": \"R2\",\n   \"type\": \"LOCAL\",\n   \"action\": {\n    \"verb\": \"move\",\n    \"object\": \"brown laundry basket\",\n    \"from\": \"floor\",\n    \"to\": \"bathroom\"\n   }\n  }\n ],\n \"R3\": [],\n \"R4\": [\n  {\n   \"id\": \"r4_s1\",\n   \"agent\": \"R4\",\n   \"type\": \"LOCAL\",\n   \"action\": {\n    \"verb\": \"pour\",\n    \"objec",
     "output": {
       "ops": [
         {
           "op": "drop",
-          "node": "r6_s2",
-          "why": "DUPLICATE_WORK across robots"
+          "node": "r6_s1",
+          "why": "DUPLICATE_WORK across robots. Never a request or CONFIRMED provider."
         }
       ]
     }
@@ -903,12 +774,12 @@
     "user": "TASK: I want to take a bath in 5 minutes. The bathroom should be ready — bathtub filled with warm water, and I'll need something to dry off with nearby.\nROBOTS: {\n \"R1\": {\n  \"room\": \"bedroom\",\n  \"mobile\": false,\n  \"body\": \"Gripper. CAN: PickupLightObject, SliceObject, PourObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture. This robot is FIXED IN PLACE and can never move to another room. To pass an item to another robot, that other robot must come to this robot's own room first.\"",
     "output": {
       "sizes": {
-        "r2_s1": "short",
+        "r2_s1": "medium",
         "r4_s1": "short",
-        "r6_s1": "short",
+        "r5_s1": "short",
+        "r6_s2": "short",
         "r4_s2": "short",
-        "r6_s3": "medium",
-        "r5_s2": "short"
+        "r4_s3": "short"
       }
     }
   }

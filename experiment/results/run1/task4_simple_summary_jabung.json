@@ -1,0 +1,82 @@
+{
+  "cda": {
+    "name": "CDA",
+    "track_a_llm_judge": {
+      "TF": 7,
+      "TF_reason": "The plan attempts all four goals. R2 successfully clears the ottoman by moving the remote control and book to the sofa. R3 stores the CD on the dresser (synonym for Drawer/SideTable). R4 fills the bathtub by toggling the faucet. However, R1 only picks up the lettuce but does not actually wash it (e.g., by toggling the faucet or using a sink).",
+      "GF": 9,
+      "GF_reason": "The plan is mostly feasible. All robots act within their capabilities and use objects present in their respective rooms. The only minor issue is that R3 puts the CD on a 'dresser', which is a reasonable synonym for Drawer or SideTable, but not explicitly listed.",
+      "SC": 10,
+      "SC_reason": "The sequence of actions is perfectly coherent. Objects are picked up before being put down, and there are no ordering violations.",
+      "CQ": 10,
+      "CQ_reason": "This is a set of independent single-room tasks. The robots correctly operate independently without forcing unnecessary cross-room collaboration."
+    },
+    "track_b_gc": 0,
+    "track_b_state_detail": {},
+    "object_grounding": "N/A"
+  },
+  "central": {
+    "name": "Centralized",
+    "track_a_llm_judge": {
+      "TF": 4,
+      "TF_reason": "The plan attempts all goals, but fails to properly achieve them. Washing the lettuce is assigned to R3 in the bedroom (which lacks a water source), and clearing the ottoman uses vague 'light objects' rather than specific items from the room list.",
+      "GF": 2,
+      "GF_reason": "Severe grounding violations: R2 uses vague expressions ('light objects', 'Confirm... clear'). R3 holds multiple objects simultaneously (two light objects, lettuce, and a CD). R3 attempts to wash lettuce in a room without a sink or faucet.",
+      "SC": 3,
+      "SC_reason": "Critical ordering and logical violations: R3 stores the CD without ever picking it up. R3 receives two different objects in the same time block using the exact same action ID (r3_s1). R3 asks for help to fill the bathtub after R4 has already completed the task.",
+      "CQ": 2,
+      "CQ_reason": "Collaboration is highly inappropriate and unnecessary. R1 passes the lettuce to R3 to wash, which makes no sense as R1 is in the kitchen (with a sink) and R3 is in the bedroom. R2 unnecessarily passes cleared objects to R3. R3 asks for help for a task R4 already finished."
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": "N/A"
+  },
+  "independent": {
+    "name": "Independent",
+    "track_a_llm_judge": {
+      "TF": 6,
+      "TF_reason": "The plan achieves washing the lettuce (R1), storing the CD (R3), and filling the bathtub (R4). However, clearing the ottoman is not properly achieved due to vague actions by R2 and R3 acting in the wrong room. Multiple robots hallucinate interacting with the CD.",
+      "GF": 2,
+      "GF_reason": "Severe grounding violations: R2 and R4 hallucinate a CD in their respective rooms. R2 uses vague expressions like 'designated storage area', 'any light objects', and 'designated places'. R3 attempts to interact with the ottoman, which is in a different room.",
+      "SC": 5,
+      "SC_reason": "Basic local sequences (pick up then store/wash) are coherent, but R3 asks for help to wash the lettuce and fill the bathtub after R1 and R4 have already completed these tasks, showing a lack of sequential awareness.",
+      "CQ": 2,
+      "CQ_reason": "Collaboration is not required for these independent tasks, yet R3 makes completely unnecessary and inappropriate ASK_HELP requests for tasks in other rooms that were already completed by other robots."
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": "N/A"
+  },
+  "lamma_p": {
+    "name": "LaMMA-P",
+    "track_a_llm_judge": {
+      "TF": 5,
+      "TF_reason": "The plan attempts all required goals, but relies heavily on vague terms ('item from ottoman', 'storage', 'CD storage') rather than concrete objects from the room lists. Filling the bathtub is the only goal achieved with clear, concrete actions.",
+      "GF": 2,
+      "GF_reason": "Severe grounding violations. The plan uses vague expressions ('item', 'storage', 'CD location'). R3 is tasked with holding multiple objects simultaneously (lettuce and an item from the ottoman). Additionally, R3 interacts with a 'sink' to wash lettuce, but only a 'Faucet' is listed in the kitchen (FP3).",
+      "SC": 2,
+      "SC_reason": "Critical ordering and physical violations. R3 is scheduled to perform parallel sequences of actions in two different rooms (kitchen and living room) during the exact same time blocks, which is physically impossible for a single robot.",
+      "CQ": 4,
+      "CQ_reason": "No collaboration is utilized. While the sub-tasks are largely independent, assigning one robot (R3) to simultaneously handle tasks in two different rooms without delegating to another available robot shows poor multi-agent task distribution."
+    },
+    "track_b_gc": 0,
+    "track_b_state_detail": {},
+    "object_grounding": "N/A"
+  },
+  "smart_llm": {
+    "name": "SMART-LLM",
+    "track_a_llm_judge": {
+      "TF": 8,
+      "TF_reason": "The plan successfully addresses all four task goals (wash lettuce, clear ottoman, store CD, fill bathtub) within the time limit. However, some destinations for placing objects (like 'CD storage location' and 'shelf' in the living room) are vague or hallucinated, which slightly detracts from full fulfillment.",
+      "GF": 6,
+      "GF_reason": "There are several grounding issues: R2 uses a vague 'CD storage location', R3 hallucinates a 'shelf' in the living room (FP203 does not have a shelf, though it has a Drawer and SideTable), and R1 refers to 'sink' and 'countertop' which are not explicitly listed in the kitchen (though 'Faucet' is present).",
+      "SC": 10,
+      "SC_reason": "The sequence of actions for all robots is highly coherent. Prerequisites are respected (e.g., picking up before placing, turning on the faucet before waiting to fill/wash, and turning it off afterwards).",
+      "CQ": 10,
+      "CQ_reason": "The task consists of four independent sub-tasks located in four different rooms. Each robot handles the task in its respective room independently. Collaboration is not required, and the plan correctly avoids unnecessary interactions."
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": "N/A"
+  }
+}

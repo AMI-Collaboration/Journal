@@ -257,6 +257,42 @@ def validate(raw_steps: list[dict], agent: str, offers: dict[str, Offer], cfg: T
         else:
             step["enables"] = None
         errors += [f"step {i}: {x}" for x in step["violations"]]
+    # third pass: pick_up must have a follow-up (put_down, PASS, or another action on same object)
+    import re as _re2
+    for idx2, step in enumerate(cleaned):
+        if step["type"] != LOCAL: continue
+        action_str = _action_str(step["action"])
+        if not _re2.match(r'pick.?up|pickup|grab|lift', action_str, _re2.I): continue
+        obj_match = _re2.search(r'(?:pick.?up|grab|lift)\s+(?:the\s+)?(.+?)(?:\s+from|\s+to|$)', action_str, _re2.I)
+        if not obj_match: continue
+        obj = obj_match.group(1).strip().lower()
+        # check if any later step uses this object
+        later = cleaned[idx2+1:]
+        has_followup = any(
+            obj in _action_str(s["action"]).lower() or
+            (s["type"] == PASS and s.get("item") and (s.get("item","").lower() in obj or obj in s.get("item","").lower()))
+            for s in later
+        )
+        if not has_followup:
+            step["violations"].append(
+                f"LOCAL '{step['action']}' picks up '{obj}' but no later step puts it down, passes it, or uses it. "
+                f"Add a put_down/PASS step, or remove this pick_up.")
+            errors.append(f"step {idx2}: pick_up '{obj}' has no follow-up (put_down/PASS/use)")
+
+    # fourth pass: LOCAL "receive X" immediately after RECEIVE X is a no-op duplicate — remove
+    import re as _re3
+    to_remove = set()
+    for idx3 in range(len(cleaned)-1):
+        s1 = cleaned[idx3]
+        s2 = cleaned[idx3+1]
+        if s1["type"] == RECEIVE and s2["type"] == LOCAL:
+            item1 = (s1.get("item") or "").lower().strip()
+            action2 = _action_str(s2["action"]).lower().strip()
+            if item1 and (action2.startswith("receive") or item1 in action2):
+                to_remove.add(idx3+1)
+                errors.append(f"step {s2['_raw_index']}: LOCAL '{s2['action']}' is a duplicate of the preceding RECEIVE — remove it")
+    cleaned = [s for i,s in enumerate(cleaned) if i not in to_remove]
+
     # one object per step: several RECEIVEs of different objects feeding ONE step means that step
     # handles several objects at once (soft: asks the robot to split it, does not drop anything)
     fed: dict = {}

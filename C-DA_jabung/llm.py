@@ -75,7 +75,7 @@ class OpenAILLM(BaseLLM):
     """gpt-4o style models get `temperature`; reasoning models (gpt-5.x, gpt-6, o-series) get
     `reasoning_effort` instead, because they reject `temperature`."""
 
-    def __init__(self, model: str = "gpt-4o", temperature: float | None = 0.2,
+    def __init__(self, model: str = "gpt-4o", temperature: float | None = 0.5,
                  reasoning_effort: str | None = "medium", max_concurrency: int = 4,
                  image_detail: str = "low"):
         super().__init__()

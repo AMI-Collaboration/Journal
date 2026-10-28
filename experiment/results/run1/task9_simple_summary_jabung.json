@@ -1,0 +1,82 @@
+{
+  "cda": {
+    "name": "CDA",
+    "track_a_llm_judge": {
+      "TF": 5,
+      "TF_reason": "The plan partially fulfills the task. It attempts to move dishes to the sink but fails to actually wash them (e.g., using the DishSponge and SoapBottle). It also attempts to make the bed but relies on several hallucinated objects.",
+      "GF": 4,
+      "GF_reason": "There are multiple hallucinations. In the kitchen, 'plastic container' and 'sink' are not in the provided object list. In the bedroom, 'black and red blanket', 'red bedsheet', and 'white blanket' are hallucinated (only Bed and Pillow are listed).",
+      "SC": 9,
+      "SC_reason": "The sequence of actions is logical. Objects are picked up before being moved or arranged, and there are no major ordering violations.",
+      "CQ": 9,
+      "CQ_reason": "The task consists of independent goals in separate rooms, so cross-room collaboration is not required. The robots correctly work independently in their respective rooms without unnecessary collaboration."
+    },
+    "track_b_gc": 0,
+    "track_b_state_detail": {},
+    "object_grounding": "N/A"
+  },
+  "central": {
+    "name": "Centralized",
+    "track_a_llm_judge": {
+      "TF": 6,
+      "TF_reason": "The plan attempts to fulfill the goals of washing dishes (mug, fork, spoon) and making the bed. However, it relies on hallucinated objects like 'sink basin' and 'bed sheets', and uses vague actions, which reduces the fulfillment score.",
+      "GF": 3,
+      "GF_reason": "Severe grounding violations. The plan hallucinates 'sink basin' in the kitchen and 'bed sheets' in the bedroom. It also uses vague expressions like 'Gather bedding materials', 'light objects', and 'ensure everything is tidy'.",
+      "SC": 3,
+      "SC_reason": "Critical ordering and logical violations. R4 passes pillows and bed sheets without ever picking them up. R3 never explicitly receives the items passed by R4. Additionally, there is a duplicate step ID (r2_s2) for R2 receiving the fork and washing the dishes.",
+      "CQ": 3,
+      "CQ_reason": "Collaboration is highly forced and unnecessary. R1 passing dishes to R2 in the same room is inefficient, as one robot could complete the task. Similarly, R4 passing pillows to R3 is unnecessary for making a bed. Furthermore, the collaboration is incomplete as R3 lacks RECEIVE actions for the items R4 passes."
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": "N/A"
+  },
+  "independent": {
+    "name": "Independent",
+    "track_a_llm_judge": {
+      "TF": 4,
+      "TF_reason": "The plan attempts to wash some dishes (mug, fork, spoon) and make the bed, but misses many other dishes and utensils in the kitchen (bowl, plate, pot, pan, cup, knife, etc.). It also relies heavily on hallucinated objects.",
+      "GF": 2,
+      "GF_reason": "Severe grounding violations. The plan hallucinates objects not in the room lists (sink basin, faucet, drying rack, counter, bedspread, bed sheets, blankets). It also includes vague actions ('Assess the state of the bed...', 'Perform a final check...') and has two robots (R1 and R2) picking up the exact same dish sponge.",
+      "SC": 2,
+      "SC_reason": "Critical sequential errors. R1 scrubs the fork and spoon without ever picking them up. R1 and R2 perform redundant and conflicting actions on the same objects simultaneously (both wash the mug, both wash the spoon, both pick up the dish sponge).",
+      "CQ": 2,
+      "CQ_reason": "Collaboration is extremely poor. Instead of dividing the tasks effectively, the robots in the same rooms interfere with each other by attempting to perform the exact same actions on the exact same objects at the same time."
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": "N/A"
+  },
+  "lamma_p": {
+    "name": "LaMMA-P",
+    "track_a_llm_judge": {
+      "TF": 4,
+      "TF_reason": "The plan attempts to fulfill the goals, but relies heavily on hallucinated objects ('sink' in the kitchen, 'blanket' in the bedroom) and vague groupings ('dirty dishes', 'storage location') rather than specific objects from the room lists.",
+      "GF": 3,
+      "GF_reason": "Severe grounding violations: 'sink' and 'blanket' are hallucinated as they do not exist in the provided room lists. 'dirty dishes' and 'storage location' are vague expressions. Additionally, picking up 'dirty dishes' implies holding multiple objects simultaneously, which is a capability violation.",
+      "SC": 9,
+      "SC_reason": "The sequential ordering of actions is logical and respects dependencies (going to objects, picking them up, moving to destinations, and placing/using them).",
+      "CQ": 10,
+      "CQ_reason": "The tasks in the kitchen and bedroom are completely independent. The plan correctly avoids unnecessary collaboration."
+    },
+    "track_b_gc": 0,
+    "track_b_state_detail": {},
+    "object_grounding": "N/A"
+  },
+  "smart_llm": {
+    "name": "SMART-LLM",
+    "track_a_llm_judge": {
+      "TF": 3,
+      "TF_reason": "The plan attempts to wash some dishes and make the bed, but misses several utensils (Mug, Bowl, Knife, etc.) and relies heavily on hallucinated objects (Sink, Faucet, CounterTop, Blanket) to achieve the goals.",
+      "GF": 2,
+      "GF_reason": "Severe grounding violations: Sink, Faucet, CounterTop, and Blanket are hallucinated (not in the actual room lists). Additionally, R4 picks up the DishSponge and then proceeds to pick up the Plate, Spoon, and Fork without putting the DishSponge down, violating the single-object holding constraint.",
+      "SC": 6,
+      "SC_reason": "The sequence of actions is mostly logical, but R4 holds multiple objects simultaneously (DishSponge + utensils) throughout the plan, which is physically unrealistic.",
+      "CQ": 10,
+      "CQ_reason": "The tasks in the kitchen and bedroom are completely independent and self-contained. No collaboration is required, and none is unnecessarily attempted, which is appropriate."
+    },
+    "track_b_gc": "N/A (설계상 제외)",
+    "track_b_state_detail": "N/A (설계상 제외)",
+    "object_grounding": "N/A"
+  }
+}

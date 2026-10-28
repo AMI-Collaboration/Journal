@@ -163,11 +163,11 @@ def interactive_capture(scene, agent_count, out_dir, prefix, robot_labels, width
 
 if __name__ == "__main__":
     interactive_capture(
-        scene="FloorPlan320",
-        agent_count=1,
-        out_dir="/home/user/journal_co/experiment_new/image/multi_room/abstract/task5",
-        prefix="task5_abstract_bedroom",
-        robot_labels=["R3"],
+        scene="FloorPlan15",
+        agent_count=4,
+        out_dir="/home/user/journal_co/experiment/scene/images/FP15",
+        prefix="FP15",
+        robot_labels=["R1:Gripper", "R2:Mobile_Light", "R3:Mobile_Heavy", "R4:Gripper"],
     )
 
 def teleport_to_can(controller, current_agent):

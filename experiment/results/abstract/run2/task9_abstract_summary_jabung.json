@@ -3,13 +3,13 @@
     "name": "CDA",
     "track_a_llm_judge": {
       "TF": 4,
-      "TF_reason": "The plan attempts to fulfill the goals of putting things away, turning down lights, and preparing the bedroom. However, it relies heavily on hallucinated objects (blanket, toothbrush, toothpaste, kitchen lights, bathroom light, hanging light, kitchen sink), which means many core actions are not actually achieved.",
-      "PF": 2,
-      "PF_reason": "Severe feasibility issues due to numerous hallucinated objects (stainless steel sink in kitchen, hanging light, toothbrush, toothpaste, kitchen lights, blue blanket, bathroom light). Additionally, 'storage area' is a vague location.",
-      "OC": 6,
-      "OC_reason": "The task does not strictly require cross-room collaboration, but R2 asks R5 (who is in the bedroom) to come to the kitchen to turn off lights. This is an unnecessary and inefficient collaboration, though they do coordinate the ASK_HELP and HELP actions.",
-      "SC": 8,
-      "SC_reason": "The sequence of actions is mostly logical, with pick up actions preceding put down actions. However, R5 performs local actions in the bedroom and then helps in the kitchen within the same time block, which might be tight on time."
+      "TF_reason": "The plan attempts to fulfill the goals of turning off lights/appliances and putting things away. However, it relies heavily on hallucinated objects and fails to complete several actions properly, leaving the house only partially settled.",
+      "GF": 2,
+      "GF_reason": "Severe grounding violations. Hallucinated objects include 'kitchen lights', 'ceiling lamp' (living room), 'ceiling light' (bathroom), 'stove' (kitchen), and 'mug' (living room). Additionally, R5 attempts to place items on a 'dresser' which does not exist in the bedroom, and R1 attempts to put down objects it is not holding.",
+      "SC": 3,
+      "SC_reason": "Critical sequential errors: R1 puts down a tomato and bread without ever picking them up. R3 picks up a mug but never puts it down. R2's pick up action is malformed ('pick up... to the white cabinet').",
+      "CQ": 7,
+      "CQ_reason": "No collaboration is present. While local tidying does not strictly require cross-room collaboration, the robots operate entirely in silos. Given the abstract nature of the task, some coordination might have been beneficial, but its absence is not a critical failure for local cleanup."
     },
     "track_b_gc": 0.0,
     "track_b_state_detail": {
@@ -24,13 +24,13 @@
     "name": "Centralized",
     "track_a_llm_judge": {
       "TF": 4,
-      "TF_reason": "The plan attempts to fulfill the task goals (lights down, things put away), but relies heavily on vague statements ('ensure the bed is clear', 'ensure all lights... are off') and hallucinated objects ('kitchen lights', 'main room light', 'bathroom lights') rather than concrete actions on real objects.",
-      "PF": 2,
-      "PF_reason": "Severe feasibility violations due to pervasive vague expressions ('any light objects', 'designated storage area', 'if necessary', 'ensure') and hallucinated objects ('cupboard', 'coffee table', 'table lamp', 'kitchen lights', 'main room light', 'bathroom lights').",
-      "OC": 9,
-      "OC_reason": "The task does not require cross-room collaboration, and the robots correctly act independently within their own rooms based on local observations.",
-      "SC": 8,
-      "SC_reason": "The sequence of actions is generally coherent, though R4 picking up a candle only to place it back in the same cabinet in the next time block is illogical and wastes steps."
+      "TF_reason": "The plan attempts to fulfill the goals of turning off lights and putting things away, but it fails to identify specific misplaced objects (e.g., Bowl and Mug in the bedroom, Pillow in the living room) and relies heavily on vague, generalized actions rather than concrete steps.",
+      "GF": 2,
+      "GF_reason": "Severe grounding violations. The plan uses numerous vague expressions ('any light objects', 'designated storage area', 'ensure all lights are off', 'ensure the bed is clear') and hallucinates several objects and fixtures (cupboard, coffee table, table lamp, main room light, kitchen lights, bathroom lights).",
+      "SC": 6,
+      "SC_reason": "The sequence is mostly logical, but contains flaws: R4 picks up a candle only to put it back in the exact same place in the next time block, which is pointless. R3 combines picking up and placing objects into a single step (r3_s2).",
+      "CQ": 4,
+      "CQ_reason": "While basic room-clearing can be done locally, 'putting things away' in a whole-house context typically requires cross-room collaboration to return misplaced objects (like the bedroom's Bowl/Mug to the kitchen, or the living room's Pillow to the bedroom). The plan completely misses these opportunities and features zero collaboration."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -39,14 +39,14 @@
   "independent": {
     "name": "Independent",
     "track_a_llm_judge": {
-      "TF": 4,
-      "TF_reason": "The plan attempts to fulfill the task by turning off lights and putting things away, but many actions involve hallucinated objects (e.g., football, dresser, cupboard, kitchen sink basin), meaning those specific goals are not actually achieved.",
-      "PF": 2,
-      "PF_reason": "Severe feasibility violations due to numerous hallucinated objects (cupboard, kitchen sink basin, football, bedroom dresser, table lamp, charging station) and vague expressions ('Ensure the curtains are closed', 'Straighten the bed cover').",
-      "OC": 9,
-      "OC_reason": "The task involves general tidying and preparing for bed, which can be done independently in each room. The robots correctly act on local observations without unnecessary cross-room collaboration.",
-      "SC": 9,
-      "SC_reason": "The sequence of actions is logically coherent, with objects being picked up before being placed, and no major dependency violations."
+      "TF": 6,
+      "TF_reason": "The plan addresses the main goals of the task (turning down lights, putting things away, preparing the bedroom). However, several actions involve hallucinated objects (e.g., putting away a 'football' instead of the actual basketball, and interacting with a 'sink basin' in the kitchen), which means those specific sub-goals are not successfully achieved. R4 taking out a spray bottle also contradicts the 'settled' goal.",
+      "GF": 4,
+      "GF_reason": "There are multiple grounding violations. Hallucinated objects include 'sink basin' in the kitchen, 'cupboard' (though shelf exists), 'charging station' in the living room, and 'football' in the bedroom. Additionally, R2 uses a vague expression ('Ensure the curtains are closed').",
+      "SC": 10,
+      "SC_reason": "The sequential coherence is excellent. All prerequisite actions (picking up objects) occur before their dependent actions (placing objects), and there are no ordering violations.",
+      "CQ": 10,
+      "CQ_reason": "Collaboration is not required for this task, as each room's goals are self-contained and no objects need to be moved between rooms. The agents correctly work independently without forcing unnecessary collaboration."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -56,13 +56,13 @@
     "name": "LaMMA-P",
     "track_a_llm_judge": {
       "TF": 4,
-      "TF_reason": "The plan attempts to fulfill the goals (quiet, lights down, things put away, bedroom ready), but relies heavily on hallucinated objects to do so (e.g., 'light switch', 'kitchen radio'). It successfully interacts with the Television, Bed, RemoteControl, and CreditCard, but fails to use actual light sources like the FloorLamp or DeskLamp.",
-      "PF": 2,
-      "PF_reason": "Severe feasibility violations due to numerous hallucinated objects (light switch, kitchen light, living room light, kitchen radio, bedroom window, bedroom door) and vague expressions ('item (e.g., remote control)', 'storage location', 'noise-making device').",
-      "OC": 9,
-      "OC_reason": "The task does not require cross-room collaboration, and the robots appropriately act independently in their respective areas based on local observations.",
-      "SC": 8,
-      "SC_reason": "The sequence of actions is generally logical, though R3 moves back and forth between the living room and kitchen multiple times within the same time blocks, which is slightly inefficient."
+      "TF_reason": "The plan attempts to fulfill the goals (turning off lights, putting things away, preparing the bed), but it heavily relies on hallucinated objects (light switches, radio, window, door) rather than interacting with the actual objects available in the rooms (like FloorLamp, DeskLamp).",
+      "GF": 2,
+      "GF_reason": "Severe grounding violations. The plan includes numerous hallucinated objects ('light switch', 'kitchen light', 'kitchen radio', 'bedroom window', 'bedroom door') and uses vague expressions ('noise-making device', 'item (e.g., remote control)', 'storage location', 'if applicable').",
+      "SC": 7,
+      "SC_reason": "The sequence of actions is generally logical (e.g., go to object, pick up, go to storage, put away), but the presence of vague and hallucinated targets detracts from the overall coherence and executability of the sequence.",
+      "CQ": 8,
+      "CQ_reason": "No collaboration is present in the plan, which is appropriate since the tasks in each room can be completed independently by the robots stationed there."
     },
     "track_b_gc": 0.0,
     "track_b_state_detail": {
@@ -76,14 +76,14 @@
   "smart_llm": {
     "name": "SMART-LLM",
     "track_a_llm_judge": {
-      "TF": 4,
-      "TF_reason": "The plan attempts to fulfill the task by turning off lights, putting items away, and preparing the bed. However, it relies heavily on hallucinated objects (LivingRoomLight, KitchenLight, HallwayLight, Bookshelf, Cupboard, BedroomLight) instead of using the actual objects available in the rooms (e.g., FloorLamp, DeskLamp, Shelf, Cabinet). Consequently, many core goals are not actually achieved.",
-      "PF": 2,
-      "PF_reason": "Severe feasibility violations due to widespread object hallucinations (LivingRoomLight, KitchenLight, HallwayLight, Bookshelf, Cupboard, BedroomLight). Additionally, the plan assumes a 'Hallway' room which does not exist in the provided environment, and robots teleport between rooms (e.g., R1 moves from living room to bedroom, R3 moves from hallway to living room to bedroom) without explicit navigation actions.",
-      "OC": 5,
-      "OC_reason": "The task does not require cross-room collaboration, and the robots act independently, which is appropriate. However, the robots act on hallucinated global knowledge (non-existent rooms and objects) and teleport across rooms, violating local observability constraints.",
-      "SC": 7,
-      "SC_reason": "The sequence of actions is generally logical (picking up before putting away). However, the spatial sequencing is disjointed due to robots performing actions in completely different rooms in consecutive steps without navigation."
+      "TF": 5,
+      "TF_reason": "The plan correctly identifies the goals (turning off lights, putting away items, preparing the bed, closing curtains) and respects the deadline. However, many core actions fail because they rely on hallucinated objects (e.g., LivingRoomLight, KitchenLight, Bookshelf, Cupboard).",
+      "GF": 2,
+      "GF_reason": "Severe grounding violations. The plan relies heavily on hallucinated objects not present in the room lists (LivingRoomLight, KitchenLight, HallwayLight, Bookshelf, Cupboard, BedroomLight). Additionally, robots appear to teleport between rooms without explicit navigation or coordination.",
+      "SC": 9,
+      "SC_reason": "The sequence of actions is logically coherent. Objects are picked up before being put away, and the timeline is respected.",
+      "CQ": 5,
+      "CQ_reason": "No collaboration is present. While cross-room object transfers are not strictly required for this task, the lack of coordination results in robots independently jumping between rooms rather than dividing the labor efficiently by room."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",

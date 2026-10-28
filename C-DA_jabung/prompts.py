@@ -46,11 +46,16 @@ OFFER_SYSTEM = """You are robot {agent}, a household robot that sees only its ow
 STEP 1 — LIST has_items: every clearly visible movable object in your images.
 Format: "<color> <noun> (<location>, image <k>)". NEVER infer unlisted objects. Only what you directly see.
 
-STEP 2 — REASONING (one sentence each):
+STEP 2 — CHAIN-OF-THOUGHT REASONING (think step by step):
 a) GOAL STATE: what must be true when task is done? Think beyond literal words.
-b) PRIORITY: what matters most given the deadline?
-c) MY ROOM: which changes happen here using my has_items?
-d) FOR OTHERS: which of my has_items serve another room's needs?
+   e.g. "watch movie" → TV on + dim lighting + snacks + comfortable seating
+b) EACH ROOM'S ROLE: what does each room need to contribute toward that end state?
+   Think about ALL rooms, not just yours.
+c) MY CONTRIBUTION: given the end state, what can MY room contribute?
+   Even if my room is not the main focus, find supporting actions.
+   Ask: "what items in my room serve the task's end goal, directly or indirectly?"
+d) PRIORITY: which of my contributions matter most given the deadline?
+e) FOR OTHERS: which of my has_items should go to another room? Be generous.
 
 STEP 3 — FILL FIELDS:
 - capability: one sentence about your body.
@@ -63,6 +68,18 @@ STEP 3 — FILL FIELDS:
 - obs_scope: what you can/cannot observe.
 
 """ + _WORDING + "\n" + _ESSENTIAL + "\n" + _SPACE_RULES + """
+
+━━━ FEW-SHOT EXAMPLE (grandmother visit, R1=Mobile_Light in kitchen) ━━━
+{{"has_items":["silver kettle (counter, image 1)","white mug (cabinet, image 1)","green apple (counter, image 2)","orange (counter, image 2)"],
+ "reasoning":"a) Grandmother needs warm tea + healthy snacks — elderly visitor comfort. b) Tea prep is top priority; kettle takes time. c) I toggle kettle, pick mug, pour tea. d) Mug with tea goes to living room via R4 PASS; fruit also to R4.",
+ "capability":"I am mobile and can carry light objects up to 5 kg.",
+ "can_do":["PickupLightObject: lift mugs, fruit, small items","PassReceiveObject: transfer items to/from other robots","ToggleObject: turn on/off kettle, lights, appliances"],
+ "cannot_do":["PickupHeavyObject: cannot lift heavy furniture","PushFurniture: cannot push sofa","SliceObject: cannot slice food","PourObject: cannot pour precisely"],
+ "suggests":["silver kettle","white mug"],
+ "intends":["toggle silver kettle from off to on","pick up white mug from cabinet","pour hot water into mug","pass mug to R4"],
+ "need_from_others":["R4 to receive mug and deliver tea to grandmother in living room"],
+ "obs_scope":"I can observe and interact with items in the kitchen only."}}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Return JSON:
 {{"has_items": [...], "reasoning": "a)... b)... c)... d)...", "capability": "...",
@@ -83,6 +100,13 @@ Images attached ({n_img} image(s)), image 1 to {n_img}."""
 
 # ================================================================ Stage 2: Local Plan
 PLAN_SYSTEM = """You are robot {agent} in the {room}. Write YOUR part of the shared plan.
+
+CHAIN-OF-THOUGHT before writing steps:
+1. TASK END STATE: what must be true when done? (same as offer stage)
+2. OTHER ROBOTS: scan ALL robots intends in PUBLIC OFFERS. Who is doing what?
+3. GAPS: what essential actions are NOT covered by others?
+4. MY STEPS: fill the gaps using MY has_items and capabilities. Never duplicate others.
+5. COLLABORATION: what do I need from others (ASK_HELP)? What can I send (PASS)?
 
 ━━━ CRITICAL RULES (violation = plan rejected) ━━━
 1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, safe location,
@@ -119,19 +143,56 @@ STEP 5 — STEPS (high priority first):
 - RECEIVE: {{"type":"RECEIVE", "item":"EXACT name from target's has_items", "target":"RN", "serves":N}}
 - PASS: {{"type":"PASS", "item":"exact name from YOUR has_items", "target":"RN", "serves":N}}
 
-━━━ FEW-SHOT EXAMPLE (task: "bath in 5 min") ━━━
-R3 (gripper, bathroom): goals=[fill bathtub, towel ready]
+━━━ FEW-SHOT EXAMPLE (task: "grandmother visiting in 15 min") ━━━
+R1 (mobile_light, kitchen): goals=[prepare warm tea, pass to R4]
+reasoning: "R2 handles fruit — I do NOT duplicate. Kettle on first (takes time). Pour after kettle ready. PASS mug to R4 — I cannot navigate to living room."
 steps:
-  {{"type":"ASK_HELP","action":{{"verb":"fill","object":"white bathtub","to":"filled with warm water"}},
-    "target":"R4","enables":1,"serves":0}},
-  {{"type":"LOCAL","action":{{"verb":"move","object":"beige towel","from":"wall hook","to":"towel rack near bathtub"}},
-    "uses":0,"serves":1}}
-R4 (mobile, bathroom): goals=[help fill tub, place bath mat]
+  {{"type":"LOCAL","action":{{"verb":"toggle","object":"silver kettle","from":"off","to":"on"}},"uses":0,"serves":1,"reason":"boil water immediately — heating takes time"}},
+  {{"type":"LOCAL","action":{{"verb":"pick_up","object":"white mug","from":"cabinet","to":"gripper"}},"uses":0,"serves":1,"reason":"vessel for tea while kettle heats"}},
+  {{"type":"LOCAL","action":{{"verb":"pour","object":"silver kettle","from":"kettle","to":"white mug"}},"uses":0,"serves":1,"reason":"fill mug with hot water for grandmother"}},
+  {{"type":"PASS","item":"white mug","target":"R4","reason":"cannot navigate to living room; R4 delivers tea to grandmother"}}
+
+R2 (gripper, kitchen): goals=[prepare sliced fruit, pass to R4]
+reasoning: "R1 handles kettle/tea — do NOT touch kettle. Only I can SliceObject. Slice apple, pick orange, PASS both to R4."
 steps:
-  {{"type":"LOCAL","action":{{"verb":"fill","object":"white bathtub","to":"filled with warm water"}},
-    "uses":1,"serves":0}},
-  {{"type":"LOCAL","action":{{"verb":"move","object":"striped bath mat","from":"floor","to":"in front of bathtub"}},
-    "uses":0,"serves":1}}
+  {{"type":"LOCAL","action":{{"verb":"slice","object":"green apple","from":"counter","to":"cutting board"}},"uses":0,"serves":1,"reason":"sliced fruit easier for elderly; only Gripper can slice"}},
+  {{"type":"LOCAL","action":{{"verb":"pick_up","object":"orange","from":"counter","to":"gripper"}},"uses":0,"serves":1,"reason":"healthy vitamin snack for grandmother"}},
+  {{"type":"PASS","item":"green apple","target":"R4","reason":"Gripper fixed in kitchen; R4 places fruit on coffee table"}},
+  {{"type":"PASS","item":"orange","target":"R4","reason":"same — R4 delivers all food to grandmother"}}
+
+R3 (mobile_heavy, living_room): goals=[clear walkway, arrange seating]
+reasoning: "Only I can push furniture. Grandmother is elderly — floor obstacles are dangerous. Push sofa first to open walkway, then move box, then armchair."
+steps:
+  {{"type":"LOCAL","action":{{"verb":"push","object":"gray sofa","from":"center of room","to":"against the wall"}},"uses":0,"serves":1,"reason":"open central walkway — critical fall prevention for elderly"}},
+  {{"type":"LOCAL","action":{{"verb":"move","object":"cardboard box","from":"floor","to":"cabinet"}},"uses":0,"serves":1,"reason":"eliminate trip hazard from walking path"}},
+  {{"type":"LOCAL","action":{{"verb":"push","object":"brown armchair","from":"corner","to":"near gray sofa"}},"uses":0,"serves":1,"reason":"additional comfortable seating for elderly visitor"}}
+
+R4 (mobile_light, living_room): goals=[clear floor, lights on, receive all items, place on table]
+reasoning: "I am receiver hub. Clear floor FIRST (trip hazards). Then lights on. Then receive tea/fruit/cushion. Place all on coffee table/sofa."
+steps:
+  {{"type":"LOCAL","action":{{"verb":"pick_up","object":"black bag","from":"floor","to":"shelf"}},"uses":0,"serves":1,"reason":"trip hazard removal — elderly safety priority"}},
+  {{"type":"LOCAL","action":{{"verb":"pick_up","object":"brown shoes","from":"floor","to":"cabinet"}},"uses":0,"serves":1,"reason":"remove additional trip hazard"}},
+  {{"type":"LOCAL","action":{{"verb":"toggle","object":"floor lamp","from":"off","to":"on"}},"uses":0,"serves":1,"reason":"bright lighting critical for elderly visibility"}},
+  {{"type":"ASK_HELP","action":{{"verb":"prepare","object":"warm tea","from":"kitchen","to":"white mug filled with hot water"}},"enables":"r4_receive_mug","reason":"R1 has kettle; I need tea delivered to serve grandmother"}},
+  {{"type":"RECEIVE","item":"white mug","from":"R1","reason":"accepting warm tea prepared by R1"}},
+  {{"type":"RECEIVE","item":"green apple","from":"R2","reason":"accepting healthy sliced snack"}},
+  {{"type":"LOCAL","action":{{"verb":"put_down","object":"white mug","from":"gripper","to":"coffee table"}},"uses":0,"serves":1,"reason":"tea accessible for seated grandmother"}},
+  {{"type":"RECEIVE","item":"blue cushion","from":"R5","reason":"accepting comfort cushion from bedroom"}},
+  {{"type":"LOCAL","action":{{"verb":"put_down","object":"blue cushion","from":"gripper","to":"gray sofa"}},"uses":0,"serves":1,"reason":"back support for elderly grandmother"}}
+
+R5 (mobile_light, bedroom): goals=[pass cushion to R4, tidy bedroom]
+reasoning: "Blue cushion for grandmother's comfort. R4 is receiver in living room — PASS to R4. Tidy bedroom after."
+steps:
+  {{"type":"LOCAL","action":{{"verb":"pick_up","object":"blue cushion","from":"bed","to":"gripper"}},"uses":0,"serves":1,"reason":"soft cushion for grandmother's back support"}},
+  {{"type":"PASS","item":"blue cushion","target":"R4","reason":"R4 places on sofa for grandmother's comfort"}},
+  {{"type":"LOCAL","action":{{"verb":"arrange","object":"gray blanket","from":"bed","to":"neatly on bed"}},"uses":0,"serves":1,"reason":"presentable bedroom in case grandmother rests"}}
+
+R6 (mobile_light, bathroom): goals=[hang towel, turn on light, tidy sink]
+reasoning: "Grandmother will need bathroom. Fresh towel + bright light = elderly safety. Tidy sink. All self-contained — no cross-room help needed."
+steps:
+  {{"type":"LOCAL","action":{{"verb":"hang","object":"white towel","from":"counter","to":"towel rack"}},"uses":0,"serves":1,"reason":"fresh towel for grandmother — cleanliness for elderly guest"}},
+  {{"type":"LOCAL","action":{{"verb":"toggle","object":"bathroom light","from":"off","to":"on"}},"uses":0,"serves":1,"reason":"well-lit bathroom critical for elderly safety"}},
+  {{"type":"LOCAL","action":{{"verb":"move","object":"pink soap","from":"sink","to":"cabinet"}},"uses":0,"serves":1,"reason":"tidy sink area for grandmother's comfort"}}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 """ + _WORDING + "\n" + _ESSENTIAL + "\n" + _SPACE_RULES + """
@@ -139,10 +200,13 @@ steps:
 BEFORE RETURNING, verify silently:
 ✓ Every object is in a has_items list
 ✓ No banned words
-✓ Every pick_up has a follow-up step
+✓ Every pick_up has a follow-up step (put_down to DIFFERENT location, PASS, or use)
 ✓ No from==to moves
+✓ No pick_up → put_down to the SAME location (that is a no-op — remove both steps)
 ✓ Every destination is real furniture
 ✓ ≥2 active steps per robot
+✓ No self-pass (PASS to yourself)
+✓ pick_up bread → must carry somewhere useful, not just hold it
 
 Return JSON:
 {{"reasoning":"a)... b)... c)... d)...",
@@ -185,6 +249,13 @@ Fix ONLY these problems. Return full corrected JSON (including goals and checkli
 # ================================================================ Stage 3: Edge Proposal
 PROPOSE_SYSTEM = """You are robot {agent}. Judge other robots' requests and offers.
 
+CHAIN-OF-THOUGHT before deciding:
+1. TASK NEED: does this offer/request actually serve the task end goal?
+2. MY PLAN: do I already cover this? (already_doing) Or conflict with it?
+3. CAPABILITY: can I physically do what is asked?
+4. EFFICIENCY: is accepting this the most efficient path, or is there a better way?
+5. DECIDE: accept/reject/already_doing/volunteer based on above reasoning.
+
 FIRST: check your own plan. If you already do what an ASK_HELP asks → "already_doing" + covered_by.
 DUPLICATE REQUESTS: if you're already serving an identical request → "ignore" the duplicate.
 
@@ -198,6 +269,21 @@ If you accept/volunteer for RECEIVE offer: add ONE PASS step (item from YOUR has
 Mobile robots can help in other rooms if it doesn't break their own work.
 
 OFFERS TO YOU: receive only if your goals need it and nothing else covers that purpose.
+
+━━━ FEW-SHOT EXAMPLE (grandmother visit, R4 in living_room) ━━━
+Offers to R4: [r1_pass_mug, r2_pass_apple, r2_pass_orange, r5_pass_cushion]
+Requests to judge: [r4_ask_help_tea (target=R1)]
+R4 response:
+{{"offers":[
+  {{"offer":"r1_pass_mug","decision":"receive","action":"receive white mug (with hot tea) from R1","uses":1,"insert_after":"r4_toggle_ceiling_light","reason":"I am mobile receiver; R1 cannot navigate. Accepting tea to place on coffee table for grandmother."}},
+  {{"offer":"r2_pass_apple","decision":"receive","action":"receive sliced green apple from R2","uses":1,"insert_after":"r4_receive_mug","reason":"Healthy snack for grandmother; Gripper R2 cannot navigate. I place on coffee table."}},
+  {{"offer":"r2_pass_orange","decision":"receive","action":"receive orange from R2","uses":1,"insert_after":"r4_receive_apple","reason":"Additional snack; same rationale as apple."}},
+  {{"offer":"r5_pass_cushion","decision":"receive","action":"receive blue cushion from R5","uses":1,"insert_after":"r4_place_orange","reason":"Comfort cushion for grandmother; R5 in bedroom cannot place in living room."}}
+],
+"judgments":[
+  {{"request":"r4_ask_help_tea","decision":"accept","reason":"R4 correctly identifies I have kettle. I will toggle kettle, pour water, PASS mug. Legitimate cross-room collaboration.","action":"pour silver kettle into white mug then PASS to R4","uses":1,"insert_after":"r1_pick_up_mug"}}
+]}}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 """ + _WORDING + """
 
@@ -221,6 +307,13 @@ OFFERS TO YOU: {offers}"""
 GRAPH_SYSTEM = """You are the graph integrator. You do NOT plan or allocate — every step was written by the robot that executes it.
 Turn CANDIDATE collaborations into one consistent joint plan.
 
+CHAIN-OF-THOUGHT before deciding each op:
+1. ISSUE TYPE: what kind of conflict is this? (duplicate, ordering, cycle, mismatch)
+2. ROOT CAUSE: why did this issue arise? (same object, same action, wrong order)
+3. CONSEQUENCE: what happens if left unresolved? (blocked steps, wasted work)
+4. BEST FIX: which op resolves it with minimum disruption? (drop/connect/order/disconnect)
+5. VERIFY: after applying op, does the plan make sense?
+
 Operations (use only with ids from issues):
 - {"op":"connect","src":CANDIDATE_ID,"dst":REQUEST_ID,"why":"..."} — MULTIPLE_CANDIDATES: pick ONE provider.
   Criteria: 1) body fits, 2) existing_work=true (prefer, no extra work), 3) targeted=true, 4) less work.
@@ -232,7 +325,16 @@ Operations (use only with ids from issues):
 - {"op":"merge","node":NODE_ID,"into":NODE_ID_OF_SAME_ROBOT,"why":"..."} — DUPLICATE inside ONE robot.
 - {"op":"unresolved","issue":ISSUE_ID,"why":"..."} — truly ambiguous.
 
-Answer EVERY issue with exactly one operation. Return JSON: {"ops":[...]}"""
+Answer EVERY issue with exactly one operation. Return JSON: {"ops":[...]}
+
+━━━ FEW-SHOT EXAMPLE (grandmother visit) ━━━
+Issues:
+  I1: DUPLICATE_WORK — r2_s0 (R2: pick up silver kettle) vs r1_s1 (R1: toggle silver kettle). R1 already owns kettle.
+  I2: ORDER_CANDIDATE — r4_ask_help (R4 ASK_HELP tea) must precede r1_pour (R1 pour kettle).
+ops:
+  {{"op":"drop","node":"r2_s0","why":"DUPLICATE_WORK with R1 who handles kettle for tea. R2 must focus on fruit only."}}
+  {{"op":"order","before":"r4_ask_help","after":"r1_pour","why":"ASK_HELP must be established before R1 pours — ensures correct dependency chain."}}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"""
 
 GRAPH_USER = """TASK: {task}
 JOINT PLAN: {plan}

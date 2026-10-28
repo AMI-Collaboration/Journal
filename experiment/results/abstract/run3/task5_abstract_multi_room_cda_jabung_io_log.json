@@ -1,44 +1,45 @@
 [
   {
-    "key": "offer:R3",
-    "system": "You are robot R3, a household robot that sees only its own room.\n\nSTEP 1 — LIST has_items: every clearly visible movable object in your images.\nFormat: \"<color> <noun> (<location>, image <k>)\". NEVER ",
-    "user": "## TASK (serve this only):\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR BODY: room=living_room, mobile=True, payload=20 kg, embodiment=Mobile_Heavy. CAN: PickupLightObject, PickupHeavyObject, PushFurniture, PassReceiveObject. CANNOT: SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\n(none)\n\nImages attached (2 image(s)), image 1 to 2.",
+    "key": "offer:R2",
+    "system": "You are robot R2, a household robot that sees only its own room.\n\nSTEP 1 — LIST has_items: every clearly visible movable object in your images.\nFormat: \"<color> <noun> (<location>, image <k>)\". NEVER ",
+    "user": "## TASK (serve this only):\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR BODY: room=kitchen, mobile=True, payload=5 kg, embodiment=Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture, SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\nKnife (in Drawer)\nEgg (in Fridge)\nTomato (in Fridge)\nDishSponge (in SinkBasin)\nLettuce (in SinkBasin)\nMug (",
     "output": {
       "has_items": [
-        "blue blanket (sofa, image 1)",
-        "black speaker (floor, image 1)",
-        "wooden table (center, image 2)",
-        "wooden chair (around table, image 2)",
-        "black plate (table, image 2)",
-        "tablet (table, image 2)",
-        "laptop (table, image 2)"
+        "red toaster (counter, image 1)",
+        "white kettle (counter, image 1)",
+        "glass jar (counter, image 1)",
+        "green apple (counter, image 1)",
+        "orange bowl (counter, image 1)",
+        "orange vase (table, image 2)",
+        "black bowl (table, image 2)"
       ],
-      "reasoning": "a) The living room should be dim and comfortable with snacks available. b) Ensuring the room is dim and comfortable is most important. c) Adjust lighting and arrange seating for comfort. d) The black plate could be used for snacks.",
-      "capability": "I am a mobile robot capable of moving objects and adjusting furniture.",
+      "reasoning": "a) Watching a movie requires a comfortable, dimly lit room with snacks. b) The living room needs dim lighting and snacks. c) I can provide snacks like the green apple and orange bowl. d) Snacks are essential for the movie experience. e) I will send snacks to the living room.",
+      "capability": "I am mobile and can carry light objects up to 5 kg.",
       "can_do": [
-        "PickupLightObject: move small items",
-        "PickupHeavyObject: move larger items",
-        "PushFurniture: rearrange furniture",
-        "PassReceiveObject: exchange items",
-        "ToggleObject: turn on/off lights, TV, appliances"
+        "PickupLightObject: lift mugs, fruit, small items",
+        "PassReceiveObject: transfer items to/from other robots",
+        "ToggleObject: turn on/off kettle, lights, appliances"
       ],
       "cannot_do": [
-        "SliceObject: cannot cut food",
-        "PourObject: cannot serve drinks"
+        "PickupHeavyObject: cannot lift heavy furniture",
+        "PushFurniture: cannot push sofa",
+        "SliceObject: cannot slice food",
+        "PourObject: cannot pour precisely"
       ],
       "suggests": [
-        "black plate (table, image 2)"
+        "green apple",
+        "orange bowl"
       ],
       "intends": [
-        "PushFurniture: adjust wooden chair for comfortable seating",
-        "PickupLightObject: move black plate to sofa for snacks",
-        "ToggleObject: adjust lighting to be dim",
-        "PickupLightObject: place blue blanket on sofa for comfort"
+        "pick up green apple from counter",
+        "pick up orange bowl from counter",
+        "pass green apple to living room",
+        "pass orange bowl to living room"
       ],
       "need_from_others": [
-        "snacks for the black plate"
+        "Living room to adjust lighting for dim ambiance"
       ],
-      "obs_scope": "I can observe and interact with items in the living room."
+      "obs_scope": "I can observe and interact with items in the kitchen only."
     }
   },
   {
@@ -47,83 +48,33 @@
     "user": "## TASK (serve this only):\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR BODY: room=living_room, mobile=False, payload=not specified (judge from your embodiment), embodiment=Gripper. CAN: PickupLightObject, SliceObject, PourObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture. This robot is FIXED IN PLACE and can never move to another room. To pass an item to another robot,",
     "output": {
       "has_items": [
-        "beige armchair (left side, image 1)",
-        "wooden side table (left side, image 1)",
-        "TV (center, image 1)",
-        "fireplace (center, image 1)",
-        "beige sofa (right side, image 1)",
-        "wooden dining table (center, image 2)",
-        "wooden dining chairs (around table, image 2)",
-        "chandelier (ceiling, image 2)",
-        "robot (near dining table, image 2)"
+        "white sofa (living room, image 1)",
+        "wooden coffee table (living room, image 1)",
+        "TV (living room, image 1)",
+        "white armchair (living room, image 1)",
+        "chandelier (living room, image 2)",
+        "robot with gripper (dining area, image 2)"
       ],
-      "reasoning": "a) GOAL STATE: The living room should be dimly lit, comfortable, and have snacks available. b) PRIORITY: Adjust lighting and prepare snacks within 30 minutes. c) MY ROOM: Adjust lighting using chandelier and prepare snacks if available. d) FOR OTHERS: No items in my room serve another room's needs.",
-      "capability": "I can manipulate light objects and prepare snacks.",
+      "reasoning": "a) Watching a movie requires a comfortable seating area, dim lighting, and snacks. b) The living room should have seating ready, lighting adjusted, and snacks available. c) I can adjust lighting by turning off the chandelier and ensure seating is comfortable. d) Dimming lights and ensuring seating is ready are priority. e) Snacks need to be brought from another room, as none are visible here.",
+      "capability": "I am fixed in place but can manipulate light objects and adjust lighting.",
       "can_do": [
-        "PickupLightObject: handle small items",
+        "PickupLightObject: lift small items",
         "SliceObject: cut food items",
-        "PourObject: serve drinks",
-        "PassReceiveObject: exchange items with others",
-        "ToggleObject: turn on/off lights, TV, appliances"
+        "PourObject: pour liquids",
+        "PassReceiveObject: transfer items to/from other robots"
       ],
       "cannot_do": [
         "PickupHeavyObject: cannot lift heavy furniture",
-        "PushFurniture: cannot move large items",
-        "Move: fixed in place, cannot relocate",
-        "AdjustCurtains: cannot reach or manipulate curtains",
-        "DimLights: cannot adjust light intensity directly"
+        "PushFurniture: cannot rearrange furniture"
       ],
       "suggests": [],
       "intends": [
-        "ToggleObject: turn off chandelier",
-        "ToggleObject: turn on TV"
+        "toggle chandelier from on to off"
       ],
       "need_from_others": [
-        "Bring snacks to the living room"
+        "snacks from the kitchen or another room"
       ],
-      "obs_scope": "I can observe the living room and its immediate surroundings."
-    }
-  },
-  {
-    "key": "offer:R2",
-    "system": "You are robot R2, a household robot that sees only its own room.\n\nSTEP 1 — LIST has_items: every clearly visible movable object in your images.\nFormat: \"<color> <noun> (<location>, image <k>)\". NEVER ",
-    "user": "## TASK (serve this only):\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR BODY: room=kitchen, mobile=True, payload=5 kg, embodiment=Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture, SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\nKnife (in Drawer)\nEgg (in Fridge)\nTomato (in Fridge)\nDishSponge (in SinkBasin)\nLettuce (in SinkBasin)\nMug (",
-    "output": {
-      "has_items": [
-        "black toaster (on counter, image 1)",
-        "brown jar (on counter, image 1)",
-        "white jar (on counter, image 1)",
-        "silver faucet (on counter, image 1)",
-        "green lettuce (on counter, image 1)",
-        "orange vase (on table, image 2)",
-        "black bowl (on table, image 2)",
-        "black chair (near table, image 2)"
-      ],
-      "reasoning": "a) GOAL STATE: The living room is dimly lit, comfortable, and has snacks available. b) PRIORITY: Ensuring snacks are ready and the environment is comfortable within 30 minutes. c) MY ROOM: Gather snacks using available items. d) FOR OTHERS: Provide snacks for the living room.",
-      "capability": "I am a mobile robot capable of light object manipulation.",
-      "can_do": [
-        "PickupLightObject: pick up objects under 5 kg",
-        "PassReceiveObject: transfer objects between rooms",
-        "ToggleObject: turn on/off lights, TV, appliances"
-      ],
-      "cannot_do": [
-        "PickupHeavyObject: cannot lift objects over 5 kg",
-        "PushFurniture: cannot move furniture",
-        "SliceObject: cannot cut or slice items",
-        "PourObject: cannot pour liquids"
-      ],
-      "suggests": [
-        "green lettuce (on counter, image 1)"
-      ],
-      "intends": [
-        "move green lettuce from counter to black bowl",
-        "PASS green lettuce to living room"
-      ],
-      "need_from_others": [
-        "DimLights: adjust lighting in the living room",
-        "ArrangeSeating: ensure comfortable seating in the living room"
-      ],
-      "obs_scope": "I can observe and interact with objects in the kitchen only."
+      "obs_scope": "I can observe and interact with items in the living room only."
     }
   },
   {
@@ -132,46 +83,81 @@
     "user": "## TASK (serve this only):\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR BODY: room=kitchen, mobile=True, payload=5 kg, embodiment=Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture, SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\nKnife (in Drawer)\nEgg (in Fridge)\nTomato (in Fridge)\nDishSponge (in SinkBasin)\nLettuce (in SinkBasin)\nMug (",
     "output": {
       "has_items": [
-        "green lettuce (sink basin, image 1)",
-        "brown bread (counter, image 2)",
+        "green apple (counter, image 1)",
+        "orange (counter, image 1)",
+        "brown loaf (counter, image 2)",
         "black bowl (counter, image 2)",
-        "red microwave (counter, image 2)",
-        "white paper towel (counter, image 2)",
-        "black coffee maker (counter, image 2)",
-        "silver sink (counter, image 1)",
-        "white dishwasher (counter, image 2)",
-        "white ceiling lamp (ceiling, image 1)",
-        "green vase (table, image 1)",
-        "orange cabinet (wall, image 1)",
-        "orange cabinet (wall, image 2)",
-        "white refrigerator (corner, image 1)"
+        "coffee maker (counter, image 2)",
+        "microwave (counter, image 2)"
       ],
-      "reasoning": "a) GOAL STATE: Living room is dim and comfortable with snacks available. b) PRIORITY: Ensure snacks are ready and lighting is adjusted in time. c) MY ROOM: Gather snacks using available items. d) FOR OTHERS: Provide snacks for the living room.",
-      "capability": "I am a mobile robot with light object handling capabilities.",
+      "reasoning": "a) To watch a movie comfortably, the living room needs dim lighting, comfortable seating, and snacks. b) Living room requires dim lighting and snacks ready. c) I can provide snacks from the kitchen. d) Snacks are a priority to prepare before the movie begins. e) Green apple and orange should be brought to the living room as snacks.",
+      "capability": "I am mobile and can carry light objects up to 5 kg.",
       "can_do": [
-        "PickupLightObject: pick up items like bread and bowl",
-        "PassReceiveObject: transfer items to other rooms",
+        "PickupLightObject: lift mugs, fruit, small items",
+        "PassReceiveObject: transfer items to/from other robots",
         "ToggleObject: turn on/off lights, TV, appliances"
       ],
       "cannot_do": [
-        "PickupHeavyObject: cannot lift heavy items",
-        "PushFurniture: cannot move furniture",
-        "SliceObject: cannot cut or slice items",
+        "PickupHeavyObject: cannot lift heavy furniture",
+        "PushFurniture: cannot push sofa",
+        "SliceObject: cannot slice food",
+        "PourObject: cannot pour precisely"
+      ],
+      "suggests": [
+        "green apple",
+        "orange"
+      ],
+      "intends": [
+        "pick up green apple from counter",
+        "pick up orange from counter",
+        "pass green apple to living room",
+        "pass orange to living room"
+      ],
+      "need_from_others": [
+        "Dim lighting in the living room",
+        "Arrange comfortable seating in the living room"
+      ],
+      "obs_scope": "I can observe and interact with items in the kitchen only."
+    }
+  },
+  {
+    "key": "offer:R3",
+    "system": "You are robot R3, a household robot that sees only its own room.\n\nSTEP 1 — LIST has_items: every clearly visible movable object in your images.\nFormat: \"<color> <noun> (<location>, image <k>)\". NEVER ",
+    "user": "## TASK (serve this only):\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR BODY: room=living_room, mobile=True, payload=20 kg, embodiment=Mobile_Heavy. CAN: PickupLightObject, PickupHeavyObject, PushFurniture, PassReceiveObject. CANNOT: SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\n(none)\n\nImages attached (2 image(s)), image 1 to 2.",
+    "output": {
+      "has_items": [
+        "blue blanket (sofa, image 1)",
+        "black speaker (floor, image 1)",
+        "black tablet (table, image 1)",
+        "black plate (table, image 2)",
+        "gray laptop (table, image 2)"
+      ],
+      "reasoning": "a) To watch a movie comfortably, the room should have dim lighting, comfortable seating, and snacks. b) The living room needs to be arranged for comfort with dim lighting and snacks available. c) I can adjust the seating with the blue blanket, set up the black tablet for control, and ensure snacks are on the black plate. d) Adjusting the seating and preparing snacks are the top priorities given the deadline. e) The black plate should be used for snacks.",
+      "capability": "I am mobile and can carry heavy objects up to 20 kg.",
+      "can_do": [
+        "PickupLightObject: lift small items like tablets and plates",
+        "PickupHeavyObject: move heavy items like furniture",
+        "PushFurniture: rearrange sofas or chairs",
+        "PassReceiveObject: transfer items to/from other robots",
+        "ToggleObject: turn on/off lights, TV, appliances"
+      ],
+      "cannot_do": [
+        "SliceObject: cannot slice food",
         "PourObject: cannot pour liquids"
       ],
       "suggests": [
-        "brown bread (counter, image 2)",
-        "black bowl (counter, image 2)"
+        "black plate"
       ],
       "intends": [
-        "move brown bread from counter to black bowl",
-        "pass black bowl to living room"
+        "push sofa slightly for better viewing",
+        "place blue blanket on sofa",
+        "ensure black tablet is on table for control",
+        "place black plate on table for snacks"
       ],
       "need_from_others": [
-        "DimLights: adjust lighting in the living room",
-        "ArrangeSeating: ensure comfortable seating in the living room"
+        "snacks to place on black plate"
       ],
-      "obs_scope": "I can observe and interact with items in the kitchen only."
+      "obs_scope": "I can observe and interact with items in the living room only."
     }
   },
   {
@@ -180,32 +166,27 @@
     "user": "## TASK (serve this only):\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR BODY: room=bathroom, mobile=True, payload=5 kg, embodiment=Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture, SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\n(none)\n\nImages attached (2 image(s)), image 1 to 2.",
     "output": {
       "has_items": [
-        "brown towel (shower, image 1)",
-        "light switch (wall, image 2)",
-        "door (wall, image 2)"
+        "brown towel (shower rack, image 1)"
       ],
-      "reasoning": "a) The living room should be dim and comfortable with snacks available. b) Ensuring the living room is dim and snacks are ready is crucial. c) I can only adjust lighting in my room. d) I have no items useful for the living room's needs.",
-      "capability": "I can move around and interact with light objects.",
+      "reasoning": "a) Watching a movie needs a comfortable setup with dim lighting and snacks. b) Living room should have dim lighting, comfortable seating, and snacks. c) I can contribute by offering any items that could enhance comfort or be used for snacks, though the bathroom is limited in options. d) Priority is to focus on potential contributions to comfort or snacks. e) No items in my room are directly useful for the task, so assistance is minimal.",
+      "capability": "I am mobile and can carry light objects up to 5 kg.",
       "can_do": [
-        "PickupLightObject: pick up objects under 5 kg",
-        "PassReceiveObject: pass or receive objects",
-        "ToggleObject: turn on/off lights, TV, appliances"
+        "PickupLightObject: lift light items like towels",
+        "PassReceiveObject: transfer items to/from other robots"
       ],
       "cannot_do": [
-        "PickupHeavyObject: cannot lift heavy items",
-        "PushFurniture: cannot move furniture",
-        "SliceObject: cannot cut items",
-        "PourObject: cannot pour liquids"
+        "PickupHeavyObject: cannot lift heavy furniture",
+        "PushFurniture: cannot move sofa",
+        "SliceObject: cannot slice food",
+        "PourObject: cannot pour drinks"
       ],
       "suggests": [],
-      "intends": [
-        "toggle light switch (wall, image 2)"
-      ],
+      "intends": [],
       "need_from_others": [
-        "dim lighting in the living room",
-        "prepare snacks"
+        "ToggleObject: dim the lights in the living room",
+        "Provide snacks for the movie"
       ],
-      "obs_scope": "I can only observe and interact with items in the bathroom."
+      "obs_scope": "I can observe and interact with items in the bathroom only."
     }
   },
   {
@@ -214,31 +195,29 @@
     "user": "## TASK (serve this only):\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR BODY: room=bathroom, mobile=True, payload=5 kg, embodiment=Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture, SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\n(none)\n\nImages attached (2 image(s)), image 1 to 2.",
     "output": {
       "has_items": [
-        "black trash bin (next to toilet, image 1)",
-        "green soap dispenser (on sink, image 2)",
-        "pink soap bar (on sink, image 2)",
-        "brown toothbrush holder (on sink, image 2)",
-        "yellow toothbrush (on sink, image 2)"
+        "black trash bin (corner, image 1)",
+        "green soap dispenser (sink, image 2)",
+        "pink soap bar (sink, image 2)",
+        "brown toothbrush holder (sink, image 2)",
+        "yellow toothbrush (sink, image 2)"
       ],
-      "reasoning": "a) The living room should be dimly lit, comfortable, and have snacks available. b) Ensuring the living room is dim and comfortable is most important given the deadline. c) No changes are needed in the bathroom for this task. d) None of the bathroom items serve the living room's needs.",
-      "capability": "I am a mobile robot with light object handling capabilities.",
+      "reasoning": "a) To watch a movie comfortably, the living room should be dim, with snacks available. b) Living room needs dim lighting, comfortable seating, and snacks. c) I can provide snacks if available or suggest items for others to handle. d) Snacks are a priority for comfort. e) I have no snack items to offer, but I can suggest checking the kitchen for snacks.",
+      "capability": "I am mobile and can carry light objects up to 5 kg.",
       "can_do": [
-        "PickupLightObject: pick up small items",
-        "PassReceiveObject: transfer items to/from others",
-        "ToggleObject: turn on/off lights, TV, appliances"
+        "PickupLightObject: lift small items like soap",
+        "PassReceiveObject: transfer items to/from other robots",
+        "ToggleObject: turn on/off lights, appliances"
       ],
       "cannot_do": [
-        "PickupHeavyObject: cannot lift heavy items",
-        "PushFurniture: cannot move furniture",
-        "SliceObject: cannot cut or slice items",
+        "PickupHeavyObject: cannot lift heavy furniture",
+        "PushFurniture: cannot push sofa",
+        "SliceObject: cannot slice food",
         "PourObject: cannot pour liquids"
       ],
       "suggests": [],
       "intends": [],
       "need_from_others": [
-        "DimLighting: adjust living room lights",
-        "ArrangeSeating: ensure comfortable seating",
-        "ProvideSnacks: bring snacks to the living room"
+        "Snacks from the kitchen"
       ],
       "obs_scope": "I can observe and interact with items in the bathroom only."
     }
@@ -249,39 +228,29 @@
     "user": "## TASK (serve this only):\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR BODY: room=bedroom, mobile=True, payload=5 kg, embodiment=Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture, SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\n(none)\n\nImages attached (2 image(s)), image 1 to 2.",
     "output": {
       "has_items": [
-        "brown trash can (next to bed, image 1)",
-        "blue book (on floor, image 1)",
-        "green sock (on floor, image 1)",
-        "TV (on stand, image 2)",
-        "map (on wall, image 2)"
+        "orange book (floor, image 1)",
+        "brown trash can (floor, image 1)",
+        "digital clock (window sill, image 1)"
       ],
-      "reasoning": "a) The living room should be dimly lit, comfortable, and have snacks available for the movie. b) Ensuring the living room is comfortable and snacks are ready is most important. c) I can adjust the lighting in my room and ensure it's tidy. d) The TV might be useful in the living room if needed.",
-      "capability": "I am a mobile robot with light manipulation capabilities.",
+      "reasoning": "a) Goal is a comfortable, dim living room with snacks for movie watching. b) Living room needs dim lighting, comfortable seating, and snacks. c) In my room, I can contribute by providing snacks if available. d) Priority is to ensure snacks are available. e) I have no snacks to offer, so I suggest checking the kitchen for snacks.",
+      "capability": "I am mobile and can carry light objects up to 5 kg.",
       "can_do": [
-        "PickupLightObject: pick up objects under 5 kg",
-        "PassReceiveObject: pass or receive objects",
+        "PickupLightObject: lift small items",
+        "PassReceiveObject: transfer items to/from other robots",
         "ToggleObject: turn on/off lights, TV, appliances"
       ],
       "cannot_do": [
-        "PickupHeavyObject: cannot lift heavy items",
-        "PushFurniture: cannot move furniture",
-        "SliceObject: cannot cut food",
-        "PourObject: cannot pour drinks"
+        "PickupHeavyObject: cannot lift heavy furniture",
+        "PushFurniture: cannot push sofa",
+        "SliceObject: cannot slice food",
+        "PourObject: cannot pour precisely"
       ],
-      "suggests": [
-        "TV (on stand, image 2)"
-      ],
-      "intends": [
-        "PickupLightObject: pick up blue book from floor",
-        "PickupLightObject: pick up green sock from floor",
-        "PassReceiveObject: pass blue book to living room",
-        "PassReceiveObject: pass green sock to living room"
-      ],
+      "suggests": [],
+      "intends": [],
       "need_from_others": [
-        "DimLighting: adjust living room lighting",
-        "PrepareSnacks: provide snacks for the movie"
+        "Snacks from the kitchen to the living room"
       ],
-      "obs_scope": "I can observe and interact with objects in my bedroom."
+      "obs_scope": "I can observe and interact with items in the bedroom only."
     }
   },
   {
@@ -290,134 +259,104 @@
     "user": "## TASK (serve this only):\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR BODY: room=bedroom, mobile=True, payload=5 kg, embodiment=Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture, SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\n(none)\n\nImages attached (2 image(s)), image 1 to 2.",
     "output": {
       "has_items": [
-        "white clock (windowsill, image 1)",
+        "white clock (radiator, image 1)",
         "green trash bin (floor, image 1)",
-        "black lamp (desk, image 1)",
-        "brown desk (floor, image 1)",
+        "wooden desk (floor, image 1)",
         "wooden chair (floor, image 1)",
+        "white table lamp (desk, image 1)",
         "books (desk, image 1)",
         "silver laptop (desk, image 1)",
-        "beige bed (floor, image 2)",
-        "TV (shelf, image 2)",
-        "map (wall, image 2)",
-        "blue broom (floor, image 2)"
+        "brown shelf (floor, image 2)",
+        "TV (brown shelf, image 2)",
+        "wooden bed (floor, image 2)",
+        "blue umbrella (wooden bed, image 2)"
       ],
-      "reasoning": "a) GOAL STATE: The living room is dim, comfortable, and has snacks available. b) PRIORITY: Ensuring the lighting is dim and snacks are ready within 30 minutes. c) MY ROOM: I can only toggle the black lamp here. d) FOR OTHERS: I cannot directly provide snacks or adjust living room lighting.",
-      "capability": "I am mobile and can interact with light objects.",
+      "reasoning": "a) Watching a movie requires a comfortable seating area, dim lighting, and snacks. b) The living room should have dim lighting and a comfortable setup with snacks ready. c) I can contribute by providing a table lamp for dim lighting and checking for snacks in the bedroom. d) The table lamp is important for creating dim lighting. e) The table lamp should go to the living room for lighting adjustment.",
+      "capability": "I am mobile and can carry light objects up to 5 kg.",
       "can_do": [
-        "PickupLightObject: move small items",
-        "PassReceiveObject: transfer items",
-        "ToggleObject: turn on/off lights, TV, appliances"
+        "PickupLightObject: lift lamps, small items",
+        "PassReceiveObject: transfer items to/from other robots",
+        "ToggleObject: turn on/off table lamp, TV, appliances"
       ],
       "cannot_do": [
-        "PickupHeavyObject: too heavy for me",
-        "PushFurniture: not possible",
-        "SliceObject: cannot cut",
-        "PourObject: cannot pour liquids"
+        "PickupHeavyObject: cannot lift heavy furniture",
+        "PushFurniture: cannot push sofa",
+        "SliceObject: cannot slice food",
+        "PourObject: cannot pour precisely"
       ],
       "suggests": [
-        "black lamp (desk, image 1)"
+        "white table lamp"
       ],
       "intends": [
-        "ToggleObject: turn off black lamp (desk, image 1)"
+        "pick up white table lamp from desk",
+        "pass white table lamp to living room"
       ],
       "need_from_others": [
-        "Provide snacks for the living room",
-        "Adjust living room lighting"
+        "Adjust lighting in the living room with the table lamp",
+        "Provide snacks in the living room"
       ],
-      "obs_scope": "I can only observe and interact with items in my bedroom."
-    }
-  },
-  {
-    "key": "plan:R1",
-    "system": "You are robot R1 in the kitchen. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am a mobile robot with light object handling capabilities.\",\n \"can_do\": [\n  \"PickupLightObject: pick up items like bread and bowl\",\n  \"PassReceiveObject: transfer items to other rooms\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"green lettuce (sink basin, imag",
-    "output": {
-      "reasoning": "a) The goal is to prepare the living room for a movie by ensuring it is dimly lit and comfortable, with snacks available. b) My priority is to prepare and pass snacks to the living room. c) In my room, I will gather the necessary items for snacks. d) I will pass the prepared snacks to the living room for others to arrange.",
-      "goals": [
-        {
-          "goal": "Provide snacks for the living room",
-          "priority": "high",
-          "in_my_room": true
-        }
-      ],
-      "checklist": [
-        {
-          "object": "brown bread",
-          "change": "move to black bowl",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "black bowl",
-          "change": "pass to living room",
-          "weight": "light",
-          "how": "PASS"
-        }
-      ],
-      "steps": [
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "move",
-            "object": "brown bread",
-            "from": "counter",
-            "to": "black bowl"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "PASS",
-          "item": "black bowl",
-          "target": "R3",
-          "serves": 1
-        }
-      ]
+      "obs_scope": "I can observe and interact with items in the bedroom only."
     }
   },
   {
     "key": "plan:R2",
-    "system": "You are robot R2 in the kitchen. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am a mobile robot capable of light object manipulation.\",\n \"can_do\": [\n  \"PickupLightObject: pick up objects under 5 kg\",\n  \"PassReceiveObject: transfer objects between rooms\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"black toaster (on counter, image 1)\",\n  ",
+    "system": "You are robot R2 in the kitchen. Write YOUR part of the shared plan.\n\nCHAIN-OF-THOUGHT before writing steps:\n1. TASK END STATE: what must be true when done? (same as offer stage)\n2. OTHER ROBOTS: scan",
+    "user": "## TASK:\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift mugs, fruit, small items\",\n  \"PassReceiveObject: transfer items to/from other robots\",\n  \"ToggleObject: turn on/off kettle, lights, appliances\"\n ],\n \"has_items\": [\n  \"red toaster (counter, image 1)\",\n ",
     "output": {
-      "reasoning": "a) The living room needs to be dimly lit, comfortable, and have snacks available for watching a movie. b) My priority is to ensure snacks are ready and transferred to the living room. c) In my room, I will gather and prepare the snacks using available items. d) I will pass the snacks to the living room for others to use.",
+      "reasoning": "a) Watching a movie requires a comfortable, dimly lit room with snacks. b) The living room needs dim lighting and snacks. c) I can provide snacks like the green apple and orange bowl. d) Snacks are essential for the movie experience. e) I will send snacks to the living room.",
       "goals": [
         {
-          "goal": "Provide snacks for the living room",
+          "goal": "Provide snacks for the movie in the living room",
           "priority": "high",
           "in_my_room": true
         }
       ],
       "checklist": [
         {
-          "object": "green lettuce",
-          "change": "move to black bowl",
+          "object": "green apple",
+          "change": "pass to living room",
           "weight": "light",
           "how": "LOCAL"
         },
         {
-          "object": "green lettuce",
+          "object": "orange bowl",
           "change": "pass to living room",
           "weight": "light",
-          "how": "PASS"
+          "how": "LOCAL"
         }
       ],
       "steps": [
         {
           "type": "LOCAL",
           "action": {
-            "verb": "move",
-            "object": "green lettuce",
+            "verb": "pick_up",
+            "object": "green apple",
             "from": "counter",
-            "to": "black bowl"
+            "to": "gripper"
           },
           "uses": 0,
           "serves": 1
         },
         {
           "type": "PASS",
-          "item": "green lettuce",
+          "item": "green apple",
+          "target": "R3",
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "orange bowl",
+            "from": "counter",
+            "to": "gripper"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "PASS",
+          "item": "orange bowl",
           "target": "R3",
           "serves": 1
         }
@@ -426,13 +365,13 @@
   },
   {
     "key": "plan:R4",
-    "system": "You are robot R4 in the living_room. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessibl",
-    "user": "## TASK:\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I can manipulate light objects and prepare snacks.\",\n \"can_do\": [\n  \"PickupLightObject: handle small items\",\n  \"SliceObject: cut food items\",\n  \"PourObject: serve drinks\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [",
+    "system": "You are robot R4 in the living_room. Write YOUR part of the shared plan.\n\nCHAIN-OF-THOUGHT before writing steps:\n1. TASK END STATE: what must be true when done? (same as offer stage)\n2. OTHER ROBOTS: ",
+    "user": "## TASK:\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I am fixed in place but can manipulate light objects and adjust lighting.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items\",\n  \"SliceObject: cut food items\",\n  \"PourObject: pour liquids\",\n  \"PassReceiveObject: transfer items to/from other robots\"\n ],\n \"has_items\": [\n  \"white sofa (living r",
     "output": {
-      "reasoning": "a) The living room should be dimly lit, comfortable, and have snacks available for a movie. b) Priority is high for adjusting lighting and preparing snacks within 30 minutes. c) In my room, I will turn off the chandelier and turn on the TV. d) I will receive snacks from R1 and R2 to ensure they are available in the living room.",
+      "reasoning": "a) Watching a movie requires a comfortable seating area, dim lighting, and snacks. b) The living room should have seating ready, lighting adjusted, and snacks available. c) I can adjust the lighting by turning off the chandelier and ensure seating is comfortable. d) Dimming lights and ensuring seating is ready are priorities. e) Snacks need to be brought from another room, as none are visible here.",
       "goals": [
         {
-          "goal": "Adjust lighting and prepare snacks for movie watching",
+          "goal": "Make the living room comfortable and dim for movie watching, with snacks available.",
           "priority": "high",
           "in_my_room": true
         }
@@ -440,25 +379,13 @@
       "checklist": [
         {
           "object": "chandelier",
-          "change": "turn off",
+          "change": "toggle from on to off",
           "weight": "light",
           "how": "LOCAL"
         },
         {
-          "object": "TV",
-          "change": "turn on",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "brown bread",
-          "change": "receive",
-          "weight": "light",
-          "how": "RECEIVE"
-        },
-        {
-          "object": "green lettuce",
-          "change": "receive",
+          "object": "snacks",
+          "change": "receive and place on coffee table",
           "weight": "light",
           "how": "RECEIVE"
         }
@@ -467,10 +394,33 @@
         {
           "type": "LOCAL",
           "action": {
-            "verb": "turn_off",
+            "verb": "toggle",
             "object": "chandelier",
-            "from": "ceiling",
+            "from": "on",
             "to": "off"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "RECEIVE",
+          "item": "green apple",
+          "target": "R1",
+          "serves": 1
+        },
+        {
+          "type": "RECEIVE",
+          "item": "orange",
+          "target": "R1",
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "green apple",
+            "from": "gripper",
+            "to": "wooden coffee table"
           },
           "uses": 0,
           "serves": 1
@@ -478,70 +428,40 @@
         {
           "type": "LOCAL",
           "action": {
-            "verb": "turn_on",
-            "object": "TV",
-            "from": "off",
-            "to": "on"
+            "verb": "put_down",
+            "object": "orange",
+            "from": "gripper",
+            "to": "wooden coffee table"
           },
           "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "RECEIVE",
-          "item": "brown bread",
-          "target": "R1",
-          "serves": 1
-        },
-        {
-          "type": "RECEIVE",
-          "item": "green lettuce",
-          "target": "R2",
           "serves": 1
         }
       ]
     }
   },
   {
-    "key": "plan:R3",
-    "system": "You are robot R3 in the living_room. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessibl",
-    "user": "## TASK:\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am a mobile robot capable of moving objects and adjusting furniture.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PickupHeavyObject: move larger items\",\n  \"PushFurniture: rearrange furniture\",\n  \"PassReceiveObject: exchange items\",\n  \"ToggleObject: turn on/off lights, TV, applia",
+    "key": "plan:R1",
+    "system": "You are robot R1 in the kitchen. Write YOUR part of the shared plan.\n\nCHAIN-OF-THOUGHT before writing steps:\n1. TASK END STATE: what must be true when done? (same as offer stage)\n2. OTHER ROBOTS: scan",
+    "user": "## TASK:\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift mugs, fruit, small items\",\n  \"PassReceiveObject: transfer items to/from other robots\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"green apple (counter, image 1)\",\n  \"or",
     "output": {
-      "reasoning": "a) The living room should be comfortable with dim lighting and snacks available for watching a movie. b) Ensuring the room is dim and comfortable is most important. c) I will adjust the lighting, arrange seating, and prepare the sofa with a blanket. d) I will receive snacks from another robot to complete the setup.",
+      "reasoning": "a) To watch a movie comfortably, the living room needs dim lighting, comfortable seating, and snacks. b) I can provide snacks from the kitchen. c) R3 will handle rearranging the seating in the living room. d) R4 will manage the lighting by turning off the chandelier. e) I will pass snacks to the living room to ensure they are available for the movie.",
       "goals": [
         {
-          "goal": "prepare living room for movie watching",
+          "goal": "Provide snacks for the movie in the living room",
           "priority": "high",
-          "in_my_room": true
+          "in_my_room": false
         }
       ],
       "checklist": [
         {
-          "object": "blue blanket",
-          "change": "move to sofa",
+          "object": "green apple",
+          "change": "pass to living room",
           "weight": "light",
           "how": "LOCAL"
         },
         {
-          "object": "black plate",
-          "change": "move to sofa",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "wooden chair",
-          "change": "adjust for comfortable seating",
-          "weight": "heavy",
-          "how": "LOCAL"
-        },
-        {
-          "object": "ceiling lamp",
-          "change": "turn off",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "floor lamp",
-          "change": "turn on",
+          "object": "orange",
+          "change": "pass to living room",
           "weight": "light",
           "how": "LOCAL"
         }
@@ -551,6 +471,102 @@
           "type": "LOCAL",
           "action": {
             "verb": "pick_up",
+            "object": "green apple",
+            "from": "counter",
+            "to": "gripper"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pass",
+            "object": "green apple",
+            "target": "R3"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "orange",
+            "from": "counter",
+            "to": "gripper"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pass",
+            "object": "orange",
+            "target": "R3"
+          },
+          "uses": 0,
+          "serves": 1
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R3",
+    "system": "You are robot R3 in the living_room. Write YOUR part of the shared plan.\n\nCHAIN-OF-THOUGHT before writing steps:\n1. TASK END STATE: what must be true when done? (same as offer stage)\n2. OTHER ROBOTS: ",
+    "user": "## TASK:\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am mobile and can carry heavy objects up to 20 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items like tablets and plates\",\n  \"PickupHeavyObject: move heavy items like furniture\",\n  \"PushFurniture: rearrange sofas or chairs\",\n  \"PassReceiveObject: transfer items to/from other robots\",\n",
+    "output": {
+      "reasoning": "a) To watch a movie comfortably, the room should be arranged with dim lighting, comfortable seating, and snacks. b) I will ensure the sofa is positioned for optimal viewing and add a blanket for comfort. c) I will place the black tablet on the table for movie control and prepare the black plate for snacks. d) I need to receive snacks from R1 or R2, who are both in the kitchen, to complete the setup.",
+      "goals": [
+        {
+          "goal": "prepare living room for movie watching",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "gray sofa",
+          "change": "reposition for better viewing",
+          "weight": "heavy",
+          "how": "LOCAL"
+        },
+        {
+          "object": "blue blanket",
+          "change": "place on sofa",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "black tablet",
+          "change": "ensure on table",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "black plate",
+          "change": "place on table for snacks",
+          "weight": "light",
+          "how": "LOCAL"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "push",
+            "object": "gray sofa",
+            "from": "center",
+            "to": "better viewing position"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "place",
             "object": "blue blanket",
             "from": "sofa",
             "to": "sofa"
@@ -562,9 +578,31 @@
           "type": "LOCAL",
           "action": {
             "verb": "pick_up",
+            "object": "black tablet",
+            "from": "table",
+            "to": "gripper"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "black tablet",
+            "from": "gripper",
+            "to": "table"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
             "object": "black plate",
             "from": "table",
-            "to": "sofa"
+            "to": "gripper"
           },
           "uses": 0,
           "serves": 1
@@ -572,62 +610,70 @@
         {
           "type": "LOCAL",
           "action": {
-            "verb": "push",
-            "object": "wooden chair",
-            "from": "around table",
-            "to": "comfortable position"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "turn_off",
-            "object": "ceiling lamp",
-            "from": "ceiling",
-            "to": "off"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "turn_on",
-            "object": "floor lamp",
-            "from": "floor",
-            "to": "on"
+            "verb": "put_down",
+            "object": "black plate",
+            "from": "gripper",
+            "to": "table"
           },
           "uses": 0,
           "serves": 1
         },
         {
           "type": "RECEIVE",
-          "item": "snacks",
-          "target": "R4",
+          "item": "green apple",
+          "target": "R1",
+          "serves": 1
+        },
+        {
+          "type": "RECEIVE",
+          "item": "orange",
+          "target": "R2",
           "serves": 1
         }
       ]
     }
   },
   {
-    "key": "plan:R6",
-    "system": "You are robot R6 in the bathroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, ",
-    "user": "## TASK:\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR OFFER: {\n \"agent\": \"R6\",\n \"capability\": \"I can move around and interact with light objects.\",\n \"can_do\": [\n  \"PickupLightObject: pick up objects under 5 kg\",\n  \"PassReceiveObject: pass or receive objects\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"brown towel (shower, image 1)\",\n  \"light switch (wall,",
+    "key": "plan:R5",
+    "system": "You are robot R5 in the bathroom. Write YOUR part of the shared plan.\n\nCHAIN-OF-THOUGHT before writing steps:\n1. TASK END STATE: what must be true when done? (same as offer stage)\n2. OTHER ROBOTS: sca",
+    "user": "## TASK:\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR OFFER: {\n \"agent\": \"R5\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items like soap\",\n  \"PassReceiveObject: transfer items to/from other robots\",\n  \"ToggleObject: turn on/off lights, appliances\"\n ],\n \"has_items\": [\n  \"black trash bin (corner, image 1)\",\n  \"green ",
     "output": {
-      "reasoning": "a) The task requires the living room to be dim and have snacks available for a movie. b) I can only interact with the light switch in the bathroom. c) Other robots are responsible for preparing snacks and adjusting the living room lighting. d) I will toggle the bathroom light switch to ensure it's off, contributing to the dim ambiance.",
+      "reasoning": "a) The task requires a comfortable and dim living room setup for movie watching, along with snacks. b) Since I am in the bathroom and no snacks are available here, I rely on other robots for snack provision. c) Other robots are handling lighting and furniture arrangement in the living room, so I should focus on what I can contribute or facilitate. d) My main role is to ensure any items I can pass or receive are managed efficiently, but since I don't have direct contributions to the living room setup, I will remain on standby for any collaborative needs.",
       "goals": [
         {
-          "goal": "toggle bathroom light switch to off",
+          "goal": "facilitate the movie watching setup by being available for item transfer if needed",
           "priority": "low",
           "in_my_room": true
         }
       ],
       "checklist": [
         {
-          "object": "light switch (wall, image 2)",
-          "change": "toggle to off",
+          "object": "snacks",
+          "change": "ensure availability",
+          "weight": "light",
+          "how": "RECEIVE"
+        }
+      ],
+      "steps": []
+    }
+  },
+  {
+    "key": "plan:R6",
+    "system": "You are robot R6 in the bathroom. Write YOUR part of the shared plan.\n\nCHAIN-OF-THOUGHT before writing steps:\n1. TASK END STATE: what must be true when done? (same as offer stage)\n2. OTHER ROBOTS: sca",
+    "user": "## TASK:\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR OFFER: {\n \"agent\": \"R6\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift light items like towels\",\n  \"PassReceiveObject: transfer items to/from other robots\"\n ],\n \"has_items\": [\n  \"brown towel (shower rack, image 1)\"\n ],\n \"need_from_others\": [\n  \"ToggleObject: dim the light",
+    "output": {
+      "reasoning": "a) The task requires a comfortable and dim living room setup with snacks for a movie. b) My role is limited to the bathroom, which offers minimal direct contribution to the living room setup. c) I can assist by offering a towel for comfort or any other minor contribution, but no significant items are available in my room for this task. d) Other robots are handling lighting and snacks, so I will not duplicate those efforts.",
+      "goals": [
+        {
+          "goal": "assist in creating a comfortable movie-watching environment",
+          "priority": "low",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "brown towel",
+          "change": "potentially pass for comfort",
           "weight": "light",
           "how": "LOCAL"
         }
@@ -636,42 +682,12 @@
         {
           "type": "LOCAL",
           "action": {
-            "verb": "toggle",
-            "object": "light switch",
-            "from": "on",
-            "to": "off"
+            "verb": "pick_up",
+            "object": "brown towel",
+            "from": "shower rack",
+            "to": "gripper"
           },
           "uses": 0,
-          "serves": 0
-        }
-      ]
-    }
-  },
-  {
-    "key": "plan:R5",
-    "system": "You are robot R5 in the bathroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, ",
-    "user": "## TASK:\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR OFFER: {\n \"agent\": \"R5\",\n \"capability\": \"I am a mobile robot with light object handling capabilities.\",\n \"can_do\": [\n  \"PickupLightObject: pick up small items\",\n  \"PassReceiveObject: transfer items to/from others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"black trash bin (next to toilet, image 1)\",\n ",
-    "output": {
-      "reasoning": "a) The task is to prepare the living room for a movie, which requires dim lighting, comfortable seating, and snacks. b) My capabilities are limited to the bathroom, and none of the items here are relevant to the task. c) I can assist by facilitating the transfer of items or toggling appliances if needed. d) Since the bathroom items are not needed, I will pass my idle capacity to assist other robots if necessary.",
-      "goals": [
-        {
-          "goal": "assist in preparing the living room for a movie",
-          "priority": "medium",
-          "in_my_room": false
-        }
-      ],
-      "checklist": [],
-      "steps": [
-        {
-          "type": "PASS",
-          "item": "yellow toothbrush",
-          "target": "R6",
-          "serves": 1
-        },
-        {
-          "type": "PASS",
-          "item": "pink soap bar",
-          "target": "R6",
           "serves": 1
         }
       ]
@@ -679,58 +695,36 @@
   },
   {
     "key": "plan:R7",
-    "system": "You are robot R7 in the bedroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR OFFER: {\n \"agent\": \"R7\",\n \"capability\": \"I am a mobile robot with light manipulation capabilities.\",\n \"can_do\": [\n  \"PickupLightObject: pick up objects under 5 kg\",\n  \"PassReceiveObject: pass or receive objects\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"brown trash can (next to bed, image 1)\",\n  \"blu",
+    "system": "You are robot R7 in the bedroom. Write YOUR part of the shared plan.\n\nCHAIN-OF-THOUGHT before writing steps:\n1. TASK END STATE: what must be true when done? (same as offer stage)\n2. OTHER ROBOTS: scan",
+    "user": "## TASK:\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR OFFER: {\n \"agent\": \"R7\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items\",\n  \"PassReceiveObject: transfer items to/from other robots\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"orange book (floor, image 1)\",\n  \"brown trash can (",
     "output": {
-      "reasoning": "a) The living room should be ready for a movie with dim lighting, comfortable seating, and snacks. b) I can contribute by ensuring the bedroom is tidy and passing items that might be needed in the living room. c) The TV in my room might be useful in the living room, so I will suggest it. d) I will pass the blue book and green sock to the living room to keep the bedroom tidy.",
+      "reasoning": "The goal is to prepare the living room for a movie by ensuring it is comfortable and dimly lit, with snacks available. R3 will handle rearranging the furniture and placing a plate for snacks. R4 will manage the lighting by toggling the chandelier. R1 and R2 will provide snacks from the kitchen. I, R7, will ensure that any needed items from the bedroom are ready and assist in transferring snacks to the living room if required.",
       "goals": [
         {
-          "goal": "Pass items to living room and suggest TV for use.",
-          "priority": "medium",
-          "in_my_room": true
+          "goal": "Ensure snacks are available in the living room",
+          "priority": "high",
+          "in_my_room": false
         }
       ],
       "checklist": [
         {
-          "object": "blue book",
-          "change": "pass to living room",
+          "object": "snacks",
+          "change": "transferred to living room",
           "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "green sock",
-          "change": "pass to living room",
-          "weight": "light",
-          "how": "LOCAL"
+          "how": "RECEIVE"
         }
       ],
       "steps": [
         {
-          "type": "LOCAL",
-          "action": {
-            "verb": "pick_up",
-            "object": "blue book",
-            "from": "floor",
-            "to": "living room"
-          },
-          "uses": 0,
+          "type": "RECEIVE",
+          "item": "green apple",
+          "target": "R1",
           "serves": 1
         },
         {
-          "type": "LOCAL",
-          "action": {
-            "verb": "pick_up",
-            "object": "green sock",
-            "from": "floor",
-            "to": "living room"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "PASS",
-          "item": "TV (on stand, image 2)",
-          "target": "R3",
+          "type": "RECEIVE",
+          "item": "orange",
+          "target": "R1",
           "serves": 1
         }
       ]
@@ -738,20 +732,68 @@
   },
   {
     "key": "plan:R8",
-    "system": "You are robot R8 in the bedroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR OFFER: {\n \"agent\": \"R8\",\n \"capability\": \"I am mobile and can interact with light objects.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PassReceiveObject: transfer items\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"white clock (windowsill, image 1)\",\n  \"green trash bin (floor, image 1)\",\n ",
+    "system": "You are robot R8 in the bedroom. Write YOUR part of the shared plan.\n\nCHAIN-OF-THOUGHT before writing steps:\n1. TASK END STATE: what must be true when done? (same as offer stage)\n2. OTHER ROBOTS: scan",
+    "user": "## TASK:\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR OFFER: {\n \"agent\": \"R8\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift lamps, small items\",\n  \"PassReceiveObject: transfer items to/from other robots\",\n  \"ToggleObject: turn on/off table lamp, TV, appliances\"\n ],\n \"has_items\": [\n  \"white clock (radiator, image 1)\",\n  \"gre",
     "output": {
-      "reasoning": "a) The goal is to create a comfortable and dim environment in the living room with snacks available for a movie. b) My priority is to ensure that the lighting is adjusted and snacks are provided. c) In my room, I can toggle the black lamp to contribute to the dim lighting. d) I need to pass the black lamp to the living room for use there.",
+      "reasoning": "a) The task involves creating a comfortable and dim environment in the living room for watching a movie, which includes adjusting the lighting and providing snacks. b) I can contribute by providing a table lamp for dim lighting as I am in the bedroom and can pass it to the living room. c) R1 and R2 are handling snacks, so I will not duplicate their efforts. d) My role is to ensure the table lamp is available in the living room for lighting adjustment.",
       "goals": [
         {
-          "goal": "Ensure the living room is dim and comfortable for a movie.",
+          "goal": "Provide a table lamp to the living room for dim lighting.",
           "priority": "high",
-          "in_my_room": false
+          "in_my_room": true
         }
       ],
       "checklist": [
         {
-          "object": "black lamp",
+          "object": "white table lamp",
+          "change": "pass to living room",
+          "weight": "light",
+          "how": "LOCAL"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "white table lamp",
+            "from": "desk",
+            "to": "gripper"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "PASS",
+          "item": "white table lamp",
+          "target": "R3",
+          "serves": 1
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R2:fix",
+    "system": "You are robot R2 in the kitchen. Write YOUR part of the shared plan.\n\nCHAIN-OF-THOUGHT before writing steps:\n1. TASK END STATE: what must be true when done? (same as offer stage)\n2. OTHER ROBOTS: scan",
+    "user": "## TASK:\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift mugs, fruit, small items\",\n  \"PassReceiveObject: transfer items to/from other robots\",\n  \"ToggleObject: turn on/off kettle, lights, appliances\"\n ],\n \"has_items\": [\n  \"red toaster (counter, image 1)\",\n ",
+    "output": {
+      "reasoning": "a) Watching a movie requires a comfortable, dimly lit room with snacks. b) The living room needs dim lighting and snacks. c) I can provide snacks like the green apple and orange bowl. d) Snacks are essential for the movie experience. e) I will send snacks to the living room via R3, who can handle them in the living room.",
+      "goals": [
+        {
+          "goal": "Provide snacks for the movie in the living room",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "green apple",
+          "change": "pass to living room",
+          "weight": "light",
+          "how": "PASS"
+        },
+        {
+          "object": "orange bowl",
           "change": "pass to living room",
           "weight": "light",
           "how": "PASS"
@@ -759,18 +801,111 @@
       ],
       "steps": [
         {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "green apple",
+            "from": "counter",
+            "to": "gripper"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
           "type": "PASS",
-          "item": "black lamp (desk, image 1)",
+          "item": "green apple",
           "target": "R3",
-          "serves": 1
+          "serves": 0
         },
         {
           "type": "LOCAL",
           "action": {
+            "verb": "pick_up",
+            "object": "orange bowl",
+            "from": "counter",
+            "to": "gripper"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "PASS",
+          "item": "orange bowl",
+          "target": "R3",
+          "serves": 0
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R4:fix",
+    "system": "You are robot R4 in the living_room. Write YOUR part of the shared plan.\n\nCHAIN-OF-THOUGHT before writing steps:\n1. TASK END STATE: what must be true when done? (same as offer stage)\n2. OTHER ROBOTS: ",
+    "user": "## TASK:\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I am fixed in place but can manipulate light objects and adjust lighting.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items\",\n  \"SliceObject: cut food items\",\n  \"PourObject: pour liquids\",\n  \"PassReceiveObject: transfer items to/from other robots\"\n ],\n \"has_items\": [\n  \"white sofa (living r",
+    "output": {
+      "reasoning": "a) Watching a movie requires a comfortable seating area, dim lighting, and snacks. b) The living room should have seating ready, lighting adjusted, and snacks available. c) I can adjust the lighting by turning off the chandelier and ensure seating is comfortable. d) Dimming lights and ensuring seating is ready are priorities. e) Snacks need to be brought from another room, as none are visible here.",
+      "goals": [
+        {
+          "goal": "Make the living room comfortable and dim for movie watching, with snacks available.",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "chandelier",
+          "change": "toggle from on to off",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "snacks",
+          "change": "receive and place on coffee table",
+          "weight": "light",
+          "how": "RECEIVE"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
             "verb": "toggle",
-            "object": "black lamp",
-            "from": "desk",
+            "object": "chandelier",
+            "from": "on",
             "to": "off"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "RECEIVE",
+          "item": "green apple",
+          "target": "R1",
+          "serves": 0
+        },
+        {
+          "type": "RECEIVE",
+          "item": "orange",
+          "target": "R1",
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "green apple",
+            "from": "gripper",
+            "to": "wooden coffee table"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "orange",
+            "from": "gripper",
+            "to": "wooden coffee table"
           },
           "uses": 0,
           "serves": 0
@@ -780,376 +915,63 @@
   },
   {
     "key": "plan:R1:fix",
-    "system": "You are robot R1 in the kitchen. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am a mobile robot with light object handling capabilities.\",\n \"can_do\": [\n  \"PickupLightObject: pick up items like bread and bowl\",\n  \"PassReceiveObject: transfer items to other rooms\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"green lettuce (sink basin, imag",
+    "system": "You are robot R1 in the kitchen. Write YOUR part of the shared plan.\n\nCHAIN-OF-THOUGHT before writing steps:\n1. TASK END STATE: what must be true when done? (same as offer stage)\n2. OTHER ROBOTS: scan",
+    "user": "## TASK:\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift mugs, fruit, small items\",\n  \"PassReceiveObject: transfer items to/from other robots\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"green apple (counter, image 1)\",\n  \"or",
     "output": {
-      "reasoning": "a) The goal is to prepare the living room for a movie by ensuring it is dimly lit and comfortable, with snacks available. b) My priority is to prepare and pass snacks to the living room. c) In my room, I will gather the necessary items for snacks. d) I will pass the prepared snacks to the living room for others to arrange.",
+      "reasoning": "a) To watch a movie comfortably, the living room needs dim lighting, comfortable seating, and snacks. b) I can provide snacks from the kitchen. c) R3 will handle rearranging the seating in the living room. d) R4 will manage the lighting by turning off the chandelier. e) I will pass snacks to the living room to ensure they are available for the movie.",
       "goals": [
         {
-          "goal": "Provide snacks for the living room",
+          "goal": "Provide snacks for the movie in the living room",
           "priority": "high",
-          "in_my_room": true
+          "in_my_room": false
         }
       ],
       "checklist": [
         {
-          "object": "brown bread",
-          "change": "move to black bowl",
+          "object": "green apple",
+          "change": "pass to living room",
           "weight": "light",
           "how": "LOCAL"
         },
         {
-          "object": "black bowl",
+          "object": "orange",
           "change": "pass to living room",
           "weight": "light",
-          "how": "PASS"
+          "how": "LOCAL"
         }
       ],
       "steps": [
         {
           "type": "LOCAL",
           "action": {
-            "verb": "move",
-            "object": "brown bread",
+            "verb": "pick_up",
+            "object": "green apple",
             "from": "counter",
-            "to": "black bowl"
+            "to": "gripper"
           },
           "uses": 0,
           "serves": 0
         },
         {
           "type": "PASS",
-          "item": "black bowl",
+          "item": "green apple",
           "target": "R3",
           "serves": 0
-        }
-      ]
-    }
-  },
-  {
-    "key": "plan:R4:fix",
-    "system": "You are robot R4 in the living_room. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessibl",
-    "user": "## TASK:\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I can manipulate light objects and prepare snacks.\",\n \"can_do\": [\n  \"PickupLightObject: handle small items\",\n  \"SliceObject: cut food items\",\n  \"PourObject: serve drinks\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [",
-    "output": {
-      "reasoning": "a) The living room should be dimly lit, comfortable, and have snacks available for a movie. b) Priority is high for adjusting lighting and preparing snacks within 30 minutes. c) In my room, I will turn off the chandelier and turn on the TV. d) I will receive snacks from R1 and R2 to ensure they are available in the living room.",
-      "goals": [
-        {
-          "goal": "Adjust lighting and prepare snacks for movie watching",
-          "priority": "high",
-          "in_my_room": true
-        }
-      ],
-      "checklist": [
-        {
-          "object": "chandelier",
-          "change": "turn off",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "TV",
-          "change": "turn on",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "brown bread",
-          "change": "receive",
-          "weight": "light",
-          "how": "RECEIVE"
-        },
-        {
-          "object": "green lettuce",
-          "change": "receive",
-          "weight": "light",
-          "how": "RECEIVE"
-        }
-      ],
-      "steps": [
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "turn_off",
-            "object": "chandelier",
-            "from": "ceiling",
-            "to": "off"
-          },
-          "uses": 0,
-          "serves": 0
         },
         {
           "type": "LOCAL",
           "action": {
-            "verb": "turn_on",
-            "object": "TV",
-            "from": "off",
-            "to": "on"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "RECEIVE",
-          "item": "brown bread",
-          "target": "R1",
-          "serves": 0
-        },
-        {
-          "type": "RECEIVE",
-          "item": "green lettuce",
-          "target": "R2",
-          "serves": 0
-        }
-      ]
-    }
-  },
-  {
-    "key": "plan:R2:fix",
-    "system": "You are robot R2 in the kitchen. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am a mobile robot capable of light object manipulation.\",\n \"can_do\": [\n  \"PickupLightObject: pick up objects under 5 kg\",\n  \"PassReceiveObject: transfer objects between rooms\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"black toaster (on counter, image 1)\",\n  ",
-    "output": {
-      "reasoning": "a) The living room needs to be dimly lit, comfortable, and have snacks available for watching a movie. b) My priority is to ensure snacks are ready and transferred to the living room. c) In my room, I will gather and prepare the snacks using available items. d) I will pass the snacks to the living room for others to use.",
-      "goals": [
-        {
-          "goal": "Provide snacks for the living room",
-          "priority": "high",
-          "in_my_room": true
-        }
-      ],
-      "checklist": [
-        {
-          "object": "green lettuce",
-          "change": "move to black bowl",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "green lettuce",
-          "change": "pass to living room",
-          "weight": "light",
-          "how": "PASS"
-        }
-      ],
-      "steps": [
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "move",
-            "object": "green lettuce",
+            "verb": "pick_up",
+            "object": "orange",
             "from": "counter",
-            "to": "black bowl"
+            "to": "gripper"
           },
           "uses": 0,
           "serves": 0
         },
         {
           "type": "PASS",
-          "item": "green lettuce",
-          "target": "R3",
-          "serves": 0
-        }
-      ]
-    }
-  },
-  {
-    "key": "plan:R6:fix",
-    "system": "You are robot R6 in the bathroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, ",
-    "user": "## TASK:\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR OFFER: {\n \"agent\": \"R6\",\n \"capability\": \"I can move around and interact with light objects.\",\n \"can_do\": [\n  \"PickupLightObject: pick up objects under 5 kg\",\n  \"PassReceiveObject: pass or receive objects\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"brown towel (shower, image 1)\",\n  \"light switch (wall,",
-    "output": {
-      "reasoning": "a) The task requires the living room to be dim and have snacks available for a movie. b) I can only interact with the light switch in the bathroom. c) Other robots are responsible for preparing snacks and adjusting the living room lighting. d) I will toggle the bathroom light switch to ensure it's off, contributing to the dim ambiance.",
-      "goals": [
-        {
-          "goal": "toggle bathroom light switch to off",
-          "priority": "low",
-          "in_my_room": true
-        }
-      ],
-      "checklist": [
-        {
-          "object": "light switch (wall, image 2)",
-          "change": "toggle to off",
-          "weight": "light",
-          "how": "LOCAL"
-        }
-      ],
-      "steps": [
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "toggle",
-            "object": "light switch (wall, image 2)",
-            "from": "on",
-            "to": "off"
-          },
-          "uses": 0,
-          "serves": 0
-        }
-      ]
-    }
-  },
-  {
-    "key": "plan:R3:fix",
-    "system": "You are robot R3 in the living_room. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessibl",
-    "user": "## TASK:\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am a mobile robot capable of moving objects and adjusting furniture.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PickupHeavyObject: move larger items\",\n  \"PushFurniture: rearrange furniture\",\n  \"PassReceiveObject: exchange items\",\n  \"ToggleObject: turn on/off lights, TV, applia",
-    "output": {
-      "reasoning": "a) The living room should be comfortable with dim lighting and snacks available for watching a movie. b) Ensuring the room is dim and comfortable is most important. c) I will adjust the lighting, arrange seating, and prepare the sofa with a blanket. d) I will receive snacks from another robot to complete the setup.",
-      "goals": [
-        {
-          "goal": "prepare living room for movie watching",
-          "priority": "high",
-          "in_my_room": true
-        }
-      ],
-      "checklist": [
-        {
-          "object": "blue blanket",
-          "change": "move to sofa",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "black plate",
-          "change": "move to sofa",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "wooden chair",
-          "change": "adjust for comfortable seating",
-          "weight": "heavy",
-          "how": "LOCAL"
-        },
-        {
-          "object": "ceiling lamp",
-          "change": "turn off",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "floor lamp",
-          "change": "turn on",
-          "weight": "light",
-          "how": "LOCAL"
-        }
-      ],
-      "steps": [
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "put_down",
-            "object": "blue blanket",
-            "from": "sofa",
-            "to": "sofa"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "pick_up",
-            "object": "black plate",
-            "from": "table",
-            "to": "sofa"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "push",
-            "object": "wooden chair",
-            "from": "around table",
-            "to": "sofa"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "turn_off",
-            "object": "ceiling lamp",
-            "from": "ceiling",
-            "to": "off"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "turn_on",
-            "object": "floor lamp",
-            "from": "floor",
-            "to": "on"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "RECEIVE",
-          "item": "brown bread",
-          "target": "R1",
-          "serves": 0
-        }
-      ]
-    }
-  },
-  {
-    "key": "plan:R7:fix",
-    "system": "You are robot R7 in the bedroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR OFFER: {\n \"agent\": \"R7\",\n \"capability\": \"I am a mobile robot with light manipulation capabilities.\",\n \"can_do\": [\n  \"PickupLightObject: pick up objects under 5 kg\",\n  \"PassReceiveObject: pass or receive objects\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"brown trash can (next to bed, image 1)\",\n  \"blu",
-    "output": {
-      "reasoning": "a) The living room should be ready for a movie with dim lighting, comfortable seating, and snacks. b) I can contribute by ensuring the bedroom is tidy and passing items that might be needed in the living room. c) The TV in my room might be useful in the living room, so I will suggest it. d) I will pass the blue book and green sock to the living room to keep the bedroom tidy.",
-      "goals": [
-        {
-          "goal": "Pass items to living room and suggest TV for use.",
-          "priority": "medium",
-          "in_my_room": true
-        }
-      ],
-      "checklist": [
-        {
-          "object": "blue book",
-          "change": "pass to living room",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "green sock",
-          "change": "pass to living room",
-          "weight": "light",
-          "how": "LOCAL"
-        }
-      ],
-      "steps": [
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "pick_up",
-            "object": "blue book",
-            "from": "floor",
-            "to": "living room"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "pick_up",
-            "object": "green sock",
-            "from": "floor",
-            "to": "living room"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "PASS",
-          "item": "TV (on stand, image 2)",
+          "item": "orange",
           "target": "R3",
           "serves": 0
         }
@@ -1158,244 +980,121 @@
   },
   {
     "key": "plan:R5:fix",
-    "system": "You are robot R5 in the bathroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, ",
-    "user": "## TASK:\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR OFFER: {\n \"agent\": \"R5\",\n \"capability\": \"I am a mobile robot with light object handling capabilities.\",\n \"can_do\": [\n  \"PickupLightObject: pick up small items\",\n  \"PassReceiveObject: transfer items to/from others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"black trash bin (next to toilet, image 1)\",\n ",
+    "system": "You are robot R5 in the bathroom. Write YOUR part of the shared plan.\n\nCHAIN-OF-THOUGHT before writing steps:\n1. TASK END STATE: what must be true when done? (same as offer stage)\n2. OTHER ROBOTS: sca",
+    "user": "## TASK:\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR OFFER: {\n \"agent\": \"R5\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items like soap\",\n  \"PassReceiveObject: transfer items to/from other robots\",\n  \"ToggleObject: turn on/off lights, appliances\"\n ],\n \"has_items\": [\n  \"black trash bin (corner, image 1)\",\n  \"green ",
     "output": {
-      "reasoning": "a) The task is to prepare the living room for a movie, which requires dim lighting, comfortable seating, and snacks. b) My capabilities are limited to the bathroom, and none of the items here are relevant to the task. c) I can assist by facilitating the transfer of items or toggling appliances if needed. d) Since the bathroom items are not needed, I will pass my idle capacity to assist other robots if necessary.",
+      "reasoning": "a) The task requires a comfortable and dim living room setup for movie watching, along with snacks. b) Since I am in the bathroom and no snacks are available here, I rely on other robots for snack provision. c) Other robots are handling lighting and furniture arrangement in the living room, so I should focus on what I can contribute or facilitate. d) My main role is to ensure any items I can pass or receive are managed efficiently, and I will receive snacks from the kitchen to pass to the living room.",
       "goals": [
         {
-          "goal": "assist in preparing the living room for a movie",
+          "goal": "facilitate the movie watching setup by receiving and passing snacks to the living room",
           "priority": "medium",
-          "in_my_room": false
-        }
-      ],
-      "checklist": [],
-      "steps": [
-        {
-          "type": "PASS",
-          "item": "yellow toothbrush",
-          "target": "R6",
-          "serves": 0
-        },
-        {
-          "type": "PASS",
-          "item": "pink soap bar",
-          "target": "R6",
-          "serves": 0
-        }
-      ]
-    }
-  },
-  {
-    "key": "plan:R8:fix",
-    "system": "You are robot R8 in the bedroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR OFFER: {\n \"agent\": \"R8\",\n \"capability\": \"I am mobile and can interact with light objects.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PassReceiveObject: transfer items\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"white clock (windowsill, image 1)\",\n  \"green trash bin (floor, image 1)\",\n ",
-    "output": {
-      "reasoning": "a) The goal is to create a comfortable and dim environment in the living room with snacks available for a movie. b) My priority is to ensure that the lighting is adjusted and snacks are provided. c) In my room, I can toggle the black lamp to contribute to the dim lighting. d) I need to pass the black lamp to the living room for use there.",
-      "goals": [
-        {
-          "goal": "Ensure the living room is dim and comfortable for a movie.",
-          "priority": "high",
-          "in_my_room": false
-        }
-      ],
-      "checklist": [
-        {
-          "object": "black lamp",
-          "change": "pass to living room",
-          "weight": "light",
-          "how": "PASS"
-        }
-      ],
-      "steps": [
-        {
-          "type": "PASS",
-          "item": "black lamp (desk, image 1)",
-          "target": "R3",
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "toggle",
-            "object": "black lamp",
-            "from": "desk",
-            "to": "off"
-          },
-          "uses": 0,
-          "serves": 0
-        }
-      ]
-    }
-  },
-  {
-    "key": "plan:R1:fix",
-    "system": "You are robot R1 in the kitchen. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am a mobile robot with light object handling capabilities.\",\n \"can_do\": [\n  \"PickupLightObject: pick up items like bread and bowl\",\n  \"PassReceiveObject: transfer items to other rooms\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"green lettuce (sink basin, imag",
-    "output": {
-      "reasoning": "a) The goal is to prepare the living room for a movie by ensuring it is dimly lit and comfortable, with snacks available. b) My priority is to prepare and pass snacks to the living room. c) In my room, I will gather the necessary items for snacks. d) I will pass the prepared snacks to the living room for others to arrange.",
-      "goals": [
-        {
-          "goal": "Provide snacks for the living room",
-          "priority": "high",
           "in_my_room": true
         }
       ],
       "checklist": [
         {
-          "object": "brown bread",
-          "change": "move to black bowl",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "black bowl",
-          "change": "pass to living room",
-          "weight": "light",
-          "how": "PASS"
-        }
-      ],
-      "steps": [
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "move",
-            "object": "brown bread",
-            "from": "counter",
-            "to": "black bowl"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "PASS",
-          "item": "black bowl",
-          "target": "R3",
-          "serves": 0
-        }
-      ]
-    }
-  },
-  {
-    "key": "plan:R2:fix",
-    "system": "You are robot R2 in the kitchen. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am a mobile robot capable of light object manipulation.\",\n \"can_do\": [\n  \"PickupLightObject: pick up objects under 5 kg\",\n  \"PassReceiveObject: transfer objects between rooms\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"black toaster (on counter, image 1)\",\n  ",
-    "output": {
-      "reasoning": "a) The living room needs to be dimly lit, comfortable, and have snacks available for watching a movie. b) My priority is to ensure snacks are ready and transferred to the living room. c) In my room, I will gather and prepare the snacks using available items. d) I will pass the snacks to the living room for others to use.",
-      "goals": [
-        {
-          "goal": "Provide snacks for the living room",
-          "priority": "high",
-          "in_my_room": true
-        }
-      ],
-      "checklist": [
-        {
-          "object": "green lettuce",
-          "change": "move to black bowl",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "green lettuce",
-          "change": "pass to living room",
-          "weight": "light",
-          "how": "PASS"
-        }
-      ],
-      "steps": [
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "move",
-            "object": "green lettuce",
-            "from": "counter",
-            "to": "black bowl"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "PASS",
-          "item": "green lettuce",
-          "target": "R3",
-          "serves": 0
-        }
-      ]
-    }
-  },
-  {
-    "key": "plan:R4:fix",
-    "system": "You are robot R4 in the living_room. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessibl",
-    "user": "## TASK:\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I can manipulate light objects and prepare snacks.\",\n \"can_do\": [\n  \"PickupLightObject: handle small items\",\n  \"SliceObject: cut food items\",\n  \"PourObject: serve drinks\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [",
-    "output": {
-      "reasoning": "a) The living room should be dimly lit, comfortable, and have snacks available for a movie. b) Priority is high for adjusting lighting and preparing snacks within 30 minutes. c) In my room, I will turn off the chandelier and turn on the TV. d) I will receive snacks from R1 and R2 to ensure they are available in the living room.",
-      "goals": [
-        {
-          "goal": "Adjust lighting and prepare snacks for movie watching",
-          "priority": "high",
-          "in_my_room": true
-        }
-      ],
-      "checklist": [
-        {
-          "object": "chandelier",
-          "change": "turn off",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "TV",
-          "change": "turn on",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "brown bread",
-          "change": "receive",
-          "weight": "light",
-          "how": "RECEIVE"
-        },
-        {
-          "object": "green lettuce",
-          "change": "receive",
+          "object": "snacks",
+          "change": "receive and pass",
           "weight": "light",
           "how": "RECEIVE"
         }
       ],
       "steps": [
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "turn_off",
-            "object": "chandelier",
-            "from": "ceiling",
-            "to": "off"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "turn_on",
-            "object": "TV",
-            "from": "off",
-            "to": "on"
-          },
-          "uses": 0,
-          "serves": 0
-        },
         {
           "type": "RECEIVE",
-          "item": "brown bread",
+          "item": "green apple",
+          "target": "R1",
+          "serves": 1
+        },
+        {
+          "type": "PASS",
+          "item": "green apple",
+          "target": "R3",
+          "serves": 1
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R6:fix",
+    "system": "You are robot R6 in the bathroom. Write YOUR part of the shared plan.\n\nCHAIN-OF-THOUGHT before writing steps:\n1. TASK END STATE: what must be true when done? (same as offer stage)\n2. OTHER ROBOTS: sca",
+    "user": "## TASK:\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR OFFER: {\n \"agent\": \"R6\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift light items like towels\",\n  \"PassReceiveObject: transfer items to/from other robots\"\n ],\n \"has_items\": [\n  \"brown towel (shower rack, image 1)\"\n ],\n \"need_from_others\": [\n  \"ToggleObject: dim the light",
+    "output": {
+      "reasoning": "a) The task requires a comfortable and dim living room setup with snacks for a movie. b) My role is limited to the bathroom, which offers minimal direct contribution to the living room setup. c) I can assist by offering a towel for comfort, but no significant items are available in my room for this task. d) Other robots are handling lighting and snacks, so I will not duplicate those efforts. e) I will PASS the towel to a robot in the living room to contribute to comfort.",
+      "goals": [
+        {
+          "goal": "assist in creating a comfortable movie-watching environment",
+          "priority": "low",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "brown towel",
+          "change": "pass for comfort",
+          "weight": "light",
+          "how": "PASS"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "brown towel",
+            "from": "shower rack",
+            "to": "gripper"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "PASS",
+          "item": "brown towel",
+          "target": "R3",
+          "serves": 0
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R7:fix",
+    "system": "You are robot R7 in the bedroom. Write YOUR part of the shared plan.\n\nCHAIN-OF-THOUGHT before writing steps:\n1. TASK END STATE: what must be true when done? (same as offer stage)\n2. OTHER ROBOTS: scan",
+    "user": "## TASK:\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR OFFER: {\n \"agent\": \"R7\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items\",\n  \"PassReceiveObject: transfer items to/from other robots\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"orange book (floor, image 1)\",\n  \"brown trash can (",
+    "output": {
+      "reasoning": "The goal is to prepare the living room for a movie by ensuring it is comfortable and dimly lit, with snacks available. R3 will handle rearranging the furniture and placing a plate for snacks. R4 will manage the lighting by toggling the chandelier. R1 and R2 will provide snacks from the kitchen. I, R7, will ensure that any needed items from the bedroom are ready and assist in transferring snacks to the living room if required.",
+      "goals": [
+        {
+          "goal": "Ensure snacks are available in the living room",
+          "priority": "high",
+          "in_my_room": false
+        }
+      ],
+      "checklist": [
+        {
+          "object": "green apple",
+          "change": "transferred to living room",
+          "weight": "light",
+          "how": "RECEIVE"
+        },
+        {
+          "object": "orange",
+          "change": "transferred to living room",
+          "weight": "light",
+          "how": "RECEIVE"
+        }
+      ],
+      "steps": [
+        {
+          "type": "RECEIVE",
+          "item": "green apple",
           "target": "R1",
           "serves": 0
         },
         {
           "type": "RECEIVE",
-          "item": "green lettuce",
-          "target": "R2",
+          "item": "orange",
+          "target": "R1",
           "serves": 0
         }
       ]
@@ -1403,10 +1102,10 @@
   },
   {
     "key": "plan:R3:fix",
-    "system": "You are robot R3 in the living_room. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessibl",
-    "user": "## TASK:\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am a mobile robot capable of moving objects and adjusting furniture.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PickupHeavyObject: move larger items\",\n  \"PushFurniture: rearrange furniture\",\n  \"PassReceiveObject: exchange items\",\n  \"ToggleObject: turn on/off lights, TV, applia",
+    "system": "You are robot R3 in the living_room. Write YOUR part of the shared plan.\n\nCHAIN-OF-THOUGHT before writing steps:\n1. TASK END STATE: what must be true when done? (same as offer stage)\n2. OTHER ROBOTS: ",
+    "user": "## TASK:\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am mobile and can carry heavy objects up to 20 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items like tablets and plates\",\n  \"PickupHeavyObject: move heavy items like furniture\",\n  \"PushFurniture: rearrange sofas or chairs\",\n  \"PassReceiveObject: transfer items to/from other robots\",\n",
     "output": {
-      "reasoning": "a) The living room should be comfortable with dim lighting and snacks available for watching a movie. b) Ensuring the room is dim and comfortable is most important. c) I will adjust the lighting, arrange seating, and prepare the sofa with a blanket. d) I will receive snacks from another robot to complete the setup.",
+      "reasoning": "a) To watch a movie comfortably, the room should be arranged with dim lighting, comfortable seating, and snacks. b) I will ensure the sofa is positioned for better viewing and add a blanket for comfort. c) I will ensure the black tablet is on the table for movie control and prepare the black plate for snacks. d) I need to receive snacks from R1 or R2, who are both in the kitchen, to complete the setup.",
       "goals": [
         {
           "goal": "prepare living room for movie watching",
@@ -1416,32 +1115,26 @@
       ],
       "checklist": [
         {
+          "object": "gray sofa",
+          "change": "reposition for better viewing",
+          "weight": "heavy",
+          "how": "LOCAL"
+        },
+        {
           "object": "blue blanket",
-          "change": "move to sofa",
+          "change": "place on sofa",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "black tablet",
+          "change": "ensure on table",
           "weight": "light",
           "how": "LOCAL"
         },
         {
           "object": "black plate",
-          "change": "move to sofa",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "wooden chair",
-          "change": "adjust for comfortable seating",
-          "weight": "heavy",
-          "how": "LOCAL"
-        },
-        {
-          "object": "ceiling lamp",
-          "change": "turn off",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "floor lamp",
-          "change": "turn on",
+          "change": "place on table for snacks",
           "weight": "light",
           "how": "LOCAL"
         }
@@ -1450,10 +1143,21 @@
         {
           "type": "LOCAL",
           "action": {
-            "verb": "move",
+            "verb": "push",
+            "object": "gray sofa",
+            "from": "center",
+            "to": "better viewing position"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "place",
             "object": "blue blanket",
             "from": "sofa",
-            "to": "sofa backrest"
+            "to": "back of sofa"
           },
           "uses": 0,
           "serves": 0
@@ -1461,315 +1165,687 @@
         {
           "type": "LOCAL",
           "action": {
-            "verb": "pick_up",
+            "verb": "ensure",
+            "object": "black tablet",
+            "from": "gripper",
+            "to": "table"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "place",
             "object": "black plate",
             "from": "table",
-            "to": "sofa"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "push",
-            "object": "wooden chair",
-            "from": "around table",
-            "to": "sofa"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "turn_off",
-            "object": "ceiling lamp",
-            "from": "ceiling",
-            "to": "off"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "turn_on",
-            "object": "floor lamp",
-            "from": "floor",
-            "to": "on"
+            "to": "table"
           },
           "uses": 0,
           "serves": 0
         },
         {
           "type": "RECEIVE",
-          "item": "brown bread",
+          "item": "green apple",
           "target": "R1",
+          "serves": 0
+        },
+        {
+          "type": "RECEIVE",
+          "item": "orange",
+          "target": "R2",
           "serves": 0
         }
       ]
     }
   },
   {
-    "key": "propose:R4",
-    "system": "You are robot R4. Judge other robots' requests and offers.\n\nFIRST: check your own plan. If you already do what an ASK_HELP asks → \"already_doing\" + covered_by.\nDUPLICATE REQUESTS: if you're already se",
-    "user": "TASK: I'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I can manipulate light objects and prepare snacks.\",\n \"can_do\": [\n  \"PickupLightObject: handle small items\",\n  \"SliceObject: cut food items\",\n  \"PourObject: serve drinks\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"beige armchair (left ",
+    "key": "plan:R8:fix",
+    "system": "You are robot R8 in the bedroom. Write YOUR part of the shared plan.\n\nCHAIN-OF-THOUGHT before writing steps:\n1. TASK END STATE: what must be true when done? (same as offer stage)\n2. OTHER ROBOTS: scan",
+    "user": "## TASK:\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR OFFER: {\n \"agent\": \"R8\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift lamps, small items\",\n  \"PassReceiveObject: transfer items to/from other robots\",\n  \"ToggleObject: turn on/off table lamp, TV, appliances\"\n ],\n \"has_items\": [\n  \"white clock (radiator, image 1)\",\n  \"gre",
     "output": {
-      "offers": [],
-      "judgments": [
+      "reasoning": "a) The task involves creating a comfortable and dim environment in the living room for watching a movie, which includes adjusting the lighting and providing snacks. b) I can contribute by providing a table lamp for dim lighting as I am in the bedroom and can pass it to the living room. c) R1 and R2 are handling snacks, so I will not duplicate their efforts. d) My role is to ensure the table lamp is available in the living room for lighting adjustment.",
+      "goals": [
         {
-          "request": "r3_s6",
-          "decision": "ignore",
-          "reason": "The request is not targeted at me and does not align with my current needs or capabilities."
+          "goal": "Provide a table lamp to the living room for dim lighting.",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "white table lamp",
+          "change": "pass to living room",
+          "weight": "light",
+          "how": "LOCAL"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "white table lamp",
+            "from": "desk",
+            "to": "gripper"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "PASS",
+          "item": "white table lamp",
+          "target": "R3",
+          "serves": 0
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R4:fix",
+    "system": "You are robot R4 in the living_room. Write YOUR part of the shared plan.\n\nCHAIN-OF-THOUGHT before writing steps:\n1. TASK END STATE: what must be true when done? (same as offer stage)\n2. OTHER ROBOTS: ",
+    "user": "## TASK:\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I am fixed in place but can manipulate light objects and adjust lighting.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items\",\n  \"SliceObject: cut food items\",\n  \"PourObject: pour liquids\",\n  \"PassReceiveObject: transfer items to/from other robots\"\n ],\n \"has_items\": [\n  \"white sofa (living r",
+    "output": {
+      "reasoning": "a) Watching a movie requires a comfortable seating area, dim lighting, and snacks. b) The living room should have seating ready, lighting adjusted, and snacks available. c) I can adjust the lighting by turning off the chandelier and ensure seating is comfortable. d) Dimming lights and ensuring seating is ready are priorities. e) Snacks need to be brought from another room, as none are visible here.",
+      "goals": [
+        {
+          "goal": "Make the living room comfortable and dim for movie watching, with snacks available.",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "chandelier",
+          "change": "toggle from on to off",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "snacks",
+          "change": "receive and place on coffee table",
+          "weight": "light",
+          "how": "RECEIVE"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "toggle",
+            "object": "chandelier",
+            "from": "on",
+            "to": "off"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "RECEIVE",
+          "item": "green apple",
+          "target": "R1",
+          "serves": 0
+        },
+        {
+          "type": "RECEIVE",
+          "item": "orange",
+          "target": "R1",
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "green apple",
+            "from": "gripper",
+            "to": "wooden coffee table"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "orange",
+            "from": "gripper",
+            "to": "wooden coffee table"
+          },
+          "uses": 0,
+          "serves": 0
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R5:fix",
+    "system": "You are robot R5 in the bathroom. Write YOUR part of the shared plan.\n\nCHAIN-OF-THOUGHT before writing steps:\n1. TASK END STATE: what must be true when done? (same as offer stage)\n2. OTHER ROBOTS: sca",
+    "user": "## TASK:\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR OFFER: {\n \"agent\": \"R5\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items like soap\",\n  \"PassReceiveObject: transfer items to/from other robots\",\n  \"ToggleObject: turn on/off lights, appliances\"\n ],\n \"has_items\": [\n  \"black trash bin (corner, image 1)\",\n  \"green ",
+    "output": {
+      "reasoning": "a) The task requires a comfortable and dim living room setup for movie watching, along with snacks. b) Since I am in the bathroom and no snacks are available here, I rely on other robots for snack provision. c) Other robots are handling lighting and furniture arrangement in the living room, so I should focus on what I can contribute or facilitate. d) My main role is to ensure any items I can pass or receive are managed efficiently, and I will receive snacks from the kitchen to pass to the living room.",
+      "goals": [
+        {
+          "goal": "facilitate the movie watching setup by receiving and passing snacks to the living room",
+          "priority": "medium",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "green apple",
+          "change": "receive and pass",
+          "weight": "light",
+          "how": "RECEIVE"
+        }
+      ],
+      "steps": [
+        {
+          "type": "RECEIVE",
+          "item": "green apple",
+          "target": "R1",
+          "serves": 0
+        },
+        {
+          "type": "PASS",
+          "item": "green apple",
+          "target": "R3",
+          "serves": 0
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R3:fix",
+    "system": "You are robot R3 in the living_room. Write YOUR part of the shared plan.\n\nCHAIN-OF-THOUGHT before writing steps:\n1. TASK END STATE: what must be true when done? (same as offer stage)\n2. OTHER ROBOTS: ",
+    "user": "## TASK:\nI'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nDEADLINE: 30 minutes\n\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am mobile and can carry heavy objects up to 20 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items like tablets and plates\",\n  \"PickupHeavyObject: move heavy items like furniture\",\n  \"PushFurniture: rearrange sofas or chairs\",\n  \"PassReceiveObject: transfer items to/from other robots\",\n",
+    "output": {
+      "reasoning": "a) To watch a movie comfortably, the living room should be arranged with comfortable seating, dim lighting, and snacks available. b) My role includes repositioning the sofa for better viewing, placing the blue blanket on the sofa for comfort, and ensuring the black tablet is accessible on the table for control. c) I will prepare the black plate for snacks, which need to be received from R1 or R2. d) Adjusting the seating and preparing for snacks are high priorities given the deadline.",
+      "goals": [
+        {
+          "goal": "prepare living room for movie watching",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "gray sofa",
+          "change": "reposition for better viewing",
+          "weight": "heavy",
+          "how": "LOCAL"
+        },
+        {
+          "object": "blue blanket",
+          "change": "place on sofa",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "black tablet",
+          "change": "move to table for control",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "black plate",
+          "change": "place on table for snacks",
+          "weight": "light",
+          "how": "LOCAL"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "push",
+            "object": "gray sofa",
+            "from": "center",
+            "to": "better viewing position"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "place",
+            "object": "blue blanket",
+            "from": "sofa",
+            "to": "back of sofa"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "black tablet",
+            "from": "table",
+            "to": "accessible position on table"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "place",
+            "object": "black plate",
+            "from": "table",
+            "to": "accessible position on table"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "RECEIVE",
+          "item": "green apple",
+          "target": "R1",
+          "serves": 0
+        },
+        {
+          "type": "RECEIVE",
+          "item": "orange",
+          "target": "R2",
+          "serves": 0
         }
       ]
     }
   },
   {
     "key": "propose:R1",
-    "system": "You are robot R1. Judge other robots' requests and offers.\n\nFIRST: check your own plan. If you already do what an ASK_HELP asks → \"already_doing\" + covered_by.\nDUPLICATE REQUESTS: if you're already se",
-    "user": "TASK: I'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am a mobile robot with light object handling capabilities.\",\n \"can_do\": [\n  \"PickupLightObject: pick up items like bread and bowl\",\n  \"PassReceiveObject: transfer items to other rooms\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"green lettuce (sink basin, image 1)\",\n  \"brown bread (co",
+    "system": "You are robot R1. Judge other robots' requests and offers.\n\nCHAIN-OF-THOUGHT before deciding:\n1. TASK NEED: does this offer/request actually serve the task end goal?\n2. MY PLAN: do I already cover thi",
+    "user": "TASK: I'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift mugs, fruit, small items\",\n  \"PassReceiveObject: transfer items to/from other robots\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"green apple (counter, image 1)\",\n  \"orange (counter, image 1)\",",
     "output": {
       "offers": [],
       "judgments": [
         {
-          "request": "r3_s6",
+          "request": "r3_s5",
           "decision": "accept",
-          "reason": "R3 is the intended recipient for the brown bread, and I am already planning to pass it.",
-          "action": "pass brown bread to R3",
+          "reason": "R3 is in the living room and can place the green apple on a table. I will pass the green apple to R3.",
+          "action": "pass green apple to R3",
           "uses": 1,
-          "insert_after": "r1_s2"
+          "insert_after": "r1_s1"
+        },
+        {
+          "request": "r3_s6",
+          "decision": "reject",
+          "reason": "R3 requests orange from R2, but I have the orange and plan to pass it to R3. R2's involvement is unnecessary."
+        },
+        {
+          "request": "r4_s2",
+          "decision": "reject",
+          "reason": "R4's request for the green apple is unnecessary since R3 is already set to receive it."
         },
         {
           "request": "r4_s3",
-          "decision": "reject",
-          "reason": "R4 is not the intended recipient for the brown bread, and I am already passing it to R3."
+          "decision": "accept",
+          "reason": "R4 is in the living room and can place the orange on a table. I will pass the orange to R4.",
+          "action": "pass orange to R4",
+          "uses": 1,
+          "insert_after": "r1_s3"
         },
         {
-          "request": "r4_s4",
+          "request": "r5_s1",
+          "decision": "reject",
+          "reason": "R5 is in the bathroom, which is not relevant for the living room setup. Request is out of scope."
+        },
+        {
+          "request": "r7_s1",
+          "decision": "reject",
+          "reason": "R7 is in the bedroom, which is not relevant for the living room setup. Request is out of scope."
+        },
+        {
+          "request": "r7_s2",
+          "decision": "reject",
+          "reason": "R7 is in the bedroom, which is not relevant for the living room setup. Request is out of scope."
+        }
+      ]
+    }
+  },
+  {
+    "key": "propose:R4",
+    "system": "You are robot R4. Judge other robots' requests and offers.\n\nCHAIN-OF-THOUGHT before deciding:\n1. TASK NEED: does this offer/request actually serve the task end goal?\n2. MY PLAN: do I already cover thi",
+    "user": "TASK: I'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I am fixed in place but can manipulate light objects and adjust lighting.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items\",\n  \"SliceObject: cut food items\",\n  \"PourObject: pour liquids\",\n  \"PassReceiveObject: transfer items to/from other robots\"\n ],\n \"has_items\": [\n  \"white sofa (living room, image 1)\",\n  \"wooden",
+    "output": {
+      "offers": [],
+      "judgments": [
+        {
+          "request": "r3_s5",
           "decision": "ignore",
-          "reason": "The request is for R2, not R1."
+          "reason": "R3's request to receive the green apple from R1 is unrelated to my current task and location."
+        },
+        {
+          "request": "r3_s6",
+          "decision": "ignore",
+          "reason": "R3's request to receive the orange from R2 is unrelated to my current task and location."
+        },
+        {
+          "request": "r5_s1",
+          "decision": "ignore",
+          "reason": "R5's request to receive the green apple from R1 is unrelated to my current task and location."
+        },
+        {
+          "request": "r7_s1",
+          "decision": "ignore",
+          "reason": "R7's request to receive the green apple from R1 is unrelated to my current task and location."
+        },
+        {
+          "request": "r7_s2",
+          "decision": "ignore",
+          "reason": "R7's request to receive the orange from R1 is unrelated to my current task and location."
         }
       ]
     }
   },
   {
     "key": "propose:R2",
-    "system": "You are robot R2. Judge other robots' requests and offers.\n\nFIRST: check your own plan. If you already do what an ASK_HELP asks → \"already_doing\" + covered_by.\nDUPLICATE REQUESTS: if you're already se",
-    "user": "TASK: I'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am a mobile robot capable of light object manipulation.\",\n \"can_do\": [\n  \"PickupLightObject: pick up objects under 5 kg\",\n  \"PassReceiveObject: transfer objects between rooms\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"black toaster (on counter, image 1)\",\n  \"brown jar (on counter, i",
+    "system": "You are robot R2. Judge other robots' requests and offers.\n\nCHAIN-OF-THOUGHT before deciding:\n1. TASK NEED: does this offer/request actually serve the task end goal?\n2. MY PLAN: do I already cover thi",
+    "user": "TASK: I'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift mugs, fruit, small items\",\n  \"PassReceiveObject: transfer items to/from other robots\",\n  \"ToggleObject: turn on/off kettle, lights, appliances\"\n ],\n \"has_items\": [\n  \"red toaster (counter, image 1)\",\n  \"white kettle (counter, ",
     "output": {
       "offers": [],
       "judgments": [
         {
+          "request": "r3_s5",
+          "decision": "reject",
+          "reason": "R3 requests to receive a green apple from R1 in the living room. I am already passing the green apple to R3, not R1."
+        },
+        {
           "request": "r3_s6",
-          "decision": "ignore",
-          "reason": "target is not R2"
+          "decision": "reject",
+          "reason": "R3 requests to receive an orange from me. I am passing the orange bowl, not an individual orange."
+        },
+        {
+          "request": "r4_s2",
+          "decision": "reject",
+          "reason": "R4 requests to receive a green apple from R1 in the living room. I am already passing the green apple to R3, not R1 or R4."
         },
         {
           "request": "r4_s3",
-          "decision": "ignore",
-          "reason": "target is not R2"
+          "decision": "reject",
+          "reason": "R4 requests to receive an orange from R1 in the living room. I am passing the orange bowl to R3, not R1 or R4."
         },
         {
-          "request": "r4_s4",
-          "decision": "accept",
-          "reason": "R2 is already planning to pass green lettuce to the living room",
-          "action": "PASS green lettuce to living room",
-          "uses": 1,
-          "insert_after": "r2_s2"
-        }
-      ]
-    }
-  },
-  {
-    "key": "propose:R5",
-    "system": "You are robot R5. Judge other robots' requests and offers.\n\nFIRST: check your own plan. If you already do what an ASK_HELP asks → \"already_doing\" + covered_by.\nDUPLICATE REQUESTS: if you're already se",
-    "user": "TASK: I'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nYOUR OFFER: {\n \"agent\": \"R5\",\n \"capability\": \"I am a mobile robot with light object handling capabilities.\",\n \"can_do\": [\n  \"PickupLightObject: pick up small items\",\n  \"PassReceiveObject: transfer items to/from others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"black trash bin (next to toilet, image 1)\",\n  \"green soap dispenser (o",
-    "output": {
-      "offers": [],
-      "judgments": [
-        {
-          "request": "r3_s6",
-          "decision": "ignore",
-          "reason": "I do not have the item 'brown bread' to pass."
+          "request": "r5_s1",
+          "decision": "reject",
+          "reason": "R5 requests to receive a green apple in the bathroom. The green apple is intended for the living room, not the bathroom."
         },
         {
-          "request": "r4_s3",
-          "decision": "ignore",
-          "reason": "I do not have the item 'brown bread' to pass."
+          "request": "r7_s1",
+          "decision": "reject",
+          "reason": "R7 requests to receive a green apple in the bedroom. The green apple is intended for the living room, not the bedroom."
         },
         {
-          "request": "r4_s4",
-          "decision": "ignore",
-          "reason": "I do not have the item 'green lettuce' to pass."
+          "request": "r7_s2",
+          "decision": "reject",
+          "reason": "R7 requests to receive an orange in the bedroom. The orange (as part of the orange bowl) is intended for the living room, not the bedroom."
         }
       ]
     }
   },
   {
     "key": "propose:R7",
-    "system": "You are robot R7. Judge other robots' requests and offers.\n\nFIRST: check your own plan. If you already do what an ASK_HELP asks → \"already_doing\" + covered_by.\nDUPLICATE REQUESTS: if you're already se",
-    "user": "TASK: I'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nYOUR OFFER: {\n \"agent\": \"R7\",\n \"capability\": \"I am a mobile robot with light manipulation capabilities.\",\n \"can_do\": [\n  \"PickupLightObject: pick up objects under 5 kg\",\n  \"PassReceiveObject: pass or receive objects\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"brown trash can (next to bed, image 1)\",\n  \"blue book (on floor, image 1",
+    "system": "You are robot R7. Judge other robots' requests and offers.\n\nCHAIN-OF-THOUGHT before deciding:\n1. TASK NEED: does this offer/request actually serve the task end goal?\n2. MY PLAN: do I already cover thi",
+    "user": "TASK: I'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nYOUR OFFER: {\n \"agent\": \"R7\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items\",\n  \"PassReceiveObject: transfer items to/from other robots\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"orange book (floor, image 1)\",\n  \"brown trash can (floor, image 1)\",\n  \"digi",
     "output": {
       "offers": [],
       "judgments": [
         {
+          "request": "r3_s5",
+          "decision": "ignore",
+          "reason": "This request targets R1, and I have no role in it. R1 can handle the transfer directly."
+        },
+        {
           "request": "r3_s6",
           "decision": "ignore",
-          "reason": "The request is targeted at R1, not R7."
+          "reason": "This request targets R2, and I have no role in it. R2 can handle the transfer directly."
+        },
+        {
+          "request": "r4_s2",
+          "decision": "ignore",
+          "reason": "This request targets R1, and I have no role in it. R1 can handle the transfer directly."
         },
         {
           "request": "r4_s3",
           "decision": "ignore",
-          "reason": "The request is targeted at R1, not R7."
+          "reason": "This request targets R1, and I have no role in it. R1 can handle the transfer directly."
         },
         {
-          "request": "r4_s4",
+          "request": "r5_s1",
           "decision": "ignore",
-          "reason": "The request is targeted at R2, not R7."
-        }
-      ]
-    }
-  },
-  {
-    "key": "propose:R6",
-    "system": "You are robot R6. Judge other robots' requests and offers.\n\nFIRST: check your own plan. If you already do what an ASK_HELP asks → \"already_doing\" + covered_by.\nDUPLICATE REQUESTS: if you're already se",
-    "user": "TASK: I'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nYOUR OFFER: {\n \"agent\": \"R6\",\n \"capability\": \"I can move around and interact with light objects.\",\n \"can_do\": [\n  \"PickupLightObject: pick up objects under 5 kg\",\n  \"PassReceiveObject: pass or receive objects\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"brown towel (shower, image 1)\",\n  \"light switch (wall, image 2)\",\n  \"door (wall",
-    "output": {
-      "offers": [
-        {
-          "offer": "r5_s1",
-          "decision": "decline",
-          "reason": "The yellow toothbrush is not needed for the current tasks."
-        },
-        {
-          "offer": "r5_s2",
-          "decision": "decline",
-          "reason": "The pink soap bar is not needed for the current tasks."
-        }
-      ],
-      "judgments": [
-        {
-          "request": "r3_s6",
-          "decision": "ignore",
-          "reason": "The request is not relevant to my capabilities or current tasks."
-        },
-        {
-          "request": "r4_s3",
-          "decision": "ignore",
-          "reason": "The request is not relevant to my capabilities or current tasks."
-        },
-        {
-          "request": "r4_s4",
-          "decision": "ignore",
-          "reason": "The request is not relevant to my capabilities or current tasks."
+          "reason": "This request targets R1, and I have no role in it. R1 can handle the transfer directly."
         }
       ]
     }
   },
   {
     "key": "propose:R3",
-    "system": "You are robot R3. Judge other robots' requests and offers.\n\nFIRST: check your own plan. If you already do what an ASK_HELP asks → \"already_doing\" + covered_by.\nDUPLICATE REQUESTS: if you're already se",
-    "user": "TASK: I'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am a mobile robot capable of moving objects and adjusting furniture.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PickupHeavyObject: move larger items\",\n  \"PushFurniture: rearrange furniture\",\n  \"PassReceiveObject: exchange items\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [",
+    "system": "You are robot R3. Judge other robots' requests and offers.\n\nCHAIN-OF-THOUGHT before deciding:\n1. TASK NEED: does this offer/request actually serve the task end goal?\n2. MY PLAN: do I already cover thi",
+    "user": "TASK: I'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am mobile and can carry heavy objects up to 20 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items like tablets and plates\",\n  \"PickupHeavyObject: move heavy items like furniture\",\n  \"PushFurniture: rearrange sofas or chairs\",\n  \"PassReceiveObject: transfer items to/from other robots\",\n  \"ToggleObject: turn on/",
     "output": {
       "offers": [
         {
           "offer": "r1_s2",
           "decision": "receive",
-          "action": "receive black bowl (counter, image 2)",
-          "uses": 0,
-          "insert_after": "r3_s2"
+          "action": "receive green apple from R1",
+          "uses": 1,
+          "insert_after": "r3_s4",
+          "reason": "I need snacks for the movie, and receiving the green apple from R1 fulfills this need."
+        },
+        {
+          "offer": "r1_s4",
+          "decision": "receive",
+          "action": "receive orange from R1",
+          "uses": 1,
+          "insert_after": "r3_s5",
+          "reason": "I need snacks for the movie, and receiving the orange from R1 fulfills this need."
         },
         {
           "offer": "r2_s2",
           "decision": "decline",
-          "reason": "already_have_snack_container"
+          "reason": "I already accepted a green apple from R1 for snacks, no additional apples needed."
         },
         {
-          "offer": "r7_s3",
+          "offer": "r2_s4",
           "decision": "decline",
-          "reason": "TV not needed for current tasks"
+          "reason": "I already accepted an orange from R1 for snacks, no additional oranges needed."
         },
         {
-          "offer": "r8_s1",
+          "offer": "r6_s2",
           "decision": "decline",
-          "reason": "already_adjusting_lighting"
+          "reason": "A brown towel does not contribute to the movie-watching environment I am setting up."
+        },
+        {
+          "offer": "r8_s2",
+          "decision": "decline",
+          "reason": "I can toggle existing lights for dim lighting; a table lamp is unnecessary."
         }
       ],
       "judgments": [
         {
-          "request": "r4_s3",
+          "request": "r4_s2",
           "decision": "ignore",
-          "reason": "duplicate_request_for_brown_bread"
+          "reason": "I'm already receiving a green apple from R1 for the living room."
         },
         {
-          "request": "r4_s4",
+          "request": "r4_s3",
           "decision": "ignore",
-          "reason": "green_lettuce_not_needed"
+          "reason": "I'm already receiving an orange from R1 for the living room."
+        },
+        {
+          "request": "r5_s1",
+          "decision": "ignore",
+          "reason": "R5 is in the bathroom and not related to my task in the living room."
+        },
+        {
+          "request": "r7_s1",
+          "decision": "ignore",
+          "reason": "R7 is in the bedroom and not related to my task in the living room."
+        },
+        {
+          "request": "r7_s2",
+          "decision": "ignore",
+          "reason": "R7 is in the bedroom and not related to my task in the living room."
+        }
+      ]
+    }
+  },
+  {
+    "key": "propose:R5",
+    "system": "You are robot R5. Judge other robots' requests and offers.\n\nCHAIN-OF-THOUGHT before deciding:\n1. TASK NEED: does this offer/request actually serve the task end goal?\n2. MY PLAN: do I already cover thi",
+    "user": "TASK: I'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nYOUR OFFER: {\n \"agent\": \"R5\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items like soap\",\n  \"PassReceiveObject: transfer items to/from other robots\",\n  \"ToggleObject: turn on/off lights, appliances\"\n ],\n \"has_items\": [\n  \"black trash bin (corner, image 1)\",\n  \"green soap dispenser (sink, ima",
+    "output": {
+      "offers": [],
+      "judgments": [
+        {
+          "request": "r3_s5",
+          "decision": "ignore",
+          "reason": "R3's request for green apple is already covered by my current plan to pass the green apple to R3."
+        },
+        {
+          "request": "r3_s6",
+          "decision": "ignore",
+          "reason": "R3's request for orange does not involve me as I do not have an orange to pass."
+        },
+        {
+          "request": "r4_s2",
+          "decision": "ignore",
+          "reason": "R4's request for green apple is irrelevant to my current plan, which is to pass the apple to R3."
+        },
+        {
+          "request": "r4_s3",
+          "decision": "ignore",
+          "reason": "R4's request for orange does not involve me as I do not have an orange to pass."
+        },
+        {
+          "request": "r7_s1",
+          "decision": "ignore",
+          "reason": "R7's request for green apple is not relevant to my current plan, which is to pass the apple to R3."
+        },
+        {
+          "request": "r7_s2",
+          "decision": "ignore",
+          "reason": "R7's request for orange does not involve me as I do not have an orange to pass."
+        }
+      ]
+    }
+  },
+  {
+    "key": "propose:R6",
+    "system": "You are robot R6. Judge other robots' requests and offers.\n\nCHAIN-OF-THOUGHT before deciding:\n1. TASK NEED: does this offer/request actually serve the task end goal?\n2. MY PLAN: do I already cover thi",
+    "user": "TASK: I'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nYOUR OFFER: {\n \"agent\": \"R6\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift light items like towels\",\n  \"PassReceiveObject: transfer items to/from other robots\"\n ],\n \"has_items\": [\n  \"brown towel (shower rack, image 1)\"\n ],\n \"need_from_others\": [\n  \"ToggleObject: dim the lights in the living room\",\n  ",
+    "output": {
+      "offers": [],
+      "judgments": [
+        {
+          "request": "r3_s5",
+          "decision": "ignore",
+          "reason": "Request targets R1, not relevant to my capabilities or current plan."
+        },
+        {
+          "request": "r3_s6",
+          "decision": "ignore",
+          "reason": "Request targets R2, not relevant to my capabilities or current plan."
+        },
+        {
+          "request": "r4_s2",
+          "decision": "ignore",
+          "reason": "Request targets R1, not relevant to my capabilities or current plan."
+        },
+        {
+          "request": "r4_s3",
+          "decision": "ignore",
+          "reason": "Request targets R1, not relevant to my capabilities or current plan."
+        },
+        {
+          "request": "r5_s1",
+          "decision": "ignore",
+          "reason": "Request targets R1, not relevant to my capabilities or current plan."
+        },
+        {
+          "request": "r7_s1",
+          "decision": "ignore",
+          "reason": "Request targets R1, not relevant to my capabilities or current plan."
+        },
+        {
+          "request": "r7_s2",
+          "decision": "ignore",
+          "reason": "Request targets R1, not relevant to my capabilities or current plan."
         }
       ]
     }
   },
   {
     "key": "propose:R8",
-    "system": "You are robot R8. Judge other robots' requests and offers.\n\nFIRST: check your own plan. If you already do what an ASK_HELP asks → \"already_doing\" + covered_by.\nDUPLICATE REQUESTS: if you're already se",
-    "user": "TASK: I'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nYOUR OFFER: {\n \"agent\": \"R8\",\n \"capability\": \"I am mobile and can interact with light objects.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PassReceiveObject: transfer items\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"white clock (windowsill, image 1)\",\n  \"green trash bin (floor, image 1)\",\n  \"black lamp (desk, image",
+    "system": "You are robot R8. Judge other robots' requests and offers.\n\nCHAIN-OF-THOUGHT before deciding:\n1. TASK NEED: does this offer/request actually serve the task end goal?\n2. MY PLAN: do I already cover thi",
+    "user": "TASK: I'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nYOUR OFFER: {\n \"agent\": \"R8\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift lamps, small items\",\n  \"PassReceiveObject: transfer items to/from other robots\",\n  \"ToggleObject: turn on/off table lamp, TV, appliances\"\n ],\n \"has_items\": [\n  \"white clock (radiator, image 1)\",\n  \"green trash bin (floor, imag",
     "output": {
       "offers": [],
       "judgments": [
         {
+          "request": "r3_s5",
+          "decision": "ignore",
+          "reason": "Request targets R1, not relevant to my task or capabilities."
+        },
+        {
           "request": "r3_s6",
           "decision": "ignore",
-          "reason": "The request is not targeted at me and I do not have the item 'brown bread'."
+          "reason": "Request targets R2, not relevant to my task or capabilities."
+        },
+        {
+          "request": "r4_s2",
+          "decision": "ignore",
+          "reason": "Request targets R1, not relevant to my task or capabilities."
         },
         {
           "request": "r4_s3",
           "decision": "ignore",
-          "reason": "The request is not targeted at me and I do not have the item 'brown bread'."
+          "reason": "Request targets R1, not relevant to my task or capabilities."
         },
         {
-          "request": "r4_s4",
+          "request": "r5_s1",
           "decision": "ignore",
-          "reason": "The request is not targeted at me and I do not have the item 'green lettuce'."
+          "reason": "Request targets R1, not relevant to my task or capabilities."
+        },
+        {
+          "request": "r7_s1",
+          "decision": "ignore",
+          "reason": "Request targets R1, not relevant to my task or capabilities."
+        },
+        {
+          "request": "r7_s2",
+          "decision": "ignore",
+          "reason": "Request targets R1, not relevant to my task or capabilities."
         }
       ]
     }
   },
   {
     "key": "graph:1",
-    "system": "You are the graph integrator. You do NOT plan or allocate — every step was written by the robot that executes it.\nTurn CANDIDATE collaborations into one consistent joint plan.\n\nOperations (use only wi",
-    "user": "TASK: I'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nJOINT PLAN: {\n \"R1\": [\n  {\n   \"id\": \"r1_s1\",\n   \"agent\": \"R1\",\n   \"type\": \"LOCAL\",\n   \"action\": {\n    \"verb\": \"move\",\n    \"object\": \"brown bread\",\n    \"from\": \"counter\",\n    \"to\": \"black bowl\"\n   }\n  },\n  {\n   \"id\": \"r1_s2\",\n   \"agent\": \"R1\",\n   \"type\": \"PASS\",\n   \"action\": \"pass black bowl (counter, image 2) to R3\",\n   \"item\": \"black bowl (counter, image 2)\",\n   ",
+    "system": "You are the graph integrator. You do NOT plan or allocate — every step was written by the robot that executes it.\nTurn CANDIDATE collaborations into one consistent joint plan.\n\nCHAIN-OF-THOUGHT before",
+    "user": "TASK: I'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nJOINT PLAN: {\n \"R1\": [\n  {\n   \"id\": \"r1_s1\",\n   \"agent\": \"R1\",\n   \"type\": \"LOCAL\",\n   \"action\": {\n    \"verb\": \"pick_up\",\n    \"object\": \"green apple\",\n    \"from\": \"counter\",\n    \"to\": \"gripper\"\n   }\n  },\n  {\n   \"id\": \"r1_s2\",\n   \"agent\": \"R1\",\n   \"type\": \"PASS\",\n   \"action\": \"pass green apple (counter, image 1) to R3\",\n   \"item\": \"green apple (counter, image 1)\",\n ",
     "output": {
       "ops": [
         {
-          "op": "independent",
-          "issue": "I1",
-          "why": "The actions involve different objects: a ceiling lamp and a chandelier, so they are not duplicates."
+          "op": "drop",
+          "node": "r2_s1",
+          "why": "DUPLICATE_WORK with R1 who is already handling the green apple."
         },
         {
-          "op": "independent",
-          "issue": "I2",
-          "why": "The actions are different: turning off a ceiling lamp and turning on a TV, so they are not duplicates."
-        }
-      ]
-    }
-  },
-  {
-    "key": "graph:2",
-    "system": "You are the graph integrator. You do NOT plan or allocate — every step was written by the robot that executes it.\nTurn CANDIDATE collaborations into one consistent joint plan.\n\nOperations (use only wi",
-    "user": "TASK: I'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.\nJOINT PLAN: {\n \"R1\": [\n  {\n   \"id\": \"r1_s1\",\n   \"agent\": \"R1\",\n   \"type\": \"LOCAL\",\n   \"action\": {\n    \"verb\": \"move\",\n    \"object\": \"brown bread\",\n    \"from\": \"counter\",\n    \"to\": \"black bowl\"\n   }\n  },\n  {\n   \"id\": \"r1_s2\",\n   \"agent\": \"R1\",\n   \"type\": \"PASS\",\n   \"action\": \"pass black bowl (counter, image 2) to R3\",\n   \"item\": \"black bowl (counter, image 2)\",\n   ",
-    "output": {
-      "ops": [
-        {
-          "op": "independent",
-          "issue": "I1",
-          "why": "The actions involve different objects: ceiling lamp and chandelier, so they are not duplicates."
+          "op": "drop",
+          "node": "r2_s3",
+          "why": "DUPLICATE_WORK with R1 who is handling the orange, and R2 is not needed for the orange bowl."
         },
         {
-          "op": "independent",
-          "issue": "I2",
-          "why": "The actions are different: one turns off a ceiling lamp, the other turns on a TV, so they are not duplicates."
+          "op": "drop",
+          "node": "r4_s4",
+          "why": "DUPLICATE_WORK with R3 who is already placing the green apple on the coffee table."
+        },
+        {
+          "op": "drop",
+          "node": "r4_s5",
+          "why": "DUPLICATE_WORK with R3 who is already placing the orange on the coffee table."
         }
       ]
     }
@@ -1781,19 +1857,20 @@
     "output": {
       "sizes": {
         "r1_s1": "short",
-        "r2_s1": "short",
-        "r3_s2": "short",
+        "r3_s1": "long",
         "r4_s1": "short",
         "r6_s1": "short",
-        "r7_s1": "medium",
+        "r8_s1": "short",
         "r1_s2": "medium",
-        "r4_s2": "short",
-        "r7_s2": "medium",
+        "r3_s2": "short",
+        "r1_s3": "short",
+        "r3_s3": "short",
+        "r1_s4": "medium",
+        "r3_s4": "short",
         "r3_s7": "short",
         "r3_s8": "short",
-        "r3_s3": "long",
-        "r3_s4": "short",
-        "r3_s5": "short"
+        "r3_s9": "short",
+        "r3_s10": "short"
       }
     }
   }

@@ -1,42 +1,49 @@
 [
   {
-    "key": "offer:R1",
-    "system": "You are robot R1, a household robot that sees only its own room.\n\nSTEP 1 — LIST has_items: every clearly visible movable object in your images.\nFormat: \"<color> <noun> (<location>, image <k>)\". NEVER ",
-    "user": "## TASK (serve this only):\nI have a video call starting in 5 minutes. My desk area needs to look presentable and I should be able to see and hear clearly. The bedroom light is off.\nDEADLINE: 10 minutes\n\nYOUR BODY: room=living_room, mobile=False, payload=not specified (judge from your embodiment), embodiment=Gripper. CAN: PickupLightObject, SliceObject, PourObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture. This robot is FIXED IN PLACE and can never move to another room. To pass",
+    "key": "offer:R3",
+    "system": "You are robot R3, a household robot that sees only its own room.\n\nSTEP 1 — LIST has_items: every clearly visible movable object in your images.\nFormat: \"<color> <noun> (<location>, image <k>)\". NEVER ",
+    "user": "## TASK (serve this only):\nI have a video call starting in 5 minutes. My desk area needs to look presentable and I should be able to see and hear clearly. The bedroom light is off.\nDEADLINE: 10 minutes\n\nYOUR BODY: room=bedroom, mobile=False, payload=not specified (judge from your embodiment), embodiment=Gripper. CAN: PickupLightObject, SliceObject, PourObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture. This robot is FIXED IN PLACE and can never move to another room. To pass an ",
     "output": {
       "has_items": [
-        "beige box (table, image 1)",
-        "floor lamp (corner, image 1)",
-        "ceiling light (ceiling, image 2)",
-        "table lamp (side table, image 2)",
-        "brown sofa (center, image 2)",
-        "brown armchair (center, image 2)",
-        "TV (wall, image 2)",
-        "vase with flowers (cabinet, image 2)"
+        "brown book (desk, image 1)",
+        "black and white board (desk, image 1)",
+        "blue pen (desk, image 1)",
+        "white phone (desk, image 1)",
+        "lamp (desk, image 1)",
+        "green plant (desk, image 1)",
+        "blue mug (desk, image 1)",
+        "laptop (desk, image 2)",
+        "blue USB drive (desk, image 2)",
+        "monitor 1 (desk, image 2)",
+        "monitor 2 (desk, image 2)",
+        "brown bowl (desk, image 2)"
       ],
-      "reasoning": "a) The desk area should be clear and well-lit for the video call. b) Ensuring the lighting is appropriate and the area is tidy is most important given the short time. c) I can adjust lighting using the ceiling light and table lamp. d) None of my items serve another room's needs directly.",
-      "capability": "I am fixed in place and can manipulate light objects within reach.",
+      "reasoning": "a) The desk area must be tidy, and lighting should be sufficient for visibility. b) Ensuring the desk is presentable and lighting is adequate is crucial. c) I can adjust the lamp and organize items on the desk. d) None of my items are needed in another room.",
+      "capability": "I am a fixed robot with a gripper for manipulating light objects.",
       "can_do": [
-        "PickupLightObject: pick up items like paper or small objects",
-        "SliceObject: cut items like paper",
+        "PickupLightObject: lift small items",
+        "SliceObject: cut items",
         "PourObject: pour liquids",
-        "PassReceiveObject: pass items to another robot",
+        "PassReceiveObject: exchange items with others",
         "ToggleObject: turn on/off lights, TV, appliances"
       ],
       "cannot_do": [
-        "PickupHeavyObject: cannot lift heavy items due to weight limitations",
-        "PushFurniture: cannot move furniture due to being fixed in place"
+        "PickupHeavyObject: cannot lift heavy items",
+        "PushFurniture: cannot move furniture",
+        "Move: fixed in place, cannot change location"
       ],
       "suggests": [],
       "intends": [
-        "ToggleObject: turn on ceiling light (ceiling, image 2)",
-        "ToggleObject: turn on table lamp (side table, image 2)"
+        "turn on lamp (desk, image 1)",
+        "move brown book (desk, image 1) to bed",
+        "move black and white board (desk, image 1) to bed",
+        "move blue pen (desk, image 1) to bed",
+        "move white phone (desk, image 1) to bed",
+        "move blue USB drive (desk, image 2) to bed",
+        "move brown bowl (desk, image 2) to bed"
       ],
-      "need_from_others": [
-        "ASK_HELP: clear desk area in bedroom",
-        "ASK_HELP: turn on bedroom light"
-      ],
-      "obs_scope": "I can observe and interact with items in the living room only."
+      "need_from_others": [],
+      "obs_scope": "I can observe and interact with items on the desk in the bedroom."
     }
   },
   {
@@ -47,79 +54,36 @@
       "has_items": [
         "black laptop (sofa, image 1)",
         "beige sofa (living room, image 1)",
-        "brown side table (next to sofa, image 1)",
-        "white lamp (side table, image 1)",
-        "floor lamp (corner, image 1)",
+        "brown side table (living room, image 1)",
+        "floor lamp (living room, image 1)",
+        "table lamp (brown side table, image 1)",
         "TV (wall, image 2)",
-        "brown console table (below TV, image 2)",
+        "decorative items (console table, image 2)",
         "potted plant (console table, image 2)"
       ],
-      "reasoning": "a) GOAL STATE: The desk area is tidy, and lighting is adequate for a clear video call. b) PRIORITY: Ensure the lighting is sufficient and the laptop is ready for the call. c) MY ROOM: Adjust lighting using the white lamp and floor lamp. d) FOR OTHERS: No items needed from my room for the desk area.",
+      "reasoning": "a) GOAL STATE: Desk area is tidy, lighting is adequate for video call, and audio is clear. b) PRIORITY: Ensure lighting and audio-visual setup are optimal before the call starts. c) MY ROOM: Adjust lighting and ensure laptop is ready. d) FOR OTHERS: None of my has_items serve another room's needs.",
       "capability": "I am a mobile robot with a light payload capacity.",
       "can_do": [
         "PickupLightObject: move small items",
-        "PassReceiveObject: exchange items with others",
+        "PassReceiveObject: exchange items",
         "ToggleObject: turn on/off lights, TV, appliances"
       ],
       "cannot_do": [
-        "PickupHeavyObject: cannot lift heavy furniture",
-        "PushFurniture: cannot move large furniture",
-        "SliceObject: cannot cut or slice items",
+        "PickupHeavyObject: cannot lift heavy items",
+        "PushFurniture: cannot move furniture",
+        "SliceObject: cannot cut items",
         "PourObject: cannot pour liquids"
       ],
       "suggests": [],
       "intends": [
-        "turn on white lamp",
+        "move black laptop from sofa to brown side table",
+        "turn on table lamp on brown side table",
         "turn on floor lamp"
       ],
       "need_from_others": [
-        "Ensure desk area is tidy",
-        "Turn on bedroom light"
+        "Ensure bedroom light is on for better visibility during the call."
       ],
-      "obs_scope": "I can observe and interact with items in the living room."
-    }
-  },
-  {
-    "key": "offer:R3",
-    "system": "You are robot R3, a household robot that sees only its own room.\n\nSTEP 1 — LIST has_items: every clearly visible movable object in your images.\nFormat: \"<color> <noun> (<location>, image <k>)\". NEVER ",
-    "user": "## TASK (serve this only):\nI have a video call starting in 5 minutes. My desk area needs to look presentable and I should be able to see and hear clearly. The bedroom light is off.\nDEADLINE: 10 minutes\n\nYOUR BODY: room=bedroom, mobile=False, payload=not specified (judge from your embodiment), embodiment=Gripper. CAN: PickupLightObject, SliceObject, PourObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture. This robot is FIXED IN PLACE and can never move to another room. To pass an ",
-    "output": {
-      "has_items": [
-        "brown book (desk, image 1)",
-        "black and white notebook (desk, image 1)",
-        "blue pen (desk, image 1)",
-        "lamp (desk, image 1)",
-        "green plant (desk, image 1)",
-        "white phone (desk, image 1)",
-        "laptop (desk, image 2)",
-        "blue USB drive (desk, image 2)",
-        "monitor 1 (desk, image 2)",
-        "monitor 2 (desk, image 2)",
-        "blue mug (desk, image 2)"
-      ],
-      "reasoning": "a) The desk area must be tidy, and the lighting should be sufficient for a clear video call. b) Ensuring the desk is presentable and the lighting is adequate is most important given the time constraint. c) I can adjust the lighting and organize light objects on the desk. d) None of my items are needed in another room.",
-      "capability": "I am a fixed robot with a gripper, able to manipulate light objects and toggle devices within reach.",
-      "can_do": [
-        "PickupLightObject: move small items like pens and books",
-        "SliceObject: cut items if needed",
-        "PourObject: pour from containers",
-        "PassReceiveObject: hand over items to other robots",
-        "ToggleObject: turn on/off lights, TV, appliances"
-      ],
-      "cannot_do": [
-        "PickupHeavyObject: cannot lift heavy items like furniture",
-        "PushFurniture: cannot move furniture due to being fixed in place"
-      ],
-      "suggests": [],
-      "intends": [
-        "ToggleObject: turn on lamp (desk, image 1)",
-        "PickupLightObject: move brown book (desk, image 1) to a neat stack",
-        "PickupLightObject: move black and white notebook (desk, image 1) to a neat stack",
-        "PickupLightObject: move blue pen (desk, image 1) to a neat position",
-        "PickupLightObject: move white phone (desk, image 1) to a neat position"
-      ],
-      "need_from_others": [],
-      "obs_scope": "I can observe and interact with items on the desk in the bedroom."
+      "obs_scope": "I can observe the living room and its contents."
     }
   },
   {
@@ -129,209 +93,93 @@
     "output": {
       "has_items": [
         "brown bat (corner, image 1)",
-        "gray trash can (under desk, image 1)",
-        "black office chair (at desk, image 1)",
+        "gray trash can (next to desk, image 1)",
         "black laptop (on desk, image 1)",
+        "black office chair (at desk, image 1)",
         "black monitor (on desk, image 1)",
-        "black keyboard (on desk, image 1)",
-        "white floor lamp (beside desk, image 1)",
-        "brown desk (against wall, image 1)",
+        "black desk lamp (on desk, image 2)",
+        "white ceiling lamp (ceiling, image 1)",
+        "white floor lamp (next to desk, image 1)",
+        "green plant (on floor, image 2)",
         "blue blanket (on bed, image 2)",
         "brown pillow (on bed, image 2)",
-        "brown nightstand (beside bed, image 2)",
-        "white table lamp (on nightstand, image 2)",
-        "green plant (beside desk, image 2)"
+        "black nightstand (next to bed, image 2)"
       ],
-      "reasoning": "a) GOAL STATE: The desk area is tidy, and lighting is sufficient for a clear video call. b) PRIORITY: Ensuring the desk is clear and lighting is adequate before the call starts. c) MY ROOM: Adjust lighting and clear desk area using my has_items. d) FOR OTHERS: None of my has_items are needed elsewhere.",
+      "reasoning": "a) GOAL STATE: Desk area is tidy, lighting is sufficient for video call, and audio is clear. b) PRIORITY: Ensure lighting and desk tidiness before the call starts. c) MY ROOM: Adjust lighting and clear desk area using my has_items. d) FOR OTHERS: None of my has_items serve another room's needs.",
       "capability": "I am a mobile robot capable of moving objects and adjusting furniture.",
       "can_do": [
         "PickupLightObject: move small items",
         "PickupHeavyObject: move larger items",
-        "PushFurniture: adjust furniture position",
-        "PassReceiveObject: hand over or receive items",
+        "PushFurniture: adjust furniture positions",
+        "PassReceiveObject: exchange items with others",
         "ToggleObject: turn on/off lights, TV, appliances"
       ],
       "cannot_do": [
-        "SliceObject: cannot cut or divide items",
+        "SliceObject: cannot cut or divide objects",
         "PourObject: cannot pour liquids"
       ],
       "suggests": [],
       "intends": [
-        "turn on white floor lamp",
-        "move gray trash can from under desk to corner",
-        "adjust black office chair to face desk neatly",
-        "ensure black laptop and black keyboard are aligned on brown desk"
+        "turn on white ceiling lamp",
+        "turn on black desk lamp",
+        "move gray trash can from next to desk to corner",
+        "adjust black office chair to face desk neatly"
       ],
       "need_from_others": [],
-      "obs_scope": "I can observe and interact with objects in the bedroom."
+      "obs_scope": "I can observe and interact with items in the bedroom."
     }
   },
   {
-    "key": "plan:R2",
-    "system": "You are robot R2 in the living_room. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessibl",
-    "user": "## TASK:\nI have a video call starting in 5 minutes. My desk area needs to look presentable and I should be able to see and hear clearly. The bedroom light is off.\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am a mobile robot with a light payload capacity.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"black laptop (sofa, image 1)\",\n  \"b",
+    "key": "offer:R1",
+    "system": "You are robot R1, a household robot that sees only its own room.\n\nSTEP 1 — LIST has_items: every clearly visible movable object in your images.\nFormat: \"<color> <noun> (<location>, image <k>)\". NEVER ",
+    "user": "## TASK (serve this only):\nI have a video call starting in 5 minutes. My desk area needs to look presentable and I should be able to see and hear clearly. The bedroom light is off.\nDEADLINE: 10 minutes\n\nYOUR BODY: room=living_room, mobile=False, payload=not specified (judge from your embodiment), embodiment=Gripper. CAN: PickupLightObject, SliceObject, PourObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture. This robot is FIXED IN PLACE and can never move to another room. To pass",
     "output": {
-      "reasoning": "a) The goal is to ensure the living room is well-lit for a video call. b) Priority is high as lighting is crucial for visibility during the call. c) In my room, I will turn on the white lamp and floor lamp to improve lighting. d) I do not need any items from other rooms for my tasks.",
-      "goals": [
-        {
-          "goal": "Ensure living room is well-lit for video call.",
-          "priority": "high",
-          "in_my_room": true
-        }
+      "has_items": [
+        "beige box (table, image 1)",
+        "floor lamp (corner, image 1)",
+        "ceiling light (ceiling, image 2)",
+        "brown sofa (center, image 2)",
+        "brown armchair (center, image 2)",
+        "TV (wall, image 2)",
+        "vase with flowers (cabinet, image 2)"
       ],
-      "checklist": [
-        {
-          "object": "white lamp",
-          "change": "turn on",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "floor lamp",
-          "change": "turn on",
-          "weight": "light",
-          "how": "LOCAL"
-        }
+      "reasoning": "a) GOAL STATE: Desk area is tidy, lighting is adequate for video call. b) PRIORITY: Ensure lighting is sufficient and area is tidy within 5 minutes. c) MY ROOM: Adjust lighting using ceiling light and floor lamp. d) FOR OTHERS: No items directly serve the desk area needs.",
+      "capability": "I am fixed in place and can manipulate light objects.",
+      "can_do": [
+        "PickupLightObject: lift small items",
+        "SliceObject: cut items",
+        "PourObject: pour liquids",
+        "PassReceiveObject: exchange items with others",
+        "ToggleObject: turn on/off lights, TV, appliances"
       ],
-      "steps": [
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "turn_on",
-            "object": "white lamp",
-            "from": "side table",
-            "to": "on"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "turn_on",
-            "object": "floor lamp",
-            "from": "corner",
-            "to": "on"
-          },
-          "uses": 0,
-          "serves": 1
-        }
-      ]
-    }
-  },
-  {
-    "key": "plan:R3",
-    "system": "You are robot R3 in the bedroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nI have a video call starting in 5 minutes. My desk area needs to look presentable and I should be able to see and hear clearly. The bedroom light is off.\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am a fixed robot with a gripper, able to manipulate light objects and toggle devices within reach.\",\n \"can_do\": [\n  \"PickupLightObject: move small items like pens and books\",\n  \"SliceObject: cut items if needed\",\n  \"PourObject: pour from containers\",\n  \"PassReceiveOb",
-    "output": {
-      "reasoning": "a) The desk area must be tidy and well-lit for a clear video call. b) I will organize the items on the desk and turn on the lamp to ensure proper lighting. c) R4 can assist with any additional adjustments needed in the bedroom. d) No items need to be passed to or from other rooms, as all necessary items are within my reach.",
-      "goals": [
-        {
-          "goal": "Ensure desk area is tidy and well-lit for video call",
-          "priority": "high",
-          "in_my_room": true
-        }
+      "cannot_do": [
+        "PickupHeavyObject: too heavy for my gripper",
+        "PushFurniture: cannot move large items",
+        "Move: fixed in place, cannot relocate",
+        "AdjustDesk: cannot access desk area",
+        "Clean: cannot tidy or organize"
       ],
-      "checklist": [
-        {
-          "object": "lamp",
-          "change": "turn on",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "brown book",
-          "change": "move to neat stack",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "black and white notebook",
-          "change": "move to neat stack",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "blue pen",
-          "change": "move to neat position",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "white phone",
-          "change": "move to neat position",
-          "weight": "light",
-          "how": "LOCAL"
-        }
+      "suggests": [],
+      "intends": [
+        "ToggleObject: turn on ceiling light (ceiling, image 2)",
+        "ToggleObject: turn on floor lamp (corner, image 1)"
       ],
-      "steps": [
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "turn_on",
-            "object": "lamp",
-            "from": "desk",
-            "to": "on"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "move",
-            "object": "brown book",
-            "from": "desk",
-            "to": "neat stack"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "move",
-            "object": "black and white notebook",
-            "from": "desk",
-            "to": "neat stack"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "move",
-            "object": "blue pen",
-            "from": "desk",
-            "to": "neat position"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "move",
-            "object": "white phone",
-            "from": "desk",
-            "to": "neat position"
-          },
-          "uses": 0,
-          "serves": 0
-        }
-      ]
+      "need_from_others": [
+        "Ensure desk area is tidy and presentable",
+        "Ensure audio and video equipment are functional"
+      ],
+      "obs_scope": "I can observe and interact with items in the living room only."
     }
   },
   {
     "key": "plan:R1",
     "system": "You are robot R1 in the living_room. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessibl",
-    "user": "## TASK:\nI have a video call starting in 5 minutes. My desk area needs to look presentable and I should be able to see and hear clearly. The bedroom light is off.\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am fixed in place and can manipulate light objects within reach.\",\n \"can_do\": [\n  \"PickupLightObject: pick up items like paper or small objects\",\n  \"SliceObject: cut items like paper\",\n  \"PourObject: pour liquids\",\n  \"PassReceiveObject: pass items to another robot\",\n",
+    "user": "## TASK:\nI have a video call starting in 5 minutes. My desk area needs to look presentable and I should be able to see and hear clearly. The bedroom light is off.\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am fixed in place and can manipulate light objects.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items\",\n  \"SliceObject: cut items\",\n  \"PourObject: pour liquids\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject: turn on/off lights, TV, appliance",
     "output": {
-      "reasoning": "a) The video call requires a well-lit and tidy desk area. b) I can contribute by adjusting the lighting in the living room to ensure clear visibility. c) The ceiling light and table lamp in the living room need to be turned on for better lighting. d) I will ask for help to ensure the bedroom light is turned on and the desk area is cleared, as I cannot move to the bedroom.",
+      "reasoning": "a) The goal is to ensure the living room is well-lit for a video call, which requires turning on both the ceiling light and the floor lamp. b) The priority is high because adequate lighting is essential for the video call. c) My room is the living room, and I can manipulate the lights here. d) No other robots are handling the ceiling light or floor lamp in the living room, so I will proceed with these actions.",
       "goals": [
         {
-          "goal": "ensure living room is well-lit for video call",
+          "goal": "Ensure adequate lighting in the living room for a video call.",
           "priority": "high",
           "in_my_room": true
         }
@@ -344,7 +192,7 @@
           "how": "LOCAL"
         },
         {
-          "object": "table lamp",
+          "object": "floor lamp",
           "change": "turn on",
           "weight": "light",
           "how": "LOCAL"
@@ -366,8 +214,78 @@
           "type": "LOCAL",
           "action": {
             "verb": "turn_on",
+            "object": "floor lamp",
+            "from": "corner",
+            "to": "on"
+          },
+          "uses": 0,
+          "serves": 1
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R2",
+    "system": "You are robot R2 in the living_room. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessibl",
+    "user": "## TASK:\nI have a video call starting in 5 minutes. My desk area needs to look presentable and I should be able to see and hear clearly. The bedroom light is off.\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am a mobile robot with a light payload capacity.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PassReceiveObject: exchange items\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"black laptop (sofa, image 1)\",\n  \"beige sofa (l",
+    "output": {
+      "reasoning": "a) The goal is to ensure the living room is presentable and well-lit for a video call. b) Priority is high as the call starts in 5 minutes. c) In my room, I need to move the laptop to the side table and adjust lighting. d) I need R4 to turn on the bedroom light for better visibility during the call.",
+      "goals": [
+        {
+          "goal": "Ensure living room is presentable and well-lit for video call.",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "black laptop",
+          "change": "move to brown side table",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "table lamp",
+          "change": "turn on",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "floor lamp",
+          "change": "turn on",
+          "weight": "light",
+          "how": "LOCAL"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "black laptop",
+            "from": "sofa",
+            "to": "brown side table"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
             "object": "table lamp",
-            "from": "side table",
+            "from": "brown side table",
+            "to": "on"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "floor lamp",
+            "from": "living room",
             "to": "on"
           },
           "uses": 0,
@@ -377,23 +295,11 @@
           "type": "ASK_HELP",
           "action": {
             "verb": "turn_on",
-            "object": "bedroom light",
-            "from": "off",
+            "object": "white ceiling lamp",
+            "from": "ceiling",
             "to": "on"
           },
           "target": "R4",
-          "enables": 0,
-          "serves": 0
-        },
-        {
-          "type": "ASK_HELP",
-          "action": {
-            "verb": "clear",
-            "object": "desk area",
-            "from": "cluttered",
-            "to": "tidy"
-          },
-          "target": "R3",
           "enables": 0,
           "serves": 0
         }
@@ -403,19 +309,25 @@
   {
     "key": "plan:R4",
     "system": "You are robot R4 in the bedroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nI have a video call starting in 5 minutes. My desk area needs to look presentable and I should be able to see and hear clearly. The bedroom light is off.\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I am a mobile robot capable of moving objects and adjusting furniture.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PickupHeavyObject: move larger items\",\n  \"PushFurniture: adjust furniture position\",\n  \"PassReceiveObject: hand over or receive items\",\n  \"",
+    "user": "## TASK:\nI have a video call starting in 5 minutes. My desk area needs to look presentable and I should be able to see and hear clearly. The bedroom light is off.\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I am a mobile robot capable of moving objects and adjusting furniture.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PickupHeavyObject: move larger items\",\n  \"PushFurniture: adjust furniture positions\",\n  \"PassReceiveObject: exchange items with others\",\n  ",
     "output": {
-      "reasoning": "a) The desk area must be tidy and well-lit for a video call. b) The priority is high because the call starts soon. c) In my room, I will adjust the lighting and organize the desk area. d) I do not need any items from other rooms and no other robots need items from my room.",
+      "reasoning": "a) The desk area must be tidy and well-lit for the video call. b) The priority is high because the call starts soon. c) My tasks involve adjusting lighting and organizing the desk area in the bedroom. d) No assistance from other rooms is needed as all tasks are within my capability and room.",
       "goals": [
         {
-          "goal": "Ensure the desk area is tidy and well-lit for a video call.",
+          "goal": "Ensure the desk area is tidy and well-lit for the video call.",
           "priority": "high",
           "in_my_room": true
         }
       ],
       "checklist": [
         {
-          "object": "white floor lamp",
+          "object": "white ceiling lamp",
+          "change": "turn on",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "black desk lamp",
           "change": "turn on",
           "weight": "light",
           "how": "LOCAL"
@@ -431,18 +343,6 @@
           "change": "adjust to face desk neatly",
           "weight": "heavy",
           "how": "LOCAL"
-        },
-        {
-          "object": "black laptop",
-          "change": "align on desk",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "black keyboard",
-          "change": "align on desk",
-          "weight": "light",
-          "how": "LOCAL"
         }
       ],
       "steps": [
@@ -450,8 +350,19 @@
           "type": "LOCAL",
           "action": {
             "verb": "turn_on",
-            "object": "white floor lamp",
-            "from": "beside desk",
+            "object": "white ceiling lamp",
+            "from": "ceiling",
+            "to": "on"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "black desk lamp",
+            "from": "desk",
             "to": "on"
           },
           "uses": 0,
@@ -462,7 +373,7 @@
           "action": {
             "verb": "move",
             "object": "gray trash can",
-            "from": "under desk",
+            "from": "next to desk",
             "to": "corner"
           },
           "uses": 0,
@@ -478,14 +389,128 @@
           },
           "uses": 0,
           "serves": 1
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R1:fix",
+    "system": "You are robot R1 in the living_room. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessibl",
+    "user": "## TASK:\nI have a video call starting in 5 minutes. My desk area needs to look presentable and I should be able to see and hear clearly. The bedroom light is off.\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am fixed in place and can manipulate light objects.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items\",\n  \"SliceObject: cut items\",\n  \"PourObject: pour liquids\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject: turn on/off lights, TV, appliance",
+    "output": {
+      "reasoning": "a) The goal is to ensure the living room is well-lit for a video call, which requires turning on both the ceiling light and the floor lamp. b) The priority is high because adequate lighting is essential for the video call. c) My room is the living room, and I can manipulate the lights here. d) No other robots are handling the ceiling light or floor lamp in the living room, so I will proceed with these actions.",
+      "goals": [
+        {
+          "goal": "Ensure adequate lighting in the living room for a video call.",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "ceiling light",
+          "change": "turn on",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "floor lamp",
+          "change": "turn on",
+          "weight": "light",
+          "how": "LOCAL"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "ceiling light",
+            "from": "ceiling",
+            "to": "on"
+          },
+          "uses": 0,
+          "serves": 0
         },
         {
           "type": "LOCAL",
           "action": {
-            "verb": "move",
-            "object": "black laptop",
-            "from": "on desk",
-            "to": "aligned on desk"
+            "verb": "turn_on",
+            "object": "floor lamp",
+            "from": "corner",
+            "to": "on"
+          },
+          "uses": 0,
+          "serves": 0
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R3",
+    "system": "You are robot R3 in the bedroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
+    "user": "## TASK:\nI have a video call starting in 5 minutes. My desk area needs to look presentable and I should be able to see and hear clearly. The bedroom light is off.\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am a fixed robot with a gripper for manipulating light objects.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items\",\n  \"SliceObject: cut items\",\n  \"PourObject: pour liquids\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject: turn on/off lights, T",
+    "output": {
+      "reasoning": "a) The desk area must be tidy for the video call, which requires removing unnecessary items. b) Adequate lighting is essential for visibility during the call. c) I can turn on the lamp on the desk and move items to the bed to clear the desk. d) No other robots are handling these specific tasks in the bedroom, so I will proceed with them.",
+      "goals": [
+        {
+          "goal": "Ensure desk area is tidy and well-lit for the video call",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "lamp",
+          "change": "turn on",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "brown book",
+          "change": "move to bed",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "black and white board",
+          "change": "move to bed",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "blue pen",
+          "change": "move to bed",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "white phone",
+          "change": "move to bed",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "blue USB drive",
+          "change": "move to bed",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "brown bowl",
+          "change": "move to bed",
+          "weight": "light",
+          "how": "LOCAL"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "lamp",
+            "from": "desk",
+            "to": "on"
           },
           "uses": 0,
           "serves": 1
@@ -494,9 +519,64 @@
           "type": "LOCAL",
           "action": {
             "verb": "move",
-            "object": "black keyboard",
-            "from": "on desk",
-            "to": "aligned on desk"
+            "object": "brown book",
+            "from": "desk",
+            "to": "bed"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "black and white board",
+            "from": "desk",
+            "to": "bed"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "blue pen",
+            "from": "desk",
+            "to": "bed"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "white phone",
+            "from": "desk",
+            "to": "bed"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "blue USB drive",
+            "from": "desk",
+            "to": "bed"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "brown bowl",
+            "from": "desk",
+            "to": "bed"
           },
           "uses": 0,
           "serves": 1
@@ -507,19 +587,25 @@
   {
     "key": "plan:R2:fix",
     "system": "You are robot R2 in the living_room. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessibl",
-    "user": "## TASK:\nI have a video call starting in 5 minutes. My desk area needs to look presentable and I should be able to see and hear clearly. The bedroom light is off.\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am a mobile robot with a light payload capacity.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"black laptop (sofa, image 1)\",\n  \"b",
+    "user": "## TASK:\nI have a video call starting in 5 minutes. My desk area needs to look presentable and I should be able to see and hear clearly. The bedroom light is off.\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am a mobile robot with a light payload capacity.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PassReceiveObject: exchange items\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"black laptop (sofa, image 1)\",\n  \"beige sofa (l",
     "output": {
-      "reasoning": "a) The goal is to ensure the living room is well-lit for a video call. b) Priority is high as lighting is crucial for visibility during the call. c) In my room, I will turn on the white lamp and floor lamp to improve lighting. d) I do not need any items from other rooms for my tasks.",
+      "reasoning": "a) The goal is to ensure the living room is presentable and well-lit for a video call. b) Priority is high as the call starts in 5 minutes. c) In my room, I need to move the laptop to the side table and adjust lighting. d) I need R4 to turn on the bedroom light for better visibility during the call.",
       "goals": [
         {
-          "goal": "Ensure living room is well-lit for video call.",
+          "goal": "Ensure living room is presentable and well-lit for video call.",
           "priority": "high",
           "in_my_room": true
         }
       ],
       "checklist": [
         {
-          "object": "white lamp",
+          "object": "black laptop",
+          "change": "move to brown side table",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "table lamp",
           "change": "turn on",
           "weight": "light",
           "how": "LOCAL"
@@ -535,9 +621,20 @@
         {
           "type": "LOCAL",
           "action": {
+            "verb": "move",
+            "object": "black laptop",
+            "from": "sofa",
+            "to": "brown side table"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
             "verb": "turn_on",
-            "object": "white lamp",
-            "from": "side table",
+            "object": "table lamp",
+            "from": "brown side table",
             "to": "on"
           },
           "uses": 0,
@@ -548,165 +645,8 @@
           "action": {
             "verb": "turn_on",
             "object": "floor lamp",
-            "from": "corner",
+            "from": "living room",
             "to": "on"
-          },
-          "uses": 0,
-          "serves": 0
-        }
-      ]
-    }
-  },
-  {
-    "key": "plan:R1:fix",
-    "system": "You are robot R1 in the living_room. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessibl",
-    "user": "## TASK:\nI have a video call starting in 5 minutes. My desk area needs to look presentable and I should be able to see and hear clearly. The bedroom light is off.\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am fixed in place and can manipulate light objects within reach.\",\n \"can_do\": [\n  \"PickupLightObject: pick up items like paper or small objects\",\n  \"SliceObject: cut items like paper\",\n  \"PourObject: pour liquids\",\n  \"PassReceiveObject: pass items to another robot\",\n",
-    "output": {
-      "reasoning": "a) The video call requires a well-lit and tidy desk area. b) I can contribute by adjusting the lighting in the living room to ensure clear visibility. c) The ceiling light and table lamp in the living room need to be turned on for better lighting. d) I will focus on lighting adjustments in the living room as I cannot move to the bedroom.",
-      "goals": [
-        {
-          "goal": "ensure living room is well-lit for video call",
-          "priority": "high",
-          "in_my_room": true
-        }
-      ],
-      "checklist": [
-        {
-          "object": "ceiling light",
-          "change": "turn on",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "table lamp",
-          "change": "turn on",
-          "weight": "light",
-          "how": "LOCAL"
-        }
-      ],
-      "steps": [
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "turn_on",
-            "object": "ceiling light",
-            "from": "ceiling",
-            "to": "on"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "turn_on",
-            "object": "table lamp",
-            "from": "side table",
-            "to": "on"
-          },
-          "uses": 0,
-          "serves": 0
-        }
-      ]
-    }
-  },
-  {
-    "key": "plan:R3:fix",
-    "system": "You are robot R3 in the bedroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nI have a video call starting in 5 minutes. My desk area needs to look presentable and I should be able to see and hear clearly. The bedroom light is off.\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am a fixed robot with a gripper, able to manipulate light objects and toggle devices within reach.\",\n \"can_do\": [\n  \"PickupLightObject: move small items like pens and books\",\n  \"SliceObject: cut items if needed\",\n  \"PourObject: pour from containers\",\n  \"PassReceiveOb",
-    "output": {
-      "reasoning": "a) The desk area must be tidy and well-lit for a clear video call. b) I will organize the items on the desk and turn on the lamp to ensure proper lighting. c) R4 can assist with any additional adjustments needed in the bedroom. d) No items need to be passed to or from other rooms, as all necessary items are within my reach.",
-      "goals": [
-        {
-          "goal": "Ensure desk area is tidy and well-lit for video call",
-          "priority": "high",
-          "in_my_room": true
-        }
-      ],
-      "checklist": [
-        {
-          "object": "lamp",
-          "change": "turn on",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "brown book",
-          "change": "move to neat stack",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "black and white notebook",
-          "change": "move to neat stack",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "blue pen",
-          "change": "move to neat position",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "white phone",
-          "change": "move to neat position",
-          "weight": "light",
-          "how": "LOCAL"
-        }
-      ],
-      "steps": [
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "turn_on",
-            "object": "lamp",
-            "from": "desk",
-            "to": "on"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "move",
-            "object": "brown book",
-            "from": "desk",
-            "to": "neat stack"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "move",
-            "object": "black and white notebook",
-            "from": "desk",
-            "to": "neat stack"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "move",
-            "object": "blue pen",
-            "from": "desk",
-            "to": "neat position"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "move",
-            "object": "white phone",
-            "from": "desk",
-            "to": "neat position"
           },
           "uses": 0,
           "serves": 0
@@ -717,19 +657,25 @@
   {
     "key": "plan:R4:fix",
     "system": "You are robot R4 in the bedroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nI have a video call starting in 5 minutes. My desk area needs to look presentable and I should be able to see and hear clearly. The bedroom light is off.\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I am a mobile robot capable of moving objects and adjusting furniture.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PickupHeavyObject: move larger items\",\n  \"PushFurniture: adjust furniture position\",\n  \"PassReceiveObject: hand over or receive items\",\n  \"",
+    "user": "## TASK:\nI have a video call starting in 5 minutes. My desk area needs to look presentable and I should be able to see and hear clearly. The bedroom light is off.\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I am a mobile robot capable of moving objects and adjusting furniture.\",\n \"can_do\": [\n  \"PickupLightObject: move small items\",\n  \"PickupHeavyObject: move larger items\",\n  \"PushFurniture: adjust furniture positions\",\n  \"PassReceiveObject: exchange items with others\",\n  ",
     "output": {
-      "reasoning": "a) The desk area must be tidy and well-lit for a video call. b) The priority is high because the call starts soon. c) In my room, I will adjust the lighting and organize the desk area. d) I do not need any items from other rooms and no other robots need items from my room.",
+      "reasoning": "a) The desk area must be tidy and well-lit for the video call. b) The priority is high because the call starts soon. c) My tasks involve adjusting lighting and organizing the desk area in the bedroom. d) No assistance from other rooms is needed as all tasks are within my capability and room.",
       "goals": [
         {
-          "goal": "Ensure the desk area is tidy and well-lit for a video call.",
+          "goal": "Ensure the desk area is tidy and well-lit for the video call.",
           "priority": "high",
           "in_my_room": true
         }
       ],
       "checklist": [
         {
-          "object": "white floor lamp",
+          "object": "white ceiling lamp",
+          "change": "turn on",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "black desk lamp",
           "change": "turn on",
           "weight": "light",
           "how": "LOCAL"
@@ -745,18 +691,6 @@
           "change": "adjust to face desk neatly",
           "weight": "heavy",
           "how": "LOCAL"
-        },
-        {
-          "object": "black laptop",
-          "change": "align on desk",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "black keyboard",
-          "change": "align on desk",
-          "weight": "light",
-          "how": "LOCAL"
         }
       ],
       "steps": [
@@ -764,8 +698,19 @@
           "type": "LOCAL",
           "action": {
             "verb": "turn_on",
-            "object": "white floor lamp",
-            "from": "beside desk",
+            "object": "white ceiling lamp",
+            "from": "ceiling",
+            "to": "on"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "black desk lamp",
+            "from": "desk",
             "to": "on"
           },
           "uses": 0,
@@ -776,7 +721,7 @@
           "action": {
             "verb": "move",
             "object": "gray trash can",
-            "from": "under desk",
+            "from": "next to desk",
             "to": "corner"
           },
           "uses": 0,
@@ -792,28 +737,6 @@
           },
           "uses": 0,
           "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "move",
-            "object": "black laptop",
-            "from": "on desk",
-            "to": "aligned on desk"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "move",
-            "object": "black keyboard",
-            "from": "on desk",
-            "to": "aligned on desk"
-          },
-          "uses": 0,
-          "serves": 0
         }
       ]
     }
@@ -821,12 +744,12 @@
   {
     "key": "plan:R3:fix",
     "system": "You are robot R3 in the bedroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nI have a video call starting in 5 minutes. My desk area needs to look presentable and I should be able to see and hear clearly. The bedroom light is off.\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am a fixed robot with a gripper, able to manipulate light objects and toggle devices within reach.\",\n \"can_do\": [\n  \"PickupLightObject: move small items like pens and books\",\n  \"SliceObject: cut items if needed\",\n  \"PourObject: pour from containers\",\n  \"PassReceiveOb",
+    "user": "## TASK:\nI have a video call starting in 5 minutes. My desk area needs to look presentable and I should be able to see and hear clearly. The bedroom light is off.\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am a fixed robot with a gripper for manipulating light objects.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items\",\n  \"SliceObject: cut items\",\n  \"PourObject: pour liquids\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject: turn on/off lights, T",
     "output": {
-      "reasoning": "a) The desk area must be tidy and well-lit for a clear video call. b) I will organize the items on the desk and turn on the lamp to ensure proper lighting. c) R4 can assist with any additional adjustments needed in the bedroom. d) No items need to be passed to or from other rooms, as all necessary items are within my reach.",
+      "reasoning": "a) The desk area must be tidy and well-lit for the video call, which requires removing unnecessary items and ensuring adequate lighting. b) I can turn on the lamp on the desk and move items to the bed to clear the desk. c) No other robots are handling these specific tasks in the bedroom, so I will proceed with them. d) Ensuring the desk is presentable and lighting is adequate is crucial for the video call.",
       "goals": [
         {
-          "goal": "Ensure desk area is tidy and well-lit for video call",
+          "goal": "Ensure desk area is tidy and well-lit for the video call",
           "priority": "high",
           "in_my_room": true
         }
@@ -840,25 +763,37 @@
         },
         {
           "object": "brown book",
-          "change": "move to neat stack",
+          "change": "move to bed",
           "weight": "light",
           "how": "LOCAL"
         },
         {
-          "object": "black and white notebook",
-          "change": "move to neat stack",
+          "object": "black and white board",
+          "change": "move to bed",
           "weight": "light",
           "how": "LOCAL"
         },
         {
           "object": "blue pen",
-          "change": "move to neat position",
+          "change": "move to bed",
           "weight": "light",
           "how": "LOCAL"
         },
         {
           "object": "white phone",
-          "change": "move to neat position",
+          "change": "move to bed",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "blue USB drive",
+          "change": "move to bed",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "brown bowl",
+          "change": "move to bed",
           "weight": "light",
           "how": "LOCAL"
         }
@@ -881,7 +816,7 @@
             "verb": "move",
             "object": "brown book",
             "from": "desk",
-            "to": "neat stack"
+            "to": "bed"
           },
           "uses": 0,
           "serves": 0
@@ -890,9 +825,9 @@
           "type": "LOCAL",
           "action": {
             "verb": "move",
-            "object": "black and white notebook",
+            "object": "black and white board",
             "from": "desk",
-            "to": "neat stack"
+            "to": "bed"
           },
           "uses": 0,
           "serves": 0
@@ -903,7 +838,7 @@
             "verb": "move",
             "object": "blue pen",
             "from": "desk",
-            "to": "neat position"
+            "to": "bed"
           },
           "uses": 0,
           "serves": 0
@@ -914,7 +849,167 @@
             "verb": "move",
             "object": "white phone",
             "from": "desk",
-            "to": "neat position"
+            "to": "bed"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "blue USB drive",
+            "from": "desk",
+            "to": "bed"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "brown bowl",
+            "from": "desk",
+            "to": "bed"
+          },
+          "uses": 0,
+          "serves": 0
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R3:fix",
+    "system": "You are robot R3 in the bedroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
+    "user": "## TASK:\nI have a video call starting in 5 minutes. My desk area needs to look presentable and I should be able to see and hear clearly. The bedroom light is off.\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am a fixed robot with a gripper for manipulating light objects.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items\",\n  \"SliceObject: cut items\",\n  \"PourObject: pour liquids\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject: turn on/off lights, T",
+    "output": {
+      "reasoning": "a) The desk area must be tidy and well-lit for the video call, which requires removing unnecessary items and ensuring adequate lighting. b) I can turn on the lamp on the desk and move items to the bed to clear the desk. c) No other robots are handling these specific tasks in the bedroom, so I will proceed with them. d) Ensuring the desk is presentable and lighting is adequate is crucial for the video call.",
+      "goals": [
+        {
+          "goal": "Ensure desk area is tidy and well-lit for the video call",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "lamp",
+          "change": "turn on",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "brown book",
+          "change": "move to bed",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "black and white board",
+          "change": "move to bed",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "blue pen",
+          "change": "move to bed",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "white phone",
+          "change": "move to bed",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "blue USB drive",
+          "change": "move to bed",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "brown bowl",
+          "change": "move to bed",
+          "weight": "light",
+          "how": "LOCAL"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "lamp",
+            "from": "desk",
+            "to": "on"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "brown book",
+            "from": "desk",
+            "to": "bed"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "black and white board",
+            "from": "desk",
+            "to": "bed"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "blue pen",
+            "from": "desk",
+            "to": "bed"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "white phone",
+            "from": "desk",
+            "to": "bed"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "blue USB drive",
+            "from": "desk",
+            "to": "bed"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "brown bowl",
+            "from": "desk",
+            "to": "bed"
           },
           "uses": 0,
           "serves": 0
@@ -925,30 +1020,20 @@
   {
     "key": "graph:1",
     "system": "You are the graph integrator. You do NOT plan or allocate — every step was written by the robot that executes it.\nTurn CANDIDATE collaborations into one consistent joint plan.\n\nOperations (use only wi",
-    "user": "TASK: I have a video call starting in 5 minutes. My desk area needs to look presentable and I should be able to see and hear clearly. The bedroom light is off.\nJOINT PLAN: {\n \"R1\": [\n  {\n   \"id\": \"r1_s1\",\n   \"agent\": \"R1\",\n   \"type\": \"LOCAL\",\n   \"action\": {\n    \"verb\": \"turn_on\",\n    \"object\": \"ceiling light\",\n    \"from\": \"ceiling\",\n    \"to\": \"on\"\n   }\n  },\n  {\n   \"id\": \"r1_s2\",\n   \"agent\": \"R1\",\n   \"type\": \"LOCAL\",\n   \"action\": {\n    \"verb\": \"turn_on\",\n    \"object\": \"table lamp\",\n    \"from\": \"s",
+    "user": "TASK: I have a video call starting in 5 minutes. My desk area needs to look presentable and I should be able to see and hear clearly. The bedroom light is off.\nJOINT PLAN: {\n \"R1\": [\n  {\n   \"id\": \"r1_s1\",\n   \"agent\": \"R1\",\n   \"type\": \"LOCAL\",\n   \"action\": {\n    \"verb\": \"turn_on\",\n    \"object\": \"ceiling light\",\n    \"from\": \"ceiling\",\n    \"to\": \"on\"\n   }\n  },\n  {\n   \"id\": \"r1_s2\",\n   \"agent\": \"R1\",\n   \"type\": \"LOCAL\",\n   \"action\": {\n    \"verb\": \"turn_on\",\n    \"object\": \"floor lamp\",\n    \"from\": \"c",
     "output": {
       "ops": [
         {
           "op": "disconnect",
           "src": "r1_s2",
-          "dst": "I1",
-          "why": "The actions are similar but not identical; they refer to different lamps."
+          "dst": "r2_s3",
+          "why": "DUPLICATE_WORK: Both actions turn on the same floor lamp in the living room. Choose one to avoid redundancy."
         },
         {
           "op": "disconnect",
           "src": "r3_s1",
-          "dst": "I2",
-          "why": "The actions are similar but not identical; they refer to different lamps."
-        },
-        {
-          "op": "independent",
-          "issue": "I3",
-          "why": "The actions involve different objects and do not interfere with each other."
-        },
-        {
-          "op": "independent",
-          "issue": "I4",
-          "why": "The actions involve different objects and do not interfere with each other."
+          "dst": "r4_s2",
+          "why": "DUPLICATE_WORK: Both actions turn on the desk lamp in the bedroom. Choose one to avoid redundancy."
         }
       ]
     }
@@ -956,29 +1041,20 @@
   {
     "key": "graph:2",
     "system": "You are the graph integrator. You do NOT plan or allocate — every step was written by the robot that executes it.\nTurn CANDIDATE collaborations into one consistent joint plan.\n\nOperations (use only wi",
-    "user": "TASK: I have a video call starting in 5 minutes. My desk area needs to look presentable and I should be able to see and hear clearly. The bedroom light is off.\nJOINT PLAN: {\n \"R1\": [\n  {\n   \"id\": \"r1_s1\",\n   \"agent\": \"R1\",\n   \"type\": \"LOCAL\",\n   \"action\": {\n    \"verb\": \"turn_on\",\n    \"object\": \"ceiling light\",\n    \"from\": \"ceiling\",\n    \"to\": \"on\"\n   }\n  },\n  {\n   \"id\": \"r1_s2\",\n   \"agent\": \"R1\",\n   \"type\": \"LOCAL\",\n   \"action\": {\n    \"verb\": \"turn_on\",\n    \"object\": \"table lamp\",\n    \"from\": \"s",
+    "user": "TASK: I have a video call starting in 5 minutes. My desk area needs to look presentable and I should be able to see and hear clearly. The bedroom light is off.\nJOINT PLAN: {\n \"R1\": [\n  {\n   \"id\": \"r1_s1\",\n   \"agent\": \"R1\",\n   \"type\": \"LOCAL\",\n   \"action\": {\n    \"verb\": \"turn_on\",\n    \"object\": \"ceiling light\",\n    \"from\": \"ceiling\",\n    \"to\": \"on\"\n   }\n  },\n  {\n   \"id\": \"r1_s2\",\n   \"agent\": \"R1\",\n   \"type\": \"LOCAL\",\n   \"action\": {\n    \"verb\": \"turn_on\",\n    \"object\": \"floor lamp\",\n    \"from\": \"c",
     "output": {
       "ops": [
         {
           "op": "disconnect",
           "src": "r1_s2",
           "dst": "I1",
-          "why": "Duplicate work with R2, but R2's action is more specific with 'white lamp'."
+          "why": "Duplicate work across different robots, choose one to execute."
         },
         {
-          "op": "independent",
-          "issue": "I2",
-          "why": "Both lamps can be turned on for better lighting."
-        },
-        {
-          "op": "independent",
-          "issue": "I3",
-          "why": "Moving a notebook and aligning a laptop are different tasks."
-        },
-        {
-          "op": "independent",
-          "issue": "I4",
-          "why": "Moving a notebook and aligning a keyboard are different tasks."
+          "op": "disconnect",
+          "src": "r3_s1",
+          "dst": "I2",
+          "why": "Duplicate work across different robots, choose one to execute."
         }
       ]
     }
@@ -990,19 +1066,21 @@
     "output": {
       "sizes": {
         "r1_s1": "short",
-        "r2_s1": "short",
+        "r2_s1": "medium",
         "r3_s1": "short",
         "r4_s1": "short",
         "r1_s2": "short",
         "r2_s2": "short",
-        "r3_s2": "short",
-        "r4_s2": "medium",
-        "r3_s3": "short",
+        "r3_s2": "medium",
+        "r4_s2": "short",
+        "r2_s3": "short",
+        "r3_s3": "medium",
         "r4_s3": "medium",
         "r3_s4": "short",
-        "r4_s4": "short",
+        "r4_s4": "medium",
         "r3_s5": "short",
-        "r4_s5": "short"
+        "r3_s6": "short",
+        "r3_s7": "short"
       }
     }
   }

@@ -3,68 +3,69 @@
   "mode": "multi_room",
   "model": "gpt-4o",
   "task_text": "Turn on coffee machine and TV",
-  "joint_plan_text": "### Joint Plan — task1_simple  (about 5 min / deadline 10 min: OK)\n### Robots: R1:Mobile_Light(kitchen), R2:Mobile_Light(living_room)\n\n\n[0-5 min]\n- R1 [LOCAL] turn on the blue coffee machine from the counter  (r1_s1)\n- R2 [LOCAL] turn on the black TV from the TV stand  (r2_s1)\n- R2 [LOCAL] turn on the white coffee machine from the dining table  (r2_s2)",
-  "joint_plan_full": "### Joint Plan — task1_simple  (about 5 min / deadline 10 min: OK)\n### Robots: R1:Mobile_Light(kitchen), R2:Mobile_Light(living_room)\n\n\n[0-5 min]\n- R1 [LOCAL] turn_on the blue coffee machine from counter to on  (r1_s1)\n- R2 [LOCAL] turn_on the black TV from TV stand to on  (r2_s1)\n- R2 [LOCAL] turn_on the white coffee machine from dining table to on  (r2_s2)",
+  "joint_plan_text": "### Joint Plan — task1_simple  (about 5 min / deadline 10 min: OK)\n### Robots: R1:Mobile_Light(kitchen), R2:Mobile_Light(living_room)\n\n[0-5 min]\n- R1 [LOCAL] toggle the coffee machine from off to on  (r1_s1)\n- R2 [LOCAL] toggle the TV from off to on  (r2_s1)\n\n### Not covered (from the robots' own checklists)\n- R2: TV: toggle from off to on",
+  "joint_plan_full": "### Joint Plan — task1_simple  (about 5 min / deadline 10 min: OK)\n### Robots: R1:Mobile_Light(kitchen), R2:Mobile_Light(living_room)\n\n\n[0-5 min]\n- R1 [LOCAL] toggle the coffee machine from off to on  (r1_s1)\n- R2 [LOCAL] toggle the TV from off to on  (r2_s1)\n\n### Not covered (from the robots' own checklists)\n- R2: TV: toggle from off to on",
   "offers": {
     "R1": {
       "agent": "R1",
-      "capability": "I am a mobile robot capable of interacting with light objects.",
+      "capability": "I am mobile and can carry light objects up to 5 kg.",
       "can_do": [
-        "PickupLightObject: pick up items under 5 kg",
-        "PassReceiveObject: transfer objects to/from others",
-        "ToggleObject: turn on/off lights, TV, appliances"
+        "PickupLightObject: lift mugs, fruit, small items",
+        "PassReceiveObject: transfer items to/from other robots",
+        "ToggleObject: turn on/off kettle, lights, appliances"
       ],
       "has_items": [
-        "green plant (counter, image 1)",
-        "metal pot (counter, image 1)",
-        "brown stone (counter, image 1)",
-        "green lettuce (counter, image 1)",
-        "white paper towel (counter, image 1)",
-        "blue coffee machine (counter, image 2)",
-        "red toaster (counter, image 2)"
+        "plant (counter, image 1)",
+        "pot (counter, image 1)",
+        "lettuce (counter, image 1)",
+        "dishcloth (counter, image 1)",
+        "coffee machine (counter, image 2)",
+        "toaster (counter, image 2)",
+        "fridge (corner, image 2)"
       ],
       "need_from_others": [
-        "ToggleObject: turn on TV"
+        "TV to be turned on in the living room"
       ],
       "intends": [
-        "ToggleObject: turn on blue coffee machine"
+        "toggle coffee machine from off to on"
       ],
       "suggests": [],
       "obs_scope": "I can observe and interact with items in the kitchen only.",
       "cannot_do": [
-        "PickupHeavyObject: cannot lift items over 5 kg",
-        "PushFurniture: cannot move furniture",
-        "SliceObject: cannot cut items",
-        "PourObject: cannot pour liquids"
+        "PickupHeavyObject: cannot lift heavy furniture",
+        "PushFurniture: cannot push sofa",
+        "SliceObject: cannot slice food",
+        "PourObject: cannot pour precisely"
       ],
-      "reasoning": "a) The coffee machine and TV must be turned on. b) Turning on both devices quickly is most important. c) I will turn on the blue coffee machine. d) None of my items are needed for the TV."
+      "reasoning": "a) The goal is to have the coffee machine and TV turned on. b) The living room likely has the TV, so it needs to be turned on there. c) I can turn on the coffee machine in the kitchen. d) Turning on the coffee machine is my top priority. e) The TV needs to be turned on in another room."
     },
     "R2": {
       "agent": "R2",
-      "capability": "I am a mobile robot with light object handling abilities.",
+      "capability": "I am mobile and can carry light objects up to 5 kg.",
       "can_do": [
         "PickupLightObject: lift small items",
-        "PassReceiveObject: transfer items",
-        "ToggleObject: turn on/off lights, TV, appliances"
+        "PassReceiveObject: transfer items to/from other robots",
+        "ToggleObject: turn on/off TV, lights"
       ],
       "has_items": [
-        "black TV (on TV stand, image 1)",
-        "white coffee machine (on dining table, image 2)"
+        "TV (on stand, image 1)",
+        "lamp (on table, image 2)"
       ],
-      "need_from_others": [],
+      "need_from_others": [
+        "Another robot to turn on the coffee machine in the kitchen"
+      ],
       "intends": [
-        "ToggleObject: turn on black TV (on TV stand, image 1)",
-        "ToggleObject: turn on white coffee machine (on dining table, image 2)"
+        "toggle TV from off to on"
       ],
       "suggests": [],
-      "obs_scope": "I can observe and interact with objects in the living room.",
+      "obs_scope": "I can observe and interact with items in the living room only.",
       "cannot_do": [
-        "PickupHeavyObject: too heavy for me",
-        "PushFurniture: cannot move furniture",
-        "SliceObject: cannot cut",
-        "PourObject: cannot pour liquids"
+        "PickupHeavyObject: cannot lift heavy furniture",
+        "PushFurniture: cannot push sofa",
+        "SliceObject: cannot slice food",
+        "PourObject: cannot pour precisely"
       ],
-      "reasoning": "a) GOAL STATE: The TV and coffee machine are both turned on. b) PRIORITY: Ensure both devices are powered on within the 10-minute deadline. c) MY ROOM: Turn on the black TV and white coffee machine. d) FOR OTHERS: No items needed for other rooms."
+      "reasoning": "a) The goal is to have the coffee machine and TV turned on. b) The living room needs the TV on for viewing. c) I can turn on the TV in my room. d) Turning on the TV is the priority since I can see and access it. e) I have no items to suggest for the coffee machine task."
     }
   },
   "local_plans": {
@@ -74,9 +75,9 @@
         "agent": "R1",
         "type": "LOCAL",
         "action": {
-          "verb": "turn_on",
-          "object": "blue coffee machine",
-          "from": "counter",
+          "verb": "toggle",
+          "object": "coffee machine",
+          "from": "off",
           "to": "on"
         },
         "item": null,
@@ -86,7 +87,7 @@
         "origin": "local",
         "answers": null,
         "enables": null,
-        "serves": "Turn on blue coffee machine",
+        "serves": "coffee machine turned on",
         "prepared_by": null,
         "status": "active",
         "violations": [],
@@ -102,9 +103,9 @@
         "agent": "R2",
         "type": "LOCAL",
         "action": {
-          "verb": "turn_on",
-          "object": "black TV",
-          "from": "TV stand",
+          "verb": "toggle",
+          "object": "TV",
+          "from": "off",
           "to": "on"
         },
         "item": null,
@@ -114,33 +115,7 @@
         "origin": "local",
         "answers": null,
         "enables": null,
-        "serves": "Turn on the black TV and white coffee machine",
-        "prepared_by": null,
-        "status": "active",
-        "violations": [],
-        "size": null,
-        "phase": null,
-        "t_start": null,
-        "t_end": null
-      },
-      {
-        "id": "r2_s2",
-        "agent": "R2",
-        "type": "LOCAL",
-        "action": {
-          "verb": "turn_on",
-          "object": "white coffee machine",
-          "from": "dining table",
-          "to": "on"
-        },
-        "item": null,
-        "target": null,
-        "uses": 0,
-        "location": "living_room",
-        "origin": "local",
-        "answers": null,
-        "enables": null,
-        "serves": "Turn on the black TV and white coffee machine",
+        "serves": "turn on the TV",
         "prepared_by": null,
         "status": "active",
         "violations": [],
@@ -159,9 +134,9 @@
         "agent": "R1",
         "type": "LOCAL",
         "action": {
-          "verb": "turn_on",
-          "object": "blue coffee machine",
-          "from": "counter",
+          "verb": "toggle",
+          "object": "coffee machine",
+          "from": "off",
           "to": "on"
         },
         "item": null,
@@ -171,7 +146,7 @@
         "origin": "local",
         "answers": null,
         "enables": null,
-        "serves": "Turn on blue coffee machine",
+        "serves": "coffee machine turned on",
         "prepared_by": null,
         "status": "active",
         "violations": [],
@@ -185,9 +160,9 @@
         "agent": "R2",
         "type": "LOCAL",
         "action": {
-          "verb": "turn_on",
-          "object": "black TV",
-          "from": "TV stand",
+          "verb": "toggle",
+          "object": "TV",
+          "from": "off",
           "to": "on"
         },
         "item": null,
@@ -197,7 +172,7 @@
         "origin": "local",
         "answers": null,
         "enables": null,
-        "serves": "Turn on the black TV and white coffee machine",
+        "serves": "turn on the TV",
         "prepared_by": null,
         "status": "active",
         "violations": [],
@@ -205,32 +180,6 @@
         "phase": 1,
         "t_start": 0,
         "t_end": 1
-      },
-      {
-        "id": "r2_s2",
-        "agent": "R2",
-        "type": "LOCAL",
-        "action": {
-          "verb": "turn_on",
-          "object": "white coffee machine",
-          "from": "dining table",
-          "to": "on"
-        },
-        "item": null,
-        "target": null,
-        "uses": 0,
-        "location": "living_room",
-        "origin": "local",
-        "answers": null,
-        "enables": null,
-        "serves": "Turn on the black TV and white coffee machine",
-        "prepared_by": null,
-        "status": "active",
-        "violations": [],
-        "size": "short",
-        "phase": 1,
-        "t_start": 1,
-        "t_end": 2
       }
     ],
     "order": {
@@ -238,20 +187,10 @@
         "r1_s1"
       ],
       "R2": [
-        "r2_s1",
-        "r2_s2"
+        "r2_s1"
       ]
     },
-    "edges": [
-      {
-        "src": "r2_s1",
-        "dst": "r2_s2",
-        "kind": "SEQ",
-        "status": "CONFIRMED",
-        "source": "local",
-        "targeted": false
-      }
-    ],
+    "edges": [],
     "drops": [],
     "unresolved": [],
     "warnings": [],
@@ -259,8 +198,8 @@
   },
   "metrics": {
     "task_id": "task1_simple",
-    "n_steps_total": 3,
-    "n_steps_active": 3,
+    "n_steps_total": 2,
+    "n_steps_active": 2,
     "n_blocked": 0,
     "n_dropped": 0,
     "n_requests": 0,
@@ -279,14 +218,14 @@
     "n_warnings": 0,
     "plan_fix_rounds": {
       "R1": 1,
-      "R2": 1
+      "R2": 2
     },
-    "n_checklist_items": 3,
-    "n_uncovered_checklist": 0,
+    "n_checklist_items": 2,
+    "n_uncovered_checklist": 1,
     "n_uncovered_essential": 0,
     "graph_ops_applied": 0,
     "graph_ops_rejected": 0,
-    "makespan_steps": 2,
+    "makespan_steps": 1,
     "makespan_min": 5,
     "deadline": 10,
     "deadline_ok": true,
@@ -309,15 +248,15 @@
     "n_preparations_released": 0,
     "n_help_edges": 0,
     "n_transfer_edges": 0,
-    "llm_calls": 7,
-    "prompt_tokens": 13454,
-    "completion_tokens": 1331,
+    "llm_calls": 8,
+    "prompt_tokens": 23993,
+    "completion_tokens": 1409,
     "config": {
       "use_edge_proposal": true,
       "use_graph_llm": true,
       "max_graph_rounds": 2
     },
-    "wall_time_sec": 7.8
+    "wall_time_sec": 13.6
   },
   "config": {
     "use_edge_proposal": true,

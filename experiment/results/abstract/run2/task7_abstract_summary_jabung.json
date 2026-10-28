@@ -2,14 +2,14 @@
   "cda": {
     "name": "CDA",
     "track_a_llm_judge": {
-      "TF": 5,
-      "TF_reason": "The plan partially achieves the goals by closing several windows and securing some real objects (plant, laptop, towel). However, it relies on hallucinated objects (cabbage, bean bag, toy car) and leaves some checklist items unfulfilled.",
-      "PF": 3,
-      "PF_reason": "There are multiple severe violations including hallucinated objects ('green cabbage', 'blue bean bag', 'red toy car') and vague expressions for locations ('secure location', 'secured', 'stable').",
-      "OC": 8,
-      "OC_reason": "Robots mostly act on local information. Collaboration is used within rooms (R3 asking R4, R1 asking R2) which is acceptable, though not strictly required since any capable robot could perform the actions independently.",
-      "SC": 6,
-      "SC_reason": "There is an ordering violation: R1 waits for R2 to close the kitchen doors in step r1_s4, but R2 already performed this action in step r2_s3, which could lead to a deadlock."
+      "TF": 6,
+      "TF_reason": "The plan addresses the core goal of securing loose items and closing windows before the typhoon. However, there are several hallucinations (e.g., 'black stool' in the bathroom, 'silver can' in the kitchen, 'red object' in the living room) which detract from the overall fulfillment.",
+      "GF": 4,
+      "GF_reason": "There are multiple grounding and capability violations. R6 attempts to move a 'black stool' in the bathroom, but the stool is in the kitchen. Gripper robots (R1, R3) use a non-standard macro action 'pick up [obj] from [loc] to [loc]' instead of separate pick and put actions. R5 (Mobile_Heavy) uses 'pick up' and 'put down' which are typically Gripper actions, and its action strings are malformed.",
+      "SC": 5,
+      "SC_reason": "The sequence is flawed due to the misuse of action primitives. R1 and R3 'pick up' objects to a destination but never explicitly 'put down' the objects. R5 picks up a laptop 'to the white dresser' and then puts it down 'from the white bed to the white dresser', which is logically and syntactically incoherent.",
+      "CQ": 9,
+      "CQ_reason": "Collaboration is not strictly required for this task, as each robot can independently secure the loose items and windows in its respective room. The independent, parallel execution is appropriate for the task type."
     },
     "track_b_gc": 0.0,
     "track_b_state_detail": {
@@ -23,14 +23,14 @@
   "central": {
     "name": "Centralized",
     "track_a_llm_judge": {
-      "TF": 4,
-      "TF_reason": "The plan only addresses closing windows and doors in the living room, ignoring other rooms. Securing loose objects is handled with vague, high-level statements rather than specific actions on all loose items.",
-      "PF": 2,
-      "PF_reason": "Severe violations: R1 and R3 pick up and hold multiple objects simultaneously. 'Red object' is hallucinated/vague. Actions like 'secure loose light objects' and 'close all windows' are vague and lack specific object references.",
-      "OC": 4,
-      "OC_reason": "R1 passes objects to R2 without coordinating a meeting location (R2 is in the living room, R1 is in the kitchen). R3 asks R4 to come to the living room, but R4 is already there.",
+      "TF": 3,
+      "TF_reason": "The plan partially addresses the task by attempting to close windows and doors in the living room and picking up a few loose objects. However, it ignores other rooms (bedroom, bathroom) entirely, leaves many loose objects unsecured, and relies on vague actions like 'secure loose light objects' rather than concrete interactions with specific items.",
+      "GF": 2,
+      "GF_reason": "Severe violations exist: R1 and R3 both hold multiple objects simultaneously (3 each). The plan includes vague and hallucinated objects ('red object', 'loose light objects'). Furthermore, R1 attempts to pass objects to R2 while they are in different rooms (R1 in kitchen, R2 in living room).",
       "SC": 2,
-      "SC_reason": "Multiple sequential errors: R1 passes objects to R2 but R2 has no RECEIVE actions. R3 passes three objects to R4 but R4 only has one general RECEIVE action. Duplicate step IDs are used (e.g., r2_s1, r4_s1). R2 moves to assist R4 before R4 asks for help."
+      "SC_reason": "Critical sequencing and logical errors: R1 passes objects to R2, but R2 has no corresponding RECEIVE actions. R3 passes three objects to R4, but R4 only has a single RECEIVE action. Additionally, R4's RECEIVE action reuses an ID (r4_s1) from the previous time block, and R3 asks R4 to come to the living room when R4 is already there.",
+      "CQ": 2,
+      "CQ_reason": "Collaboration is highly disjointed and inappropriate. Passes are initiated without corresponding receives, robots attempt to pass objects across different rooms without meeting, and R3 requests R4 to move to a room R4 is already in. Passing objects between robots is also largely unnecessary for simply securing them."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -40,13 +40,13 @@
     "name": "Independent",
     "track_a_llm_judge": {
       "TF": 4,
-      "TF_reason": "The plan partially addresses the task by closing some windows and securing a few items. However, many loose items remain unsecured, the door is left open because R3's request for help is ignored, and robots redundantly handle the same objects.",
-      "PF": 3,
-      "PF_reason": "The plan contains multiple vague expressions ('Ensure all small items are secured', 'Ensure all cabinet doors are closed', 'red object'). It also hallucinates objects not in the room lists, such as 'cabinet' in the kitchen and 'red object' in the living room.",
-      "OC": 6,
-      "OC_reason": "Robots mostly act on local observations. However, R3 asks for help to close a door, but R4 (who is in the same room) completely ignores the request, showing a failure in collaboration logic.",
-      "SC": 3,
-      "SC_reason": "Severe sequence violations exist: R1 and R2 manipulate the exact same objects (apple, tomato). R1 picks up the apple after R2 already placed it, and R2 picks up the tomato after R1 already placed it. Additionally, R3 requests help that never arrives."
+      "TF_reason": "The plan attempts to secure loose items and close windows, but completely ignores the bedroom and bathroom. Additionally, there are redundant actions on the same objects, and the plan relies on vague 'ensure' actions rather than concrete steps.",
+      "GF": 3,
+      "GF_reason": "Severe grounding violations exist. The plan uses vague expressions like 'Ensure all small items are secured' and 'Ensure all cabinet doors are closed'. R3 hallucinates action formats (e.g., 'PickupLightObject: Close the laptop'). 'Cabinet' is hallucinated as a receptacle instead of using available ones like ShelvingUnit.",
+      "SC": 4,
+      "SC_reason": "There are critical ordering and state violations. R1 and R2 repeatedly attempt to pick up and stow the exact same objects (apple, tomato) after the other robot has already placed them. R3 requests help that never arrives.",
+      "CQ": 2,
+      "CQ_reason": "Collaboration is extremely poor. R3 explicitly asks for help to close a door because it cannot move, but no other robot responds or assists. There is no coordination between R1 and R2 in the kitchen, leading to redundant actions on the same objects."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -55,14 +55,14 @@
   "lamma_p": {
     "name": "LaMMA-P",
     "track_a_llm_judge": {
-      "TF": 2,
-      "TF_reason": "The plan fails to achieve the task goals using concrete actions with real objects. It relies entirely on generic, ungrounded terms like 'first window', 'first door', and 'loose item' instead of interacting with specific objects from the provided room lists.",
-      "PF": 0,
-      "PF_reason": "The plan is completely infeasible because it consists entirely of vague expressions ('first window', 'first door', 'first loose item inside', 'secure location', 'next loose item outside'). Furthermore, 'window' and 'door' are not listed in the actual objects list.",
-      "OC": 7,
-      "OC_reason": "The robots act independently based on local observations, which is appropriate since the task does not strictly require cross-room collaboration. However, the observations are of vague, undefined objects.",
+      "TF": 3,
+      "TF_reason": "The plan addresses the core goals of the task (closing windows/doors, securing loose items) and respects the time limit, but it completely fails to identify or interact with any specific real objects from the provided room lists, relying entirely on abstract placeholders.",
+      "GF": 1,
+      "GF_reason": "The plan is entirely ungrounded. It uses vague expressions ('first window', 'loose items inside', 'secure location') instead of specific, observable objects from the environment. This makes the plan physically unexecutable by the robots.",
       "SC": 8,
-      "SC_reason": "The sequence of actions (identify -> go to -> pick up/close -> put) is logically ordered, although the actions themselves are too generic to be executed."
+      "SC_reason": "The sequence of actions is logically coherent in an abstract sense (e.g., identifying items, going to them, picking them up, and placing them), with no major prerequisite violations among the abstract steps.",
+      "CQ": 5,
+      "CQ_reason": "There is no explicit collaboration between the robots. While parallel independent work is acceptable for this task, the lack of coordination regarding room assignments or shared goals limits the effectiveness of the multi-agent setup."
     },
     "track_b_gc": 0.0,
     "track_b_state_detail": {
@@ -77,13 +77,13 @@
     "name": "SMART-LLM",
     "track_a_llm_judge": {
       "TF": 2,
-      "TF_reason": "The plan attempts to fulfill the task by closing windows/doors and securing items, but it relies heavily on hallucinated objects (Window1, Window2, Window3, FrontDoor, BackDoor, Cabinet, GardenChair, GardenTable, Garage) that do not exist in the environment.",
-      "PF": 2,
-      "PF_reason": "Severe violations due to the use of numerous hallucinated objects (Window1, Window2, Window3, FrontDoor, BackDoor, Cabinet, GardenChair, GardenTable, Garage) which makes the plan largely infeasible.",
-      "OC": 2,
-      "OC_reason": "Robots act on objects they do not possess without any communication or transfer. For example, R3 picks up the GardenChair but R2 puts it away; R1 picks up the GardenTable but R3 puts it away. This implies unjustified global knowledge and telepathy.",
+      "TF_reason": "The plan attempts to fulfill the task by closing windows/doors and securing items, but almost all critical objects (Window1, Window2, Window3, FrontDoor, BackDoor, Cabinet, GardenChair, GardenTable, Garage) are hallucinated and do not exist in the environment.",
+      "GF": 1,
+      "GF_reason": "Severe violations due to massive hallucinations of objects and locations (windows, doors, garage, garden furniture). Additionally, robots attempt to place objects they are not holding.",
       "SC": 2,
-      "SC_reason": "Critical ordering and dependency violations exist. In the 5-10 min block, R2 puts the GardenChair in the Garage without ever picking it up or receiving it (R3 picked it up). Similarly, R3 puts the GardenTable in the Garage without picking it up or receiving it (R1 picked it up)."
+      "SC_reason": "Critical ordering and state violations in the 5-10 minute block: R2 attempts to put down the GardenChair that R3 picked up, and R3 attempts to put down the GardenTable that R1 picked up, without any PASS/RECEIVE actions.",
+      "CQ": 2,
+      "CQ_reason": "Collaboration is completely broken. Robots attempt to place objects picked up by other robots without any explicit PASS/RECEIVE actions, demonstrating a fundamental misunderstanding of multi-agent coordination."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",

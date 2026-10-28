@@ -1,35 +1,75 @@
 [
   {
-    "key": "offer:R1",
-    "system": "You are robot R1, a household robot that sees only its own room.\n\nSTEP 1 — LIST has_items: every clearly visible movable object in your images.\nFormat: \"<color> <noun> (<location>, image <k>)\". NEVER ",
-    "user": "## TASK (serve this only):\nEmpty the trash cans\nDEADLINE: 20 minutes\n\nYOUR BODY: room=kitchen, mobile=True, payload=5 kg, embodiment=Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture, SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\nBowl (in Cabinet)\nPan (in Cabinet)\nPlate (in Cabinet)\nButterKnife (in Drawer)\nFork (in Drawer)\nKnife (in Drawer)\nSpoon (in Drawer)\nDishSponge (in SinkBasin)\n\nImages attached (2 image(s)), image 1 to 2.",
+    "key": "offer:R3",
+    "system": "You are robot R3, a household robot that sees only its own room.\n\nSTEP 1 — LIST has_items: every clearly visible movable object in your images.\nFormat: \"<color> <noun> (<location>, image <k>)\". NEVER ",
+    "user": "## TASK (serve this only):\nEmpty the trash cans\nDEADLINE: 20 minutes\n\nYOUR BODY: room=bedroom, mobile=True, payload=5 kg, embodiment=Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture, SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\nCD (in Drawer)\n\nImages attached (2 image(s)), image 1 to 2.",
     "output": {
       "has_items": [
-        "green trash can (floor, image 1)",
-        "brown paper bag (green trash can, image 1)"
+        "black trash bag (floor, image 1)",
+        "black trash bag (floor, image 2)",
+        "gray trash can (corner, image 2)"
       ],
-      "reasoning": "a) Trash cans must be emptied. b) The most important task is to empty the trash cans within the deadline. c) I will remove the brown paper bag from the green trash can. d) No items from my room are needed elsewhere.",
+      "reasoning": "a) Trash cans must be emptied and bags removed for disposal. b) Bedroom trash bags need to be collected and taken to a central disposal area. c) I can collect the trash bags and pass them to another room for disposal. d) Collecting and passing the trash bags is the priority. e) Pass the trash bags to a robot in the disposal area.",
       "capability": "I am mobile and can carry light objects up to 5 kg.",
       "can_do": [
-        "PickupLightObject: lift objects under 5 kg",
-        "PassReceiveObject: transfer objects to/from others",
+        "PickupLightObject: lift small trash bags",
+        "PassReceiveObject: transfer items to/from other robots"
+      ],
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift heavy furniture",
+        "PushFurniture: cannot push sofa",
+        "SliceObject: cannot slice food",
+        "PourObject: cannot pour precisely",
+        "ToggleObject: cannot turn on/off lights, TV, appliances"
+      ],
+      "suggests": [
+        "black trash bag",
+        "black trash bag"
+      ],
+      "intends": [
+        "pick up black trash bag from floor (image 1)",
+        "pick up black trash bag from floor (image 2)",
+        "pass black trash bag to disposal robot",
+        "pass black trash bag to disposal robot"
+      ],
+      "need_from_others": [
+        "Disposal robot to receive trash bags and dispose of them"
+      ],
+      "obs_scope": "I can observe and interact with items in the bedroom only."
+    }
+  },
+  {
+    "key": "offer:R2",
+    "system": "You are robot R2, a household robot that sees only its own room.\n\nSTEP 1 — LIST has_items: every clearly visible movable object in your images.\nFormat: \"<color> <noun> (<location>, image <k>)\". NEVER ",
+    "user": "## TASK (serve this only):\nEmpty the trash cans\nDEADLINE: 20 minutes\n\nYOUR BODY: room=living_room, mobile=True, payload=5 kg, embodiment=Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture, SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\n(none)\n\nImages attached (2 image(s)), image 1 to 2.",
+    "output": {
+      "has_items": [
+        "gray trash can (corner, image 1)",
+        "brown cardboard tubes (gray trash can, image 1)",
+        "black chair (left of trash can, image 1)",
+        "TV (on cabinet, image 2)",
+        "laptop (on table, image 2)"
+      ],
+      "reasoning": "a) Trash cans must be emptied to maintain cleanliness. b) Locate and empty trash cans in each room. c) My room has a gray trash can that needs emptying. d) Prioritize emptying the gray trash can as it's the only one visible. e) No items need to be moved to other rooms.",
+      "capability": "I am mobile and can carry light objects up to 5 kg.",
+      "can_do": [
+        "PickupLightObject: lift mugs, fruit, small items",
+        "PassReceiveObject: transfer items to/from other robots",
         "ToggleObject: turn on/off lights, TV, appliances"
       ],
       "cannot_do": [
-        "PickupHeavyObject: cannot lift objects over 5 kg",
-        "PushFurniture: cannot move furniture",
-        "SliceObject: cannot cut objects",
-        "PourObject: cannot pour liquids"
+        "PickupHeavyObject: cannot lift heavy furniture",
+        "PushFurniture: cannot push sofa",
+        "SliceObject: cannot slice food",
+        "PourObject: cannot pour precisely"
       ],
       "suggests": [],
       "intends": [
-        "pickup brown paper bag from green trash can",
-        "move brown paper bag to outside trash area"
+        "pick up brown cardboard tubes from gray trash can",
+        "empty gray trash can by transporting contents outside"
       ],
-      "need_from_others": [
-        "RECEIVE empty trash bag"
-      ],
-      "obs_scope": "I can observe and interact with objects in the kitchen."
+      "need_from_others": [],
+      "obs_scope": "I can observe and interact with items in the living room only."
     }
   },
   {
@@ -41,110 +81,126 @@
         "plunger (next to cabinet, image 1)",
         "trash can (next to cabinet, image 1)"
       ],
-      "reasoning": "a) GOAL STATE: Trash cans are empty. b) PRIORITY: Emptying the trash cans within the deadline. c) MY ROOM: Remove trash from the trash can. d) FOR OTHERS: None of my has_items serve another room's needs.",
-      "capability": "I can move around the room and interact with light objects.",
+      "reasoning": "a) Trash cans need to be emptied for cleanliness and odor control. b) Each room may have trash cans that need emptying; mine is in the bathroom. c) I can pick up the trash can and pass it to another robot for disposal. d) The priority is to ensure the trash can is empty before the deadline. e) The trash can should be passed to a robot responsible for disposal.",
+      "capability": "I am mobile and can carry light objects up to 5 kg.",
       "can_do": [
-        "PickupLightObject: lift small items",
-        "PassReceiveObject: transfer items to/from others",
-        "ToggleObject: turn on/off lights, TV, appliances"
+        "PickupLightObject: lift mugs, fruit, small items",
+        "PassReceiveObject: transfer items to/from other robots"
       ],
       "cannot_do": [
-        "PickupHeavyObject: too heavy for my capacity",
-        "PushFurniture: beyond my physical capability",
-        "SliceObject: no cutting tools",
-        "PourObject: no pouring mechanism"
+        "PickupHeavyObject: cannot lift heavy furniture",
+        "PushFurniture: cannot push sofa",
+        "SliceObject: cannot slice food",
+        "PourObject: cannot pour precisely"
       ],
-      "suggests": [],
+      "suggests": [
+        "trash can"
+      ],
       "intends": [
-        "PickupLightObject: remove trash from trash can",
-        "PassReceiveObject: transfer trash to designated disposal area"
+        "pick up trash can from next to cabinet",
+        "pass trash can to another robot for disposal"
       ],
       "need_from_others": [
-        "Receive: empty trash from another room if needed"
+        "Another robot to receive the trash can and dispose of its contents"
       ],
       "obs_scope": "I can observe and interact with items in the bathroom only."
     }
   },
   {
-    "key": "offer:R2",
-    "system": "You are robot R2, a household robot that sees only its own room.\n\nSTEP 1 — LIST has_items: every clearly visible movable object in your images.\nFormat: \"<color> <noun> (<location>, image <k>)\". NEVER ",
-    "user": "## TASK (serve this only):\nEmpty the trash cans\nDEADLINE: 20 minutes\n\nYOUR BODY: room=living_room, mobile=True, payload=5 kg, embodiment=Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture, SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\n(none)\n\nImages attached (2 image(s)), image 1 to 2.",
+    "key": "offer:R1",
+    "system": "You are robot R1, a household robot that sees only its own room.\n\nSTEP 1 — LIST has_items: every clearly visible movable object in your images.\nFormat: \"<color> <noun> (<location>, image <k>)\". NEVER ",
+    "user": "## TASK (serve this only):\nEmpty the trash cans\nDEADLINE: 20 minutes\n\nYOUR BODY: room=kitchen, mobile=True, payload=5 kg, embodiment=Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture, SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\nBowl (in Cabinet)\nPan (in Cabinet)\nPlate (in Cabinet)\nButterKnife (in Drawer)\nFork (in Drawer)\nKnife (in Drawer)\nSpoon (in Drawer)\nDishSponge (in SinkBasin)\n\nImages attached (2 image(s)), image 1 to 2.",
     "output": {
       "has_items": [
-        "gray trash can (corner, image 1)",
-        "brown paper rolls (trash can, image 1)",
-        "black chair (left of trash can, image 1)",
-        "TV (on cabinet, image 2)",
-        "white object (on cabinet, image 2)",
-        "laptop (on table, image 2)"
+        "green trash can (floor, image 1)",
+        "green trash can (floor, image 2)"
       ],
-      "reasoning": "a) GOAL STATE: Trash cans are empty. b) PRIORITY: Ensure trash is removed within 20 minutes. c) MY ROOM: Empty the gray trash can. d) FOR OTHERS: None of my has_items serve another room's needs.",
-      "capability": "I am a mobile robot capable of light object manipulation.",
+      "reasoning": "a) Trash cans must be emptied to maintain cleanliness. b) Each room should have empty trash cans to prevent overflow. c) I can remove trash bags from the cans in my room. d) Removing trash bags is a priority to ensure the cans are empty. e) The trash bags should be taken out of the kitchen for disposal.",
+      "capability": "I am mobile and can carry light objects up to 5 kg.",
       "can_do": [
-        "PickupLightObject: lift small/light items",
-        "PassReceiveObject: exchange items with others",
-        "ToggleObject: turn on/off lights, TV, appliances"
+        "PickupLightObject: lift small items and trash bags",
+        "PassReceiveObject: transfer items to/from other robots"
       ],
       "cannot_do": [
-        "PickupHeavyObject: cannot lift heavy items",
+        "PickupHeavyObject: cannot lift heavy trash bags",
         "PushFurniture: cannot move furniture",
         "SliceObject: cannot cut items",
         "PourObject: cannot pour liquids"
       ],
       "suggests": [],
       "intends": [
-        "PickupLightObject: remove brown paper rolls from gray trash can",
-        "PassReceiveObject: transport brown paper rolls to designated disposal area"
+        "pick up trash bag from green trash can (image 1)",
+        "pick up trash bag from green trash can (image 2)",
+        "pass trash bags to another robot for disposal"
       ],
       "need_from_others": [
-        "Receive: a place to dispose of trash outside the living room"
+        "Another robot to receive and dispose of trash bags outside the kitchen"
       ],
-      "obs_scope": "I can observe and interact with items in the living room."
+      "obs_scope": "I can observe and interact with items in the kitchen only."
     }
   },
   {
-    "key": "offer:R3",
-    "system": "You are robot R3, a household robot that sees only its own room.\n\nSTEP 1 — LIST has_items: every clearly visible movable object in your images.\nFormat: \"<color> <noun> (<location>, image <k>)\". NEVER ",
-    "user": "## TASK (serve this only):\nEmpty the trash cans\nDEADLINE: 20 minutes\n\nYOUR BODY: room=bedroom, mobile=True, payload=5 kg, embodiment=Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture, SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\nCD (in Drawer)\n\nImages attached (2 image(s)), image 1 to 2.",
+    "key": "plan:R2",
+    "system": "You are robot R2 in the living_room. Write YOUR part of the shared plan.\n\nCHAIN-OF-THOUGHT before writing steps:\n1. TASK END STATE: what must be true when done? (same as offer stage)\n2. OTHER ROBOTS: ",
+    "user": "## TASK:\nEmpty the trash cans\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift mugs, fruit, small items\",\n  \"PassReceiveObject: transfer items to/from other robots\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"gray trash can (corner, image 1)\",\n  \"brown cardboard tubes (gray trash can, image 1)\",\n  \"black chair (left of trash can, image 1)\",\n  \"TV (on c",
     "output": {
-      "has_items": [
-        "black trash bag (floor, image 1)",
-        "black trash bag (floor, image 2)",
-        "gray trash can (corner, image 2)"
+      "reasoning": "a) The task requires emptying trash cans in different rooms. b) My room has a gray trash can with brown cardboard tubes that need to be removed. c) I will focus on emptying the gray trash can in the living room. d) I will collaborate with other robots by passing the removed contents for disposal outside.",
+      "goals": [
+        {
+          "goal": "empty gray trash can in the living room",
+          "priority": "high",
+          "in_my_room": true
+        }
       ],
-      "reasoning": "a) GOAL STATE: Trash cans are empty and trash is removed from the room. b) PRIORITY: Ensure all trash is collected and removed within the deadline. c) MY ROOM: Remove the black trash bags from the room. d) FOR OTHERS: None of my items serve another room's needs.",
-      "capability": "I am a mobile robot capable of moving light objects.",
-      "can_do": [
-        "PickupLightObject: lift small items",
-        "PassReceiveObject: transfer items to/from others",
-        "ToggleObject: turn on/off lights, TV, appliances"
+      "checklist": [
+        {
+          "object": "brown cardboard tubes",
+          "change": "remove from gray trash can",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "gray trash can",
+          "change": "empty outside",
+          "weight": "light",
+          "how": "LOCAL"
+        }
       ],
-      "cannot_do": [
-        "PickupHeavyObject: cannot lift heavy items",
-        "PushFurniture: cannot move large furniture",
-        "SliceObject: cannot cut or slice items",
-        "PourObject: cannot pour liquids"
-      ],
-      "suggests": [],
-      "intends": [
-        "pickup black trash bag (floor, image 1)",
-        "pickup black trash bag (floor, image 2)",
-        "move black trash bag (floor, image 1) to outside",
-        "move black trash bag (floor, image 2) to outside"
-      ],
-      "need_from_others": [],
-      "obs_scope": "I can observe and interact with items in my room only."
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "brown cardboard tubes",
+            "from": "gray trash can",
+            "to": "gripper"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "brown cardboard tubes",
+            "from": "gripper",
+            "to": "outside"
+          },
+          "uses": 0,
+          "serves": 1
+        }
+      ]
     }
   },
   {
     "key": "plan:R4",
-    "system": "You are robot R4 in the bathroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, ",
-    "user": "## TASK:\nEmpty the trash cans\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I can move around the room and interact with light objects.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items\",\n  \"PassReceiveObject: transfer items to/from others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"plunger (next to cabinet, image 1)\",\n  \"trash can (next to cabinet, image 1)\"\n ],\n \"need_from_others\": [\n  \"Receive: empty trash from another room if needed",
+    "system": "You are robot R4 in the bathroom. Write YOUR part of the shared plan.\n\nCHAIN-OF-THOUGHT before writing steps:\n1. TASK END STATE: what must be true when done? (same as offer stage)\n2. OTHER ROBOTS: sca",
+    "user": "## TASK:\nEmpty the trash cans\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift mugs, fruit, small items\",\n  \"PassReceiveObject: transfer items to/from other robots\"\n ],\n \"has_items\": [\n  \"plunger (next to cabinet, image 1)\",\n  \"trash can (next to cabinet, image 1)\"\n ],\n \"need_from_others\": [\n  \"Another robot to receive the trash can and dispose of its contents\"\n ],\n \"intends\": [\n  \"pi",
     "output": {
-      "reasoning": "a) The goal is to ensure the trash can in the bathroom is emptied. b) This task has a high priority as it is essential for cleanliness. c) In my room, I will remove the trash from the trash can. d) I do not need to pass any items to other rooms as no other room requires items from the bathroom for this task.",
+      "reasoning": "a) The task is to empty the trash cans for cleanliness and odor control. b) Each robot is responsible for handling the trash cans in their respective rooms. c) My role is to pick up the trash can in the bathroom and pass it to another robot for disposal. d) No other robot is handling the trash can in the bathroom, so I will proceed with my intended actions. e) It is essential to ensure the trash can is empty before the deadline, and collaboration with another robot for disposal is necessary.",
       "goals": [
         {
-          "goal": "Empty the trash can in the bathroom.",
+          "goal": "empty the trash can in the bathroom",
           "priority": "high",
           "in_my_room": true
         }
@@ -152,7 +208,7 @@
       "checklist": [
         {
           "object": "trash can",
-          "change": "empty",
+          "change": "pass for disposal",
           "weight": "light",
           "how": "LOCAL"
         }
@@ -164,68 +220,15 @@
             "verb": "pick_up",
             "object": "trash can",
             "from": "next to cabinet",
-            "to": "designated disposal area"
-          },
-          "uses": 1,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "put_down",
-            "object": "trash can",
-            "from": "designated disposal area",
-            "to": "next to cabinet"
-          },
-          "uses": 0,
-          "serves": 1
-        }
-      ]
-    }
-  },
-  {
-    "key": "plan:R2",
-    "system": "You are robot R2 in the living_room. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessibl",
-    "user": "## TASK:\nEmpty the trash cans\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am a mobile robot capable of light object manipulation.\",\n \"can_do\": [\n  \"PickupLightObject: lift small/light items\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"gray trash can (corner, image 1)\",\n  \"brown paper rolls (trash can, image 1)\",\n  \"black chair (left of trash can, image 1)\",\n  \"TV (on cabinet, image 2)\",\n",
-    "output": {
-      "reasoning": "a) GOAL STATE: Ensure the gray trash can in the living room is emptied. b) PRIORITY: High, as the task must be completed within 20 minutes. c) MY ROOM: Remove brown paper rolls from the gray trash can. d) FOR OTHERS: I need a place to dispose of the trash outside the living room, which will be handled by another robot.",
-      "goals": [
-        {
-          "goal": "Empty the gray trash can in the living room",
-          "priority": "high",
-          "in_my_room": true
-        }
-      ],
-      "checklist": [
-        {
-          "object": "brown paper rolls",
-          "change": "remove from gray trash can",
-          "weight": "light",
-          "how": "LOCAL"
-        }
-      ],
-      "steps": [
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "pick_up",
-            "object": "brown paper rolls",
-            "from": "gray trash can",
-            "to": "my possession"
+            "to": "gripper"
           },
           "uses": 0,
           "serves": 1
         },
         {
-          "type": "ASK_HELP",
-          "action": {
-            "verb": "PassReceiveObject",
-            "object": "brown paper rolls",
-            "from": "my possession",
-            "to": "outside trash area"
-          },
+          "type": "PASS",
+          "item": "trash can",
           "target": "R1",
-          "enables": 0,
           "serves": 1
         }
       ]
@@ -233,13 +236,13 @@
   },
   {
     "key": "plan:R3",
-    "system": "You are robot R3 in the bedroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nEmpty the trash cans\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am a mobile robot capable of moving light objects.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items\",\n  \"PassReceiveObject: transfer items to/from others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"black trash bag (floor, image 1)\",\n  \"black trash bag (floor, image 2)\",\n  \"gray trash can (corner, image 2)\"\n ],\n \"need_from_others\": [],\n \"intends\": [\n  \"pickup ",
+    "system": "You are robot R3 in the bedroom. Write YOUR part of the shared plan.\n\nCHAIN-OF-THOUGHT before writing steps:\n1. TASK END STATE: what must be true when done? (same as offer stage)\n2. OTHER ROBOTS: scan",
+    "user": "## TASK:\nEmpty the trash cans\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift small trash bags\",\n  \"PassReceiveObject: transfer items to/from other robots\"\n ],\n \"has_items\": [\n  \"black trash bag (floor, image 1)\",\n  \"black trash bag (floor, image 2)\",\n  \"gray trash can (corner, image 2)\"\n ],\n \"need_from_others\": [\n  \"Disposal robot to receive trash bags and dispose of them\"\n ],\n \"int",
     "output": {
-      "reasoning": "a) The goal is to ensure that the trash cans in the bedroom are emptied by removing the black trash bags from the room. b) The priority is high as the task is to empty the trash cans within the given deadline. c) My room contains two black trash bags that need to be moved outside. d) No other robots need assistance from my room, and I do not require any items from other rooms.",
+      "reasoning": "a) The task involves emptying trash cans, which means collecting trash bags and ensuring they are disposed of. b) In the bedroom, my role is to collect the black trash bags and pass them to a robot that can dispose of them. c) I will collect the two black trash bags from the floor and pass them to a robot designated for disposal. d) This ensures that the trash from the bedroom is ready for disposal without duplication of efforts from other robots.",
       "goals": [
         {
-          "goal": "Remove black trash bags from the bedroom",
+          "goal": "Collect and pass trash bags from the bedroom for disposal.",
           "priority": "high",
           "in_my_room": true
         }
@@ -247,13 +250,13 @@
       "checklist": [
         {
           "object": "black trash bag (floor, image 1)",
-          "change": "move to outside",
+          "change": "collected and passed for disposal",
           "weight": "light",
           "how": "LOCAL"
         },
         {
           "object": "black trash bag (floor, image 2)",
-          "change": "move to outside",
+          "change": "collected and passed for disposal",
           "weight": "light",
           "how": "LOCAL"
         }
@@ -263,44 +266,62 @@
           "type": "LOCAL",
           "action": {
             "verb": "pick_up",
-            "object": "black trash bag (floor, image 1)",
-            "from": "floor",
-            "to": "outside"
+            "object": "black trash bag",
+            "from": "floor (image 1)",
+            "to": "gripper"
           },
           "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "PASS",
+          "item": "black trash bag",
+          "target": "R2",
           "serves": 1
         },
         {
           "type": "LOCAL",
           "action": {
             "verb": "pick_up",
-            "object": "black trash bag (floor, image 2)",
-            "from": "floor",
-            "to": "outside"
+            "object": "black trash bag",
+            "from": "floor (image 2)",
+            "to": "gripper"
           },
           "uses": 0,
-          "serves": 1
+          "serves": 2
+        },
+        {
+          "type": "PASS",
+          "item": "black trash bag",
+          "target": "R2",
+          "serves": 2
         }
       ]
     }
   },
   {
     "key": "plan:R1",
-    "system": "You are robot R1 in the kitchen. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nEmpty the trash cans\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift objects under 5 kg\",\n  \"PassReceiveObject: transfer objects to/from others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"green trash can (floor, image 1)\",\n  \"brown paper bag (green trash can, image 1)\"\n ],\n \"need_from_others\": [\n  \"RECEIVE empty trash bag\"\n ],\n \"intends\": [\n",
+    "system": "You are robot R1 in the kitchen. Write YOUR part of the shared plan.\n\nCHAIN-OF-THOUGHT before writing steps:\n1. TASK END STATE: what must be true when done? (same as offer stage)\n2. OTHER ROBOTS: scan",
+    "user": "## TASK:\nEmpty the trash cans\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items and trash bags\",\n  \"PassReceiveObject: transfer items to/from other robots\"\n ],\n \"has_items\": [\n  \"green trash can (floor, image 1)\",\n  \"green trash can (floor, image 2)\"\n ],\n \"need_from_others\": [\n  \"Another robot to receive and dispose of trash bags outside the kitchen\"\n ],\n \"intends\": [\n  \"pi",
     "output": {
-      "reasoning": "a) The task is to empty the trash cans, which involves removing the trash bags and disposing of them outside. b) My primary goal is to remove the brown paper bag from the green trash can in the kitchen and move it to the outside trash area. c) I need an empty trash bag to replace the one I remove. d) No other robots are handling the green trash can in the kitchen, so I will proceed with my intended actions.",
+      "reasoning": "a) The task requires emptying trash cans to maintain cleanliness in the kitchen. b) I can handle light objects and pass them to another robot for disposal. c) Each trash can in my room needs to be emptied by removing and passing the trash bags to another robot. d) I need another robot to dispose of the trash bags outside the kitchen since I cannot leave the room.",
       "goals": [
         {
-          "goal": "empty the green trash can in the kitchen",
+          "goal": "Empty the trash cans in the kitchen",
           "priority": "high",
           "in_my_room": true
         }
       ],
       "checklist": [
         {
-          "object": "brown paper bag",
-          "change": "move to outside trash area",
+          "object": "trash bag from green trash can (image 1)",
+          "change": "removed and passed for disposal",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "trash bag from green trash can (image 2)",
+          "change": "removed and passed for disposal",
           "weight": "light",
           "how": "LOCAL"
         }
@@ -310,28 +331,98 @@
           "type": "LOCAL",
           "action": {
             "verb": "pick_up",
-            "object": "brown paper bag",
-            "from": "green trash can",
-            "to": "carried"
+            "object": "trash bag",
+            "from": "green trash can (image 1)",
+            "to": "gripper"
           },
           "uses": 0,
           "serves": 1
         },
         {
+          "type": "PASS",
+          "item": "trash bag",
+          "target": "R3",
+          "serves": 1
+        },
+        {
           "type": "LOCAL",
           "action": {
-            "verb": "move",
-            "object": "brown paper bag",
-            "from": "carried",
-            "to": "outside trash area"
+            "verb": "pick_up",
+            "object": "trash bag",
+            "from": "green trash can (image 2)",
+            "to": "gripper"
           },
-          "uses": 1,
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "PASS",
+          "item": "trash bag",
+          "target": "R3",
+          "serves": 1
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R2:fix",
+    "system": "You are robot R2 in the living_room. Write YOUR part of the shared plan.\n\nCHAIN-OF-THOUGHT before writing steps:\n1. TASK END STATE: what must be true when done? (same as offer stage)\n2. OTHER ROBOTS: ",
+    "user": "## TASK:\nEmpty the trash cans\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift mugs, fruit, small items\",\n  \"PassReceiveObject: transfer items to/from other robots\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"gray trash can (corner, image 1)\",\n  \"brown cardboard tubes (gray trash can, image 1)\",\n  \"black chair (left of trash can, image 1)\",\n  \"TV (on c",
+    "output": {
+      "reasoning": "a) The task requires emptying trash cans in different rooms. b) My room has a gray trash can with brown cardboard tubes that need to be removed. c) I will focus on emptying the gray trash can in the living room. d) I will collaborate with other robots by passing the removed contents for disposal outside.",
+      "goals": [
+        {
+          "goal": "empty gray trash can in the living room",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "brown cardboard tubes",
+          "change": "remove from gray trash can",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "gray trash can",
+          "change": "empty outside",
+          "weight": "light",
+          "how": "LOCAL"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "brown cardboard tubes",
+            "from": "gray trash can",
+            "to": "gripper"
+          },
+          "uses": 0,
           "serves": 0
         },
         {
-          "type": "RECEIVE",
-          "item": "empty trash bag",
-          "target": "R3",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "brown cardboard tubes",
+            "from": "gripper",
+            "to": "outside"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "gray trash can",
+            "from": "corner",
+            "to": "outside"
+          },
+          "uses": 0,
           "serves": 0
         }
       ]
@@ -339,13 +430,13 @@
   },
   {
     "key": "plan:R4:fix",
-    "system": "You are robot R4 in the bathroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, ",
-    "user": "## TASK:\nEmpty the trash cans\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I can move around the room and interact with light objects.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items\",\n  \"PassReceiveObject: transfer items to/from others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"plunger (next to cabinet, image 1)\",\n  \"trash can (next to cabinet, image 1)\"\n ],\n \"need_from_others\": [\n  \"Receive: empty trash from another room if needed",
+    "system": "You are robot R4 in the bathroom. Write YOUR part of the shared plan.\n\nCHAIN-OF-THOUGHT before writing steps:\n1. TASK END STATE: what must be true when done? (same as offer stage)\n2. OTHER ROBOTS: sca",
+    "user": "## TASK:\nEmpty the trash cans\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift mugs, fruit, small items\",\n  \"PassReceiveObject: transfer items to/from other robots\"\n ],\n \"has_items\": [\n  \"plunger (next to cabinet, image 1)\",\n  \"trash can (next to cabinet, image 1)\"\n ],\n \"need_from_others\": [\n  \"Another robot to receive the trash can and dispose of its contents\"\n ],\n \"intends\": [\n  \"pi",
     "output": {
-      "reasoning": "a) The goal is to ensure the trash can in the bathroom is emptied. b) This task has a high priority as it is essential for cleanliness. c) In my room, I will remove the trash from the trash can. d) I do not need to pass any items to other rooms as no other room requires items from the bathroom for this task.",
+      "reasoning": "a) The task is to empty the trash cans for cleanliness and odor control. b) Each robot is responsible for handling the trash cans in their respective rooms. c) My role is to pick up the trash can in the bathroom and pass it to another robot for disposal. d) No other robot is handling the trash can in the bathroom, so I will proceed with my intended actions. e) It is essential to ensure the trash can is empty before the deadline, and collaboration with another robot for disposal is necessary.",
       "goals": [
         {
-          "goal": "Empty the trash can in the bathroom.",
+          "goal": "empty the trash can in the bathroom",
           "priority": "high",
           "in_my_room": true
         }
@@ -353,7 +444,7 @@
       "checklist": [
         {
           "object": "trash can",
-          "change": "empty",
+          "change": "pass for disposal",
           "weight": "light",
           "how": "LOCAL"
         }
@@ -365,61 +456,14 @@
             "verb": "pick_up",
             "object": "trash can",
             "from": "next to cabinet",
-            "to": "designated disposal area"
-          },
-          "uses": 1,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "put_down",
-            "object": "trash can",
-            "from": "designated disposal area",
-            "to": "next to cabinet"
-          },
-          "uses": 0,
-          "serves": 0
-        }
-      ]
-    }
-  },
-  {
-    "key": "plan:R2:fix",
-    "system": "You are robot R2 in the living_room. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessibl",
-    "user": "## TASK:\nEmpty the trash cans\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am a mobile robot capable of light object manipulation.\",\n \"can_do\": [\n  \"PickupLightObject: lift small/light items\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"gray trash can (corner, image 1)\",\n  \"brown paper rolls (trash can, image 1)\",\n  \"black chair (left of trash can, image 1)\",\n  \"TV (on cabinet, image 2)\",\n",
-    "output": {
-      "reasoning": "a) GOAL STATE: Ensure the gray trash can in the living room is emptied. b) PRIORITY: High, as the task must be completed within 20 minutes. c) MY ROOM: Remove brown paper rolls from the gray trash can. d) FOR OTHERS: I need a place to dispose of the trash outside the living room, which will be handled by another robot.",
-      "goals": [
-        {
-          "goal": "Empty the gray trash can in the living room",
-          "priority": "high",
-          "in_my_room": true
-        }
-      ],
-      "checklist": [
-        {
-          "object": "brown paper rolls",
-          "change": "remove from gray trash can",
-          "weight": "light",
-          "how": "LOCAL"
-        }
-      ],
-      "steps": [
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "pick_up",
-            "object": "brown paper rolls",
-            "from": "gray trash can",
-            "to": "my possession"
+            "to": "gripper"
           },
           "uses": 0,
           "serves": 0
         },
         {
           "type": "PASS",
-          "item": "brown paper rolls",
+          "item": "trash can",
           "target": "R1",
           "serves": 0
         }
@@ -427,14 +471,79 @@
     }
   },
   {
-    "key": "plan:R3:fix",
-    "system": "You are robot R3 in the bedroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nEmpty the trash cans\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am a mobile robot capable of moving light objects.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items\",\n  \"PassReceiveObject: transfer items to/from others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"black trash bag (floor, image 1)\",\n  \"black trash bag (floor, image 2)\",\n  \"gray trash can (corner, image 2)\"\n ],\n \"need_from_others\": [],\n \"intends\": [\n  \"pickup ",
+    "key": "plan:R1:fix",
+    "system": "You are robot R1 in the kitchen. Write YOUR part of the shared plan.\n\nCHAIN-OF-THOUGHT before writing steps:\n1. TASK END STATE: what must be true when done? (same as offer stage)\n2. OTHER ROBOTS: scan",
+    "user": "## TASK:\nEmpty the trash cans\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items and trash bags\",\n  \"PassReceiveObject: transfer items to/from other robots\"\n ],\n \"has_items\": [\n  \"green trash can (floor, image 1)\",\n  \"green trash can (floor, image 2)\"\n ],\n \"need_from_others\": [\n  \"Another robot to receive and dispose of trash bags outside the kitchen\"\n ],\n \"intends\": [\n  \"pi",
     "output": {
-      "reasoning": "a) The goal is to ensure that the trash cans in the bedroom are emptied by removing the black trash bags from the room. b) The priority is high as the task is to empty the trash cans within the given deadline. c) My room contains two black trash bags that need to be moved outside. d) No other robots need assistance from my room, and I do not require any items from other rooms.",
+      "reasoning": "a) The task requires emptying trash cans to maintain cleanliness in the kitchen. b) I can handle light objects and pass them to another robot for disposal. c) Each trash can in my room needs to be emptied by removing and passing the trash bags to another robot. d) I need another robot to dispose of the trash bags outside the kitchen since I cannot leave the room.",
       "goals": [
         {
-          "goal": "Remove black trash bags from the bedroom",
+          "goal": "Empty the trash cans in the kitchen",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "trash bag from green trash can (image 1)",
+          "change": "removed and passed for disposal",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "trash bag from green trash can (image 2)",
+          "change": "removed and passed for disposal",
+          "weight": "light",
+          "how": "LOCAL"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "trash bag from green trash can (image 1)",
+            "from": "green trash can (image 1)",
+            "to": "gripper"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "PASS",
+          "item": "trash bag from green trash can (image 1)",
+          "target": "R3",
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "trash bag from green trash can (image 2)",
+            "from": "green trash can (image 2)",
+            "to": "gripper"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "PASS",
+          "item": "trash bag from green trash can (image 2)",
+          "target": "R3",
+          "serves": 0
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R3:fix",
+    "system": "You are robot R3 in the bedroom. Write YOUR part of the shared plan.\n\nCHAIN-OF-THOUGHT before writing steps:\n1. TASK END STATE: what must be true when done? (same as offer stage)\n2. OTHER ROBOTS: scan",
+    "user": "## TASK:\nEmpty the trash cans\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift small trash bags\",\n  \"PassReceiveObject: transfer items to/from other robots\"\n ],\n \"has_items\": [\n  \"black trash bag (floor, image 1)\",\n  \"black trash bag (floor, image 2)\",\n  \"gray trash can (corner, image 2)\"\n ],\n \"need_from_others\": [\n  \"Disposal robot to receive trash bags and dispose of them\"\n ],\n \"int",
+    "output": {
+      "reasoning": "a) The task involves emptying trash cans by collecting trash bags and ensuring they are disposed of. b) In the bedroom, my role is to collect the black trash bags and pass them to a robot that can dispose of them. c) I will collect the two black trash bags from the floor and pass them to a robot designated for disposal. d) This ensures that the trash from the bedroom is ready for disposal without duplication of efforts from other robots.",
+      "goals": [
+        {
+          "goal": "Collect and pass trash bags from the bedroom for disposal.",
           "priority": "high",
           "in_my_room": true
         }
@@ -442,13 +551,13 @@
       "checklist": [
         {
           "object": "black trash bag (floor, image 1)",
-          "change": "move to outside",
+          "change": "collected and passed for disposal",
           "weight": "light",
           "how": "LOCAL"
         },
         {
           "object": "black trash bag (floor, image 2)",
-          "change": "move to outside",
+          "change": "collected and passed for disposal",
           "weight": "light",
           "how": "LOCAL"
         }
@@ -458,22 +567,34 @@
           "type": "LOCAL",
           "action": {
             "verb": "pick_up",
-            "object": "black trash bag (floor, image 1)",
-            "from": "floor",
-            "to": "outside"
+            "object": "black trash bag",
+            "from": "floor (image 1)",
+            "to": "gripper"
           },
           "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "PASS",
+          "item": "black trash bag",
+          "target": "R2",
           "serves": 0
         },
         {
           "type": "LOCAL",
           "action": {
             "verb": "pick_up",
-            "object": "black trash bag (floor, image 2)",
-            "from": "floor",
-            "to": "outside"
+            "object": "black trash bag",
+            "from": "floor (image 2)",
+            "to": "gripper"
           },
           "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "PASS",
+          "item": "black trash bag",
+          "target": "R2",
           "serves": 0
         }
       ]
@@ -481,21 +602,27 @@
   },
   {
     "key": "plan:R1:fix",
-    "system": "You are robot R1 in the kitchen. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nEmpty the trash cans\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift objects under 5 kg\",\n  \"PassReceiveObject: transfer objects to/from others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"green trash can (floor, image 1)\",\n  \"brown paper bag (green trash can, image 1)\"\n ],\n \"need_from_others\": [\n  \"RECEIVE empty trash bag\"\n ],\n \"intends\": [\n",
+    "system": "You are robot R1 in the kitchen. Write YOUR part of the shared plan.\n\nCHAIN-OF-THOUGHT before writing steps:\n1. TASK END STATE: what must be true when done? (same as offer stage)\n2. OTHER ROBOTS: scan",
+    "user": "## TASK:\nEmpty the trash cans\nDEADLINE: 20 minutes\n\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items and trash bags\",\n  \"PassReceiveObject: transfer items to/from other robots\"\n ],\n \"has_items\": [\n  \"green trash can (floor, image 1)\",\n  \"green trash can (floor, image 2)\"\n ],\n \"need_from_others\": [\n  \"Another robot to receive and dispose of trash bags outside the kitchen\"\n ],\n \"intends\": [\n  \"pi",
     "output": {
-      "reasoning": "a) The task is to empty the trash cans, which involves removing the trash bags and disposing of them outside. b) My primary goal is to remove the brown paper bag from the green trash can in the kitchen and move it to the outside trash area. c) I need an empty trash bag to replace the one I remove. d) No other robots are handling the green trash can in the kitchen, so I will proceed with my intended actions.",
+      "reasoning": "a) The task requires emptying trash cans to maintain cleanliness in the kitchen. b) I can handle light objects and pass them to another robot for disposal. c) Each trash can in my room needs to be emptied by removing and passing the trash bags to another robot. d) I need another robot to dispose of the trash bags outside the kitchen since I cannot leave the room.",
       "goals": [
         {
-          "goal": "empty the green trash can in the kitchen",
+          "goal": "Empty the trash cans in the kitchen",
           "priority": "high",
           "in_my_room": true
         }
       ],
       "checklist": [
         {
-          "object": "brown paper bag",
-          "change": "move to outside trash area",
+          "object": "trash bag from green trash can (floor, image 1)",
+          "change": "removed and passed for disposal",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "trash bag from green trash can (floor, image 2)",
+          "change": "removed and passed for disposal",
           "weight": "light",
           "how": "LOCAL"
         }
@@ -505,22 +632,34 @@
           "type": "LOCAL",
           "action": {
             "verb": "pick_up",
-            "object": "brown paper bag",
-            "from": "green trash can",
-            "to": "carried"
+            "object": "trash bag from green trash can (floor, image 1)",
+            "from": "green trash can (floor, image 1)",
+            "to": "gripper"
           },
           "uses": 0,
           "serves": 0
         },
         {
+          "type": "PASS",
+          "item": "trash bag from green trash can (floor, image 1)",
+          "target": "R3",
+          "serves": 0
+        },
+        {
           "type": "LOCAL",
           "action": {
-            "verb": "move",
-            "object": "brown paper bag",
-            "from": "carried",
-            "to": "outside trash area"
+            "verb": "pick_up",
+            "object": "trash bag from green trash can (floor, image 2)",
+            "from": "green trash can (floor, image 2)",
+            "to": "gripper"
           },
-          "uses": 1,
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "PASS",
+          "item": "trash bag from green trash can (floor, image 2)",
+          "target": "R3",
           "serves": 0
         }
       ]
@@ -528,14 +667,57 @@
   },
   {
     "key": "propose:R1",
-    "system": "You are robot R1. Judge other robots' requests and offers.\n\nFIRST: check your own plan. If you already do what an ASK_HELP asks → \"already_doing\" + covered_by.\nDUPLICATE REQUESTS: if you're already se",
-    "user": "TASK: Empty the trash cans\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift objects under 5 kg\",\n  \"PassReceiveObject: transfer objects to/from others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"green trash can (floor, image 1)\",\n  \"brown paper bag (green trash can, image 1)\"\n ],\n \"need_from_others\": [\n  \"RECEIVE empty trash bag\"\n ],\n \"intends\": [\n  \"pickup brown paper bag",
+    "system": "You are robot R1. Judge other robots' requests and offers.\n\nCHAIN-OF-THOUGHT before deciding:\n1. TASK NEED: does this offer/request actually serve the task end goal?\n2. MY PLAN: do I already cover thi",
+    "user": "TASK: Empty the trash cans\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items and trash bags\",\n  \"PassReceiveObject: transfer items to/from other robots\"\n ],\n \"has_items\": [\n  \"green trash can (floor, image 1)\",\n  \"green trash can (floor, image 2)\"\n ],\n \"need_from_others\": [\n  \"Another robot to receive and dispose of trash bags outside the kitchen\"\n ],\n \"intends\": [\n  \"pick up trash bag from gree",
     "output": {
       "offers": [
         {
-          "offer": "r2_s2",
+          "offer": "r4_s2",
           "decision": "decline",
-          "reason": "The offer to pass brown paper rolls is not needed for my current task of emptying the green trash can."
+          "reason": "I can only observe and interact with items in the kitchen. The bathroom trash can is outside my operational scope."
+        }
+      ],
+      "judgments": []
+    }
+  },
+  {
+    "key": "propose:R2",
+    "system": "You are robot R2. Judge other robots' requests and offers.\n\nCHAIN-OF-THOUGHT before deciding:\n1. TASK NEED: does this offer/request actually serve the task end goal?\n2. MY PLAN: do I already cover thi",
+    "user": "TASK: Empty the trash cans\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift mugs, fruit, small items\",\n  \"PassReceiveObject: transfer items to/from other robots\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"gray trash can (corner, image 1)\",\n  \"brown cardboard tubes (gray trash can, image 1)\",\n  \"black chair (left of trash can, image 1)\",\n  \"TV (on cabinet, image 2)\",\n  \"lap",
+    "output": {
+      "offers": [
+        {
+          "offer": "r3_s2",
+          "decision": "receive",
+          "action": "receive black trash bag from R3",
+          "uses": 1,
+          "insert_after": "r2_s3",
+          "reason": "R3 offers a trash bag which is useful for collecting additional trash from the gray trash can and transporting it outside."
+        },
+        {
+          "offer": "r3_s4",
+          "decision": "ignore",
+          "reason": "Duplicate offer from R3 already covered by receiving the first black trash bag. No additional bags needed."
+        }
+      ],
+      "judgments": []
+    }
+  },
+  {
+    "key": "propose:R3",
+    "system": "You are robot R3. Judge other robots' requests and offers.\n\nCHAIN-OF-THOUGHT before deciding:\n1. TASK NEED: does this offer/request actually serve the task end goal?\n2. MY PLAN: do I already cover thi",
+    "user": "TASK: Empty the trash cans\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift small trash bags\",\n  \"PassReceiveObject: transfer items to/from other robots\"\n ],\n \"has_items\": [\n  \"black trash bag (floor, image 1)\",\n  \"black trash bag (floor, image 2)\",\n  \"gray trash can (corner, image 2)\"\n ],\n \"need_from_others\": [\n  \"Disposal robot to receive trash bags and dispose of them\"\n ],\n \"intends\": [\n  \"pick up black",
+    "output": {
+      "offers": [
+        {
+          "offer": "r1_s2",
+          "decision": "decline",
+          "reason": "I am focused on collecting and passing black trash bags from the bedroom. The green trash can is unrelated to my current task scope."
+        },
+        {
+          "offer": "r1_s4",
+          "decision": "decline",
+          "reason": "I am focused on collecting and passing black trash bags from the bedroom. The green trash can is unrelated to my current task scope."
         }
       ],
       "judgments": []
@@ -549,11 +731,14 @@
       "sizes": {
         "r1_s1": "short",
         "r2_s1": "short",
-        "r3_s1": "medium",
+        "r3_s1": "short",
         "r4_s1": "medium",
-        "r1_s2": "medium",
+        "r2_s2": "medium",
         "r3_s2": "medium",
-        "r4_s2": "short"
+        "r2_s3": "medium",
+        "r3_s3": "short",
+        "r2_s4": "short",
+        "r2_s5": "short"
       }
     }
   }

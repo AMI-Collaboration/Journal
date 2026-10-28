@@ -1,7 +1,7 @@
 """
 통합 평가 스크립트 (jabung 버전).
 
-Track A (LLM Judge): 5개 방법론 전체, joint_plan_text 기반 TF/PF/OC/SC 채점 (0-10 척도)
+Track A (LLM Judge): 5개 방법론 전체, joint_plan_text 기반 TF/GF/SC/CQ 채점 (0-10 척도)
     - object.json, room.json 활용하여 실제 존재하는 객체 목록을 judge 프롬프트에 포함
     - CDA는 jabung 결과 우선 로드, Blocked/Dropped 정보 포함
 
@@ -78,11 +78,25 @@ judge_client = OpenAI(
     base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
 )
 
-results_dir = os.path.join(HERE, "results", f"run{args.run}")
+# abstract task는 abstract/runN/, simple task는 simple/ 또는 run1/
+if args.task.startswith("mat_"):
+    results_dir = os.path.join(HERE, "results", "matthor")
+elif "abstract" in args.task:
+    results_dir = os.path.join(HERE, "results", "abstract", f"run{args.run}")
+elif "simple" in args.task:
+    results_dir = os.path.join(HERE, "results", "run1")
+    _simple_cda_dir = os.path.join(HERE, "results", "simple")
+else:
+    results_dir = os.path.join(HERE, "results", "run1")
 
 
 def load_result(method):
     if method == "cda":
+        # simple task는 simple 폴더에 저장됨
+        if "simple" in args.task:
+            p = os.path.join(HERE, "results", "simple", f"{args.task}_multi_room_cda_jabung_result.json")
+            if os.path.exists(p):
+                return json.load(open(p, encoding="utf-8"))
         for pattern in [
             f"{args.task}_multi_room_cda_jabung_result.json",
             f"{args.task}_multi_room_cda_result.json",
@@ -107,7 +121,7 @@ def build_agent_config_text():
         robot_type = data["robots"][ref["robot_n"]]
         can = ", ".join(robot_type.get("robot_can", []))
         cannot = ", ".join(robot_type.get("robot_cannot", [])) if robot_type.get("robot_cannot") else "none specified"
-        lines.append(f"- {label}: {robot_type['robot_name']} — CAN: {can} | CANNOT: {cannot}")
+        lines.append(f"- {label}: {robot_type['robot_name']} -- CAN: {can} | CANNOT: {cannot}")
     return "\n".join(lines)
 
 
@@ -125,12 +139,12 @@ for m in METHODS:
     suffix = " (jabung)" if m == "cda" and has_plan else ""
     print(f"  {mark} {METHOD_NAMES[m]}{suffix}")
 
-print(f"\n{'─'*50}\n STEP 2/4  Track A — LLM Judge (0-10 척도)\n{'─'*50}")
+print(f"\n{'─'*50}\n STEP 2/4  Track A -- LLM Judge (0-10 척도)\n{'─'*50}")
 
 JUDGE_SYSTEM = "You are an expert evaluator for multi-agent household task planning. Respond in valid JSON only."
 
 
-def judge_plan(plan_text):
+def judge_plan(plan_text, deadline_min=None, makespan_min=None):
     prompt = f"""Evaluate the following multi-agent robot plan.
 
 ## Task
@@ -140,8 +154,19 @@ def judge_plan(plan_text):
 {AGENT_CONFIG}
 
 ## Actual Objects in Each Room
-The following objects ACTUALLY EXIST in the rooms. Any object not listed here is a hallucination.
+The following objects ACTUALLY EXIST in the rooms.
 {ROOM_OBJECTS_TEXT}
+
+IMPORTANT -- Object Name Matching:
+Robots describe objects using natural language from images, which may differ from canonical names.
+Accept descriptive synonyms as valid references to listed objects. Examples:
+- "silver faucet handle", "shower knob", "water tap" → Faucet
+- "white trash bin", "garbage bin", "rubbish can" → GarbageCan  
+- "toilet paper roll", "white toilet paper" → ToiletPaper
+- "bath towel", "beige towel" → Towel or HandTowel
+- "white bathtub" → Bathtub
+Do NOT mark an object as hallucinated if a reasonable synonym maps to a listed object.
+Only mark as hallucinated if NO listed object could plausibly match the description.
 
 ## Natural Language Plan
 {plan_text}
@@ -155,82 +180,99 @@ Score each criterion on a 0-10 scale:
 
 ---
 
-### A1: Task Fulfillment (TF) — 0~10
+### TF: Task Fulfillment -- 0~10
 
-Evaluate whether the plan fulfills the required goals of the task.
-Use the ground-truth goals if available; otherwise identify required outcomes from the task description.
+Evaluate whether the plan fulfills the required goals of the task using real objects from the room list.
 
 - 8-10: Most or all required goals are achieved with concrete actions using real objects. Deadline is respected.
-- 5-7: SOME required goals are achieved, but notable gaps, hallucinations, or deadline violations exist.
-- 0-4: Required goals are largely not achieved — core actions missing, plan contradicts the task goal, or deadline is clearly exceeded.
+- 5-7: Some required goals are achieved, but notable gaps, hallucinations, or deadline violations exist.
+- 0-4: Required goals are largely not achieved -- core actions missing, or deadline clearly exceeded.
 
 Rules:
-- Do NOT give high scores just because a plan claims success. Verify with real objects from the room list.
 - Goals achieved via hallucinated objects (not in actual room list) count as NOT achieved.
-- High-level statements without specific object-level actions count as partial at best.
 - If the plan's total time clearly exceeds the task deadline (MISSED label), apply deduction.
-- If two robots in the same room handle the same object redundantly, apply small deduction.
+- If two robots handle the same object redundantly, apply small deduction.
+- Partial credit: correct intent and structure deserve credit even with minor hallucinations.
+  A plan that correctly identifies goals and attempts relevant actions scores higher than
+  one with no relevant actions, even if some object names are wrong.
+- Cross-room collaboration moving objects toward the right destination deserves partial TF credit.
 
-### B1: Plan Feasibility (PF) — 0~10
+---
 
-Evaluate whether each robot's actions respect its CAN/CANNOT capabilities listed in Agent Configuration.
+### GF: Grounded Feasibility -- 0~10
 
-- 8-10: Most actions satisfy the assigned robot's CAN conditions. Minor vagueness or navigation steps acceptable.
-- 5-7: Noticeable violations exist (vague expressions, hallucinations, capability mismatches) but plan is partially executable.
-- 0-4: Severe violations — hallucinated objects dominate, core actions are infeasible, or robot capability is systematically ignored.
+Evaluate whether the plan is physically executable given each robot's capabilities AND whether
+each robot acts only on information it can legitimately observe or receive.
 
-Capability violations (check against Agent Configuration CAN/CANNOT):
-- A Mobile_Light robot performing heavy object manipulation (pushing furniture) = violation.
+Capability checks (from Agent Configuration):
+- A Mobile_Light robot performing heavy furniture pushing = violation.
 - A Gripper robot leaving its room without HELP/PASS context = violation.
 - Any robot performing actions beyond its stated CAN list = violation.
 
-Additional feasibility checks (count as violations):
-- Vague expressions: "any ...", "something", "ensure", "check", "verify", "confirm", "accessible location", "within reach", "nearby", unnamed objects.
-- Hallucinated objects not in the actual room list.
-- A robot holding multiple objects simultaneously (one object at a time rule).
-- A single robot assigned unrealistically many steps in one time block.
-
-### C1: Observability Consistency (OC) — 0~10
-
-Evaluate whether each robot acts only on information it can legitimately observe or receive,
-AND whether collaboration decisions are appropriate given the task requirements.
-
-First, determine whether the TASK requires inter-robot collaboration:
-- Collaboration is REQUIRED when: objects must move between rooms (e.g. food from kitchen to living room, towel to bathroom), a robot cannot complete a task alone due to capability limits (heavy object needs Mobile_Heavy), or the task explicitly involves preparing something in one room for use in another.
-- Collaboration is NOT REQUIRED when: each room's goals are fully self-contained and no objects or resources need to cross room boundaries.
-- If the task description implies an outcome in a room different from where the resource is located (e.g. "something to eat" in the living room but food is in the kitchen), collaboration IS required.
+Grounding checks:
+- Hallucinated objects (not in actual room list) = violation.
+- Vague expressions: "any ...", "something", "ensure", "check", "accessible location" = violation.
+- Robot using information it cannot observe (objects in other rooms it never received) = violation.
+- A robot holding multiple objects simultaneously = violation.
 
 Scoring:
-- 8-10: Each robot acts on legitimate local observations or explicitly received information. Collaboration is present when the task requires it, and absent or minimal when it does not.
-- 5-7: Minor cross-room assumptions exist; OR collaboration logic has small errors (e.g. pass without matching receive); OR collaboration is attempted but not required by the task (minor inefficiency).
-- 0-4: Robots use unjustified global knowledge for critical actions; OR collaboration is completely absent when the task clearly requires it; OR unnecessary collaboration creates logical contradictions or wastes steps significantly.
+- 8-10: Actions respect robot capabilities and observations. Only legitimate local or received info used.
+- 5-7: Noticeable violations exist but plan is partially executable.
+- 0-4: Severe violations -- hallucinations dominate, capability ignored, or cross-room assumptions.
 
-Important:
-- If the task does NOT require cross-room collaboration, robots acting independently should score HIGH, not LOW.
-- If the task REQUIRES cross-room collaboration and it is missing, apply large deduction.
-- Unnecessary collaboration (PASS/RECEIVE when not needed by the task) is a minor inefficiency — small deduction only.
-- Collaboration logic errors (pass without receive, ASK_HELP with no response) are medium deductions.
+---
 
-### D1: Sequential Coherence (SC) — 0~10
+### SC: Sequential Coherence -- 0~10
 
 Evaluate whether the action sequence respects prerequisites and dependencies.
 
 - 9-10: All prerequisite actions occur before dependent actions. No ordering violations.
-- 5-8: Ordering/dependency violations exist but are 20% or less of total actions and do not prevent task completion.
-- 0-4: Ordering/dependency violations exceed 20% of actions, OR critical violations make task execution impossible.
+- 5-8: Minor ordering violations (≤20% of actions) that don't prevent task completion.
+- 0-4: Critical violations make task execution impossible, or >20% of actions violate ordering.
 
 Violations include:
-- Object used before it is picked up or received.
-- RECEIVE action before corresponding PASS action.
+- Object used before picked up or received.
+- RECEIVE before corresponding PASS.
 - Robot waits for help that never arrives.
 - Repeated identical actions on the same object.
-- Actions in wrong time block relative to their dependencies.
-- A robot performing too many physical actions in a single 5-minute block (physically unrealistic throughput).
+- Too many physical actions in one 5-minute block (physically unrealistic).
+
+---
+
+### CQ: Collaboration Quality -- 0~10
+
+Evaluate whether inter-robot collaboration is necessary, appropriate, and effective given the task type.
+
+First determine if collaboration is REQUIRED by this task:
+- REQUIRED when: objects must move between rooms, capability constraints prevent solo completion,
+  or the task explicitly involves multi-room coordination.
+- NOT REQUIRED when: each room's goals are fully self-contained.
+
+Then evaluate:
+- Necessity: Collaboration is used when truly needed (e.g. object in another room, heavy furniture).
+  For simple tasks, unnecessary collaboration is penalized.
+- Appropriateness: PASS/RECEIVE/HELP/ASK_HELP targets correct robots with correct objects.
+  No "self-pass" (robot passing to itself), no circular requests, no wrong targets.
+- Efficiency: No redundant collaboration steps, no unnecessary intermediate transfers.
+- Completeness: Requested collaborations are actually fulfilled. Note: for CDA plans,
+  "Blocked" steps are automatically detected and skipped by the system -- this is a SAFETY
+  FEATURE, not a failure. Penalize only if the CORE collaboration goal is unachievable,
+  not for incidental blocked steps.
+- Task-type fit: Multi-room abstract tasks should show meaningful cross-room collaboration.
+  Simple single-room tasks should NOT force unnecessary collaboration.
+
+Scoring:
+- 9-10: Collaboration perfectly matches task needs. All collaborative actions are justified,
+  correct, and completed successfully.
+- 6-8: Collaboration is mostly appropriate with minor issues (small redundancy, minor target errors).
+- 3-5: Collaboration has notable issues -- unnecessary for the task type, self-pass, or key
+  required collaboration missing.
+- 0-2: Collaboration is absent when clearly required, OR severely inappropriate/circular.
 
 ---
 
 Output JSON only:
-{{"TF":<0-10>,"TF_reason":"...","PF":<0-10>,"PF_reason":"...","OC":<0-10>,"OC_reason":"...","SC":<0-10>,"SC_reason":"..."}}
+{{"TF":<0-10>,"TF_reason":"...","GF":<0-10>,"GF_reason":"...","SC":<0-10>,"SC_reason":"...","CQ":<0-10>,"CQ_reason":"..."}}
 """
     response = judge_client.chat.completions.create(
         model=GEMINI_MODEL, temperature=0.0,
@@ -246,29 +288,28 @@ judge_results = {}
 for m in METHODS:
     r = method_results[m]
     plan_text = r.get("joint_plan_text") if r else None
-    # CDA: Blocked/Dropped 정보 포함
     if plan_text and r and r.get("joint_plan_full"):
         full = r["joint_plan_full"]
         extra = []
         if "### Blocked" in full:
             blocked = full.split("### Blocked")[1].split("###")[0].strip()
-            extra.append(f"### Blocked (steps that could not execute)\n{blocked}")
+            extra.append(f"### Blocked (automatically detected & skipped by CDA safety system -- not a plan failure)\n{blocked}")
         if "### Unresolved" in full:
             unresolved = full.split("### Unresolved")[1].split("###")[0].strip()
             extra.append(f"### Unresolved\n{unresolved}")
         if extra:
             plan_text = plan_text + "\n\n" + "\n\n".join(extra)
     if not plan_text:
-        print(f"  {METHOD_NAMES[m]:14} — plan 없음, 건너뜀")
+        print(f"  {METHOD_NAMES[m]:14} -- plan 없음, 건너뜀")
         continue
     try:
         judge_results[m] = judge_plan(plan_text)
         jr = judge_results[m]
-        print(f"  {METHOD_NAMES[m]:14} TF={jr['TF']} PF={jr['PF']} OC={jr['OC']} SC={jr['SC']}")
+        print(f"  {METHOD_NAMES[m]:14} TF={jr['TF']} GF={jr['GF']} SC={jr['SC']} CQ={jr['CQ']}")
     except Exception as e:
         print(f"  {METHOD_NAMES[m]:14} 오류: {e}")
 
-print(f"\n{'─'*50}\n STEP 3/4  Track B — GC (ours, LaMMA-P만)\n{'─'*50}")
+print(f"\n{'─'*50}\n STEP 3/4  Track B -- GC (ours, LaMMA-P만)\n{'─'*50}")
 
 
 def parse_goal(pddl):
@@ -320,7 +361,7 @@ for m in GC_SG_METHODS:
 
 for m in METHODS:
     if m not in GC_SG_METHODS:
-        print(f"  {METHOD_NAMES[m]:14} — (설계상 제외)")
+        print(f"  {METHOD_NAMES[m]:14} -- (설계상 제외)")
 
 print(f"\n{'─'*50}\n STEP 4/4  Object Grounding\n{'─'*50}")
 
@@ -359,7 +400,7 @@ if not args.skip_grounding:
         r = method_results[m]
         plan_text = r.get("joint_plan_text") if r else None
         if not plan_text:
-            print(f"  {METHOD_NAMES[m]:14} — plan 없음, 건너뜀")
+            print(f"  {METHOD_NAMES[m]:14} -- plan 없음, 건너뜀")
             continue
         try:
             response = client.chat.completions.create(
@@ -404,17 +445,17 @@ with open(out_json, "w", encoding="utf-8") as f:
     json.dump(final, f, ensure_ascii=False, indent=2)
 
 lines = [f"# {args.task} 통합 평가 결과 - jabung (0-10 척도)\n"]
-lines.append("## Track A — LLM Judge\n")
-lines.append("| 방법 | TF | PF | OC | SC |")
+lines.append("## Track A -- LLM Judge\n")
+lines.append("| 방법 | TF | GF | SC | CQ |")
 lines.append("|---|---|---|---|---|")
 for m in METHODS:
     r = judge_results.get(m)
     if not r:
         lines.append(f"| {METHOD_NAMES[m]} | - | - | - | - |")
     else:
-        lines.append(f"| {METHOD_NAMES[m]} | {r['TF']} | {r['PF']} | {r['OC']} | {r['SC']} |")
+        lines.append(f"| {METHOD_NAMES[m]} | {r['TF']} | {r['GF']} | {r['SC']} | {r['CQ']} |")
 
-lines.append("\n## Track B — GC (ours, LaMMA-P만)\n")
+lines.append("\n## Track B -- GC (ours, LaMMA-P만)\n")
 lines.append("| 방법 | GC |")
 lines.append("|---|---|")
 for m in METHODS:

@@ -2,14 +2,14 @@
   "cda": {
     "name": "CDA",
     "track_a_llm_judge": {
-      "TF": 6,
-      "TF_reason": "The plan partially fulfills the task. Floor space is cleared in the living room (coffee table and chairs moved), and exercise equipment (dumbbell) is placed on the floor in the bedroom. However, preparing a drink involves pouring water in the living room where there is no water source, and bathroom preparation is vague ('accessible location') and mostly blocked.",
-      "PF": 4,
-      "PF_reason": "There are several feasibility violations: 'yellow glass bottle' is hallucinated, 'accessible location' is a vague expression, R4 attempts to pour water in the living room which lacks a Faucet or water source, and R5 and R6 redundantly attempt to move the exact same dumbbell.",
-      "OC": 6,
-      "OC_reason": "Collaboration is present (R1 passing a cup to R4), but there are logical flaws, such as R3 asking R4 to interact with a hallucinated 'yellow glass bottle' and R4 acting on water in a room without a source.",
-      "SC": 7,
-      "SC_reason": "The sequence of actions is mostly coherent, with PASS/RECEIVE and ASK_HELP/HELP actions aligning in the correct time blocks. However, there is a conflict with R5 and R6 performing the exact same action on the same dumbbell simultaneously."
+      "TF": 5,
+      "TF_reason": "The plan partially fulfills the task. Floor space is cleared (sofa and chairs moved), exercise equipment is prepared (dumbbell moved to floor), and the bathroom is readied (towels moved, shower door closed). However, the drink requirement relies on hallucinated objects ('blue bottle' in the kitchen, 'yellow bottle' in the living room).",
+      "GF": 4,
+      "GF_reason": "There are multiple severe grounding violations due to hallucinated objects: 'blue bottle' (kitchen), 'book' (living room), 'white paper' (bedroom), 'blue blanket' (bedroom), 'paper bag' (living room), and 'yellow bottle' (living room). Additionally, R3 attempts to pass an object to itself.",
+      "SC": 6,
+      "SC_reason": "The sequence is mostly coherent, but there is a significant delay between R1 passing the bottle (0-5 min) and R3 receiving it (10-15 min). R3 also executes an illogical self-pass action ('pass blue bottle to R3').",
+      "CQ": 4,
+      "CQ_reason": "Collaboration was attempted to bring a drink from the kitchen to the living room, which fits the task. However, it involves a hallucinated object, results in a self-pass by R3, and leaves several unresolved receive requests from other robots for the same hallucinated bottles."
     },
     "track_b_gc": 0.0,
     "track_b_state_detail": {
@@ -24,14 +24,14 @@
   "central": {
     "name": "Centralized",
     "track_a_llm_judge": {
-      "TF": 3,
-      "TF_reason": "The plan partially achieves clearing space (pushing coffee table) and bringing exercise equipment (dumbbell, tennis racket). However, the drink requirement fails due to hallucinating a 'bottle of water' instead of using a Cup/Mug, and the bathroom preparation fails because all actions are vague ('check', 'ensure', 'confirm') without concrete object manipulation.",
-      "PF": 2,
-      "PF_reason": "Severe feasibility issues. The plan relies heavily on hallucinated objects ('bottle of water', 'towel rack', 'shampoo'). It also contains numerous vague actions ('Check for towels', 'Move any remaining small items', 'Ensure toiletries are accessible', 'Confirm the bathroom is ready').",
-      "OC": 3,
-      "OC_reason": "Collaboration logic is highly flawed. R2, R3, and R4 all redundantly go to the bathroom to 'ensure it is ready'. Both R1 and R3 attempt to get a water bottle independently. The PASS/RECEIVE interaction between R1 and R2 is completely disjointed.",
+      "TF": 4,
+      "TF_reason": "The plan attempts to fulfill the goals by moving the coffee table, bringing a dumbbell and tennis racket, and getting a drink. However, it relies on hallucinated objects ('bottle of water') instead of available items like a Cup or Mug, and the bathroom preparation consists entirely of vague, non-concrete actions.",
+      "GF": 2,
+      "GF_reason": "Severe grounding violations. The plan hallucinates objects ('bottle of water', 'towel rack', 'shampoo') and relies heavily on vague actions ('Check for', 'Ensure', 'Confirm', 'Move any remaining small items'). Additionally, R3 attempts to pick up the tennis racket (located in the bedroom) after already moving to the living room.",
       "SC": 2,
-      "SC_reason": "Critical ordering violations. R2 receives the water bottle in the 5-10 min block and places it in the 10-15 min block, but R1 does not pass it until the 15-20 min block. R1 also moves to the living room with the bottle in 10-15 min, contradicting the earlier receive by R2."
+      "SC_reason": "Critical ordering and logical violations. R2 receives the water bottle in the 5-10 min block, but R1 does not pass it until the 15-20 min block. R3 also inexplicably picks up the water bottle in the 10-15 min block. R3 moves to the living room in 0-5 min but then picks up an object in the bedroom in 5-10 min.",
+      "CQ": 2,
+      "CQ_reason": "Collaboration is highly disorganized. The PASS/RECEIVE sequence between R1 and R2 is temporally broken. Furthermore, R1 moves to the living room anyway, making the pass to R2 unnecessary. Finally, R2, R3, and R4 all redundantly go to the bathroom at the end to perform vague 'checking' actions."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -40,14 +40,14 @@
   "independent": {
     "name": "Independent",
     "track_a_llm_judge": {
-      "TF": 3,
-      "TF_reason": "The plan partially clears floor space (moving coffee table and chairs) and puts out a dumbbell for exercising. However, it fails to provide a drink to the workout area (hallucinates water bottles, and the cup in the kitchen is never filled or brought to the user) and fails to prepare the bathroom with concrete actions (only vague 'ensure' and 'verify' statements).",
-      "PF": 2,
-      "PF_reason": "Severe violations due to numerous hallucinated objects (water bottle in living room and bedroom, towel in bedroom, glass in kitchen, shampoo in bathroom, small ball in bedroom) and vague actions ('ensure', 'check', 'verify', 'double-check').",
-      "OC": 4,
-      "OC_reason": "The task requires cross-room collaboration to bring a drink from the kitchen to the workout area, but the robots act entirely independently in their own rooms without any PASS/RECEIVE actions.",
+      "TF": 4,
+      "TF_reason": "The plan partially fulfills the goals: floor space is cleared and a dumbbell is set out. However, the drink requirement relies on hallucinated water bottles in the living room and bedroom, and the bathroom preparation consists entirely of vague, non-actionable checks rather than concrete tasks.",
+      "GF": 2,
+      "GF_reason": "Severe grounding violations. The plan includes multiple hallucinated objects (water bottle in living room and bedroom, towel in bedroom, glass in kitchen). Additionally, R4's actions are entirely vague ('ensure', 'check', 'verify'), which are not executable robot commands.",
       "SC": 8,
-      "SC_reason": "The sequence of actions is mostly logical within each robot's local plan, with pick-and-place actions ordered correctly. However, the plan relies heavily on hallucinated objects and vague checks."
+      "SC_reason": "The sequence of actions is mostly logical for the concrete steps taken (pick up followed by place). However, the plan is heavily padded with vague checks that don't physically affect the environment.",
+      "CQ": 3,
+      "CQ_reason": "Collaboration is absent when it was clearly required. To provide a drink for the workout, R1 (kitchen) should have collaborated with R2 or R3 to transfer a cup/mug. The lack of collaboration led the agents to hallucinate water bottles in their local rooms."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -57,13 +57,13 @@
     "name": "LaMMA-P",
     "track_a_llm_judge": {
       "TF": 2,
-      "TF_reason": "The plan fails to achieve the goals using concrete objects from the environment. It relies entirely on vague placeholders ('object on the floor', 'exercise equipment', 'workout area') and hallucinates a 'water bottle' which does not exist in any room. Bathroom preparation lacks specific actionable steps beyond opening a door.",
-      "PF": 1,
-      "PF_reason": "Almost every action in the plan is a severe violation of feasibility rules due to extreme vagueness. Terms like 'object', 'storage location', 'exercise equipment', 'workout area', 'Ensure shower area is clean', and 'Final check' are not executable. Additionally, 'water bottle' is a hallucinated object.",
-      "OC": 5,
-      "OC_reason": "Robots act independently, which is mostly fine, but the lack of room specifications makes it impossible to determine if they are using legitimate local observations or teleporting between rooms (e.g., R4 getting a drink and then going to the bathroom).",
+      "TF_reason": "The plan attempts to address the task goals (clearing space, getting exercise equipment, getting a drink, and preparing the bathroom) but fails to use concrete actions with real objects from the environment. It relies entirely on vague placeholders instead of actual items like 'Dumbbell' or 'Cup'.",
+      "GF": 1,
+      "GF_reason": "Severe grounding violations. The plan consists almost entirely of vague expressions ('object on the floor', 'storage location', 'exercise equipment', 'workout area', 'Ensure shower area is clean', 'Final check'). It also hallucinates a 'water bottle' which is not in the provided object list.",
       "SC": 6,
-      "SC_reason": "The sequence of actions follows a logical order (move, pick up, move, place) for the vague objects. However, R2 is assigned 10 physical actions in the first 5-minute block, which is physically unrealistic throughput."
+      "SC_reason": "The abstract sequence of actions (move, pick, move, place) is logically ordered. However, the lack of grounding makes the sequence physically meaningless and impossible to execute in a real environment.",
+      "CQ": 6,
+      "CQ_reason": "The robots divide the tasks (R2 handles the workout area and equipment, R4 handles the drink and bathroom), which is an acceptable strategy that doesn't strictly require direct PASS/RECEIVE collaboration. However, the extreme vagueness of the plan limits the effectiveness of this division."
     },
     "track_b_gc": 0.0,
     "track_b_state_detail": {
@@ -78,14 +78,14 @@
   "smart_llm": {
     "name": "SMART-LLM",
     "track_a_llm_judge": {
-      "TF": 2,
-      "TF_reason": "The plan fails to achieve most goals due to the use of hallucinated objects ('YogaMat', 'WaterBottle', 'Dumbbells', 'Soap'). While it attempts to clear space by moving a 'Chair', 'Box', and 'Pillow', the core tasks of providing a drink and exercise equipment rely on items not present in the environment.",
-      "PF": 2,
-      "PF_reason": "Severe feasibility violations. The plan relies heavily on hallucinated objects ('YogaMat', 'WaterBottle', 'Dumbbells', 'Soap'). It also uses vague, non-existent receptacles like 'WorkoutArea' and 'Bathroom'. Additionally, moving a 'Chair' to a 'Shelf' is physically unrealistic.",
-      "OC": 3,
-      "OC_reason": "The robot uses unjustified global knowledge, interacting with objects across different rooms (e.g., living room, bedroom, bathroom) without any navigation actions or context of which room it is currently in.",
-      "SC": 8,
-      "SC_reason": "The sequence of actions is linear and does not contain explicit dependency violations, though assigning 5 manipulation actions to a single robot in a 5-minute block is slightly unrealistic."
+      "TF": 4,
+      "TF_reason": "The plan attempts to fulfill the goals but relies on hallucinated objects ('YogaMat', 'WaterBottle'). It successfully identifies real objects to clear space ('Chair', 'Box', 'Pillow') and exercise equipment ('Dumbbells'), but fails to provide a real drink from the kitchen.",
+      "GF": 2,
+      "GF_reason": "Severe grounding violations: 'YogaMat' and 'WaterBottle' are hallucinated. 'WorkoutArea' and 'Bathroom' are used as vague receptacles rather than specific furniture. Moving a 'Chair' to a 'Shelf' is physically unrealistic. R2 operates across multiple rooms without any navigation or context.",
+      "SC": 5,
+      "SC_reason": "The sequence of actions is mostly independent, but executing 5 object manipulation tasks across different rooms in a single 5-minute block is physically unrealistic.",
+      "CQ": 0,
+      "CQ_reason": "There is absolutely no collaboration in this multi-agent plan. A single robot (R2) attempts to do everything across multiple rooms, which defeats the purpose of a multi-agent setup for a distributed task."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",

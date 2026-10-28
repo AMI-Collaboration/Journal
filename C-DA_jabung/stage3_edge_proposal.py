@@ -219,8 +219,12 @@ async def edge_proposal(cfg: TaskConfig, plans: dict[str, list[Node]], offers: d
                 continue
             n_ = agent_num(agent)
             counters[agent] += 1
+            _use_action = str(oj.get("action") or f"use the {p.item}")
+            import re as _re_s3
+            # skip use step if action is just "receive X" (duplicate of RECEIVE node)
+            _is_receive_dup = bool(_re_s3.match(r'receive\b', _use_action.strip(), _re_s3.I))
             use = Node(id=f"r{n_}_s{counters[agent] + 1}", agent=agent, type="LOCAL",
-                       action=str(oj.get("action") or f"use the {p.item}"), uses=uses,
+                       action=_use_action if not _is_receive_dup else f"put down the {p.item} on the coffee table", uses=uses,
                        location=cfg.agent(agent).profile.room, origin="accept", serves=f"offered {p.item}")
             rcv = Node(id=f"r{n_}_s{counters[agent]}", agent=agent, type="RECEIVE", item=p.item,
                        action=f"receive {p.item}", target=p.agent, location=cfg.agent(agent).profile.room,

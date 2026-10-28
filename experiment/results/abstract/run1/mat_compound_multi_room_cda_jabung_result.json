@@ -1,0 +1,650 @@
+{
+  "task_n": "mat_compound",
+  "mode": "multi_room",
+  "model": "gpt-4o",
+  "task_text": "Turn on Sink faucet and put toilet paper in the trash",
+  "joint_plan_text": "### Joint Plan — mat_compound  (about 5 min / deadline 10 min: OK)\n### Robots: R1:Gripper(bathroom), R2:Mobile_Light(bathroom), R3:Mobile_Heavy(bathroom), R4:Gripper(bathroom)\n\n\n[0-5 min]\n- R1 [LOCAL] pick up the toilet paper from the shelf to the gripper  (r1_s1)\n- R2 [LOCAL] toggle the bathroom light from off to on  (r2_s1)\n- R3 [LOCAL] move the blue trash bin from the corner to near the sink  (r3_s1)\n- R1 [LOCAL] put down the toilet paper from the gripper to the trash bin  (r1_s2)\n- R1 [LOCAL] toggle the sink faucet from off to on  (r1_s3)",
+  "joint_plan_full": "### Joint Plan — mat_compound  (about 5 min / deadline 10 min: OK)\n### Robots: R1:Gripper(bathroom), R2:Mobile_Light(bathroom), R3:Mobile_Heavy(bathroom), R4:Gripper(bathroom)\n\n\n[0-5 min]\n- R1 [LOCAL] pick_up the toilet paper from shelf to gripper  (r1_s1)\n- R2 [LOCAL] toggle the bathroom light from off to on  (r2_s1)\n- R3 [LOCAL] move the blue trash bin from corner to near sink  (r3_s1)\n- R1 [LOCAL] put_down the toilet paper from gripper to trash bin  (r1_s2)\n- R1 [LOCAL] toggle the sink faucet from off to on  (r1_s3)\n\n### Dropped\n- R4 [LOCAL] pick_up the white toilet paper from floor to gripper — graph: DUPLICATE_WORK with R1 who is already handling toilet paper pickup. R1 can handle the task alone. (by graph)\n- R4 [LOCAL] put_down the white toilet paper from gripper to white trash can — graph: DUPLICATE_WORK with R1 who is already handling toilet paper disposal. R1 can handle the task alone. (by graph)",
+  "offers": {
+    "R1": {
+      "agent": "R1",
+      "capability": "I am fixed in place and equipped with a gripper to manipulate small objects.",
+      "can_do": [
+        "PickupLightObject: lift toilet paper",
+        "PassReceiveObject: transfer items to/from other robots",
+        "ToggleObject: turn on/off sink faucet"
+      ],
+      "has_items": [
+        "toilet paper (shelf, image 1)",
+        "sink faucet (sink, image 2)",
+        "trash bin (corner, image 1)"
+      ],
+      "need_from_others": [],
+      "intends": [
+        "pick up toilet paper from shelf",
+        "put down toilet paper in trash bin",
+        "toggle sink faucet from off to on"
+      ],
+      "suggests": [],
+      "obs_scope": "I can observe and interact with items in the bathroom only.",
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift heavy furniture",
+        "PushFurniture: cannot push heavy objects"
+      ],
+      "reasoning": "a) The task requires the sink faucet to be turned on and the toilet paper to be placed in the trash. b) The bathroom needs to contribute by having these actions completed. c) I can turn on the sink faucet and put the toilet paper in the trash bin. d) Both actions are equally important and need to be done to complete the task. e) No items need to be transferred to other rooms."
+    },
+    "R2": {
+      "agent": "R2",
+      "capability": "I am mobile and can carry light objects up to 5 kg.",
+      "can_do": [
+        "PickupLightObject: lift toilet paper, small items",
+        "PassReceiveObject: transfer items to/from other robots",
+        "ToggleObject: turn on/off faucet, lights, appliances"
+      ],
+      "has_items": [
+        "white toilet paper (floor, image 1)",
+        "silver sink faucet (sink, image 2)",
+        "white trash can (corner, image 2)"
+      ],
+      "need_from_others": [],
+      "intends": [
+        "pick up white toilet paper from floor",
+        "place white toilet paper in white trash can",
+        "toggle silver sink faucet from off to on"
+      ],
+      "suggests": [],
+      "obs_scope": "I can observe and interact with items in the bathroom only.",
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift heavy furniture",
+        "PushFurniture: cannot push sofa",
+        "SliceObject: cannot slice food",
+        "PourObject: cannot pour precisely"
+      ],
+      "reasoning": "a) The task requires the sink faucet to be turned on and the toilet paper to be placed in the trash. b) The bathroom needs to have the sink faucet operational and the floor clear of toilet paper. c) I can turn on the silver sink faucet and move the white toilet paper to the white trash can. d) Turning on the sink faucet and removing the toilet paper are both essential actions. e) No items need to be moved to another room."
+    },
+    "R3": {
+      "agent": "R3",
+      "capability": "I am mobile and can carry heavy objects up to 20 kg.",
+      "can_do": [
+        "PickupLightObject: lift small items like toilet paper",
+        "PickupHeavyObject: lift heavier items up to 20 kg",
+        "PushFurniture: move furniture within the room",
+        "PassReceiveObject: transfer items to/from other robots",
+        "ToggleObject: turn on/off lights, faucets, appliances"
+      ],
+      "has_items": [
+        "silver faucet (sink, image 1)",
+        "white toilet paper (floor, image 2)",
+        "blue trash bin (corner, image 2)"
+      ],
+      "need_from_others": [],
+      "intends": [
+        "toggle silver faucet from off to on",
+        "pick up white toilet paper from floor",
+        "place white toilet paper into blue trash bin"
+      ],
+      "suggests": [],
+      "obs_scope": "I can observe and interact with items in the bathroom only.",
+      "cannot_do": [
+        "SliceObject: cannot slice or cut objects",
+        "PourObject: cannot pour liquids"
+      ],
+      "reasoning": "a) The task requires the sink faucet to be on and the toilet paper to be in the trash. b) The bathroom must provide a working sink and a clean floor. c) I will turn on the silver faucet and dispose of the white toilet paper. d) Turning on the faucet and disposing of toilet paper are both crucial for task completion. e) No items need to be moved to another room."
+    },
+    "R4": {
+      "agent": "R4",
+      "capability": "I am fixed in place with a gripper for manipulating light objects.",
+      "can_do": [
+        "PickupLightObject: lift small items like toilet paper",
+        "SliceObject: cut materials if needed",
+        "PourObject: manipulate liquids",
+        "PassReceiveObject: transfer items to/from other robots"
+      ],
+      "has_items": [
+        "white toilet paper (floor, image 1)",
+        "silver sink faucet (sink, image 2)",
+        "white trash can (corner, image 1)"
+      ],
+      "need_from_others": [],
+      "intends": [
+        "pick up white toilet paper from floor",
+        "put down white toilet paper into white trash can",
+        "toggle silver sink faucet from off to on"
+      ],
+      "suggests": [],
+      "obs_scope": "I can observe and interact with items in the bathroom only.",
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift heavy items",
+        "PushFurniture: cannot move furniture",
+        "Move: cannot move to another room"
+      ],
+      "reasoning": "a) The task requires the sink faucet to be on and the toilet paper to be in the trash, indicating a need for cleanliness or disposal. b) The bathroom needs to have the toilet paper disposed of and the sink faucet turned on. c) I can turn on the silver sink faucet and pick up the white toilet paper to put it in the white trash can. d) Both actions are crucial and need to be completed within the deadline. e) No items need to be passed to another room."
+    }
+  },
+  "local_plans": {
+    "R1": [
+      {
+        "id": "r1_s1",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "toilet paper",
+          "from": "shelf",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Turn on the sink faucet and put toilet paper in the trash",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r1_s2",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "toilet paper",
+          "from": "gripper",
+          "to": "trash bin"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Turn on the sink faucet and put toilet paper in the trash",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r1_s3",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "toggle",
+          "object": "sink faucet",
+          "from": "off",
+          "to": "on"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Turn on the sink faucet and put toilet paper in the trash",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "R2": [
+      {
+        "id": "r2_s1",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "toggle",
+          "object": "bathroom light",
+          "from": "off",
+          "to": "on"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Ensure the bathroom is well-lit",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "R3": [
+      {
+        "id": "r3_s1",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "move",
+          "object": "blue trash bin",
+          "from": "corner",
+          "to": "near sink"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "ensure the bathroom is tidy by moving any objects not covered by other robots",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "R4": [
+      {
+        "id": "r4_s1",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "white toilet paper",
+          "from": "floor",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "turn on sink faucet and dispose of toilet paper",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s2",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "white toilet paper",
+          "from": "gripper",
+          "to": "white trash can"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "turn on sink faucet and dispose of toilet paper",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ]
+  },
+  "judgments": [],
+  "graph": {
+    "nodes": [
+      {
+        "id": "r1_s1",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "toilet paper",
+          "from": "shelf",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Turn on the sink faucet and put toilet paper in the trash",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "short",
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 1
+      },
+      {
+        "id": "r1_s2",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "toilet paper",
+          "from": "gripper",
+          "to": "trash bin"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Turn on the sink faucet and put toilet paper in the trash",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "short",
+        "phase": 1,
+        "t_start": 1,
+        "t_end": 2
+      },
+      {
+        "id": "r1_s3",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "toggle",
+          "object": "sink faucet",
+          "from": "off",
+          "to": "on"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Turn on the sink faucet and put toilet paper in the trash",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "short",
+        "phase": 1,
+        "t_start": 2,
+        "t_end": 3
+      },
+      {
+        "id": "r2_s1",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "toggle",
+          "object": "bathroom light",
+          "from": "off",
+          "to": "on"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "Ensure the bathroom is well-lit",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "short",
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 1
+      },
+      {
+        "id": "r3_s1",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "move",
+          "object": "blue trash bin",
+          "from": "corner",
+          "to": "near sink"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "ensure the bathroom is tidy by moving any objects not covered by other robots",
+        "prepared_by": null,
+        "status": "active",
+        "violations": [],
+        "size": "medium",
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 1
+      },
+      {
+        "id": "r4_s1",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "white toilet paper",
+          "from": "floor",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "turn on sink faucet and dispose of toilet paper",
+        "prepared_by": null,
+        "status": "dropped",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s2",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "white toilet paper",
+          "from": "gripper",
+          "to": "white trash can"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": "turn on sink faucet and dispose of toilet paper",
+        "prepared_by": null,
+        "status": "dropped",
+        "violations": [],
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "order": {
+      "R1": [
+        "r1_s1",
+        "r1_s2",
+        "r1_s3"
+      ],
+      "R2": [
+        "r2_s1"
+      ],
+      "R3": [
+        "r3_s1"
+      ],
+      "R4": [
+        "r4_s1",
+        "r4_s2"
+      ]
+    },
+    "edges": [
+      {
+        "src": "r1_s1",
+        "dst": "r1_s2",
+        "kind": "SEQ",
+        "status": "CONFIRMED",
+        "source": "local",
+        "targeted": false
+      },
+      {
+        "src": "r1_s2",
+        "dst": "r1_s3",
+        "kind": "SEQ",
+        "status": "CONFIRMED",
+        "source": "local",
+        "targeted": false
+      }
+    ],
+    "drops": [
+      {
+        "node": "r4_s1",
+        "agent": "R4",
+        "type": "LOCAL",
+        "text": "pick_up the white toilet paper from floor to gripper",
+        "reason": "graph: DUPLICATE_WORK with R1 who is already handling toilet paper pickup. R1 can handle the task alone.",
+        "by": "graph"
+      },
+      {
+        "node": "r4_s2",
+        "agent": "R4",
+        "type": "LOCAL",
+        "text": "put_down the white toilet paper from gripper to white trash can",
+        "reason": "graph: DUPLICATE_WORK with R1 who is already handling toilet paper disposal. R1 can handle the task alone.",
+        "by": "graph"
+      }
+    ],
+    "unresolved": [],
+    "warnings": [],
+    "ops_log": [
+      {
+        "round": 1,
+        "op": {
+          "op": "drop",
+          "node": "r4_s1",
+          "why": "DUPLICATE_WORK with R1 who is already handling toilet paper pickup. R1 can handle the task alone."
+        },
+        "applied": true,
+        "error": null
+      },
+      {
+        "round": 1,
+        "op": {
+          "op": "drop",
+          "node": "r4_s2",
+          "why": "DUPLICATE_WORK with R1 who is already handling toilet paper disposal. R1 can handle the task alone."
+        },
+        "applied": true,
+        "error": null
+      }
+    ]
+  },
+  "metrics": {
+    "task_id": "mat_compound",
+    "n_steps_total": 7,
+    "n_steps_active": 5,
+    "n_blocked": 0,
+    "n_dropped": 2,
+    "n_requests": 0,
+    "n_requests_served": 0,
+    "n_collab_edges_final": 0,
+    "confirmed_ratio": null,
+    "selected_by_graph": 0,
+    "selected_by_rule": 0,
+    "capability_violations_after_fix": 0,
+    "n_requests_withdrawn": 0,
+    "n_served_by_own_existing_step": 0,
+    "n_duplicates_merged": 0,
+    "n_duplicates_dropped": 2,
+    "n_redundant_branches_released": 0,
+    "n_requests_moved_later": 0,
+    "n_warnings": 0,
+    "plan_fix_rounds": {
+      "R1": 1,
+      "R2": 1,
+      "R3": 1,
+      "R4": 1
+    },
+    "n_checklist_items": 5,
+    "n_uncovered_checklist": 0,
+    "n_uncovered_essential": 0,
+    "graph_ops_applied": 2,
+    "graph_ops_rejected": 0,
+    "makespan_steps": 3,
+    "makespan_min": 5,
+    "deadline": 10,
+    "deadline_ok": true,
+    "size_source": "graph_llm",
+    "n_size_missing": 0,
+    "n_candidates_from_stage3": 0,
+    "n_order_edges_added": 0,
+    "n_order_pairs_independent": 0,
+    "success_no_blocked": true,
+    "n_requests_declined": 0,
+    "n_requests_failed": 0,
+    "n_requests_moot": 0,
+    "n_blocked_by_decline": 0,
+    "n_blocked_by_failure": 0,
+    "success_no_failure": true,
+    "n_handoff_prep_dropped": 0,
+    "n_offers_made": 0,
+    "n_offers_taken": 0,
+    "n_offers_untaken": 0,
+    "n_preparations_released": 0,
+    "n_help_edges": 0,
+    "n_transfer_edges": 0,
+    "llm_calls": 14,
+    "prompt_tokens": 45521,
+    "completion_tokens": 3142,
+    "config": {
+      "use_edge_proposal": true,
+      "use_graph_llm": true,
+      "max_graph_rounds": 2
+    },
+    "wall_time_sec": 17.2
+  },
+  "config": {
+    "use_edge_proposal": true,
+    "use_graph_llm": true,
+    "max_graph_rounds": 2,
+    "deadline_min": 20
+  }
+}

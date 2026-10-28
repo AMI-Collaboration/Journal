@@ -5,29 +5,35 @@
     "user": "## TASK (serve this only):\nTurn off the room light, turn on faucet\nDEADLINE: 10 minutes\n\nYOUR BODY: room=bedroom, mobile=True, payload=5 kg, embodiment=Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture, SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\n(none)\n\nImages attached (2 image(s)), image 1 to 2.",
     "output": {
       "has_items": [
-        "white ceiling lamp (ceiling, image 1)",
-        "silver faucet (sink, image 2)"
+        "blue pillow (bed, image 1)",
+        "white blanket (bed, image 1)",
+        "wooden nightstand (beside bed, image 1)",
+        "metal lamp (nightstand, image 1)",
+        "ceiling light (ceiling, image 1)",
+        "gray rug (floor, image 2)",
+        "wooden dresser (against wall, image 2)"
       ],
-      "reasoning": "a) The ceiling lamp must be off and the faucet must be on. b) The most important task is to ensure the ceiling lamp is turned off and the faucet is turned on within the deadline. c) I will turn off the white ceiling lamp and turn on the silver faucet in my room. d) None of my has_items serve another room's needs.",
-      "capability": "I am a mobile robot with the ability to interact with light objects and toggle switches.",
+      "reasoning": "a) The goal is to have the room light off and the faucet on. b) The bedroom must contribute by ensuring the ceiling light is off. c) I can turn off the ceiling light in the bedroom. d) Turning off the ceiling light is the top priority since the deadline is short. e) No items from my room are needed in other rooms.",
+      "capability": "I am mobile and can carry light objects up to 5 kg.",
       "can_do": [
-        "PickupLightObject: pick up objects under 5 kg",
-        "PassReceiveObject: pass or receive objects",
-        "ToggleObject: turn on/off lights, TV, appliances"
+        "PickupLightObject: lift pillows, blankets, small items",
+        "PassReceiveObject: transfer items to/from other robots",
+        "ToggleObject: turn on/off lights, appliances"
       ],
       "cannot_do": [
-        "PickupHeavyObject: cannot pick up objects over 5 kg",
-        "PushFurniture: cannot move furniture",
-        "SliceObject: cannot cut or slice objects",
-        "PourObject: cannot pour liquids"
+        "PickupHeavyObject: cannot lift heavy furniture",
+        "PushFurniture: cannot push furniture",
+        "SliceObject: cannot slice food",
+        "PourObject: cannot pour water"
       ],
       "suggests": [],
       "intends": [
-        "ToggleObject: turn off white ceiling lamp",
-        "ToggleObject: turn on silver faucet"
+        "toggle ceiling light from on to off"
       ],
-      "need_from_others": [],
-      "obs_scope": "I can observe and interact with objects in my room, specifically the ceiling lamp and faucet."
+      "need_from_others": [
+        "R2 to turn on the faucet in the bathroom"
+      ],
+      "obs_scope": "I can observe and interact with items in the bedroom only."
     }
   },
   {
@@ -36,48 +42,56 @@
     "user": "## TASK (serve this only):\nTurn off the room light, turn on faucet\nDEADLINE: 10 minutes\n\nYOUR BODY: room=bathroom, mobile=True, payload=5 kg, embodiment=Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture, SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\nCloth (in BathtubBasin)\n\nImages attached (2 image(s)), image 1 to 2.",
     "output": {
       "has_items": [
-        "silver faucet (sink, image 1)",
-        "white room light switch (wall, image 2)"
+        "metal faucet (sink, image 1)",
+        "white towel (towel rack, image 2)",
+        "blue bottle (shelf, image 1)",
+        "white light switch (wall, image 2)"
       ],
-      "reasoning": "a) The room light must be off, and the faucet must be on. b) The priority is to complete both tasks within the 10-minute deadline. c) I will turn off the white room light switch and turn on the silver faucet. d) No items in my room are needed for other rooms.",
-      "capability": "I am a mobile robot with light object handling abilities.",
+      "reasoning": "a) The goal is to have the room light off and the faucet running. b) The bathroom needs to provide a dark environment with running water. c) I will turn off the light using the light switch and turn on the faucet. d) Both actions are essential for the task.",
+      "capability": "I am mobile and can carry light objects up to 5 kg.",
       "can_do": [
-        "PickupLightObject: handle light items",
-        "PassReceiveObject: exchange items",
-        "ToggleObject: turn on/off lights, TV, appliances"
+        "PickupLightObject: lift towels, small items",
+        "PassReceiveObject: transfer items to/from other robots",
+        "ToggleObject: turn on/off lights, faucet"
       ],
       "cannot_do": [
-        "PickupHeavyObject: cannot lift heavy items",
-        "PushFurniture: cannot move furniture",
-        "SliceObject: cannot cut objects",
-        "PourObject: cannot pour liquids"
+        "PickupHeavyObject: cannot lift heavy furniture",
+        "PushFurniture: cannot push furniture",
+        "SliceObject: cannot slice food",
+        "PourObject: cannot pour precisely"
       ],
       "suggests": [],
       "intends": [
-        "turn off white room light switch",
-        "turn on silver faucet"
+        "toggle white light switch from on to off",
+        "toggle metal faucet from off to on"
       ],
       "need_from_others": [],
-      "obs_scope": "I can observe and interact with objects in the bathroom."
+      "obs_scope": "I can observe and interact with items in the bathroom only."
     }
   },
   {
-    "key": "plan:R1",
-    "system": "You are robot R1 in the bedroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nTurn off the room light, turn on faucet\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am a mobile robot with the ability to interact with light objects and toggle switches.\",\n \"can_do\": [\n  \"PickupLightObject: pick up objects under 5 kg\",\n  \"PassReceiveObject: pass or receive objects\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"white ceiling lamp (ceiling, image 1)\",\n  \"silver faucet (sink, image 2)\"\n ],\n \"need_from_others\": [],\n ",
+    "key": "plan:R2",
+    "system": "You are robot R2 in the bathroom. Write YOUR part of the shared plan.\n\nCHAIN-OF-THOUGHT before writing steps:\n1. TASK END STATE: what must be true when done? (same as offer stage)\n2. OTHER ROBOTS: sca",
+    "user": "## TASK:\nTurn off the room light, turn on faucet\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift towels, small items\",\n  \"PassReceiveObject: transfer items to/from other robots\",\n  \"ToggleObject: turn on/off lights, faucet\"\n ],\n \"has_items\": [\n  \"metal faucet (sink, image 1)\",\n  \"white towel (towel rack, image 2)\",\n  \"blue bottle (shelf, image 1)\",\n  \"white light switch (wall, image ",
     "output": {
-      "reasoning": "a) The task requires the ceiling lamp to be turned off and the faucet to be turned on. b) Since R1 and R2 both have the capability to toggle switches, and R2 intends to turn on the silver faucet, R1 will focus on turning off the white ceiling lamp. c) This division of tasks ensures no duplication of work and efficient use of resources. d) R1 will turn off the ceiling lamp in the bedroom, while R2 will handle the faucet in the bathroom.",
+      "reasoning": "a) The task requires the bathroom to have the light turned off and the faucet turned on. b) R2 is responsible for both actions in the bathroom. c) No other robots are involved in these specific actions, so R2 will handle them completely. d) Both actions are essential for the task's completion.",
       "goals": [
         {
-          "goal": "Turn off the white ceiling lamp in the bedroom",
+          "goal": "turn off the bathroom light and turn on the faucet",
           "priority": "high",
           "in_my_room": true
         }
       ],
       "checklist": [
         {
-          "object": "white ceiling lamp",
-          "change": "turn off",
+          "object": "white light switch",
+          "change": "toggle from on to off",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "metal faucet",
+          "change": "toggle from off to on",
           "weight": "light",
           "how": "LOCAL"
         }
@@ -86,9 +100,92 @@
         {
           "type": "LOCAL",
           "action": {
-            "verb": "turn_off",
-            "object": "white ceiling lamp",
-            "from": "ceiling",
+            "verb": "toggle",
+            "object": "white light switch",
+            "from": "on",
+            "to": "off"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "toggle",
+            "object": "metal faucet",
+            "from": "off",
+            "to": "on"
+          },
+          "uses": 0,
+          "serves": 1
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R1",
+    "system": "You are robot R1 in the bedroom. Write YOUR part of the shared plan.\n\nCHAIN-OF-THOUGHT before writing steps:\n1. TASK END STATE: what must be true when done? (same as offer stage)\n2. OTHER ROBOTS: scan",
+    "user": "## TASK:\nTurn off the room light, turn on faucet\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift pillows, blankets, small items\",\n  \"PassReceiveObject: transfer items to/from other robots\",\n  \"ToggleObject: turn on/off lights, appliances\"\n ],\n \"has_items\": [\n  \"blue pillow (bed, image 1)\",\n  \"white blanket (bed, image 1)\",\n  \"wooden nightstand (beside bed, image 1)\",\n  \"metal lamp (n",
+    "output": {
+      "reasoning": "a) The task requires the ceiling light in the bedroom to be turned off and the faucet in the bathroom to be turned on. b) I, R1, am responsible for the bedroom and can toggle the ceiling light off. c) R2, who is in the bathroom, will handle turning on the faucet. d) Since R2 intends to turn on the faucet and the bathroom light, I will focus solely on the bedroom light to avoid duplication.",
+      "goals": [
+        {
+          "goal": "Toggle the ceiling light off in the bedroom",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "ceiling light",
+          "change": "toggle off",
+          "weight": "light",
+          "how": "LOCAL"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "toggle",
+            "object": "ceiling light",
+            "from": "on",
+            "to": "off"
+          },
+          "uses": 0,
+          "serves": 1
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R1:fix",
+    "system": "You are robot R1 in the bedroom. Write YOUR part of the shared plan.\n\nCHAIN-OF-THOUGHT before writing steps:\n1. TASK END STATE: what must be true when done? (same as offer stage)\n2. OTHER ROBOTS: scan",
+    "user": "## TASK:\nTurn off the room light, turn on faucet\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift pillows, blankets, small items\",\n  \"PassReceiveObject: transfer items to/from other robots\",\n  \"ToggleObject: turn on/off lights, appliances\"\n ],\n \"has_items\": [\n  \"blue pillow (bed, image 1)\",\n  \"white blanket (bed, image 1)\",\n  \"wooden nightstand (beside bed, image 1)\",\n  \"metal lamp (n",
+    "output": {
+      "reasoning": "a) The task requires the ceiling light in the bedroom to be turned off and the faucet in the bathroom to be turned on. b) I, R1, am responsible for the bedroom and can toggle the ceiling light off. c) R2, who is in the bathroom, will handle turning on the faucet. d) Since R2 intends to turn on the faucet, I will focus solely on the bedroom light to avoid duplication.",
+      "goals": [
+        {
+          "goal": "Toggle the ceiling light off in the bedroom",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "ceiling light",
+          "change": "toggle off",
+          "weight": "light",
+          "how": "LOCAL"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "toggle",
+            "object": "ceiling light",
+            "from": "on",
             "to": "off"
           },
           "uses": 0,
@@ -98,81 +195,28 @@
     }
   },
   {
-    "key": "plan:R2",
-    "system": "You are robot R2 in the bathroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, ",
-    "user": "## TASK:\nTurn off the room light, turn on faucet\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am a mobile robot with light object handling abilities.\",\n \"can_do\": [\n  \"PickupLightObject: handle light items\",\n  \"PassReceiveObject: exchange items\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"silver faucet (sink, image 1)\",\n  \"white room light switch (wall, image 2)\"\n ],\n \"need_from_others\": [],\n \"intends\": [\n  \"turn off white room light swit",
-    "output": {
-      "reasoning": "a) The task requires turning off the room light and turning on the faucet. b) R2 is in the bathroom and has the capability to toggle the light switch and faucet. c) No other robot intends to perform these actions in the bathroom, so R2 will handle both tasks. d) The priority is high as both actions are essential to complete the task within the 10-minute deadline.",
-      "goals": [
-        {
-          "goal": "Turn off the white room light switch and turn on the silver faucet",
-          "priority": "high",
-          "in_my_room": true
-        }
-      ],
-      "checklist": [
-        {
-          "object": "white room light switch",
-          "change": "turn off",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "silver faucet",
-          "change": "turn on",
-          "weight": "light",
-          "how": "LOCAL"
-        }
-      ],
-      "steps": [
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "turn_off",
-            "object": "white room light switch",
-            "from": "wall",
-            "to": "off position"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "turn_on",
-            "object": "silver faucet",
-            "from": "sink",
-            "to": "on position"
-          },
-          "uses": 0,
-          "serves": 1
-        }
-      ]
-    }
-  },
-  {
     "key": "plan:R2:fix",
-    "system": "You are robot R2 in the bathroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, ",
-    "user": "## TASK:\nTurn off the room light, turn on faucet\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am a mobile robot with light object handling abilities.\",\n \"can_do\": [\n  \"PickupLightObject: handle light items\",\n  \"PassReceiveObject: exchange items\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"silver faucet (sink, image 1)\",\n  \"white room light switch (wall, image 2)\"\n ],\n \"need_from_others\": [],\n \"intends\": [\n  \"turn off white room light swit",
+    "system": "You are robot R2 in the bathroom. Write YOUR part of the shared plan.\n\nCHAIN-OF-THOUGHT before writing steps:\n1. TASK END STATE: what must be true when done? (same as offer stage)\n2. OTHER ROBOTS: sca",
+    "user": "## TASK:\nTurn off the room light, turn on faucet\nDEADLINE: 10 minutes\n\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift towels, small items\",\n  \"PassReceiveObject: transfer items to/from other robots\",\n  \"ToggleObject: turn on/off lights, faucet\"\n ],\n \"has_items\": [\n  \"metal faucet (sink, image 1)\",\n  \"white towel (towel rack, image 2)\",\n  \"blue bottle (shelf, image 1)\",\n  \"white light switch (wall, image ",
     "output": {
-      "reasoning": "a) The task requires turning off the room light and turning on the faucet. b) R2 is in the bathroom and has the capability to toggle the light switch and faucet. c) No other robot intends to perform these actions in the bathroom, so R2 will handle both tasks. d) The priority is high as both actions are essential to complete the task within the 10-minute deadline.",
+      "reasoning": "a) The task requires the bathroom to have the light turned off and the faucet turned on. b) R2 is responsible for both actions in the bathroom. c) No other robots are involved in these specific actions, so R2 will handle them completely. d) Both actions are essential for the task's completion.",
       "goals": [
         {
-          "goal": "Turn off the white room light switch and turn on the silver faucet",
+          "goal": "turn off the bathroom light and turn on the faucet",
           "priority": "high",
           "in_my_room": true
         }
       ],
       "checklist": [
         {
-          "object": "white room light switch",
-          "change": "turn off",
+          "object": "white light switch",
+          "change": "toggle from on to off",
           "weight": "light",
           "how": "LOCAL"
         },
         {
-          "object": "silver faucet",
-          "change": "turn on",
+          "object": "metal faucet",
+          "change": "toggle from off to on",
           "weight": "light",
           "how": "LOCAL"
         }
@@ -181,10 +225,10 @@
         {
           "type": "LOCAL",
           "action": {
-            "verb": "turn_off",
-            "object": "white room light switch",
-            "from": "wall",
-            "to": "off position"
+            "verb": "toggle",
+            "object": "white light switch",
+            "from": "on",
+            "to": "off"
           },
           "uses": 0,
           "serves": 0
@@ -192,10 +236,10 @@
         {
           "type": "LOCAL",
           "action": {
-            "verb": "turn_on",
-            "object": "silver faucet",
-            "from": "sink",
-            "to": "on position"
+            "verb": "toggle",
+            "object": "metal faucet",
+            "from": "off",
+            "to": "on"
           },
           "uses": 0,
           "serves": 0

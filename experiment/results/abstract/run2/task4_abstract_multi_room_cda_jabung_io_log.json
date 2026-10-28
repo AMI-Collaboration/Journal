@@ -5,37 +5,41 @@
     "user": "## TASK (serve this only):\nA guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nDEADLINE: 15 minutes\n\nYOUR BODY: room=kitchen, mobile=True, payload=5 kg, embodiment=Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture, SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\nSprayBottle (in Cabinet)\nEgg (in SinkBasin)\nMug (in SinkBasin)\n\nImages attached (2 imag",
     "output": {
       "has_items": [
-        "brown loaf (counter, image 1)",
-        "silver spoon (counter, image 1)",
-        "green bottle (table, image 2)",
-        "white mug (table, image 2)",
-        "silver can (table, image 2)"
+        "loaf of bread (counter, image 1)",
+        "wine bottle (table, image 2)",
+        "wine glass (table, image 2)",
+        "black mug (counter, image 2)"
       ],
-      "reasoning": "a) The guest should have a comfortable place to sit and something to eat or drink. b) Ensuring the guest has a welcoming environment with seating and refreshments is most important. c) I can move items like the white mug and green bottle to prepare refreshments. d) The white mug and green bottle can be used in the living room for serving drinks.",
-      "capability": "I can move around the kitchen and carry light objects.",
+      "reasoning": "a) Guest comfort: seating ready + offer drink/snack. b) Living room: seating arranged; kitchen: prepare snack/drink. c) I can provide wine and bread as refreshments. d) Prioritize offering wine and bread for immediate guest arrival. e) Wine bottle and glass to living room.",
+      "capability": "I am mobile and can carry light objects up to 5 kg.",
       "can_do": [
-        "PickupLightObject: pick up objects like mugs and bottles",
-        "PassReceiveObject: pass objects to others",
-        "ToggleObject: turn on/off lights, TV, appliances"
+        "PickupLightObject: lift mugs, fruit, small items",
+        "PassReceiveObject: transfer items to/from other robots",
+        "ToggleObject: turn on/off kettle, lights, appliances"
       ],
       "cannot_do": [
-        "PickupHeavyObject: cannot lift heavy items like furniture",
-        "PushFurniture: cannot move furniture",
-        "SliceObject: cannot cut or slice food",
-        "PourObject: cannot pour drinks"
+        "PickupHeavyObject: cannot lift heavy furniture",
+        "PushFurniture: cannot push sofa",
+        "SliceObject: cannot slice food",
+        "PourObject: cannot pour precisely"
       ],
       "suggests": [
-        "white mug",
-        "green bottle"
+        "wine bottle",
+        "wine glass",
+        "loaf of bread"
       ],
       "intends": [
-        "move white mug from table to counter",
-        "move green bottle from table to counter"
+        "pick up wine bottle from table",
+        "pick up wine glass from table",
+        "pick up loaf of bread from counter",
+        "pass wine bottle to R4",
+        "pass wine glass to R4",
+        "pass loaf of bread to R4"
       ],
       "need_from_others": [
-        "ASK_HELP to prepare drinks using the green bottle and white mug"
+        "R4 to receive wine bottle, wine glass, and loaf of bread and take them to the living room"
       ],
-      "obs_scope": "I can observe and interact with objects in the kitchen only."
+      "obs_scope": "I can observe and interact with items in the kitchen only."
     }
   },
   {
@@ -44,41 +48,83 @@
     "user": "## TASK (serve this only):\nA guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nDEADLINE: 15 minutes\n\nYOUR BODY: room=kitchen, mobile=False, payload=not specified (judge from your embodiment), embodiment=Gripper. CAN: PickupLightObject, SliceObject, PourObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture. This robot is FIXED IN PLACE and can never move to another room. To pass an item t",
     "output": {
       "has_items": [
-        "brown teapot (counter, image 1)",
-        "white cup (counter, image 1)",
-        "green book (counter, image 1)",
-        "red tomato (counter, image 1)",
-        "gray plate (counter, image 1)",
-        "black pan (stove, image 2)",
-        "green cabbage (counter, image 2)"
+        "silver kettle (counter, image 1)",
+        "white mug (counter, image 1)",
+        "green apple (counter, image 1)",
+        "tomato (counter, image 1)",
+        "plate (counter, image 1)",
+        "microwave (counter, image 1)",
+        "coffee maker (counter, image 2)",
+        "cabbage (counter, image 2)",
+        "pot (stove, image 2)"
       ],
-      "reasoning": "a) The guest should have a comfortable place to sit and something to eat or drink. b) Preparing a drink or snack is most important given the short time. c) I can prepare a drink using the brown teapot and white cup. d) The white cup and brown teapot can be used in the living room for serving.",
-      "capability": "I am a fixed kitchen robot with a gripper for handling light objects.",
+      "reasoning": "a) Guest needs a comfortable seating area and refreshments. b) Living room should have seating ready; kitchen provides refreshments. c) I can prepare a drink with the coffee maker and offer fruit. d) Coffee and apple are priorities for refreshment. e) Pass coffee and apple to another room for guest.",
+      "capability": "I am fixed in place and can manipulate objects within my reach.",
       "can_do": [
-        "PickupLightObject: lift small items",
+        "PickupLightObject: lift mugs, fruit, small items",
         "SliceObject: cut food items",
-        "PourObject: serve liquids",
-        "PassReceiveObject: exchange items with others",
+        "PourObject: pour drinks",
+        "PassReceiveObject: transfer items to/from other robots"
+      ],
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift heavy furniture",
+        "PushFurniture: cannot move furniture"
+      ],
+      "suggests": [
+        "green apple",
+        "white mug"
+      ],
+      "intends": [
+        "pick up white mug from counter",
+        "pour coffee into white mug using coffee maker",
+        "pass white mug to another robot",
+        "pick up green apple from counter",
+        "pass green apple to another robot"
+      ],
+      "need_from_others": [
+        "Another robot to receive white mug and green apple and deliver to guest area"
+      ],
+      "obs_scope": "I can observe and interact with items in the kitchen only."
+    }
+  },
+  {
+    "key": "offer:R3",
+    "system": "You are robot R3, a household robot that sees only its own room.\n\nSTEP 1 — LIST has_items: every clearly visible movable object in your images.\nFormat: \"<color> <noun> (<location>, image <k>)\". NEVER ",
+    "user": "## TASK (serve this only):\nA guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nDEADLINE: 15 minutes\n\nYOUR BODY: room=living_room, mobile=True, payload=20 kg, embodiment=Mobile_Heavy. CAN: PickupLightObject, PickupHeavyObject, PushFurniture, PassReceiveObject. CANNOT: SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\n(none)\n\nImages attached (2 image(s)), image 1 to 2.",
+    "output": {
+      "has_items": [
+        "blue sofa (center, image 1)",
+        "brown coffee table (center, image 1)",
+        "red armchair (corner, image 2)",
+        "white floor lamp (corner, image 2)",
+        "black television (wall, image 2)",
+        "green plant (corner, image 1)"
+      ],
+      "reasoning": "a) A welcoming home for a guest requires comfortable seating and refreshments. b) The living room should offer seating and a pleasant atmosphere. The kitchen should provide refreshments. c) In the living room, I can arrange seating and adjust lighting. d) Prioritize seating arrangement and lighting for comfort. e) Suggest kitchen provides drinks or snacks.",
+      "capability": "I can move within the living room and handle heavy furniture.",
+      "can_do": [
+        "PickupLightObject: lift small items like lamps or cushions",
+        "PickupHeavyObject: move furniture like sofas and tables",
+        "PushFurniture: rearrange furniture for optimal seating",
+        "PassReceiveObject: transfer items to/from other robots",
         "ToggleObject: turn on/off lights, TV, appliances"
       ],
       "cannot_do": [
-        "PickupHeavyObject: too heavy for my gripper",
-        "PushFurniture: immobile and lack strength"
+        "SliceObject: cannot slice food",
+        "PourObject: cannot pour drinks"
       ],
       "suggests": [
-        "white cup",
-        "brown teapot"
+        "drinks or snacks from the kitchen"
       ],
       "intends": [
-        "PickupLightObject: pick up brown teapot from counter",
-        "PickupLightObject: pick up white cup from counter",
-        "PourObject: pour from brown teapot into white cup",
-        "PassReceiveObject: pass white cup to another robot"
+        "push blue sofa to create open seating area",
+        "push red armchair closer to coffee table",
+        "toggle white floor lamp from off to on"
       ],
       "need_from_others": [
-        "ASK_HELP: receive a comfortable seating arrangement in the living room"
+        "drinks or snacks to offer the guest"
       ],
-      "obs_scope": "I can only observe and interact with objects in the kitchen."
+      "obs_scope": "I can observe and interact with items in the living room only."
     }
   },
   {
@@ -87,37 +133,37 @@
     "user": "## TASK (serve this only):\nA guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nDEADLINE: 15 minutes\n\nYOUR BODY: room=living_room, mobile=True, payload=5 kg, embodiment=Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture, SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\n(none)\n\nImages attached (2 image(s)), image 1 to 2.",
     "output": {
       "has_items": [
-        "brown sofa (center, image 1)",
-        "white coffee table (center, image 1)",
-        "blue cushion (on brown sofa, image 1)",
-        "green plant (on white coffee table, image 1)",
-        "red book (on white coffee table, image 1)",
-        "black remote control (on white coffee table, image 1)",
-        "gray floor lamp (left corner, image 2)",
-        "yellow rug (under white coffee table, image 2)"
+        "blue sofa (center, image 1)",
+        "wooden coffee table (center, image 1)",
+        "red cushion (sofa, image 1)",
+        "beige armchair (corner, image 2)",
+        "glass vase (coffee table, image 1)",
+        "blue book (coffee table, image 1)",
+        "white lamp (side table, image 2)"
       ],
-      "reasoning": "a) GOAL STATE: The living room should be inviting with a clear seating area and an item to offer the guest. b) PRIORITY: Ensuring the sofa is clear for seating and having an item ready to offer the guest is most important given the time constraint. c) MY ROOM: I will adjust the sofa area and ensure the coffee table is tidy. d) FOR OTHERS: The red book could be offered to the guest for entertainment.",
-      "capability": "I am a mobile robot with light object handling capabilities.",
+      "reasoning": "a) To welcome a guest, the living room should have comfortable seating and offer refreshments or entertainment. b) The living room should provide seating and a place for refreshments. c) I can arrange seating to be inviting and ensure the coffee table is clear for refreshments. d) Priority is ensuring the seating is ready and the table is clear for use. e) I have no items to suggest for other rooms since my room is the main focus for seating.",
+      "capability": "I am mobile and can carry light objects up to 5 kg.",
       "can_do": [
-        "PickupLightObject: pick up objects under 5 kg",
-        "PassReceiveObject: exchange objects with others",
+        "PickupLightObject: lift cushions, small items",
+        "PassReceiveObject: transfer items to/from other robots",
         "ToggleObject: turn on/off lights, TV, appliances"
       ],
       "cannot_do": [
-        "PickupHeavyObject: cannot lift objects over 5 kg",
-        "PushFurniture: cannot move heavy furniture",
-        "SliceObject: cannot cut or slice items",
-        "PourObject: cannot pour liquids"
+        "PickupHeavyObject: cannot lift heavy furniture",
+        "PushFurniture: cannot push sofa",
+        "SliceObject: cannot slice food",
+        "PourObject: cannot pour precisely"
       ],
-      "suggests": [
-        "red book (on white coffee table, image 1)"
-      ],
+      "suggests": [],
       "intends": [
-        "move blue cushion from brown sofa to white coffee table",
-        "turn on gray floor lamp"
+        "pick up blue book from coffee table",
+        "move blue book to side table",
+        "pick up glass vase from coffee table",
+        "move glass vase to side table",
+        "arrange red cushion on blue sofa"
       ],
       "need_from_others": [
-        "OfferItem: an item to offer the guest, such as a drink or snack"
+        "refreshments to be brought to the coffee table"
       ],
       "obs_scope": "I can observe and interact with items in the living room only."
     }
@@ -128,41 +174,41 @@
     "user": "## TASK (serve this only):\nA guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nDEADLINE: 15 minutes\n\nYOUR BODY: room=bedroom, mobile=True, payload=5 kg, embodiment=Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture, SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\n(none)\n\nImages attached (2 image(s)), image 1 to 2.",
     "output": {
       "has_items": [
+        "gray laptop (dresser, image 1)",
+        "green bin (corner, image 1)",
+        "red trash can (corner, image 1)",
         "brown teddy bear (floor, image 1)",
-        "green laundry basket (floor, image 1)",
-        "red trash bin (floor, image 1)",
-        "laptop (dresser, image 1)",
         "white pillow (bed, image 2)",
         "white pillow (bed, image 2)",
         "white cube (floor, image 2)",
-        "lamp (nightstand, image 2)",
-        "alarm clock (nightstand, image 2)"
+        "white lamp (nightstand, image 2)",
+        "black alarm clock (nightstand, image 2)",
+        "blue book (dresser, image 2)"
       ],
-      "reasoning": "a) The guest should have a comfortable place to sit and something to offer. b) Preparing the seating area and offering items is most important. c) I can adjust lighting and clear space for seating. d) I can suggest items like the teddy bear for comfort in another room.",
+      "reasoning": "a) The guest needs a comfortable place to sit and a drink or snack to feel welcome. b) Main areas like the living room should have seating and refreshments. c) I can provide the brown teddy bear as a comforting decoration for seating areas. d) Moving the teddy bear is important for a welcoming environment. e) Teddy bear should go to the living room.",
       "capability": "I am mobile and can carry light objects up to 5 kg.",
       "can_do": [
-        "PickupLightObject: pick up objects up to 5 kg",
-        "PassReceiveObject: pass or receive objects",
+        "PickupLightObject: lift small items like the teddy bear",
+        "PassReceiveObject: transfer items to/from other robots",
         "ToggleObject: turn on/off lights, TV, appliances"
       ],
       "cannot_do": [
-        "PickupHeavyObject: cannot lift objects over 5 kg",
-        "PushFurniture: cannot move heavy furniture",
-        "SliceObject: cannot cut or slice objects",
-        "PourObject: cannot pour liquids"
+        "PickupHeavyObject: cannot lift heavy furniture",
+        "PushFurniture: cannot push sofa",
+        "SliceObject: cannot slice food",
+        "PourObject: cannot pour precisely"
       ],
       "suggests": [
-        "brown teddy bear (floor, image 1)"
+        "brown teddy bear"
       ],
       "intends": [
-        "move white cube from floor to bed",
-        "turn on lamp on nightstand"
+        "pick up brown teddy bear from floor",
+        "pass brown teddy bear to another robot for living room"
       ],
       "need_from_others": [
-        "Provide seating in the living room",
-        "Prepare a drink or snack for the guest"
+        "Another robot to receive the brown teddy bear and place it in the living room"
       ],
-      "obs_scope": "I can observe and interact with items in the bedroom."
+      "obs_scope": "I can observe and interact with items in the bedroom only."
     }
   },
   {
@@ -171,107 +217,65 @@
     "user": "## TASK (serve this only):\nA guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nDEADLINE: 15 minutes\n\nYOUR BODY: room=bathroom, mobile=True, payload=5 kg, embodiment=Mobile_Light. CAN: PickupLightObject, PassReceiveObject. CANNOT: PickupHeavyObject, PushFurniture, SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\nSprayBottle (in Cabinet)\nToiletPaper (in Cabinet)\n\nImages attached (2 image(s)), image",
     "output": {
       "has_items": [
-        "green soap (on sink, image 1)",
-        "pink soap (on sink, image 1)",
-        "silver faucet (on sink, image 1)",
-        "mirror (above sink, image 1)",
-        "red trash can (next to toilet, image 2)",
-        "toilet (next to red trash can, image 2)",
-        "shower (next to sink, image 1)"
+        "green soap (counter, image 1)",
+        "red towel (counter, image 1)"
       ],
-      "reasoning": "a) The house must have comfortable seating and refreshments ready for the guest. b) Ensuring the guest has a welcoming environment within the 15-minute deadline is crucial. c) My room should be clean and presentable, but no major changes are needed. d) Items like soap could be useful for guest hygiene needs in another room.",
-      "capability": "I am a mobile robot with light object handling capabilities.",
+      "reasoning": "a) A welcoming home needs comfortable seating and refreshments for the guest. b) The living room should have seating ready; the kitchen should have refreshments. c) I can ensure the bathroom is clean and has fresh towels. d) The red towel is important for a fresh look. e) The red towel can be moved to the guest room for use.",
+      "capability": "I am mobile and can carry light objects up to 5 kg.",
       "can_do": [
-        "PickupLightObject: handle small items",
-        "PassReceiveObject: transfer items between rooms",
-        "ToggleObject: turn on/off lights, TV, appliances"
+        "PickupLightObject: lift small items like towels",
+        "PassReceiveObject: transfer items to/from other robots",
+        "ToggleObject: turn on/off lights, appliances"
       ],
       "cannot_do": [
-        "PickupHeavyObject: cannot lift heavy items",
-        "PushFurniture: cannot move furniture",
-        "SliceObject: cannot cut items",
-        "PourObject: cannot pour liquids"
+        "PickupHeavyObject: cannot lift heavy furniture",
+        "PushFurniture: cannot push sofa",
+        "SliceObject: cannot slice food",
+        "PourObject: cannot pour precisely"
       ],
       "suggests": [
-        "green soap",
-        "pink soap"
+        "red towel"
       ],
-      "intends": [],
+      "intends": [
+        "pick up red towel from counter",
+        "pass red towel to another room for guest use"
+      ],
       "need_from_others": [
-        "Seating arrangement in the living room",
-        "Refreshments or snacks for the guest"
+        "Living room to have comfortable seating ready",
+        "Kitchen to have refreshments prepared"
       ],
       "obs_scope": "I can observe and interact with items in the bathroom only."
     }
   },
   {
-    "key": "offer:R3",
-    "system": "You are robot R3, a household robot that sees only its own room.\n\nSTEP 1 — LIST has_items: every clearly visible movable object in your images.\nFormat: \"<color> <noun> (<location>, image <k>)\". NEVER ",
-    "user": "## TASK (serve this only):\nA guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nDEADLINE: 15 minutes\n\nYOUR BODY: room=living_room, mobile=True, payload=20 kg, embodiment=Mobile_Heavy. CAN: PickupLightObject, PickupHeavyObject, PushFurniture, PassReceiveObject. CANNOT: SliceObject, PourObject.\n\nABOUT AREAS YOU CANNOT SEE:\n(none)\n\nImages attached (2 image(s)), image 1 to 2.",
+    "key": "plan:R3",
+    "system": "You are robot R3 in the living_room. Write YOUR part of the shared plan.\n\nCHAIN-OF-THOUGHT before writing steps:\n1. TASK END STATE: what must be true when done? (same as offer stage)\n2. OTHER ROBOTS: ",
+    "user": "## TASK:\nA guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nDEADLINE: 15 minutes\n\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I can move within the living room and handle heavy furniture.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items like lamps or cushions\",\n  \"PickupHeavyObject: move furniture like sofas and tables\",\n  \"PushFurniture: rearrange furniture for optimal seating\",\n  \"PassReceiv",
     "output": {
-      "has_items": [
-        "blue sofa (center, image 1)",
-        "wooden coffee table (center, image 1)",
-        "red armchair (left, image 1)",
-        "green plant (corner, image 1)",
-        "floor lamp (right, image 1)",
-        "television (wall, image 2)",
-        "bookshelf (right, image 2)",
-        "remote control (on coffee table, image 1)",
-        "magazine (on coffee table, image 1)",
-        "decorative bowl (on coffee table, image 1)"
-      ],
-      "reasoning": "a) The living room should be ready for a guest with comfortable seating and an inviting atmosphere. b) Ensuring the seating area is clear and inviting is most important given the deadline. c) I will arrange the seating and adjust lighting in the living room. d) The decorative bowl could be used to offer snacks in another room.",
-      "capability": "I am a mobile robot capable of moving and arranging objects within the living room.",
-      "can_do": [
-        "PickupLightObject: move small items like magazines",
-        "PickupHeavyObject: move larger items like the coffee table",
-        "PushFurniture: rearrange seating like the sofa",
-        "PassReceiveObject: hand over or receive items from other robots",
-        "ToggleObject: turn on/off lights, TV, appliances"
-      ],
-      "cannot_do": [
-        "SliceObject: I cannot cut or slice items due to lack of tools",
-        "PourObject: I cannot pour liquids as I lack the necessary mechanism"
-      ],
-      "suggests": [
-        "decorative bowl (on coffee table, image 1)"
-      ],
-      "intends": [
-        "move red armchair to face the blue sofa",
-        "turn on floor lamp",
-        "place magazine neatly on the bookshelf",
-        "ensure remote control is on the coffee table"
-      ],
-      "need_from_others": [
-        "snacks or drinks to offer the guest"
-      ],
-      "obs_scope": "I can observe and interact with items in the living room only."
-    }
-  },
-  {
-    "key": "plan:R4",
-    "system": "You are robot R4 in the living_room. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessibl",
-    "user": "## TASK:\nA guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nDEADLINE: 15 minutes\n\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I am a mobile robot with light object handling capabilities.\",\n \"can_do\": [\n  \"PickupLightObject: pick up objects under 5 kg\",\n  \"PassReceiveObject: exchange objects with others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"brown sofa (center,",
-    "output": {
-      "reasoning": "a) GOAL STATE: The living room should be inviting with a clear seating area and an item to offer the guest. b) PRIORITY: Ensuring the sofa is clear for seating and having an item ready to offer the guest is most important given the time constraint. c) MY ROOM: I will adjust the sofa area and ensure the coffee table is tidy. d) FOR OTHERS: The red book could be offered to the guest for entertainment.",
+      "reasoning": "a) A welcoming home requires comfortable seating and proper lighting. b) The living room should have an open seating arrangement and adequate lighting. c) I will rearrange the furniture to create a more inviting space and adjust the lighting to enhance the atmosphere. d) R4 is handling small items and can receive refreshments, while R1 and R2 are managing drinks and snacks. e) Therefore, my focus will be on rearranging furniture and adjusting lighting in the living room.",
       "goals": [
         {
-          "goal": "Prepare the living room for a guest with clear seating and an item to offer.",
+          "goal": "create an inviting seating area and adjust lighting",
           "priority": "high",
           "in_my_room": true
         }
       ],
       "checklist": [
         {
-          "object": "blue cushion",
-          "change": "move from brown sofa to white coffee table",
-          "weight": "light",
+          "object": "blue sofa",
+          "change": "push to create open seating area",
+          "weight": "heavy",
           "how": "LOCAL"
         },
         {
-          "object": "gray floor lamp",
-          "change": "turn on",
+          "object": "red armchair",
+          "change": "push closer to coffee table",
+          "weight": "heavy",
+          "how": "LOCAL"
+        },
+        {
+          "object": "white floor lamp",
+          "change": "toggle from off to on",
           "weight": "light",
           "how": "LOCAL"
         }
@@ -280,10 +284,10 @@
         {
           "type": "LOCAL",
           "action": {
-            "verb": "move",
-            "object": "blue cushion",
-            "from": "brown sofa",
-            "to": "white coffee table"
+            "verb": "push",
+            "object": "blue sofa",
+            "from": "center",
+            "to": "against the wall"
           },
           "uses": 0,
           "serves": 1
@@ -291,83 +295,23 @@
         {
           "type": "LOCAL",
           "action": {
-            "verb": "turn_on",
-            "object": "gray floor lamp",
-            "from": "left corner",
+            "verb": "push",
+            "object": "red armchair",
+            "from": "corner",
+            "to": "near brown coffee table"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "toggle",
+            "object": "white floor lamp",
+            "from": "off",
             "to": "on"
           },
           "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "PASS",
-          "item": "red book",
-          "target": "R3",
-          "serves": 1
-        }
-      ]
-    }
-  },
-  {
-    "key": "plan:R1",
-    "system": "You are robot R1 in the kitchen. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nA guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nDEADLINE: 15 minutes\n\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I can move around the kitchen and carry light objects.\",\n \"can_do\": [\n  \"PickupLightObject: pick up objects like mugs and bottles\",\n  \"PassReceiveObject: pass objects to others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"brown loaf (counter,",
-    "output": {
-      "reasoning": "a) The guest should have a comfortable place to sit and something to eat or drink. b) Ensuring the guest has a welcoming environment with seating and refreshments is most important. c) I can move items like the white mug and green bottle to prepare refreshments. d) The white mug and green bottle can be used in the living room for serving drinks.",
-      "goals": [
-        {
-          "goal": "prepare refreshments for the guest",
-          "priority": "high",
-          "in_my_room": true
-        }
-      ],
-      "checklist": [
-        {
-          "object": "white mug",
-          "change": "move to counter",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "green bottle",
-          "change": "move to counter",
-          "weight": "light",
-          "how": "LOCAL"
-        }
-      ],
-      "steps": [
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "move",
-            "object": "white mug",
-            "from": "table",
-            "to": "counter"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "move",
-            "object": "green bottle",
-            "from": "table",
-            "to": "counter"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "PASS",
-          "item": "white mug",
-          "target": "R2",
-          "serves": 1
-        },
-        {
-          "type": "PASS",
-          "item": "green bottle",
-          "target": "R2",
           "serves": 1
         }
       ]
@@ -375,199 +319,10 @@
   },
   {
     "key": "plan:R2",
-    "system": "You are robot R2 in the kitchen. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nA guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nDEADLINE: 15 minutes\n\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am a fixed kitchen robot with a gripper for handling light objects.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items\",\n  \"SliceObject: cut food items\",\n  \"PourObject: serve liquids\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject: turn on/off light",
+    "system": "You are robot R2 in the kitchen. Write YOUR part of the shared plan.\n\nCHAIN-OF-THOUGHT before writing steps:\n1. TASK END STATE: what must be true when done? (same as offer stage)\n2. OTHER ROBOTS: scan",
+    "user": "## TASK:\nA guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nDEADLINE: 15 minutes\n\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am fixed in place and can manipulate objects within my reach.\",\n \"can_do\": [\n  \"PickupLightObject: lift mugs, fruit, small items\",\n  \"SliceObject: cut food items\",\n  \"PourObject: pour drinks\",\n  \"PassReceiveObject: transfer items to/from other robots\"\n ],\n \"has_items\": [\n ",
     "output": {
-      "reasoning": "a) The guest should have a comfortable place to sit and something to eat or drink. b) Preparing a drink is most important given the short time. c) I can prepare a drink using the brown teapot and white cup. d) The white cup and brown teapot can be used in the living room for serving.",
-      "goals": [
-        {
-          "goal": "prepare a drink for the guest",
-          "priority": "high",
-          "in_my_room": true
-        }
-      ],
-      "checklist": [
-        {
-          "object": "brown teapot",
-          "change": "pour tea into white cup",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "white cup",
-          "change": "pass to another robot",
-          "weight": "light",
-          "how": "PASS"
-        }
-      ],
-      "steps": [
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "pick_up",
-            "object": "brown teapot",
-            "from": "counter",
-            "to": "gripper"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "pick_up",
-            "object": "white cup",
-            "from": "counter",
-            "to": "gripper"
-          },
-          "uses": 0,
-          "serves": 2
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "pour",
-            "object": "brown teapot",
-            "from": "gripper",
-            "to": "white cup"
-          },
-          "uses": 1,
-          "serves": 2
-        },
-        {
-          "type": "PASS",
-          "item": "white cup",
-          "target": "R3",
-          "serves": 0
-        }
-      ]
-    }
-  },
-  {
-    "key": "plan:R3",
-    "system": "You are robot R3 in the living_room. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessibl",
-    "user": "## TASK:\nA guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nDEADLINE: 15 minutes\n\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am a mobile robot capable of moving and arranging objects within the living room.\",\n \"can_do\": [\n  \"PickupLightObject: move small items like magazines\",\n  \"PickupHeavyObject: move larger items like the coffee table\",\n  \"PushFurniture: rearrange seating like the sofa\",\n  \"P",
-    "output": {
-      "reasoning": "a) The living room should be ready for a guest with comfortable seating and an inviting atmosphere. b) Ensuring the seating area is clear and inviting is most important given the deadline. c) I will arrange the seating and adjust lighting in the living room. d) The decorative bowl could be used to offer snacks in another room.",
-      "goals": [
-        {
-          "goal": "arrange living room for guest",
-          "priority": "high",
-          "in_my_room": true
-        }
-      ],
-      "checklist": [
-        {
-          "object": "red armchair",
-          "change": "move to face the blue sofa",
-          "weight": "heavy",
-          "how": "LOCAL"
-        },
-        {
-          "object": "floor lamp",
-          "change": "turn on",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "magazine",
-          "change": "place on bookshelf",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "decorative bowl",
-          "change": "pass to another room for snacks",
-          "weight": "light",
-          "how": "PASS"
-        }
-      ],
-      "steps": [
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "push",
-            "object": "red armchair",
-            "from": "left",
-            "to": "facing blue sofa"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "turn_on",
-            "object": "floor lamp",
-            "from": "right",
-            "to": "on"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "pick_up",
-            "object": "magazine",
-            "from": "on coffee table",
-            "to": "bookshelf"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "PASS",
-          "item": "decorative bowl",
-          "target": "R1",
-          "serves": 1
-        }
-      ]
-    }
-  },
-  {
-    "key": "plan:R6",
-    "system": "You are robot R6 in the bathroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, ",
-    "user": "## TASK:\nA guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nDEADLINE: 15 minutes\n\nYOUR OFFER: {\n \"agent\": \"R6\",\n \"capability\": \"I am a mobile robot with light object handling capabilities.\",\n \"can_do\": [\n  \"PickupLightObject: handle small items\",\n  \"PassReceiveObject: transfer items between rooms\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"green soap (on sink, image ",
-    "output": {
-      "reasoning": "a) The guest's visit requires a welcoming environment with comfortable seating and refreshments. b) My role is limited to the bathroom, but I can contribute by providing hygiene items like soap. c) The bathroom should be clean and presentable, but no major changes are needed. d) I can pass soap to another room if needed for guest hygiene.",
-      "goals": [
-        {
-          "goal": "Provide soap for guest hygiene needs.",
-          "priority": "medium",
-          "in_my_room": true
-        }
-      ],
-      "checklist": [
-        {
-          "object": "green soap",
-          "change": "pass to another room",
-          "weight": "light",
-          "how": "PASS"
-        }
-      ],
-      "steps": [
-        {
-          "type": "PASS",
-          "item": "green soap",
-          "target": "R1",
-          "serves": 1
-        },
-        {
-          "type": "PASS",
-          "item": "pink soap",
-          "target": "R1",
-          "serves": 1
-        }
-      ]
-    }
-  },
-  {
-    "key": "plan:R1:fix",
-    "system": "You are robot R1 in the kitchen. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nA guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nDEADLINE: 15 minutes\n\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I can move around the kitchen and carry light objects.\",\n \"can_do\": [\n  \"PickupLightObject: pick up objects like mugs and bottles\",\n  \"PassReceiveObject: pass objects to others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"brown loaf (counter,",
-    "output": {
-      "reasoning": "a) The guest should have a comfortable place to sit and something to eat or drink. b) Ensuring the guest has a welcoming environment with seating and refreshments is most important. c) I can move items like the white mug and green bottle to prepare refreshments. d) The white mug and green bottle can be used in the living room for serving drinks.",
+      "reasoning": "a) The guest needs refreshments, which I can prepare in the kitchen. b) R4 will handle receiving and delivering items to the living room. c) I will focus on preparing coffee and slicing a green apple as refreshments. d) Passing these items to R4 will ensure they reach the guest area in time.",
       "goals": [
         {
           "goal": "prepare refreshments for the guest",
@@ -578,13 +333,13 @@
       "checklist": [
         {
           "object": "white mug",
-          "change": "move to counter",
+          "change": "filled with coffee",
           "weight": "light",
           "how": "LOCAL"
         },
         {
-          "object": "green bottle",
-          "change": "move to counter",
+          "object": "green apple",
+          "change": "sliced",
           "weight": "light",
           "how": "LOCAL"
         }
@@ -593,155 +348,518 @@
         {
           "type": "LOCAL",
           "action": {
-            "verb": "move",
+            "verb": "pick_up",
             "object": "white mug",
-            "from": "table",
-            "to": "counter"
+            "from": "counter",
+            "to": "gripper"
           },
           "uses": 0,
-          "serves": 0
+          "serves": 1
         },
         {
           "type": "LOCAL",
           "action": {
-            "verb": "move",
-            "object": "green bottle",
-            "from": "table",
-            "to": "counter"
+            "verb": "pour",
+            "object": "coffee",
+            "from": "coffee maker",
+            "to": "white mug"
           },
           "uses": 0,
-          "serves": 0
+          "serves": 1
         },
         {
           "type": "PASS",
           "item": "white mug",
-          "target": "R2",
-          "serves": 0
+          "target": "R4",
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "green apple",
+            "from": "counter",
+            "to": "gripper"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "slice",
+            "object": "green apple",
+            "from": "gripper",
+            "to": "plate"
+          },
+          "uses": 0,
+          "serves": 1
         },
         {
           "type": "PASS",
-          "item": "green bottle",
-          "target": "R2",
-          "serves": 0
+          "item": "green apple",
+          "target": "R4",
+          "serves": 1
         }
       ]
     }
   },
   {
-    "key": "plan:R4:fix",
-    "system": "You are robot R4 in the living_room. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessibl",
-    "user": "## TASK:\nA guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nDEADLINE: 15 minutes\n\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I am a mobile robot with light object handling capabilities.\",\n \"can_do\": [\n  \"PickupLightObject: pick up objects under 5 kg\",\n  \"PassReceiveObject: exchange objects with others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"brown sofa (center,",
+    "key": "plan:R1",
+    "system": "You are robot R1 in the kitchen. Write YOUR part of the shared plan.\n\nCHAIN-OF-THOUGHT before writing steps:\n1. TASK END STATE: what must be true when done? (same as offer stage)\n2. OTHER ROBOTS: scan",
+    "user": "## TASK:\nA guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nDEADLINE: 15 minutes\n\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift mugs, fruit, small items\",\n  \"PassReceiveObject: transfer items to/from other robots\",\n  \"ToggleObject: turn on/off kettle, lights, appliances\"\n ],\n \"has_items\": [\n  \"loaf of bread ",
     "output": {
-      "reasoning": "a) GOAL STATE: The living room should be inviting with a clear seating area and an item to offer the guest. b) PRIORITY: Ensuring the sofa is clear for seating and having an item ready to offer the guest is most important given the time constraint. c) MY ROOM: I will adjust the sofa area and ensure the coffee table is tidy. d) FOR OTHERS: The red book could be offered to the guest for entertainment.",
+      "reasoning": "a) The guest will need refreshments, which I can provide by offering wine and bread. b) R4 is responsible for receiving items and taking them to the living room, ensuring the guest can access them. c) My focus is on preparing these items in the kitchen and passing them to R4 for delivery. d) Prioritize picking up and passing the wine bottle, wine glass, and loaf of bread to R4 to ensure the guest has refreshments upon arrival.",
       "goals": [
         {
-          "goal": "Prepare the living room for a guest with clear seating and an item to offer.",
+          "goal": "Prepare refreshments for the guest by providing wine and bread.",
           "priority": "high",
           "in_my_room": true
         }
       ],
       "checklist": [
         {
-          "object": "blue cushion",
-          "change": "move from brown sofa to white coffee table",
+          "object": "wine bottle",
+          "change": "pass to R4",
           "weight": "light",
-          "how": "LOCAL"
+          "how": "PASS"
         },
         {
-          "object": "gray floor lamp",
-          "change": "turn on",
+          "object": "wine glass",
+          "change": "pass to R4",
           "weight": "light",
-          "how": "LOCAL"
-        }
-      ],
-      "steps": [
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "move",
-            "object": "blue cushion",
-            "from": "brown sofa",
-            "to": "white coffee table"
-          },
-          "uses": 0,
-          "serves": 0
+          "how": "PASS"
         },
         {
-          "type": "LOCAL",
-          "action": {
-            "verb": "turn_on",
-            "object": "gray floor lamp",
-            "from": "left corner",
-            "to": "on"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "PASS",
-          "item": "red book",
-          "target": "R3",
-          "serves": 0
-        }
-      ]
-    }
-  },
-  {
-    "key": "plan:R6:fix",
-    "system": "You are robot R6 in the bathroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, ",
-    "user": "## TASK:\nA guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nDEADLINE: 15 minutes\n\nYOUR OFFER: {\n \"agent\": \"R6\",\n \"capability\": \"I am a mobile robot with light object handling capabilities.\",\n \"can_do\": [\n  \"PickupLightObject: handle small items\",\n  \"PassReceiveObject: transfer items between rooms\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"green soap (on sink, image ",
-    "output": {
-      "reasoning": "a) The guest's visit requires a welcoming environment with comfortable seating and refreshments. b) My role is limited to the bathroom, but I can contribute by providing hygiene items like soap. c) The bathroom should be clean and presentable, but no major changes are needed. d) I can pass soap to another room if needed for guest hygiene.",
-      "goals": [
-        {
-          "goal": "Provide soap for guest hygiene needs.",
-          "priority": "medium",
-          "in_my_room": true
-        }
-      ],
-      "checklist": [
-        {
-          "object": "green soap",
-          "change": "pass to another room",
+          "object": "loaf of bread",
+          "change": "pass to R4",
           "weight": "light",
           "how": "PASS"
         }
       ],
       "steps": [
         {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "wine bottle",
+            "from": "table",
+            "to": "gripper"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
           "type": "PASS",
-          "item": "green soap",
+          "item": "wine bottle",
+          "target": "R4",
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "wine glass",
+            "from": "table",
+            "to": "gripper"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "PASS",
+          "item": "wine glass",
+          "target": "R4",
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "loaf of bread",
+            "from": "counter",
+            "to": "gripper"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "PASS",
+          "item": "loaf of bread",
+          "target": "R4",
+          "serves": 1
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R4",
+    "system": "You are robot R4 in the living_room. Write YOUR part of the shared plan.\n\nCHAIN-OF-THOUGHT before writing steps:\n1. TASK END STATE: what must be true when done? (same as offer stage)\n2. OTHER ROBOTS: ",
+    "user": "## TASK:\nA guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nDEADLINE: 15 minutes\n\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift cushions, small items\",\n  \"PassReceiveObject: transfer items to/from other robots\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"blue sofa (center, im",
+    "output": {
+      "reasoning": "a) The living room should be ready for the guest with comfortable seating and a clear coffee table for refreshments. b) R3 is handling the heavy furniture arrangement, so I focus on light objects and table clearing. c) R1 will provide refreshments; I need to receive and place them. d) Ensuring the coffee table is clear and seating is inviting is my priority.",
+      "goals": [
+        {
+          "goal": "Prepare living room for guest by arranging seating and clearing table.",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "blue book",
+          "change": "move to side table",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "glass vase",
+          "change": "move to side table",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "red cushion",
+          "change": "arrange on blue sofa",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "wine bottle",
+          "change": "place on coffee table",
+          "weight": "light",
+          "how": "RECEIVE"
+        },
+        {
+          "object": "wine glass",
+          "change": "place on coffee table",
+          "weight": "light",
+          "how": "RECEIVE"
+        },
+        {
+          "object": "loaf of bread",
+          "change": "place on coffee table",
+          "weight": "light",
+          "how": "RECEIVE"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "blue book",
+            "from": "coffee table",
+            "to": "gripper"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "blue book",
+            "from": "gripper",
+            "to": "side table"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "glass vase",
+            "from": "coffee table",
+            "to": "gripper"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "glass vase",
+            "from": "gripper",
+            "to": "side table"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "red cushion",
+            "from": "sofa",
+            "to": "gripper"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "red cushion",
+            "from": "gripper",
+            "to": "sofa"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "RECEIVE",
+          "item": "wine bottle",
           "target": "R1",
+          "serves": 1
+        },
+        {
+          "type": "RECEIVE",
+          "item": "wine glass",
+          "target": "R1",
+          "serves": 1
+        },
+        {
+          "type": "RECEIVE",
+          "item": "loaf of bread",
+          "target": "R1",
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "wine bottle",
+            "from": "gripper",
+            "to": "coffee table"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "wine glass",
+            "from": "gripper",
+            "to": "coffee table"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "loaf of bread",
+            "from": "gripper",
+            "to": "coffee table"
+          },
+          "uses": 0,
+          "serves": 1
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R3:fix",
+    "system": "You are robot R3 in the living_room. Write YOUR part of the shared plan.\n\nCHAIN-OF-THOUGHT before writing steps:\n1. TASK END STATE: what must be true when done? (same as offer stage)\n2. OTHER ROBOTS: ",
+    "user": "## TASK:\nA guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nDEADLINE: 15 minutes\n\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I can move within the living room and handle heavy furniture.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items like lamps or cushions\",\n  \"PickupHeavyObject: move furniture like sofas and tables\",\n  \"PushFurniture: rearrange furniture for optimal seating\",\n  \"PassReceiv",
+    "output": {
+      "reasoning": "a) A welcoming home requires comfortable seating and proper lighting. b) The living room should have an open seating arrangement and adequate lighting. c) I will rearrange the furniture to create a more inviting space and adjust the lighting to enhance the atmosphere. d) R4 is handling small items and can receive refreshments, while R1 and R2 are managing drinks and snacks. e) Therefore, my focus will be on rearranging furniture and adjusting lighting in the living room.",
+      "goals": [
+        {
+          "goal": "create an inviting seating area and adjust lighting",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "blue sofa",
+          "change": "push to create open seating area",
+          "weight": "heavy",
+          "how": "LOCAL"
+        },
+        {
+          "object": "red armchair",
+          "change": "push closer to coffee table",
+          "weight": "heavy",
+          "how": "LOCAL"
+        },
+        {
+          "object": "white floor lamp",
+          "change": "toggle from off to on",
+          "weight": "light",
+          "how": "LOCAL"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "push",
+            "object": "blue sofa",
+            "from": "center",
+            "to": "against the wall"
+          },
+          "uses": 0,
           "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "push",
+            "object": "red armchair",
+            "from": "corner",
+            "to": "near brown coffee table"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "toggle",
+            "object": "white floor lamp",
+            "from": "off",
+            "to": "on"
+          },
+          "uses": 0,
+          "serves": 0
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R6",
+    "system": "You are robot R6 in the bathroom. Write YOUR part of the shared plan.\n\nCHAIN-OF-THOUGHT before writing steps:\n1. TASK END STATE: what must be true when done? (same as offer stage)\n2. OTHER ROBOTS: sca",
+    "user": "## TASK:\nA guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nDEADLINE: 15 minutes\n\nYOUR OFFER: {\n \"agent\": \"R6\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items like towels\",\n  \"PassReceiveObject: transfer items to/from other robots\",\n  \"ToggleObject: turn on/off lights, appliances\"\n ],\n \"has_items\": [\n  \"green soap (counter, im",
+    "output": {
+      "reasoning": "a) The house needs to be welcoming with comfortable seating and refreshments. b) The bathroom should be clean and have fresh towels for guest use. c) I will focus on ensuring the bathroom is prepared with a clean towel and tidy appearance. d) I will pass the red towel to another room for guest use, as it can enhance the welcoming atmosphere.",
+      "goals": [
+        {
+          "goal": "Prepare the bathroom for guest use by ensuring it is tidy and has a fresh towel available.",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "red towel",
+          "change": "pass to another room for guest use",
+          "weight": "light",
+          "how": "PASS"
+        },
+        {
+          "object": "green soap",
+          "change": "move to cabinet for tidiness",
+          "weight": "light",
+          "how": "LOCAL"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "red towel",
+            "from": "counter",
+            "to": "gripper"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "PASS",
+          "item": "red towel",
+          "target": "R4",
+          "serves": 1
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "green soap",
+            "from": "counter",
+            "to": "cabinet"
+          },
+          "uses": 0,
+          "serves": 1
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R5",
+    "system": "You are robot R5 in the bedroom. Write YOUR part of the shared plan.\n\nCHAIN-OF-THOUGHT before writing steps:\n1. TASK END STATE: what must be true when done? (same as offer stage)\n2. OTHER ROBOTS: scan",
+    "user": "## TASK:\nA guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nDEADLINE: 15 minutes\n\nYOUR OFFER: {\n \"agent\": \"R5\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items like the teddy bear\",\n  \"PassReceiveObject: transfer items to/from other robots\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"gray laptop",
+    "output": {
+      "reasoning": "a) The guest needs a comfortable and welcoming environment, which includes a decorated seating area. b) The brown teddy bear can add a comforting touch to the living room seating. c) R4 is responsible for arranging items in the living room and can place the teddy bear appropriately. d) I'll pick up the teddy bear and pass it to R4 for placement in the living room. e) Tidying the bedroom will ensure it's presentable, should the guest visit this room.",
+      "goals": [
+        {
+          "goal": "pass brown teddy bear to R4 for living room decor",
+          "priority": "high",
+          "in_my_room": false
+        }
+      ],
+      "checklist": [
+        {
+          "object": "brown teddy bear",
+          "change": "pass to R4",
+          "weight": "light",
+          "how": "PASS"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "brown teddy bear",
+            "from": "floor",
+            "to": "gripper"
+          },
+          "uses": 0,
+          "serves": 1
+        },
+        {
+          "type": "PASS",
+          "item": "brown teddy bear",
+          "target": "R4",
+          "serves": 1
         }
       ]
     }
   },
   {
     "key": "plan:R2:fix",
-    "system": "You are robot R2 in the kitchen. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nA guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nDEADLINE: 15 minutes\n\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am a fixed kitchen robot with a gripper for handling light objects.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items\",\n  \"SliceObject: cut food items\",\n  \"PourObject: serve liquids\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject: turn on/off light",
+    "system": "You are robot R2 in the kitchen. Write YOUR part of the shared plan.\n\nCHAIN-OF-THOUGHT before writing steps:\n1. TASK END STATE: what must be true when done? (same as offer stage)\n2. OTHER ROBOTS: scan",
+    "user": "## TASK:\nA guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nDEADLINE: 15 minutes\n\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am fixed in place and can manipulate objects within my reach.\",\n \"can_do\": [\n  \"PickupLightObject: lift mugs, fruit, small items\",\n  \"SliceObject: cut food items\",\n  \"PourObject: pour drinks\",\n  \"PassReceiveObject: transfer items to/from other robots\"\n ],\n \"has_items\": [\n ",
     "output": {
-      "reasoning": "a) The guest should have a comfortable place to sit and something to eat or drink. b) Preparing a drink is most important given the short time. c) I can prepare a drink using the brown teapot and white cup. d) The white cup and brown teapot can be used in the living room for serving.",
+      "reasoning": "a) The guest needs refreshments, which I can prepare in the kitchen. b) R4 will handle receiving and delivering items to the living room. c) I will focus on preparing coffee and slicing a green apple as refreshments. d) Passing these items to R4 will ensure they reach the guest area in time.",
       "goals": [
         {
-          "goal": "prepare a drink for the guest",
+          "goal": "prepare refreshments for the guest",
           "priority": "high",
           "in_my_room": true
         }
       ],
       "checklist": [
         {
-          "object": "brown teapot",
-          "change": "pour tea into white cup",
+          "object": "white mug",
+          "change": "filled with coffee",
           "weight": "light",
           "how": "LOCAL"
         },
         {
-          "object": "white cup",
-          "change": "pass to another robot",
+          "object": "green apple",
+          "change": "sliced",
           "weight": "light",
-          "how": "PASS"
+          "how": "LOCAL"
         }
       ],
       "steps": [
@@ -749,18 +867,7 @@
           "type": "LOCAL",
           "action": {
             "verb": "pick_up",
-            "object": "brown teapot",
-            "from": "counter",
-            "to": "gripper"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "pick_up",
-            "object": "white cup",
+            "object": "white mug",
             "from": "counter",
             "to": "gripper"
           },
@@ -771,57 +878,79 @@
           "type": "LOCAL",
           "action": {
             "verb": "pour",
-            "object": "brown teapot",
-            "from": "gripper",
-            "to": "white cup"
+            "object": "coffee",
+            "from": "coffee maker",
+            "to": "white mug"
           },
           "uses": 0,
           "serves": 0
         },
         {
           "type": "PASS",
-          "item": "white cup",
-          "target": "R3",
+          "item": "white mug",
+          "target": "R4",
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "green apple",
+            "from": "counter",
+            "to": "gripper"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "slice",
+            "object": "green apple",
+            "from": "gripper",
+            "to": "plate"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "PASS",
+          "item": "green apple",
+          "target": "R4",
           "serves": 0
         }
       ]
     }
   },
   {
-    "key": "plan:R3:fix",
-    "system": "You are robot R3 in the living_room. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessibl",
-    "user": "## TASK:\nA guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nDEADLINE: 15 minutes\n\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am a mobile robot capable of moving and arranging objects within the living room.\",\n \"can_do\": [\n  \"PickupLightObject: move small items like magazines\",\n  \"PickupHeavyObject: move larger items like the coffee table\",\n  \"PushFurniture: rearrange seating like the sofa\",\n  \"P",
+    "key": "plan:R1:fix",
+    "system": "You are robot R1 in the kitchen. Write YOUR part of the shared plan.\n\nCHAIN-OF-THOUGHT before writing steps:\n1. TASK END STATE: what must be true when done? (same as offer stage)\n2. OTHER ROBOTS: scan",
+    "user": "## TASK:\nA guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nDEADLINE: 15 minutes\n\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift mugs, fruit, small items\",\n  \"PassReceiveObject: transfer items to/from other robots\",\n  \"ToggleObject: turn on/off kettle, lights, appliances\"\n ],\n \"has_items\": [\n  \"loaf of bread ",
     "output": {
-      "reasoning": "a) The living room should be ready for a guest with comfortable seating and an inviting atmosphere. b) Ensuring the seating area is clear and inviting is most important given the deadline. c) I will arrange the seating and adjust lighting in the living room. d) The decorative bowl could be used to offer snacks in another room.",
+      "reasoning": "a) The guest will need refreshments, which I can provide by offering wine and bread. b) R4 is responsible for receiving items and taking them to the living room, ensuring the guest can access them. c) My focus is on preparing these items in the kitchen and passing them to R4 for delivery. d) Prioritize picking up and passing the wine bottle, wine glass, and loaf of bread to R4 to ensure the guest has refreshments upon arrival.",
       "goals": [
         {
-          "goal": "arrange living room for guest",
+          "goal": "Prepare refreshments for the guest by providing wine and bread.",
           "priority": "high",
           "in_my_room": true
         }
       ],
       "checklist": [
         {
-          "object": "red armchair",
-          "change": "move to face the blue sofa",
-          "weight": "heavy",
-          "how": "LOCAL"
-        },
-        {
-          "object": "floor lamp",
-          "change": "turn on",
+          "object": "wine bottle",
+          "change": "pass to R4",
           "weight": "light",
-          "how": "LOCAL"
+          "how": "PASS"
         },
         {
-          "object": "magazine",
-          "change": "place on bookshelf",
+          "object": "wine glass",
+          "change": "pass to R4",
           "weight": "light",
-          "how": "LOCAL"
+          "how": "PASS"
         },
         {
-          "object": "decorative bowl",
-          "change": "pass to another room for snacks",
+          "object": "loaf of bread",
+          "change": "pass to R4",
           "weight": "light",
           "how": "PASS"
         }
@@ -830,40 +959,52 @@
         {
           "type": "LOCAL",
           "action": {
-            "verb": "push",
-            "object": "red armchair",
-            "from": "left",
-            "to": "facing blue sofa"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "turn_on",
-            "object": "floor lamp",
-            "from": "right",
-            "to": "on"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
             "verb": "pick_up",
-            "object": "magazine",
-            "from": "on coffee table",
-            "to": "bookshelf"
+            "object": "wine bottle",
+            "from": "table",
+            "to": "gripper"
           },
           "uses": 0,
           "serves": 0
         },
         {
           "type": "PASS",
-          "item": "decorative bowl",
-          "target": "R1",
+          "item": "wine bottle",
+          "target": "R4",
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "wine glass",
+            "from": "table",
+            "to": "gripper"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "PASS",
+          "item": "wine glass",
+          "target": "R4",
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "loaf of bread",
+            "from": "counter",
+            "to": "gripper"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "PASS",
+          "item": "loaf of bread",
+          "target": "R4",
           "serves": 0
         }
       ]
@@ -871,147 +1012,122 @@
   },
   {
     "key": "plan:R6:fix",
-    "system": "You are robot R6 in the bathroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, ",
-    "user": "## TASK:\nA guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nDEADLINE: 15 minutes\n\nYOUR OFFER: {\n \"agent\": \"R6\",\n \"capability\": \"I am a mobile robot with light object handling capabilities.\",\n \"can_do\": [\n  \"PickupLightObject: handle small items\",\n  \"PassReceiveObject: transfer items between rooms\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"green soap (on sink, image ",
+    "system": "You are robot R6 in the bathroom. Write YOUR part of the shared plan.\n\nCHAIN-OF-THOUGHT before writing steps:\n1. TASK END STATE: what must be true when done? (same as offer stage)\n2. OTHER ROBOTS: sca",
+    "user": "## TASK:\nA guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nDEADLINE: 15 minutes\n\nYOUR OFFER: {\n \"agent\": \"R6\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items like towels\",\n  \"PassReceiveObject: transfer items to/from other robots\",\n  \"ToggleObject: turn on/off lights, appliances\"\n ],\n \"has_items\": [\n  \"green soap (counter, im",
     "output": {
-      "reasoning": "a) The guest's visit requires a welcoming environment with comfortable seating and refreshments. b) My role is limited to the bathroom, but I can contribute by providing hygiene items like soap. c) The bathroom should be clean and presentable, but no major changes are needed. d) I can pass soap to another room if needed for guest hygiene.",
+      "reasoning": "a) The house needs to be welcoming with comfortable seating and refreshments. b) The bathroom should be clean and have fresh towels for guest use. c) I will focus on ensuring the bathroom is prepared with a clean towel and tidy appearance. d) I will pass the red towel to another room for guest use, as it can enhance the welcoming atmosphere.",
       "goals": [
         {
-          "goal": "Provide soap for guest hygiene needs.",
-          "priority": "medium",
-          "in_my_room": true
-        }
-      ],
-      "checklist": [
-        {
-          "object": "green soap",
-          "change": "pass to another room",
-          "weight": "light",
-          "how": "PASS"
-        }
-      ],
-      "steps": [
-        {
-          "type": "PASS",
-          "item": "green soap",
-          "target": "R1",
-          "serves": 0
-        },
-        {
-          "type": "PASS",
-          "item": "pink soap",
-          "target": "R1",
-          "serves": 0
-        }
-      ]
-    }
-  },
-  {
-    "key": "plan:R5",
-    "system": "You are robot R5 in the bedroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nA guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nDEADLINE: 15 minutes\n\nYOUR OFFER: {\n \"agent\": \"R5\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: pick up objects up to 5 kg\",\n  \"PassReceiveObject: pass or receive objects\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"brown teddy bear (floor, image 1)",
-    "output": {
-      "reasoning": "a) The guest should have a comfortable place to sit and something to offer. b) Preparing the seating area and offering items is most important. c) I can adjust lighting and clear space for seating. d) I can suggest items like the teddy bear for comfort in another room.",
-      "goals": [
-        {
-          "goal": "adjust lighting and clear space in the bedroom",
-          "priority": "medium",
-          "in_my_room": true
-        }
-      ],
-      "checklist": [
-        {
-          "object": "white cube",
-          "change": "move from floor to bed",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "lamp",
-          "change": "turn on",
-          "weight": "light",
-          "how": "LOCAL"
-        }
-      ],
-      "steps": [
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "move",
-            "object": "white cube",
-            "from": "floor",
-            "to": "bed"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "turn_on",
-            "object": "lamp",
-            "from": "nightstand",
-            "to": "on"
-          },
-          "uses": 0,
-          "serves": 1
-        },
-        {
-          "type": "PASS",
-          "item": "brown teddy bear",
-          "target": "R3",
-          "serves": 1
-        }
-      ]
-    }
-  },
-  {
-    "key": "plan:R3:fix",
-    "system": "You are robot R3 in the living_room. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessibl",
-    "user": "## TASK:\nA guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nDEADLINE: 15 minutes\n\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am a mobile robot capable of moving and arranging objects within the living room.\",\n \"can_do\": [\n  \"PickupLightObject: move small items like magazines\",\n  \"PickupHeavyObject: move larger items like the coffee table\",\n  \"PushFurniture: rearrange seating like the sofa\",\n  \"P",
-    "output": {
-      "reasoning": "a) The living room should be ready for a guest with comfortable seating and an inviting atmosphere. b) Ensuring the seating area is clear and inviting is most important given the deadline. c) I will arrange the seating and adjust lighting in the living room. d) The decorative bowl could be used to offer snacks in another room.",
-      "goals": [
-        {
-          "goal": "arrange living room for guest",
+          "goal": "Prepare the bathroom for guest use by ensuring it is tidy and has a fresh towel available.",
           "priority": "high",
           "in_my_room": true
         }
       ],
       "checklist": [
         {
-          "object": "red armchair",
-          "change": "move to face the blue sofa",
-          "weight": "heavy",
-          "how": "LOCAL"
-        },
-        {
-          "object": "floor lamp",
-          "change": "turn on",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "magazine",
-          "change": "place on bookshelf",
-          "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "decorative bowl",
-          "change": "pass to another room for snacks",
+          "object": "red towel",
+          "change": "pass to another room for guest use",
           "weight": "light",
           "how": "PASS"
+        },
+        {
+          "object": "green soap",
+          "change": "move to cabinet for tidiness",
+          "weight": "light",
+          "how": "LOCAL"
         }
       ],
       "steps": [
         {
           "type": "LOCAL",
           "action": {
-            "verb": "push",
-            "object": "red armchair",
-            "from": "left",
-            "to": "facing blue sofa"
+            "verb": "pick_up",
+            "object": "red towel",
+            "from": "counter",
+            "to": "gripper"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "PASS",
+          "item": "red towel",
+          "target": "R4",
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "green soap",
+            "from": "counter",
+            "to": "cabinet"
+          },
+          "uses": 0,
+          "serves": 0
+        }
+      ]
+    }
+  },
+  {
+    "key": "plan:R4:fix",
+    "system": "You are robot R4 in the living_room. Write YOUR part of the shared plan.\n\nCHAIN-OF-THOUGHT before writing steps:\n1. TASK END STATE: what must be true when done? (same as offer stage)\n2. OTHER ROBOTS: ",
+    "user": "## TASK:\nA guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nDEADLINE: 15 minutes\n\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift cushions, small items\",\n  \"PassReceiveObject: transfer items to/from other robots\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"blue sofa (center, im",
+    "output": {
+      "reasoning": "a) The living room should be ready for the guest with comfortable seating and a clear coffee table for refreshments. b) R3 is handling the heavy furniture arrangement, so I focus on light objects and table clearing. c) R1 will provide refreshments; I need to receive and place them. d) Ensuring the coffee table is clear and seating is inviting is my priority.",
+      "goals": [
+        {
+          "goal": "Prepare living room for guest by arranging seating and clearing table.",
+          "priority": "high",
+          "in_my_room": true
+        }
+      ],
+      "checklist": [
+        {
+          "object": "blue book",
+          "change": "move to side table",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "glass vase",
+          "change": "move to side table",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "red cushion",
+          "change": "arrange on blue sofa",
+          "weight": "light",
+          "how": "LOCAL"
+        },
+        {
+          "object": "wine bottle",
+          "change": "place on coffee table",
+          "weight": "light",
+          "how": "RECEIVE"
+        },
+        {
+          "object": "wine glass",
+          "change": "place on coffee table",
+          "weight": "light",
+          "how": "RECEIVE"
+        },
+        {
+          "object": "loaf of bread",
+          "change": "place on coffee table",
+          "weight": "light",
+          "how": "RECEIVE"
+        }
+      ],
+      "steps": [
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "blue book",
+            "from": "coffee table",
+            "to": "gripper"
           },
           "uses": 0,
           "serves": 0
@@ -1019,10 +1135,10 @@
         {
           "type": "LOCAL",
           "action": {
-            "verb": "turn_on",
-            "object": "floor lamp",
-            "from": "right",
-            "to": "on"
+            "verb": "put_down",
+            "object": "blue book",
+            "from": "gripper",
+            "to": "side table"
           },
           "uses": 0,
           "serves": 0
@@ -1031,17 +1147,95 @@
           "type": "LOCAL",
           "action": {
             "verb": "pick_up",
-            "object": "magazine",
-            "from": "on coffee table",
-            "to": "bookshelf"
+            "object": "glass vase",
+            "from": "coffee table",
+            "to": "gripper"
           },
           "uses": 0,
           "serves": 0
         },
         {
-          "type": "PASS",
-          "item": "decorative bowl",
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "glass vase",
+            "from": "gripper",
+            "to": "side table"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "red cushion",
+            "from": "sofa",
+            "to": "gripper"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "red cushion",
+            "from": "gripper",
+            "to": "sofa"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "RECEIVE",
+          "item": "wine bottle",
           "target": "R1",
+          "serves": 0
+        },
+        {
+          "type": "RECEIVE",
+          "item": "wine glass",
+          "target": "R1",
+          "serves": 0
+        },
+        {
+          "type": "RECEIVE",
+          "item": "loaf of bread",
+          "target": "R1",
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "wine bottle",
+            "from": "gripper",
+            "to": "coffee table"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "wine glass",
+            "from": "gripper",
+            "to": "coffee table"
+          },
+          "uses": 0,
+          "serves": 0
+        },
+        {
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "loaf of bread",
+            "from": "gripper",
+            "to": "coffee table"
+          },
+          "uses": 0,
           "serves": 0
         }
       ]
@@ -1049,50 +1243,33 @@
   },
   {
     "key": "plan:R5:fix",
-    "system": "You are robot R5 in the bedroom. Write YOUR part of the shared plan.\n\n━━━ CRITICAL RULES (violation = plan rejected) ━━━\n1. BANNED WORDS: out of sight, dim, optimal, appropriate, nearby, accessible, s",
-    "user": "## TASK:\nA guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nDEADLINE: 15 minutes\n\nYOUR OFFER: {\n \"agent\": \"R5\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: pick up objects up to 5 kg\",\n  \"PassReceiveObject: pass or receive objects\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"brown teddy bear (floor, image 1)",
+    "system": "You are robot R5 in the bedroom. Write YOUR part of the shared plan.\n\nCHAIN-OF-THOUGHT before writing steps:\n1. TASK END STATE: what must be true when done? (same as offer stage)\n2. OTHER ROBOTS: scan",
+    "user": "## TASK:\nA guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nDEADLINE: 15 minutes\n\nYOUR OFFER: {\n \"agent\": \"R5\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items like the teddy bear\",\n  \"PassReceiveObject: transfer items to/from other robots\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"gray laptop",
     "output": {
-      "reasoning": "a) The guest should have a comfortable place to sit and something to offer. b) Preparing the seating area and offering items is most important. c) I can adjust lighting and clear space for seating. d) I can suggest items like the teddy bear for comfort in another room.",
+      "reasoning": "a) The guest needs a comfortable and welcoming environment, which includes a decorated seating area. b) The brown teddy bear can add a comforting touch to the living room seating. c) R4 is responsible for arranging items in the living room and can place the teddy bear appropriately. d) I'll pick up the teddy bear and pass it to R4 for placement in the living room. e) Tidying the bedroom will ensure it's presentable, should the guest visit this room.",
       "goals": [
         {
-          "goal": "adjust lighting and clear space in the bedroom",
-          "priority": "medium",
-          "in_my_room": true
+          "goal": "pass brown teddy bear to R4 for living room decor",
+          "priority": "high",
+          "in_my_room": false
         }
       ],
       "checklist": [
         {
-          "object": "white cube",
-          "change": "move from floor to bed",
+          "object": "brown teddy bear",
+          "change": "pass to R4",
           "weight": "light",
-          "how": "LOCAL"
-        },
-        {
-          "object": "lamp",
-          "change": "turn on",
-          "weight": "light",
-          "how": "LOCAL"
+          "how": "PASS"
         }
       ],
       "steps": [
         {
           "type": "LOCAL",
           "action": {
-            "verb": "move",
-            "object": "white cube",
+            "verb": "pick_up",
+            "object": "brown teddy bear",
             "from": "floor",
-            "to": "bed"
-          },
-          "uses": 0,
-          "serves": 0
-        },
-        {
-          "type": "LOCAL",
-          "action": {
-            "verb": "turn_on",
-            "object": "lamp",
-            "from": "nightstand",
-            "to": "on"
+            "to": "gripper"
           },
           "uses": 0,
           "serves": 0
@@ -1100,7 +1277,7 @@
         {
           "type": "PASS",
           "item": "brown teddy bear",
-          "target": "R3",
+          "target": "R4",
           "serves": 0
         }
       ]
@@ -1108,73 +1285,171 @@
   },
   {
     "key": "propose:R2",
-    "system": "You are robot R2. Judge other robots' requests and offers.\n\nFIRST: check your own plan. If you already do what an ASK_HELP asks → \"already_doing\" + covered_by.\nDUPLICATE REQUESTS: if you're already se",
-    "user": "TASK: A guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am a fixed kitchen robot with a gripper for handling light objects.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items\",\n  \"SliceObject: cut food items\",\n  \"PourObject: serve liquids\",\n  \"PassReceiveObject: exchange items with others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"",
+    "system": "You are robot R2. Judge other robots' requests and offers.\n\nCHAIN-OF-THOUGHT before deciding:\n1. TASK NEED: does this offer/request actually serve the task end goal?\n2. MY PLAN: do I already cover thi",
+    "user": "TASK: A guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nYOUR OFFER: {\n \"agent\": \"R2\",\n \"capability\": \"I am fixed in place and can manipulate objects within my reach.\",\n \"can_do\": [\n  \"PickupLightObject: lift mugs, fruit, small items\",\n  \"SliceObject: cut food items\",\n  \"PourObject: pour drinks\",\n  \"PassReceiveObject: transfer items to/from other robots\"\n ],\n \"has_items\": [\n  \"silver kettle (counter,",
     "output": {
-      "offers": [
+      "offers": [],
+      "judgments": [
         {
-          "offer": "r1_s3",
-          "decision": "receive",
-          "action": "pass white mug (table, image 2) to R2",
-          "uses": 0,
-          "insert_after": "r2_s4"
+          "request": "r4_s7",
+          "decision": "ignore",
+          "reason": "R4 is requesting items from R1, which is not within my capability or scope to provide."
         },
         {
-          "offer": "r1_s4",
-          "decision": "decline",
-          "reason": "not needed for current plan"
+          "request": "r4_s8",
+          "decision": "ignore",
+          "reason": "R4 is requesting items from R1, which is not within my capability or scope to provide."
+        },
+        {
+          "request": "r4_s9",
+          "decision": "ignore",
+          "reason": "R4 is requesting items from R1, which is not within my capability or scope to provide."
         }
-      ],
-      "judgments": []
-    }
-  },
-  {
-    "key": "propose:R1",
-    "system": "You are robot R1. Judge other robots' requests and offers.\n\nFIRST: check your own plan. If you already do what an ASK_HELP asks → \"already_doing\" + covered_by.\nDUPLICATE REQUESTS: if you're already se",
-    "user": "TASK: A guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I can move around the kitchen and carry light objects.\",\n \"can_do\": [\n  \"PickupLightObject: pick up objects like mugs and bottles\",\n  \"PassReceiveObject: pass objects to others\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"brown loaf (counter, image 1)\",\n  \"silver spo",
-    "output": {
-      "offers": [
-        {
-          "offer": "r3_s4",
-          "decision": "decline",
-          "reason": "The decorative bowl is not needed for my current tasks, which focus on preparing drinks."
-        },
-        {
-          "offer": "r6_s1",
-          "decision": "decline",
-          "reason": "Soap is not needed for my current tasks, which focus on preparing drinks."
-        },
-        {
-          "offer": "r6_s2",
-          "decision": "decline",
-          "reason": "Soap is not needed for my current tasks, which focus on preparing drinks."
-        }
-      ],
-      "judgments": []
+      ]
     }
   },
   {
     "key": "propose:R3",
-    "system": "You are robot R3. Judge other robots' requests and offers.\n\nFIRST: check your own plan. If you already do what an ASK_HELP asks → \"already_doing\" + covered_by.\nDUPLICATE REQUESTS: if you're already se",
-    "user": "TASK: A guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I am a mobile robot capable of moving and arranging objects within the living room.\",\n \"can_do\": [\n  \"PickupLightObject: move small items like magazines\",\n  \"PickupHeavyObject: move larger items like the coffee table\",\n  \"PushFurniture: rearrange seating like the sofa\",\n  \"PassReceiveObject: hand ov",
+    "system": "You are robot R3. Judge other robots' requests and offers.\n\nCHAIN-OF-THOUGHT before deciding:\n1. TASK NEED: does this offer/request actually serve the task end goal?\n2. MY PLAN: do I already cover thi",
+    "user": "TASK: A guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nYOUR OFFER: {\n \"agent\": \"R3\",\n \"capability\": \"I can move within the living room and handle heavy furniture.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items like lamps or cushions\",\n  \"PickupHeavyObject: move furniture like sofas and tables\",\n  \"PushFurniture: rearrange furniture for optimal seating\",\n  \"PassReceiveObject: transfer items t",
+    "output": {
+      "offers": [],
+      "judgments": [
+        {
+          "request": "r4_s7",
+          "decision": "ignore",
+          "reason": "R4's request is directed at R1, and I have no involvement or capability to assist with wine bottle transfer."
+        },
+        {
+          "request": "r4_s8",
+          "decision": "ignore",
+          "reason": "R4's request is directed at R1, and I have no involvement or capability to assist with wine glass transfer."
+        },
+        {
+          "request": "r4_s9",
+          "decision": "ignore",
+          "reason": "R4's request is directed at R1, and I have no involvement or capability to assist with loaf of bread transfer."
+        }
+      ]
+    }
+  },
+  {
+    "key": "propose:R1",
+    "system": "You are robot R1. Judge other robots' requests and offers.\n\nCHAIN-OF-THOUGHT before deciding:\n1. TASK NEED: does this offer/request actually serve the task end goal?\n2. MY PLAN: do I already cover thi",
+    "user": "TASK: A guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nYOUR OFFER: {\n \"agent\": \"R1\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift mugs, fruit, small items\",\n  \"PassReceiveObject: transfer items to/from other robots\",\n  \"ToggleObject: turn on/off kettle, lights, appliances\"\n ],\n \"has_items\": [\n  \"loaf of bread (counter, image 1)\",\n  \"w",
+    "output": {
+      "offers": [],
+      "judgments": [
+        {
+          "request": "r4_s7",
+          "decision": "accept",
+          "reason": "R1 is already planning to pass the wine bottle to R4. This aligns with the task goal of providing refreshments for the guest.",
+          "action": "pass wine bottle to R4",
+          "uses": 1,
+          "insert_after": "r1_s1"
+        },
+        {
+          "request": "r4_s8",
+          "decision": "accept",
+          "reason": "R1 is already planning to pass the wine glass to R4. This aligns with the task goal of providing refreshments for the guest.",
+          "action": "pass wine glass to R4",
+          "uses": 1,
+          "insert_after": "r1_s3"
+        },
+        {
+          "request": "r4_s9",
+          "decision": "accept",
+          "reason": "R1 is already planning to pass the loaf of bread to R4. This aligns with the task goal of providing refreshments for the guest.",
+          "action": "pass loaf of bread to R4",
+          "uses": 1,
+          "insert_after": "r1_s5"
+        }
+      ]
+    }
+  },
+  {
+    "key": "propose:R5",
+    "system": "You are robot R5. Judge other robots' requests and offers.\n\nCHAIN-OF-THOUGHT before deciding:\n1. TASK NEED: does this offer/request actually serve the task end goal?\n2. MY PLAN: do I already cover thi",
+    "user": "TASK: A guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nYOUR OFFER: {\n \"agent\": \"R5\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items like the teddy bear\",\n  \"PassReceiveObject: transfer items to/from other robots\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"gray laptop (dresser, image 1)\",\n  \"",
+    "output": {
+      "offers": [],
+      "judgments": []
+    }
+  },
+  {
+    "key": "propose:R6",
+    "system": "You are robot R6. Judge other robots' requests and offers.\n\nCHAIN-OF-THOUGHT before deciding:\n1. TASK NEED: does this offer/request actually serve the task end goal?\n2. MY PLAN: do I already cover thi",
+    "user": "TASK: A guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nYOUR OFFER: {\n \"agent\": \"R6\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift small items like towels\",\n  \"PassReceiveObject: transfer items to/from other robots\",\n  \"ToggleObject: turn on/off lights, appliances\"\n ],\n \"has_items\": [\n  \"green soap (counter, image 1)\",\n  \"red towel (co",
+    "output": {
+      "offers": [],
+      "judgments": [
+        {
+          "request": "r4_s7",
+          "decision": "ignore",
+          "reason": "R4's request to receive a wine bottle from R1 does not involve me directly and does not conflict with my current plan."
+        },
+        {
+          "request": "r4_s8",
+          "decision": "ignore",
+          "reason": "R4's request to receive a wine glass from R1 does not involve me directly and does not conflict with my current plan."
+        },
+        {
+          "request": "r4_s9",
+          "decision": "ignore",
+          "reason": "R4's request to receive a loaf of bread from R1 does not involve me directly and does not conflict with my current plan."
+        }
+      ]
+    }
+  },
+  {
+    "key": "propose:R4",
+    "system": "You are robot R4. Judge other robots' requests and offers.\n\nCHAIN-OF-THOUGHT before deciding:\n1. TASK NEED: does this offer/request actually serve the task end goal?\n2. MY PLAN: do I already cover thi",
+    "user": "TASK: A guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nYOUR OFFER: {\n \"agent\": \"R4\",\n \"capability\": \"I am mobile and can carry light objects up to 5 kg.\",\n \"can_do\": [\n  \"PickupLightObject: lift cushions, small items\",\n  \"PassReceiveObject: transfer items to/from other robots\",\n  \"ToggleObject: turn on/off lights, TV, appliances\"\n ],\n \"has_items\": [\n  \"blue sofa (center, image 1)\",\n  \"wooden coffee",
     "output": {
       "offers": [
         {
-          "offer": "r2_s4",
+          "offer": "r1_s2",
           "decision": "receive",
-          "action": "pass white cup (counter, image 1) to R3",
-          "uses": 0,
-          "insert_after": "r3_s4"
+          "action": "receive wine bottle from R1",
+          "uses": 1,
+          "insert_after": "r4_s6",
+          "reason": "Wine is a suitable refreshment for the guest. I will place it on the coffee table."
         },
         {
-          "offer": "r4_s3",
-          "decision": "decline",
-          "reason": "The red book is not needed for preparing the living room for a guest."
+          "offer": "r1_s4",
+          "decision": "receive",
+          "action": "receive wine glass from R1",
+          "uses": 1,
+          "insert_after": "r4_receive_wine_bottle",
+          "reason": "Wine glass complements the wine for the guest. I will place it on the coffee table."
         },
         {
-          "offer": "r5_s3",
-          "decision": "decline",
-          "reason": "The brown teddy bear is not relevant to the task of preparing the living room for a guest."
+          "offer": "r1_s6",
+          "decision": "receive",
+          "action": "receive loaf of bread from R1",
+          "uses": 1,
+          "insert_after": "r4_receive_wine_glass",
+          "reason": "Bread is an additional refreshment option for the guest. I will place it on the coffee table."
+        },
+        {
+          "offer": "r2_s3",
+          "decision": "reject",
+          "reason": "A white mug does not fit the current refreshment plan focused on wine."
+        },
+        {
+          "offer": "r2_s6",
+          "decision": "reject",
+          "reason": "A green apple does not fit the current refreshment plan focused on wine and bread."
+        },
+        {
+          "offer": "r5_s2",
+          "decision": "reject",
+          "reason": "A brown teddy bear is not necessary for the living room decor in the context of welcoming a guest."
+        },
+        {
+          "offer": "r6_s2",
+          "decision": "reject",
+          "reason": "A red towel for the bathroom is outside my current task scope, which is focused on the living room."
         }
       ],
       "judgments": []
@@ -1182,28 +1457,27 @@
   },
   {
     "key": "graph:1",
-    "system": "You are the graph integrator. You do NOT plan or allocate — every step was written by the robot that executes it.\nTurn CANDIDATE collaborations into one consistent joint plan.\n\nOperations (use only wi",
-    "user": "TASK: A guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nJOINT PLAN: {\n \"R1\": [\n  {\n   \"id\": \"r1_s1\",\n   \"agent\": \"R1\",\n   \"type\": \"LOCAL\",\n   \"action\": {\n    \"verb\": \"move\",\n    \"object\": \"white mug\",\n    \"from\": \"table\",\n    \"to\": \"counter\"\n   }\n  },\n  {\n   \"id\": \"r1_s2\",\n   \"agent\": \"R1\",\n   \"type\": \"LOCAL\",\n   \"action\": {\n    \"verb\": \"move\",\n    \"object\": \"green bottle\",\n    \"from\": \"table\",\n    ",
+    "system": "You are the graph integrator. You do NOT plan or allocate — every step was written by the robot that executes it.\nTurn CANDIDATE collaborations into one consistent joint plan.\n\nCHAIN-OF-THOUGHT before",
+    "user": "TASK: A guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nJOINT PLAN: {\n \"R1\": [\n  {\n   \"id\": \"r1_s1\",\n   \"agent\": \"R1\",\n   \"type\": \"LOCAL\",\n   \"action\": {\n    \"verb\": \"pick_up\",\n    \"object\": \"wine bottle\",\n    \"from\": \"table\",\n    \"to\": \"gripper\"\n   }\n  },\n  {\n   \"id\": \"r1_s2\",\n   \"agent\": \"R1\",\n   \"type\": \"PASS\",\n   \"action\": \"pass wine bottle (table, image 2) to R4\",\n   \"item\": \"wine bottle (table",
     "output": {
       "ops": [
         {
-          "op": "drop",
-          "node": "r2_s6",
-          "why": "DUPLICATE_WORK across robots. Never a request or CONFIRMED provider."
-        }
-      ]
-    }
-  },
-  {
-    "key": "graph:2",
-    "system": "You are the graph integrator. You do NOT plan or allocate — every step was written by the robot that executes it.\nTurn CANDIDATE collaborations into one consistent joint plan.\n\nOperations (use only wi",
-    "user": "TASK: A guest is coming over in 15 minutes. The house should feel welcoming — somewhere comfortable to sit, and something to offer them when they arrive.\nJOINT PLAN: {\n \"R1\": [\n  {\n   \"id\": \"r1_s1\",\n   \"agent\": \"R1\",\n   \"type\": \"LOCAL\",\n   \"action\": {\n    \"verb\": \"move\",\n    \"object\": \"white mug\",\n    \"from\": \"table\",\n    \"to\": \"counter\"\n   }\n  },\n  {\n   \"id\": \"r1_s2\",\n   \"agent\": \"R1\",\n   \"type\": \"LOCAL\",\n   \"action\": {\n    \"verb\": \"move\",\n    \"object\": \"green bottle\",\n    \"from\": \"table\",\n    ",
-    "output": {
-      "ops": [
+          "op": "merge",
+          "node": "r4_s14",
+          "into": "r4_s10",
+          "why": "DUPLICATE_WORK: Both actions are putting down the same wine bottle on the coffee table. Merge into one action."
+        },
         {
-          "op": "drop",
-          "node": "r2_s6",
-          "why": "DUPLICATE_WORK: R2's action is redundant as R1 already moves the white mug to the counter."
+          "op": "merge",
+          "node": "r4_s16",
+          "into": "r4_s11",
+          "why": "DUPLICATE_WORK: Both actions are putting down the same wine glass on the coffee table. Merge into one action."
+        },
+        {
+          "op": "merge",
+          "node": "r4_s18",
+          "into": "r4_s12",
+          "why": "DUPLICATE_WORK: Both actions are putting down the same loaf of bread on the coffee table. Merge into one action."
         }
       ]
     }
@@ -1219,19 +1493,27 @@
         "r3_s1": "long",
         "r4_s1": "short",
         "r5_s1": "short",
-        "r1_s2": "short",
-        "r2_s2": "short",
-        "r3_s2": "short",
+        "r6_s1": "short",
+        "r1_s2": "medium",
+        "r2_s4": "short",
+        "r3_s2": "long",
         "r4_s2": "short",
-        "r5_s2": "short",
-        "r1_s3": "medium",
-        "r2_s3": "short",
+        "r6_s3": "short",
+        "r1_s3": "short",
         "r3_s3": "short",
-        "r2_s4": "medium",
-        "r2_s5": "short",
-        "r3_s5": "medium",
-        "r2_s6": "short",
-        "r3_s6": "short"
+        "r4_s3": "short",
+        "r1_s4": "medium",
+        "r4_s4": "short",
+        "r1_s5": "short",
+        "r4_s5": "short",
+        "r1_s6": "medium",
+        "r4_s6": "short",
+        "r4_s13": "short",
+        "r4_s10": "short",
+        "r4_s11": "short",
+        "r4_s12": "short",
+        "r4_s15": "short",
+        "r4_s17": "short"
       }
     }
   }

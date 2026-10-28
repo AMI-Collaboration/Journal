@@ -26,7 +26,10 @@ args = parser.parse_args()
 data = load_all()
 task_text = data["tasks"][args.task]["task"]
 
-result_path = os.path.join(HERE, "results", f"run{args.run}", f"{args.task}_{args.method}_result.json")
+if args.task.startswith("mat_"):
+    result_path = os.path.join(HERE, "results", "matthor", f"{args.task}_{args.method}_result.json")
+else:
+    result_path = os.path.join(HERE, "results", f"run{args.run}", f"{args.task}_{args.method}_result.json")
 if not os.path.exists(result_path):
     raise SystemExit(f"결과 파일이 없습니다: {result_path}")
 

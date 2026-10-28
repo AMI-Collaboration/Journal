@@ -1,16 +1,16 @@
 # task1_abstract 통합 평가 결과 - jabung (0-10 척도)
 
-## Track A — LLM Judge
+## Track A -- LLM Judge
 
-| 방법 | TF | PF | OC | SC |
+| 방법 | TF | GF | SC | CQ |
 |---|---|---|---|---|
-| CDA | 5 | 4 | 7 | 8 |
-| Centralized | 4 | 2 | 5 | 3 |
-| Independent | 5 | 2 | 6 | 5 |
-| LaMMA-P | 4 | 2 | 9 | 4 |
-| SMART-LLM | 6 | 4 | 10 | 9 |
+| CDA | 7 | 6 | 7 | 5 |
+| Centralized | 4 | 2 | 2 | 3 |
+| Independent | 4 | 2 | 2 | 2 |
+| LaMMA-P | 5 | 2 | 6 | 10 |
+| SMART-LLM | 5 | 3 | 7 | 10 |
 
-## Track B — GC (ours, LaMMA-P만)
+## Track B -- GC (ours, LaMMA-P만)
 
 | 방법 | GC |
 |---|---|

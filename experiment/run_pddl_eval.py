@@ -38,9 +38,9 @@ task_text = data["tasks"][args.task]["task"]
 agents = build_agent_inputs(args.task, data, mode=args.mode)
 
 if args.method == "ours":
-    result_path = os.path.join(HERE, "results", f"{args.task}_result.json")
+    result_path = os.path.join(HERE, "results", "abstract", "run1", f"{args.task}_multi_room_cda_jabung_result.json")
 else:
-    result_path = os.path.join(HERE, "results", f"{args.task}_{args.method}_result.json")
+    result_path = os.path.join(HERE, "results", "abstract", "run1", f"{args.task}_{args.method}_result.json")
 
 if not os.path.exists(result_path):
     raise SystemExit(f"{args.method} 결과 파일이 없습니다: {result_path}")
@@ -58,7 +58,7 @@ def parse_scene_and_agents():
     all_rooms = sorted(set(info["room_type"] for info in agents.values()))
 
     for label, info in agents.items():
-        atype_raw = info["capability"].split(" in ")[0].strip()
+        atype_raw = info["capability"].split(".")[0].strip()
         atype = {"Gripper": "gripper", "Mobile_Light": "mobile_light", "Mobile_Heavy": "mobile_heavy"}.get(atype_raw, "mobile_light")
         access = "fixed -- cannot move, NO can-access" if atype == "gripper" else ", ".join(all_rooms)
         lines_agent.append(f"  - {label}: {info['room_type']} / {atype} / can-access: {access} / type-annotation: {label} - {atype}")
@@ -109,6 +109,8 @@ RULES = f"""
    - Containers initial state: (is-closed ?container) if initially closed
    - Powered objects currently ON: (is-on ?o)
    - Objects currently OPEN: (is-open ?o)
+   - Fixed fixtures (lamps, TV, faucet, microwave, etc.) that appear in the plan MUST also have
+     (object-at ?fixture ?room) in :init, even if they cannot be picked up.
    - Do NOT include is_gripper, is_mobile, is_mobile_heavy
 
 5. :goal must:

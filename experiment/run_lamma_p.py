@@ -77,7 +77,10 @@ else:
     else:
         print("⚠️ 로그 폴더를 찾지 못함")
 
-    results_dir = os.path.join(HERE, "results", f"run{args.run}")
+    if args.task.startswith("mat_"):
+        results_dir = os.path.join(HERE, "results", "matthor")
+    else:
+        results_dir = os.path.join(HERE, "results", f"run{args.run}")
     os.makedirs(results_dir, exist_ok=True)
     out_path = os.path.join(results_dir, f"{args.task}_lamma_p_result.json")
     with open(out_path, "w", encoding="utf-8") as f:
