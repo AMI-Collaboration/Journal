@@ -5,8 +5,8 @@
 | 방법 | TF | GF | SC | CQ |
 |---|---|---|---|---|
 | CDA | 10 | 10 | 10 | 10 |
-| Centralized | 8 | 10 | 7 | 6 |
-| Independent | 7 | 9 | 4 | 2 |
+| Centralized | 6 | 3 | 3 | 2 |
+| Independent | 7 | 8 | 4 | 2 |
 | LaMMA-P | 10 | 10 | 10 | 10 |
 | SMART-LLM | 10 | 10 | 10 | 10 |
 

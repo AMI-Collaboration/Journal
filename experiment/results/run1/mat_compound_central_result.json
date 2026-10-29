@@ -1,0 +1,25 @@
+{
+  "task_n": "mat_compound",
+  "method": "central",
+  "mode": "multi_room",
+  "task_text": "Turn on Sink faucet and put toilet paper in the trash",
+  "central_instructions": {
+    "R1": "Use your gripper to turn on the sink faucet.",
+    "R2": "Pick up the toilet paper and pass it to R3 for disposal.",
+    "R3": "Receive the toilet paper from R2 and put it in the trash.",
+    "R4": "Assist R1 if needed, but primarily remain on standby as R1 handles the faucet task."
+  },
+  "agent_plans": {
+    "R1": "[0-5 min]\n- R1 [LOCAL] Use gripper to turn on the sink faucet. (r1_s1)\n\n[5-10 min]\n- R1 [ASK_HELP] Request assistance from another robot to dispose of the toilet paper in the trash, as R1 cannot move or pick up heavy objects. (r1_s2)",
+    "R2": "[0-5 min]\n- R2 [LOCAL] Pick up the toilet paper. (r2_s1)\n\n[5-10 min]\n- R2 [PASS] Pass the toilet paper to R3 for disposal. (r2_s2)\n- R3 [RECEIVE] Receive the toilet paper from R2. (r3_s1)",
+    "R3": "[0-5 min]\n- R2 [LOCAL] Move to the location of the toilet paper. (r2_s1)\n- R3 [LOCAL] Move to the sink area. (r3_s1)\n\n[5-10 min]\n- R2 [LOCAL] Pick up the toilet paper. (r2_s2)\n- R3 [LOCAL] Turn on the sink faucet. (r3_s2)\n\n[10-15 min]\n- R2 [PASS] Move to R3 and hand over the toilet paper. (r2_s3)\n- R3 [RECEIVE] Receive the toilet paper from R2. (r3_s3)\n\n[15-20 min]\n- R3 [LOCAL] Move to the trash bin. (r3_s4)\n\n[20-25 min]\n- R3 [LOCAL] Put the toilet paper in the trash. (r3_s5)",
+    "R4": "[0-5 min]\n- R1 [LOCAL] Enter the bathroom to locate the sink faucet. (r1_s1)\n- R4 [LOCAL] Locate the toilet paper and assess if it can be picked up. (r4_s1)\n\n[5-10 min]\n- R1 [LOCAL] Turn on the sink faucet. (r1_s2)\n- R4 [LOCAL] Use gripper to pick up the toilet paper. (r4_s2)\n\n[10-15 min]\n- R4 [LOCAL] Move the toilet paper to the trash can and drop it in. (r4_s3)\n\n[15-20 min]\n- R1 [LOCAL] Confirm the sink faucet is functioning properly and exit the bathroom. (r1_s3)"
+  },
+  "joint_plan_text": "### Joint Plan\n\n[0-5 min]\n- R1 [LOCAL] Use gripper to turn on the sink faucet. (r1_s1)\n- R1 [LOCAL] Enter the bathroom to locate the sink faucet. (r1_s1)\n- R2 [LOCAL] Pick up the toilet paper. (r2_s1)\n- R2 [LOCAL] Move to the location of the toilet paper. (r2_s1)\n- R3 [LOCAL] Move to the sink area. (r3_s1)\n- R4 [LOCAL] Locate the toilet paper and assess if it can be picked up. (r4_s1)\n\n[5-10 min]\n- R1 [ASK_HELP] Request assistance from another robot to dispose of the toilet paper in the trash, as R1 cannot move or pick up heavy objects. (r1_s2)\n- R1 [LOCAL] Turn on the sink faucet. (r1_s2)\n- R2 [PASS] Pass the toilet paper to R3 for disposal. (r2_s2)\n- R2 [LOCAL] Pick up the toilet paper. (r2_s2)\n- R3 [RECEIVE] Receive the toilet paper from R2. (r3_s1)\n- R3 [LOCAL] Turn on the sink faucet. (r3_s2)\n- R4 [LOCAL] Use gripper to pick up the toilet paper. (r4_s2)\n\n[10-15 min]\n- R2 [PASS] Move to R3 and hand over the toilet paper. (r2_s3)\n- R3 [RECEIVE] Receive the toilet paper from R2. (r3_s3)\n- R4 [LOCAL] Move the toilet paper to the trash can and drop it in. (r4_s3)\n\n[15-20 min]\n- R3 [LOCAL] Move to the trash bin. (r3_s4)\n- R1 [LOCAL] Confirm the sink faucet is functioning properly and exit the bathroom. (r1_s3)\n\n[20-25 min]\n- R3 [LOCAL] Put the toilet paper in the trash. (r3_s5)",
+  "metrics": {
+    "wall_time_sec": 3.1788952350616455,
+    "prompt_tokens": 725,
+    "completion_tokens": 450,
+    "llm_calls": 1
+  }
+}

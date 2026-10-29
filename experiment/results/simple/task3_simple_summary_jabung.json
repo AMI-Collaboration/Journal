@@ -3,13 +3,13 @@
     "name": "CDA",
     "track_a_llm_judge": {
       "TF": 8,
-      "TF_reason": "The plan successfully achieves the main goals: taking the cabbage (lettuce) out of the fridge and putting it in the bowl, and opening the laptop. However, R1 attempts an extra action to open a hallucinated laptop in the kitchen.",
+      "TF_reason": "The plan successfully achieves the main goals: taking the cabbage (lettuce) out of the fridge and putting it in the bowl, and opening the laptop. However, R1 attempts an unnecessary and hallucinated action to open a laptop in the kitchen.",
       "GF": 6,
-      "GF_reason": "Most actions are grounded in the environment, and 'cabbage' is an acceptable synonym for 'Lettuce'. However, R1 interacts with a 'silver laptop' in the kitchen, which does not exist in that room.",
+      "GF_reason": "Most actions are feasible and grounded, and 'cabbage' is an acceptable synonym for 'Lettuce'. However, R1 hallucinates a 'silver laptop' in the kitchen, which does not exist in the room's object list.",
       "SC": 9,
-      "SC_reason": "The sequence of actions is logical and respects prerequisites (opening the fridge before picking up the cabbage). The only issue is the hallucinated action at the end.",
+      "SC_reason": "The sequence of actions is logical. R1 opens the fridge before picking up the cabbage, and then places it in the bowl. The hallucinated action at the end does not disrupt the prior valid sequence.",
       "CQ": 10,
-      "CQ_reason": "No collaboration is required for this task as the sub-tasks are independent and can be completed by the robots in their respective rooms. The absence of collaboration is appropriate."
+      "CQ_reason": "The task involves independent goals in separate rooms. The agents correctly work in parallel without forcing unnecessary collaboration."
     },
     "track_b_gc": 0,
     "track_b_state_detail": {},
@@ -19,13 +19,13 @@
     "name": "Centralized",
     "track_a_llm_judge": {
       "TF": 4,
-      "TF_reason": "The plan attempts the goals, but fails significantly. The cabbage (lettuce) is placed in the bowl, but the laptop opening is hallucinated in a non-existent 'living room' without anyone picking it up from the bedroom.",
+      "TF_reason": "The plan attempts to fulfill the goals (moving the cabbage/lettuce to the bowl and opening the laptop), but it features massive redundancy with multiple robots performing the exact same tasks (e.g., R1, R2, and R3 all interacting with the cabbage; R1, R2, and R4 all opening the laptop).",
       "GF": 2,
-      "GF_reason": "Severe grounding violations. The plan hallucinates a 'living room' which is not in the room list. R4 opens the laptop in the living room without ever picking it up from the bedroom. R3 performs a self-pass.",
+      "GF_reason": "Severe spatial and physical violations. R1 opens the laptop while at the fridge in the kitchen (laptop is in the bedroom). R2 picks up the cabbage after R1 already took it. R2 opens the laptop in the bedroom right after being at the bowl in the kitchen without moving.",
       "SC": 2,
-      "SC_reason": "Critical ordering and logical violations. R3 retrieves the cabbage in 0-5 min, but then R1 takes it out and passes it to R3 in 5-10 min. R4 opens the laptop in 5-10 min, but R3 asks for help to open it again in 15-20 min.",
+      "SC_reason": "Critical ordering and logical violations. R3 retrieves the cabbage in [0-5 min] before R1 takes it out in [5-10 min]. R2 picks up the cabbage after R1 already passed it to R3. The laptop is opened multiple times by different robots, and R3 asks for help to open it after it was already opened.",
       "CQ": 2,
-      "CQ_reason": "Collaboration is highly inappropriate and confused. There is a self-pass (R3 passing to R3), redundant and conflicting actions on the laptop (R4 opens it, then R2 helps R3 open it), and unnecessary involvement of multiple robots for simple tasks."
+      "CQ_reason": "Collaboration is chaotic and inappropriate. Multiple robots redundantly attempt the same tasks without coordination. R3 asks for help to open the laptop after R1 and R4 already opened it, and R2 helps despite being in a different room."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -35,13 +35,13 @@
     "name": "Independent",
     "track_a_llm_judge": {
       "TF": 7,
-      "TF_reason": "The core goals (taking lettuce/cabbage out of the fridge and putting it in a bowl, and opening the laptop) are achieved. However, there is significant redundancy with multiple robots attempting to open the laptop, and R1 attempts to open the laptop in the wrong room.",
+      "TF_reason": "The core goals of taking the cabbage (lettuce) out of the fridge and putting it in the bowl, as well as opening the laptop, are achieved. However, there are redundant actions and attempts to interact with hallucinated objects (e.g., a laptop in the kitchen).",
       "GF": 5,
-      "GF_reason": "R1 interacts with the fridge (in the kitchen) and then attempts to open the laptop, which is located in the bedroom (FP302). This implies either teleportation or hallucinating a laptop in the kitchen. Additionally, multiple robots (R2, R4) redundantly act on the same laptop.",
-      "SC": 5,
-      "SC_reason": "The sequence of actions for the lettuce is logical (open fridge -> take lettuce -> place in bowl). However, there are severe ordering and redundancy issues with the laptop, as R1, R2, and R4 all attempt to open it simultaneously in the same time block.",
+      "GF_reason": "There are several grounding violations. R1 and R3 attempt to interact with a laptop in the kitchen, which does not exist. R3 also asks for help with the cabbage when R1 is already handling it.",
+      "SC": 7,
+      "SC_reason": "The sequence of actions for the main tasks (opening fridge -> taking lettuce -> putting in bowl) is logical. However, there are redundant actions (R2 and R4 both opening the laptop) and unnecessary requests for help.",
       "CQ": 4,
-      "CQ_reason": "Collaboration is not strictly required as the tasks in the two rooms are independent. However, R3 issues an unnecessary ASK_HELP for the cabbage which is never fulfilled, and there is no coordination between R2 and R4, leading to redundant actions on the laptop."
+      "CQ_reason": "Collaboration is not required for this task as the goals are self-contained in their respective rooms. R3's request for help is unnecessary and uncoordinated with R1's actions."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -51,13 +51,13 @@
     "name": "LaMMA-P",
     "track_a_llm_judge": {
       "TF": 10,
-      "TF_reason": "The plan successfully fulfills all task requirements: taking the cabbage (mapped to lettuce) out of the fridge and putting it in the bowl, and opening the laptop.",
+      "TF_reason": "The plan successfully fulfills all task requirements. R1 takes the cabbage (mapped to lettuce) out of the fridge and puts it in the bowl, while R2 opens the laptop.",
       "GF": 10,
-      "GF_reason": "All actions are physically feasible and grounded in the environment. 'Cabbage' is a valid descriptive synonym for 'Lettuce' which exists in the kitchen. The laptop exists in the bedroom.",
+      "GF_reason": "All actions are physically executable. The objects interacted with (fridge, lettuce/cabbage, bowl, laptop) exist in the respective rooms. No capabilities are violated.",
       "SC": 10,
-      "SC_reason": "The sequence of actions is perfectly logical, respecting all prerequisites such as opening the fridge before picking up the cabbage, and picking it up before placing it in the bowl.",
+      "SC_reason": "The action sequence is perfectly logical. R1 opens the fridge before picking up the cabbage, closes it, and then places the cabbage in the bowl. R2 goes to the laptop before opening it.",
       "CQ": 10,
-      "CQ_reason": "No collaboration is required for this task as the subtasks are independent and located in different rooms. The agents correctly work in parallel without unnecessary collaboration."
+      "CQ_reason": "The task consists of independent goals in separate rooms. The agents correctly work in parallel without unnecessary collaboration, which is the most efficient approach."
     },
     "track_b_gc": 0,
     "track_b_state_detail": {},
@@ -67,13 +67,13 @@
     "name": "SMART-LLM",
     "track_a_llm_judge": {
       "TF": 10,
-      "TF_reason": "The plan successfully fulfills all task requirements. R4 takes the cabbage (lettuce) out of the fridge and places it in the bowl, while R1 opens the laptop.",
+      "TF_reason": "The plan successfully fulfills all task requirements. R1 takes the cabbage (mapped to lettuce) out of the fridge and puts it in the bowl, while R2 opens the laptop.",
       "GF": 10,
-      "GF_reason": "The plan is physically executable. All objects interacted with exist in the respective rooms (cabbage is a reasonable descriptive synonym for lettuce), and no capability constraints are violated.",
+      "GF_reason": "All actions are physically executable. The objects interacted with (Fridge, Lettuce/Cabbage, Bowl, Laptop) exist in their respective rooms. No hallucinations or capability violations are present.",
       "SC": 10,
-      "SC_reason": "The action sequence is perfectly coherent. Prerequisites such as opening the fridge before picking up the cabbage and navigating to objects before interacting with them are respected.",
+      "SC_reason": "The action sequence is perfectly logical. R1 opens the fridge before picking up the cabbage, and picks it up before placing it in the bowl. R2 goes to the laptop before opening it.",
       "CQ": 10,
-      "CQ_reason": "The task consists of independent sub-tasks in different rooms. The agents correctly work in parallel without unnecessary collaboration, which perfectly matches the task needs."
+      "CQ_reason": "The task consists of independent goals in separate rooms. The agents correctly work in parallel without forcing unnecessary collaboration."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",

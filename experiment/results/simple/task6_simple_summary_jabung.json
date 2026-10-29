@@ -7,9 +7,9 @@
       "GF": 10,
       "GF_reason": "All actions are physically executable, respect robot capabilities, and use objects that actually exist in the respective rooms.",
       "SC": 10,
-      "SC_reason": "The action sequence is perfectly coherent with no ordering violations. R1 correctly picks up the tomato before putting it in the fridge.",
+      "SC_reason": "The action sequence is perfectly coherent, with prerequisites (picking up the tomato) completed before dependent actions (putting it in the fridge).",
       "CQ": 10,
-      "CQ_reason": "Collaboration is not required for this task as all subtasks are self-contained within individual rooms, and the plan correctly avoids unnecessary collaboration."
+      "CQ_reason": "No collaboration is required for this task as all subtasks are self-contained within individual rooms, and the plan correctly avoids unnecessary collaboration."
     },
     "track_b_gc": 0,
     "track_b_state_detail": {},
@@ -18,14 +18,14 @@
   "central": {
     "name": "Centralized",
     "track_a_llm_judge": {
-      "TF": 7,
-      "TF_reason": "The plan achieves all required goals (store tomato, turn on TV, set alarm, close shower curtain). However, there are redundant and hallucinated actions where R3 attempts to turn on the TV and close the shower curtain after R2 and R4 have already completed these tasks.",
+      "TF": 8,
+      "TF_reason": "The plan successfully addresses all required goals: the tomato is stored, the TV is turned on, the alarm is set, and the shower curtain is closed. However, there are redundant and hallucinated actions by some robots.",
       "GF": 4,
-      "GF_reason": "There are severe grounding violations. R3 attempts to turn on the TV and close the shower curtain locally, but the Television is in the living room and the ShowerCurtain is in the bathroom, while R3 is in the bedroom. R3 cannot perform these actions without moving to those rooms.",
+      "GF_reason": "There are significant grounding violations. Assuming standard room assignments, R3 (likely in the bedroom) attempts to turn on the TV and close the shower curtain, which are located in the living room and bathroom, respectively. R4 asks for help with tasks completely unrelated to its environment.",
       "SC": 4,
-      "SC_reason": "There are significant ordering and formatting violations. R1 has two actions labeled 'r1_s1' in the 0-5 minute block (picking up and passing). Furthermore, R1 passes the tomato to R3 in the 0-5 minute block and then inexplicably passes it again in the 5-10 minute block.",
-      "CQ": 4,
-      "CQ_reason": "Collaboration is poorly coordinated. While passing the tomato from R1 to R3 is a valid cross-room transfer, the PASS action is duplicated across time blocks. Additionally, there is a lack of task awareness among agents, leading R3 to redundantly attempt tasks (TV, shower curtain) that were already assigned to and completed by R2 and R4."
+      "SC_reason": "The sequence has multiple coherence issues: R1 passes the tomato to R3 in the 0-5 min block and then inexplicably passes it again in the 5-10 min block. R3 and R4 both attempt to close the shower curtain at different times, and R4 requests help for tasks that are already being handled.",
+      "CQ": 3,
+      "CQ_reason": "Collaboration is poorly executed. R1 passes the tomato to R3 to store in a drawer, which is an illogical destination when the kitchen has a fridge. The pass action is duplicated, and R4 makes a completely unnecessary and inappropriate request for help regarding tasks outside its domain."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -35,13 +35,13 @@
     "name": "Independent",
     "track_a_llm_judge": {
       "TF": 7,
-      "TF_reason": "All required goals (store tomato, turn on TV, set alarm, close shower curtain) are achieved by the respective robots in their rooms. However, there are notable hallucinations and redundant attempts by R3 to complete tasks (tomato, TV) that do not exist in its room.",
-      "GF": 4,
-      "GF_reason": "Severe grounding violations exist. R3 hallucinates a tomato and a TV in the bedroom (FP305). R1 uses a vague expression ('cabinet or fridge').",
-      "SC": 7,
-      "SC_reason": "The sequence of actions is mostly logical (e.g., pick up before store), but R3's sequence involves interacting with hallucinated objects, which disrupts the physical coherence of the plan.",
+      "TF_reason": "All required goals (store tomato, turn on TV, set alarm, close shower curtain) are technically achieved by the correct robots in their respective rooms. However, R3 attempts redundant and hallucinated actions for the tomato and TV, which detracts from the overall task execution quality.",
+      "GF": 3,
+      "GF_reason": "There are severe grounding violations. R3 hallucinates a tomato and a TV in the bedroom (FP305). Additionally, R1 uses a vague expression ('a cabinet or fridge') instead of specifying a single concrete object.",
+      "SC": 9,
+      "SC_reason": "The sequence of actions is logically ordered. Objects are picked up before being stored, and there are no major dependency violations.",
       "CQ": 3,
-      "CQ_reason": "Collaboration is not required for this task as all subtasks are self-contained within specific rooms. However, robots (R2, R3, R4) issue unnecessary and blind ASK_HELP requests for tasks that are already being handled by other robots, showing poor multi-agent awareness."
+      "CQ_reason": "Collaboration is not required for this task as all goals are self-contained within specific rooms. However, R2, R3, and R4 unnecessarily spam 'ASK_HELP' for tasks that are already being handled by other robots, showing a lack of coordination and awareness."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -51,13 +51,13 @@
     "name": "LaMMA-P",
     "track_a_llm_judge": {
       "TF": 10,
-      "TF_reason": "All required goals (store tomato, turn on TV, set alarm, close shower curtain) are successfully achieved using real objects within the deadline.",
+      "TF_reason": "All required goals (store tomato, turn on TV, set alarm, close shower curtain) are successfully achieved within the deadline using real objects.",
       "GF": 10,
-      "GF_reason": "All actions are physically executable, use valid objects from the rooms, and respect the robots' local observations.",
+      "GF_reason": "All actions are physically executable, and all objects interacted with (Tomato, Fridge, Television, AlarmClock, ShowerCurtain) exist in their respective rooms.",
       "SC": 10,
       "SC_reason": "The action sequence is perfectly coherent, with all prerequisites (e.g., going to objects, opening the fridge before putting the tomato inside) respected.",
       "CQ": 10,
-      "CQ_reason": "Collaboration is not required for this task as all goals are self-contained within individual rooms, and the plan correctly avoids unnecessary collaboration."
+      "CQ_reason": "The tasks are fully self-contained within each room, so no collaboration is required, and none is unnecessarily attempted."
     },
     "track_b_gc": 0,
     "track_b_state_detail": {},
@@ -67,13 +67,13 @@
     "name": "SMART-LLM",
     "track_a_llm_judge": {
       "TF": 8,
-      "TF_reason": "All task goals (store tomato, turn on TV, set alarm, close shower curtain) are addressed using objects that actually exist in the rooms. However, the execution by R4 is physically impossible, which affects feasibility.",
-      "GF": 2,
-      "GF_reason": "Severe physical violations: R4 is scheduled to go to and interact with objects in three different rooms (living room, bedroom, bathroom) simultaneously within the same 5-minute blocks. A robot cannot be in multiple rooms at once.",
-      "SC": 4,
-      "SC_reason": "While the basic prerequisite ordering (Go to -> Interact) is maintained, R4 performs an unrealistic number of physical actions across different rooms in single 5-minute blocks, violating sequential and spatial constraints.",
-      "CQ": 8,
-      "CQ_reason": "The task consists of independent sub-tasks in different rooms, so inter-robot collaboration (like passing objects) is not required. However, the workload distribution is poor, forcing one robot to attempt simultaneous multi-room actions."
+      "TF_reason": "The plan addresses all the required goals (storing the tomato, turning on the TV, setting the alarm, and closing the shower curtain) using the correct objects. However, the execution is highly flawed.",
+      "GF": 4,
+      "GF_reason": "There is a severe physical feasibility violation: R4 interacts with objects located in three completely different rooms (living room, bedroom, bathroom) without any actions to navigate between these rooms. It assumes all these objects are locally accessible.",
+      "SC": 3,
+      "SC_reason": "The sequence of actions for R4 is physically impossible and violates spatial prerequisites. R4 performs three 'Go to' actions to objects in different rooms in a single 5-minute block, and then attempts to manipulate all three objects in the next block, despite only being able to be at one location at a time.",
+      "CQ": 5,
+      "CQ_reason": "The tasks are independent and located in different rooms, so direct collaboration (like passing objects) is not required. However, the workload distribution is extremely poor, assigning tasks across three different rooms to a single robot (R4) while ignoring the need for other agents to handle those separate rooms."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",

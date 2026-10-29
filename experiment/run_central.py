@@ -177,16 +177,25 @@ Rules:
 - Output ONLY the merged plan starting with ### Joint Plan
 """
 
+_t0 = __import__("time").time()
 merge_r = client.chat.completions.create(
     model=args.gpt_version, temperature=0.0,
     messages=[{"role": "user", "content": merge_prompt}],
 )
+_wall_time = __import__("time").time() - _t0
 log_usage("central", args.task, merge_r)
 result = merge_r.choices[0].message.content.strip()
 print("\n✅ 완료\n")
 print(result)
 
-results_dir = os.path.join(HERE, "results", f"run{args.run}")
+if "simple" in args.task:
+    results_dir = os.path.join(HERE, "results", "simple")
+elif args.task.startswith("mat_"):
+    results_dir = os.path.join(HERE, "results", "matthor")
+elif "abstract" in args.task:
+    results_dir = os.path.join(HERE, "results", "abstract", f"run{args.run}")
+else:
+    results_dir = os.path.join(HERE, "results", f"run{args.run}")
 os.makedirs(results_dir, exist_ok=True)
 out_path = os.path.join(results_dir, f"{args.task}_central_result.json")
 with open(out_path, "w", encoding="utf-8") as f:
@@ -194,5 +203,6 @@ with open(out_path, "w", encoding="utf-8") as f:
         "task_n": args.task, "method": "central", "mode": args.mode,
         "task_text": task_text, "central_instructions": instructions,
         "agent_plans": plans, "joint_plan_text": result,
+        "metrics": {"wall_time_sec": _wall_time, "prompt_tokens": merge_r.usage.prompt_tokens, "completion_tokens": merge_r.usage.completion_tokens, "llm_calls": 1},
     }, f, ensure_ascii=False, indent=2)
 print(f"\n📁 저장: {out_path}")

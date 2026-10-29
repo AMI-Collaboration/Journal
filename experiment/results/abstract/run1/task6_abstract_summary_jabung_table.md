@@ -4,11 +4,11 @@
 
 | 방법 | TF | GF | SC | CQ |
 |---|---|---|---|---|
-| CDA | 6 | 4 | 6 | 5 |
+| CDA | 7 | 6 | 6 | 6 |
 | Centralized | 5 | 2 | 3 | 2 |
-| Independent | 5 | 2 | 6 | 3 |
-| LaMMA-P | 3 | 2 | 5 | 3 |
-| SMART-LLM | 3 | 2 | 4 | 2 |
+| Independent | 4 | 2 | 7 | 3 |
+| LaMMA-P | 3 | 2 | 3 | 2 |
+| SMART-LLM | 3 | 2 | 5 | 2 |
 
 ## Track B -- GC (ours, LaMMA-P만)
 

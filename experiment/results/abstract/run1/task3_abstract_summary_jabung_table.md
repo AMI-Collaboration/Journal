@@ -6,9 +6,9 @@
 |---|---|---|---|---|
 | CDA | 5 | 3 | 6 | 5 |
 | Centralized | 3 | 2 | 4 | 3 |
-| Independent | 4 | 2 | 4 | 3 |
-| LaMMA-P | 2 | 1 | 5 | 3 |
-| SMART-LLM | 2 | 2 | 8 | 5 |
+| Independent | 3 | 2 | 2 | 2 |
+| LaMMA-P | 2 | 0 | 4 | 3 |
+| SMART-LLM | 2 | 2 | 8 | 8 |
 
 ## Track B -- GC (ours, LaMMA-P만)
 

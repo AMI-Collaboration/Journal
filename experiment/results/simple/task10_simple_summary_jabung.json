@@ -2,14 +2,14 @@
   "cda": {
     "name": "CDA",
     "track_a_llm_judge": {
-      "TF": 2,
-      "TF_reason": "The plan fails to achieve the goal of emptying the trash cans. R1 and R4 pick up items but do nothing with them. R2 puts a trash bag on the coffee table instead of disposing of it. Only R2 attempts to move items outside, but it moves the entire trash can rather than just the trash.",
-      "GF": 4,
-      "GF_reason": "There are multiple hallucinations: 'trash bag' in the kitchen and 'brown cardboard tubes' in the living room are not in the object lists. R3 also attempts to pick up a second 'black trash bag' when only one GarbageBag exists in the bedroom.",
-      "SC": 5,
-      "SC_reason": "The sequence has issues: R1 and R4 pick up objects and then halt indefinitely. R3 picks up a second trash bag while holding nothing (or after passing the first), but does nothing with it. R2 moves a trash can outside and then receives an object from R3, which implies teleportation or awkward spatial transitions.",
+      "TF": 3,
+      "TF_reason": "The task to empty the trash cans is poorly fulfilled. R1 and R4 merely pick up trash/trash cans and hold them without disposing of them. R2 moves a trash can outside but places another trash bag on the coffee table, which is inappropriate. The overall goal is largely incomplete.",
+      "GF": 5,
+      "GF_reason": "There are several hallucinations, such as 'brown cardboard tubes' in the living room and 'trash bag' in the kitchen (though plausible inside a trash can). 'Outside' is used as a destination, which is borderline acceptable but not a listed object. R2's actions are physically executable, but the plan relies on hallucinated specific trash items.",
+      "SC": 8,
+      "SC_reason": "The sequence of actions is mostly coherent. The PASS from R3 and RECEIVE by R2 are ordered correctly across time blocks. However, R3 picks up a second trash bag immediately after passing the first one without clear resolution.",
       "CQ": 3,
-      "CQ_reason": "Collaboration is unnecessary for this task, as each robot could empty its own room's trash. Furthermore, the collaboration that does occur (R3 passing a trash bag to R2) results in the trash bag being placed on a coffee table, which is counterproductive to the task."
+      "CQ_reason": "Collaboration is used but highly inappropriate in its outcome. R3 passes a trash bag to R2, who then places it on the coffee table instead of disposing of it. There is no coordinated effort to actually empty all trash cans to a proper central location or outside."
     },
     "track_b_gc": 0,
     "track_b_state_detail": {},
@@ -19,13 +19,13 @@
     "name": "Centralized",
     "track_a_llm_judge": {
       "TF": 3,
-      "TF_reason": "The task is only partially attempted. R1 and R2 collect some trash, but R3 and R4 only pick up trash bags and never dispose of them or transfer them to a collection point. The trash cans are not fully emptied.",
-      "GF": 4,
-      "GF_reason": "There are several grounding issues: R1 collects 'light trash items' (vague), R2 executes a nonsensical 'Move to R2's location', and R4 picks up a 'trash bag' in the bathroom which is not in the actual object list (only GarbageCan is).",
-      "SC": 3,
-      "SC_reason": "Severe sequencing issues: R2 performs a self-pass ('Hand over the trash to R2'), and R3 and R4 initiate PASS actions that are never matched with corresponding RECEIVE actions by R2.",
-      "CQ": 2,
-      "CQ_reason": "Collaboration is highly flawed. There is a self-pass by R2, and R3 and R4 attempt to pass items to R2 without R2 ever receiving them. The coordination is broken and incomplete."
+      "TF_reason": "The plan attempts to empty the trash cans but relies heavily on hallucinated objects ('trash', 'trash bag' in the kitchen, 'main disposal area') rather than interacting with the actual GarbageCan objects listed in the rooms.",
+      "GF": 2,
+      "GF_reason": "Severe grounding violations. The plan uses vague expressions ('trash', 'additional trash', 'all collected trash') and hallucinates objects like a 'trash bag' in the kitchen and a 'main disposal area'. Robots also attempt to hold and pass multiple abstract items simultaneously.",
+      "SC": 2,
+      "SC_reason": "Critical sequencing errors. In the [0-5 min] block, R1 passes 'trash' before ever picking it up. In the [5-10 min] block, R1, R2, and R3 execute PASS actions, but the corresponding RECEIVE actions for R2, R3, and R4 are completely missing.",
+      "CQ": 3,
+      "CQ_reason": "The collaboration forms a bucket brigade, but it is poorly executed due to missing RECEIVE actions in the second time block. Furthermore, passing abstract 'trash' across all four rooms is highly inefficient and not grounded in the actual environment."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -35,13 +35,13 @@
     "name": "Independent",
     "track_a_llm_judge": {
       "TF": 2,
-      "TF_reason": "The task of emptying the trash cans is not fulfilled. All robots either get stuck asking for help, waiting at doors, or performing vague actions without actually disposing of the trash.",
-      "GF": 4,
-      "GF_reason": "Several grounding issues exist: R1 uses a vague action ('Ensure the trash can is empty'), R2 interacts with hallucinated 'light trash', and R1 performs a [HELP] action without any actual partner present.",
-      "SC": 3,
-      "SC_reason": "Sequential coherence is poor. R1 executes a [HELP] action without any other robot participating. R2, R3, and R4 initiate requests or wait for interactions that never occur, leaving their action sequences unresolved.",
-      "CQ": 1,
-      "CQ_reason": "Collaboration is completely dysfunctional. Multiple robots use [ASK_HELP] or wait for a handoff, but no robot ever responds or coordinates with them. R1's [HELP] action is a self-contained hallucination of collaboration."
+      "TF_reason": "The plan fails to complete the task of emptying the trash cans. The robots only pick up the trash (or attempt to) but do not dispose of it anywhere. The plan ends abruptly with R4 waiting for help that never arrives.",
+      "GF": 3,
+      "GF_reason": "There are multiple hallucinations: R1, R2, and R4 attempt to pick up 'trash bag' or 'trash' which do not exist in their respective rooms (only FP312 has a GarbageBag). R4 also waits for another robot without any prior communication or planned interaction.",
+      "SC": 4,
+      "SC_reason": "The sequence is incomplete and disjointed. R4 waits for another robot to receive the trash bag, but there is no corresponding PASS action from R4, nor any RECEIVE action from another robot.",
+      "CQ": 2,
+      "CQ_reason": "Collaboration is poorly planned. R4 waits for another robot to receive an object, but no other robot is assigned to help or receive it, leading to a complete breakdown in coordination."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -51,13 +51,13 @@
     "name": "LaMMA-P",
     "track_a_llm_judge": {
       "TF": 3,
-      "TF_reason": "The plan is highly abstract and fails to address all 4 GarbageCans across the 4 rooms. By pairing up the robots, they only attempt to empty two trash cans, leaving the task incomplete. The 'disposal area' is also not defined.",
+      "TF_reason": "The plan only addresses two out of the four garbage cans present in the house. Furthermore, it relies on a vague, undefined 'disposal area' rather than a specific object or location, meaning the task is not fully or properly completed.",
       "GF": 2,
-      "GF_reason": "The plan is full of vague expressions ('trash cans in the environment', 'disposal area', 'original location') and lacks grounding to specific objects or rooms. It also assumes robots can assist each other without specifying navigation to the same room.",
-      "SC": 6,
-      "SC_reason": "The abstract sequence of actions (identify -> move -> lift -> carry -> empty -> return) is logically ordered, but the lack of spatial grounding makes the physical execution of this sequence questionable.",
+      "GF_reason": "The plan uses vague expressions like 'TrashCan #1 location' and 'disposal area' which are not grounded in the actual room objects. Additionally, having two robots jointly pick up a standard garbage can is physically unrealistic and unnecessary.",
+      "SC": 8,
+      "SC_reason": "The sequence of actions (go to, pick up, move, empty, return, place) is logically ordered, though the physical execution of two robots carrying one trash can together is questionable.",
       "CQ": 3,
-      "CQ_reason": "Collaboration is forced and unnecessary. Lifting a standard GarbageCan does not typically require two robots. By unnecessarily pairing up, the robots fail to distribute themselves efficiently to handle the 4 separate trash cans in 4 different rooms."
+      "CQ_reason": "Collaboration is forced and unnecessary. A standard garbage can does not require two robots to lift or empty. The robots are simply duplicating actions on the same objects rather than dividing the labor efficiently across the four rooms."
     },
     "track_b_gc": 0,
     "track_b_state_detail": {},
@@ -66,14 +66,14 @@
   "smart_llm": {
     "name": "SMART-LLM",
     "track_a_llm_judge": {
-      "TF": 4,
-      "TF_reason": "The plan attempts to empty trash cans but uses generic, hallucinated names instead of the actual objects in the rooms (e.g., GarbageCan). It also only addresses 3 trash cans when there are 4 in the environment.",
-      "GF": 2,
-      "GF_reason": "Severe violations: The plan uses hallucinated objects and locations ('TrashCan1', 'trash', 'DisposalArea'). Additionally, R1 picks up trash from TrashCan3 while already holding trash from TrashCan1, violating the constraint of holding multiple objects.",
-      "SC": 4,
-      "SC_reason": "R1 attempts to pick up a second object (trash from TrashCan3) before dropping the first object it picked up, which is a physical sequence violation.",
+      "TF": 2,
+      "TF_reason": "The task requires emptying all trash cans in the house (kitchen, living room, bedroom, bathroom). The plan only attempts to empty one trash can and places the trash bag into a hallucinated 'Outdoor Trash Bin', failing to fulfill the core goals.",
+      "GF": 3,
+      "GF_reason": "The plan relies heavily on a hallucinated object ('Outdoor Trash Bin') which does not exist in any of the rooms. Additionally, it assumes the presence of a 'Trash Bag' inside the trash can, which is only explicitly listed in the bedroom.",
+      "SC": 9,
+      "SC_reason": "The sequence of actions is logically coherent (go to bin, open, pick up bag, go to destination, place bag, close bins).",
       "CQ": 5,
-      "CQ_reason": "Independent execution is acceptable for this task, but the robots fail to coordinate effectively to cover all four rooms, leaving one trash can unaddressed."
+      "CQ_reason": "R1 and R2 collaborate by having R2 open and close the destination bin while R1 carries the bag. While this is a valid collaborative structure, it is applied to a hallucinated object, and R1 could likely have performed these actions independently."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",

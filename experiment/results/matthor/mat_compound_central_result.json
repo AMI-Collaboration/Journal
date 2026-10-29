@@ -1,0 +1,25 @@
+{
+  "task_n": "mat_compound",
+  "method": "central",
+  "mode": "multi_room",
+  "task_text": "Turn on Sink faucet and put toilet paper in the trash",
+  "central_instructions": {
+    "R1": "Use your gripper to turn on the sink faucet.",
+    "R2": "Pick up the toilet paper and pass it to R3 for disposal.",
+    "R3": "Receive the toilet paper from R2 and put it in the trash.",
+    "R4": "Assist R1 if needed, but primarily remain on standby as R1 handles the faucet task."
+  },
+  "agent_plans": {
+    "R1": "[0-5 min]\n- R1 [LOCAL] Use gripper to turn on the sink faucet. (r1_s1)\n\n[5-10 min]\n- R1 [ASK_HELP] Request assistance from another robot to dispose of the toilet paper in the trash. (r1_s2)",
+    "R2": "[0-5 min]\n- R2 [LOCAL] Pick up the toilet paper. (r2_s1)\n\n[5-10 min]\n- R2 [PASS] Pass the toilet paper to R3 for disposal. (r2_s2)\n- R3 [RECEIVE] Receive the toilet paper from R2. (r3_s1)",
+    "R3": "[0-5 min]\n- R2 [PASS] Hand toilet paper to R3. (r2_s1)\n- R3 [RECEIVE] Receive toilet paper from R2. (r3_s1)\n\n[5-10 min]\n- R3 [LOCAL] Move to the trash bin. (r3_s2)\n- R3 [LOCAL] Place toilet paper in the trash bin. (r3_s3)\n- R3 [LOCAL] Move to the sink. (r3_s4)\n- R3 [LOCAL] Turn on the sink faucet. (r3_s5)",
+    "R4": "[0-5 min]\n- R1 [LOCAL] Move to the sink area to assess the faucet situation (r1_s1)\n- R4 [LOCAL] Locate the toilet paper and assess its weight to ensure it is light enough to pick up (r4_s1)\n\n[5-10 min]\n- R1 [LOCAL] Turn on the sink faucet (r1_s2)\n- R4 [LOCAL] Pick up the toilet paper (r4_s2)\n- R4 [LOCAL] Place the toilet paper in the trash (r4_s3)"
+  },
+  "joint_plan_text": "### Joint Plan\n\n[0-5 min]\n- R1 [LOCAL] Use gripper to turn on the sink faucet. (r1_s1)\n- R2 [LOCAL] Pick up the toilet paper. (r2_s1)\n- R3 [RECEIVE] Receive toilet paper from R2. (r3_s1)\n- R4 [LOCAL] Locate the toilet paper and assess its weight to ensure it is light enough to pick up. (r4_s1)\n\n[5-10 min]\n- R1 [ASK_HELP] Request assistance from another robot to dispose of the toilet paper in the trash. (r1_s2)\n- R2 [PASS] Pass the toilet paper to R3 for disposal. (r2_s2)\n- R3 [LOCAL] Move to the trash bin. (r3_s2)\n- R3 [LOCAL] Place toilet paper in the trash bin. (r3_s3)\n- R3 [LOCAL] Move to the sink. (r3_s4)\n- R3 [LOCAL] Turn on the sink faucet. (r3_s5)\n- R4 [LOCAL] Pick up the toilet paper. (r4_s2)\n- R4 [LOCAL] Place the toilet paper in the trash. (r4_s3)",
+  "metrics": {
+    "wall_time_sec": 2.1447927951812744,
+    "prompt_tokens": 608,
+    "completion_tokens": 268,
+    "llm_calls": 1
+  }
+}

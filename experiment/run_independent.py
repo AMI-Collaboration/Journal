@@ -6,6 +6,8 @@ Independent(독립형) 베이스라인.
     python run_independent.py --task task1_abstract
 """
 import argparse
+import time as _time_module
+_t0 = _time_module.time()
 import base64
 import io
 import json
@@ -141,6 +143,7 @@ Rules:
 - Output ONLY the merged plan starting with ### Joint Plan
 """
 
+_wall_time = __import__("time").time() - _t0
 merge_r = client.chat.completions.create(
     model=args.gpt_version, temperature=0.0,
     messages=[{"role": "user", "content": merge_prompt}],
@@ -150,12 +153,20 @@ result = merge_r.choices[0].message.content.strip()
 print("\n✅ 완료\n")
 print(result)
 
-results_dir = os.path.join(HERE, "results", f"run{args.run}")
+if "simple" in args.task:
+    results_dir = os.path.join(HERE, "results", "simple")
+elif args.task.startswith("mat_"):
+    results_dir = os.path.join(HERE, "results", "matthor")
+elif "abstract" in args.task:
+    results_dir = os.path.join(HERE, "results", "abstract", f"run{args.run}")
+else:
+    results_dir = os.path.join(HERE, "results", f"run{args.run}")
 os.makedirs(results_dir, exist_ok=True)
 out_path = os.path.join(results_dir, f"{args.task}_independent_result.json")
 with open(out_path, "w", encoding="utf-8") as f:
     json.dump({
         "task_n": args.task, "method": "independent", "mode": args.mode,
         "task_text": task_text, "plans": plans, "joint_plan_text": result,
+        "metrics": {"wall_time_sec": _wall_time if "_wall_time" in dir() else 0, "prompt_tokens": merge_r.usage.prompt_tokens, "completion_tokens": merge_r.usage.completion_tokens},
     }, f, ensure_ascii=False, indent=2)
 print(f"\n📁 저장: {out_path}")

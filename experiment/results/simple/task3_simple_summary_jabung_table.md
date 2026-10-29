@@ -6,7 +6,7 @@
 |---|---|---|---|---|
 | CDA | 8 | 6 | 9 | 10 |
 | Centralized | 4 | 2 | 2 | 2 |
-| Independent | 7 | 5 | 5 | 4 |
+| Independent | 7 | 5 | 7 | 4 |
 | LaMMA-P | 10 | 10 | 10 | 10 |
 | SMART-LLM | 10 | 10 | 10 | 10 |
 

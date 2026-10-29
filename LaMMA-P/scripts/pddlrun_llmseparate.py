@@ -88,9 +88,9 @@ class PDDLUtils:
             import os
             frame = controller.last_event.frame
             img = Image.fromarray(frame)
-            os.makedirs("/home/user/journal_co/ai2thor_frames", exist_ok=True)
-            img.save("/home/user/journal_co/ai2thor_frames/frame_init.png")
-            print(f"[SCREENSHOT] 초기 화면 저장: frame_init.png")
+            os.makedirs("/tmp/ai2thor_frames", exist_ok=True)
+            img.save("/tmp/ai2thor_frames/frame_init.png")
+            print(f"[SCREENSHOT] saved: /tmp/ai2thor_frames/frame_init.png")
             obj = [obj["objectType"] for obj in controller.last_event.metadata["objects"]]
             obj_mass = [obj["mass"] for obj in controller.last_event.metadata["objects"]]
             return PDDLUtils.convert_to_dict_objprop(obj, obj_mass)
@@ -703,6 +703,11 @@ class LLMHandler:
                         kwargs["temperature"] = temperature
                         kwargs["frequency_penalty"] = frequency_penalty
                     response = openai.chat.completions.create(**kwargs)
+                    # 토큰 누적
+                    if not hasattr(openai, '_total_tokens'): openai._total_tokens = {'prompt': 0, 'completion': 0}
+                    if hasattr(response, 'usage') and response.usage:
+                        openai._total_tokens['prompt'] += response.usage.prompt_tokens or 0
+                        openai._total_tokens['completion'] += response.usage.completion_tokens or 0
                     return response, response.choices[0].message.content.strip()
                     
             except openai.RateLimitError:
@@ -2111,6 +2116,11 @@ def main():
 
 if __name__ == "__main__":
     main()
+    # 토큰 사용량 출력
+    import openai as _oa
+    if hasattr(_oa, '_total_tokens'):
+        t = _oa._total_tokens
+        print(f"[TOKEN_USAGE] prompt={t['prompt']} completion={t['completion']} total={t['prompt']+t['completion']}")
 
 
 

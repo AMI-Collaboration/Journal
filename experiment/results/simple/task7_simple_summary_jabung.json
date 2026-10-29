@@ -2,14 +2,14 @@
   "cda": {
     "name": "CDA",
     "track_a_llm_judge": {
-      "TF": 3,
-      "TF_reason": "The plan fails to clear most of the objects typically found on counters and tables (e.g., Pot, Egg, Kettle, Toaster, RemoteControl, etc.). It also attempts to clear several hallucinated objects.",
+      "TF": 2,
+      "TF_reason": "The task requires clearing ALL main tables and counters. The plan only addresses a small fraction of the objects in the kitchen and living room, leaving many items untouched. Furthermore, several objects targeted for clearing are hallucinated.",
       "GF": 2,
-      "GF_reason": "Severe grounding violations due to hallucinated objects (blue book, muffin, black mouse, white papers) and hallucinated receptacles (desk, drawer).",
+      "GF_reason": "The plan contains multiple severe hallucinations of objects and receptacles not present in the environment, including 'blue book', 'muffin', 'black mouse', 'white papers', 'desk', and 'drawer'.",
       "SC": 9,
-      "SC_reason": "The action sequence is logically ordered. Objects are picked up before being placed, and actions span across time blocks correctly.",
+      "SC_reason": "The sequence of actions is logically coherent, with pick up actions correctly preceding put down/move actions. The number of actions per robot within each 5-minute block is physically realistic.",
       "CQ": 10,
-      "CQ_reason": "No collaboration is required for this task, and the robots correctly work independently in their respective rooms without forcing unnecessary interactions."
+      "CQ_reason": "The task involves independent goals in separate rooms, so cross-room collaboration is not required. The robots correctly work independently within their respective rooms without unnecessary collaboration."
     },
     "track_b_gc": 0,
     "track_b_state_detail": {},
@@ -18,14 +18,14 @@
   "central": {
     "name": "Centralized",
     "track_a_llm_judge": {
-      "TF": 2,
-      "TF_reason": "The plan attempts to clear tables and counters but mostly interacts with vague ('a light object') or hallucinated ('book', 'mouse') objects. Only the 'apple' is a valid object from the environment. The final destinations are also unspecified ('designated storage area').",
-      "GF": 1,
-      "GF_reason": "Severe grounding violations. The plan hallucinates objects ('book', 'mouse') and relies heavily on vague expressions ('a light object', 'designated storage area', 'Identify all light objects', 'Confirm all main tables are clear').",
-      "SC": 2,
-      "SC_reason": "Critical sequencing and formatting errors. The plan contains numerous duplicate step IDs (e.g., r1_s1, r1_s2, r2_s1 are used twice in the first block). R4 'prepares to receive' before any pass occurs, and robots perform multiple conflicting actions simultaneously due to the duplicated steps.",
-      "CQ": 2,
-      "CQ_reason": "Collaboration is entirely unnecessary for this task. R1 and R3 pass objects to R2 and R4 respectively just to have them placed in storage, which is highly inefficient and unjustified for a simple clearing task."
+      "TF": 3,
+      "TF_reason": "The plan fails to clear all main tables and counters. It only addresses a few objects (apple, vase) and hallucinates several others (book, mouse). Many objects that would typically be on tables or counters in the kitchen and living room are ignored.",
+      "GF": 2,
+      "GF_reason": "Severe grounding violations. The plan hallucinates objects and furniture not present in the rooms (book, mouse, desk). It also uses vague expressions like 'light object', 'designated storage area', and 'final light object'.",
+      "SC": 4,
+      "SC_reason": "Multiple sequential errors: R3 passes a book to R4 in the 10-15 min block, but R4 never receives it. R2 receives a 'final light object' from R1 in the 15-20 min block, but R1 never performs a PASS action for it. R2's organization steps are also disjointed from its receive steps.",
+      "CQ": 4,
+      "CQ_reason": "Collaboration is heavily used (R1 passing to R2, R3 passing to R4) but appears unnecessary for simply clearing tables unless specific mobility constraints exist. Furthermore, the collaboration is incomplete due to missing RECEIVE and PASS actions in the later steps."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -34,14 +34,14 @@
   "independent": {
     "name": "Independent",
     "track_a_llm_judge": {
-      "TF": 3,
-      "TF_reason": "The plan attempts to clear tables and counters but misses many actual objects in both rooms. It also relies heavily on hallucinated objects (magazine, muffin, book, desk) and features redundant actions where two robots try to clear the same object.",
-      "GF": 1,
-      "GF_reason": "Severe violations exist. There are multiple hallucinated objects (magazine, muffin, book, desk, blue object, small plant) and vague expressions ('any remaining light objects', 'remove the object', 'Ensure all main tables and counters are clear').",
-      "SC": 3,
-      "SC_reason": "Critical ordering and logical violations occur, such as R1 and R2 both attempting to pick up the same apple simultaneously, and R3 and R4 both attempting to pick up the same vase simultaneously.",
-      "CQ": 2,
-      "CQ_reason": "There is no meaningful collaboration. Instead, robots in the same rooms act independently and interfere with each other by targeting the exact same objects at the same time."
+      "TF": 4,
+      "TF_reason": "The plan attempts to clear the tables and counters but misses many objects (e.g., RemoteControl, Statue, CreditCard, KeyChain, Pot, Egg). It also includes hallucinated objects and vague actions, failing to fully achieve the task.",
+      "GF": 2,
+      "GF_reason": "Severe grounding violations: hallucinations (book/magazine and muffin in the kitchen, book in the living room) and vague expressions ('any remaining light objects', 'PickupLightObject', 'Place object in storage area').",
+      "SC": 4,
+      "SC_reason": "R1 and R2 attempt to pick up the same apple simultaneously, causing a physical conflict. R4's actions lack specific object targets, breaking sequential logic.",
+      "CQ": 4,
+      "CQ_reason": "Agents in the same room fail to coordinate their tasks, leading to redundant and conflicting actions (R1 and R2 both targeting the apple)."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -50,14 +50,14 @@
   "lamma_p": {
     "name": "LaMMA-P",
     "track_a_llm_judge": {
-      "TF": 2,
-      "TF_reason": "The plan attempts to clear objects, but it relies entirely on hallucinated receptacles ('table 1', 'table 2', 'counter 1', 'counter 2', 'storage') instead of the actual furniture in the rooms (e.g., CoffeeTable, Cabinet). Therefore, the task goals are not achieved using real objects.",
-      "GF": 2,
-      "GF_reason": "Severe grounding violations. The plan hallucinates multiple receptacles ('table 1', 'table 2', 'counter 1', 'counter 2', 'storage') that do not exist in the provided object lists. Additionally, it uses vague, non-standard actions like 'Identify objects' and 'Clean'.",
-      "SC": 8,
-      "SC_reason": "The sequential ordering of actions (go to -> pick up -> go to -> place) is logically coherent, although it is applied to hallucinated receptacles.",
-      "CQ": 5,
-      "CQ_reason": "No collaboration is present in the plan. While clearing tables could potentially be done independently, the lack of room assignment and coordination makes the multi-agent execution disjointed."
+      "TF": 0,
+      "TF_reason": "The plan fails to achieve the task goals because it relies entirely on vague, generic templates ('Table 1', 'light object', 'storage location') rather than interacting with any actual objects from the provided room lists.",
+      "GF": 0,
+      "GF_reason": "The plan is completely ungrounded. It uses vague expressions ('light object', 'storage location', 'another object') and hallucinated locations ('Table 1', 'Countertop A') instead of the specific objects and receptacles available in the environment.",
+      "SC": 7,
+      "SC_reason": "Although the plan is entirely abstract and ungrounded, the logical sequence of the generic actions (navigate, pick up, move, place) is sequentially coherent.",
+      "CQ": 7,
+      "CQ_reason": "No collaboration is present in the plan. For a task like clearing tables across different rooms, independent parallel work is acceptable and collaboration is not strictly required, though the plan's overall generic nature makes it ineffective."
     },
     "track_b_gc": 0,
     "track_b_state_detail": {},
@@ -66,14 +66,14 @@
   "smart_llm": {
     "name": "SMART-LLM",
     "track_a_llm_judge": {
-      "TF": 1,
-      "TF_reason": "The plan fails to fulfill the task because it does not identify or interact with any real objects from the provided room lists, relying entirely on placeholders.",
-      "GF": 1,
-      "GF_reason": "Severe grounding violations: the plan uses vague placeholders ('object A', 'object B', etc.) instead of actual objects, and hallucinates receptacles ('CounterTop', 'DiningTable') that do not exist in the environment.",
-      "SC": 7,
-      "SC_reason": "The sequence of actions is logically ordered in an abstract sense (e.g., pick up, go to cabinet, open, place, close), and includes a wait step to avoid conflicts, though it operates on ungrounded objects.",
-      "CQ": 5,
-      "CQ_reason": "The robots attempt to coordinate access to a shared 'Cabinet' by having one wait for the other. However, it is unclear if they are in the same room, and cross-room collaboration is not strictly necessary for clearing local tables."
+      "TF": 2,
+      "TF_reason": "The plan fails to clear the actual tables in the environment (e.g., CoffeeTable in the living room) and instead targets hallucinated receptacles (Dining Table, CounterTop).",
+      "GF": 2,
+      "GF_reason": "The plan relies on hallucinated receptacles (Dining Table, CounterTop) that do not exist in the rooms. Additionally, it uses collaborative HELP actions for a light object (Plate), which is physically inappropriate.",
+      "SC": 3,
+      "SC_reason": "The plan contains severe logical violations, as robots repeatedly attempt to pick up the same single-instance objects (Cup, Knife, Spoon) at different times without them being placed back.",
+      "CQ": 2,
+      "CQ_reason": "Collaboration is used inappropriately, such as using HELP to lift a Plate. Furthermore, the robots fail to divide labor effectively to address the other room's tables."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",

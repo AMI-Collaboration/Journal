@@ -53,7 +53,10 @@ cmd = [
     "--gpt-version", args.gpt_version,
 ]
 print(f"🚀 실행: {' '.join(cmd)} (cwd={LAMMA_P_DIR})")
-result = subprocess.run(cmd, cwd=LAMMA_P_DIR)
+_t0 = __import__("time").time()
+result = subprocess.run(cmd, cwd=LAMMA_P_DIR, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+print(result.stdout)
+_lamma_output = result.stdout or ""
 
 if result.returncode != 0:
     print(f"⚠️ LaMMA-P 실행이 비정상 종료됨 (code={result.returncode})")
@@ -63,7 +66,12 @@ else:
     logs_dir = os.path.join(LAMMA_P_DIR, "logs")
     log_folders = sorted(glob.glob(os.path.join(logs_dir, "*")), key=os.path.getmtime)
 
-    result_record = {"task_n": args.task, "method": "lamma_p"}
+    _t1 = __import__("time").time()
+    import re as _re2
+    _pt, _ct = 0, 0
+    _m = _re2.search(r'\[TOKEN_USAGE\] prompt=(\d+) completion=(\d+)', _lamma_output if "_lamma_output" in dir() else "")
+    if _m: _pt, _ct = int(_m.group(1)), int(_m.group(2))
+    result_record = {"task_n": args.task, "method": "lamma_p", "metrics": {"wall_time_sec": _t1 - _t0 if "_t0" in dir() else 0, "prompt_tokens": _pt, "completion_tokens": _ct}}
 
     if log_folders:
         latest = log_folders[-1]
@@ -79,6 +87,10 @@ else:
 
     if args.task.startswith("mat_"):
         results_dir = os.path.join(HERE, "results", "matthor")
+    elif "simple" in args.task:
+        results_dir = os.path.join(HERE, "results", "simple")
+    elif "abstract" in args.task:
+        results_dir = os.path.join(HERE, "results", "abstract", f"run{args.run}")
     else:
         results_dir = os.path.join(HERE, "results", f"run{args.run}")
     os.makedirs(results_dir, exist_ok=True)

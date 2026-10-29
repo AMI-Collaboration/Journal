@@ -47,7 +47,10 @@ cmd = [
     "--gpt-version", args.gpt_version,
 ]
 print(f"🚀 실행: {' '.join(cmd)} (cwd={SMART_LLM_DIR})")
-result = subprocess.run(cmd, cwd=SMART_LLM_DIR)
+_t0 = __import__("time").time()
+result = subprocess.run(cmd, cwd=SMART_LLM_DIR, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+print(result.stdout)
+_smart_output = result.stdout or ""
 
 if result.returncode != 0:
     print(f"⚠️ SMART-LLM 실행이 비정상 종료됨 (code={result.returncode})")
@@ -57,7 +60,12 @@ else:
     logs_dir = os.path.join(SMART_LLM_DIR, "logs")
     log_folders = sorted(glob.glob(os.path.join(logs_dir, "*")), key=os.path.getmtime)
 
-    result_record = {"task_n": args.task, "method": "smart_llm"}
+    _t1 = __import__("time").time()
+    import re as _re3
+    _pt2, _ct2 = 0, 0
+    _m2 = _re3.search(r'\[TOKEN_USAGE\] prompt=(\d+) completion=(\d+)', _smart_output if "_smart_output" in dir() else "")
+    if _m2: _pt2, _ct2 = int(_m2.group(1)), int(_m2.group(2))
+    result_record = {"task_n": args.task, "method": "smart_llm", "metrics": {"wall_time_sec": _t1 - _t0 if "_t0" in dir() else 0, "prompt_tokens": _pt2, "completion_tokens": _ct2}}
 
     if log_folders:
         latest = log_folders[-1]
@@ -70,7 +78,14 @@ else:
     else:
         print("⚠️ 로그 폴더를 찾지 못함")
 
-    results_dir = os.path.join(HERE, "results", f"run{args.run}")
+    if "simple" in args.task:
+        results_dir = os.path.join(HERE, "results", "simple")
+    elif args.task.startswith("mat_"):
+        results_dir = os.path.join(HERE, "results", "matthor")
+    elif "abstract" in args.task:
+        results_dir = os.path.join(HERE, "results", "abstract", f"run{args.run}")
+    else:
+        results_dir = os.path.join(HERE, "results", f"run{args.run}")
     os.makedirs(results_dir, exist_ok=True)
     out_path = os.path.join(results_dir, f"{args.task}_smart_llm_result.json")
     with open(out_path, "w", encoding="utf-8") as f:

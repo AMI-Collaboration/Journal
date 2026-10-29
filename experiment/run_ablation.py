@@ -99,7 +99,9 @@ async def run_all(task_n, n_robots, run_n, data, mode):
     for variant in VARIANTS:
         print(f"  [{variant}] running...", flush=True)
         try:
+            _t0 = __import__("time").time()
             r = await run_variant(cfg, llm, variant)
+            r["metrics"]["wall_time_sec"] = __import__("time").time() - _t0
             results[variant] = r
             print(f"  [{variant}] ✅")
         except Exception as e:

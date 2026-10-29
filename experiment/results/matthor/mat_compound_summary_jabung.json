@@ -3,13 +3,13 @@
     "name": "CDA",
     "track_a_llm_judge": {
       "TF": 10,
-      "TF_reason": "The plan successfully achieves both required goals: turning on the sink faucet and putting the toilet paper in the trash, using real objects from the room.",
+      "TF_reason": "The plan successfully fulfills all task requirements: turning on the sink faucet and putting the toilet paper in the trash using the correct objects available in the room.",
       "GF": 10,
-      "GF_reason": "All actions are physically executable by the Gripper robot (R1). The objects interacted with (toilet paper, trash can, sink faucet) map correctly to the actual objects in the room (ToiletPaper, GarbageCan, Faucet). No hallucinations or capability violations.",
+      "GF_reason": "All actions are physically executable by the Gripper robot. The objects interacted with (toilet paper, trash can, sink faucet) map correctly to the actual objects in the room without any hallucinations.",
       "SC": 10,
-      "SC_reason": "The action sequence is perfectly coherent. The robot picks up the toilet paper before putting it in the trash, and then turns on the faucet.",
+      "SC_reason": "The sequence of actions is perfectly logical. The robot picks up the toilet paper before putting it in the trash, and then turns on the faucet. All actions can easily be completed within the 5-minute block.",
       "CQ": 10,
-      "CQ_reason": "The task is a simple, single-room task that does not require collaboration. The plan correctly assigns all actions to a single robot without forcing unnecessary collaboration."
+      "CQ_reason": "No collaboration is required for this simple, single-room task, and the plan correctly avoids unnecessary collaboration by having one robot complete all actions."
     },
     "track_b_gc": 0,
     "track_b_state_detail": {},
@@ -17,30 +17,39 @@
   },
   "central": {
     "name": "Centralized",
-    "track_a_llm_judge": "N/A",
+    "track_a_llm_judge": {
+      "TF": 6,
+      "TF_reason": "The core goals (turning on the sink faucet and putting toilet paper in the trash) are technically achieved, but there is significant redundancy as multiple robots attempt to perform the exact same tasks (R1 and R3 both turn on the faucet; R3 and R4 both try to put the toilet paper in the trash).",
+      "GF": 4,
+      "GF_reason": "There are several grounding violations. R4 uses vague language ('assess its weight to ensure it is light enough'). Furthermore, R4 attempts to pick up the toilet paper while it is already being handled by R2 and R3, which is physically impossible.",
+      "SC": 2,
+      "SC_reason": "Severe ordering violations exist. R3 executes a RECEIVE action in the [0-5 min] block before R2 executes the corresponding PASS action in the [5-10 min] block. Additionally, R4 attempts to pick up and dispose of the toilet paper after R2 has already picked it up and passed it to R3.",
+      "CQ": 2,
+      "CQ_reason": "Collaboration is completely unnecessary for this simple, single-room task. The collaboration attempted is highly inefficient and confused: R1 asks for help with an object it doesn't have, R2 unnecessarily passes the object to R3, and R3 receives before the pass occurs."
+    },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
     "object_grounding": "N/A"
   },
   "independent": {
     "name": "Independent",
-    "track_a_llm_judge": "N/A",
+    "track_a_llm_judge": {
+      "TF": 7,
+      "TF_reason": "The plan successfully identifies the correct objects (faucet, toilet paper, trash) and attempts the required actions to fulfill the task goals. However, there is massive redundancy with four robots attempting the exact same goals simultaneously.",
+      "GF": 5,
+      "GF_reason": "The objects interacted with (sink faucet, toilet paper, trash bin) exist in the room. However, having four robots physically interact with the exact same faucet and the exact same roll of toilet paper at the same time is physically unfeasible and would result in collisions.",
+      "SC": 3,
+      "SC_reason": "Severe sequential coherence issues due to repeated identical actions on the same objects. All four robots are scheduled to turn on the same faucet in the 0-5 minute block, and all four attempt to pick up and dispose of the same toilet paper in the 5-10 minute block.",
+      "CQ": 2,
+      "CQ_reason": "Collaboration is not required for this simple single-room task, but instead of assigning a single robot to complete it, the plan assigns all four robots to perform the exact same actions independently, showing a complete lack of task allocation and coordination."
+    },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
     "object_grounding": "N/A"
   },
   "lamma_p": {
     "name": "LaMMA-P",
-    "track_a_llm_judge": {
-      "TF": 9,
-      "TF_reason": "The plan successfully identifies the correct objects (sink faucet, toilet paper, trash can) and includes the necessary actions to fulfill both task goals.",
-      "GF": 9,
-      "GF_reason": "All objects interacted with (sink faucet, toilet paper, trash can) exist in the room and map correctly to the actual objects list. No hallucinated objects or capabilities are used.",
-      "SC": 4,
-      "SC_reason": "There is a spatial ordering violation. In the [0-5 min] block, R3 goes to the sink faucet and then goes to the toilet paper. In the [5-10 min] block, R3 attempts to turn on the sink faucet while located at the toilet paper, which is physically impossible without navigating back to the sink faucet first.",
-      "CQ": 10,
-      "CQ_reason": "The task is self-contained within a single room and can be completed by one robot. No collaboration is required, and none is unnecessarily included."
-    },
+    "track_a_llm_judge": "N/A",
     "track_b_gc": 0,
     "track_b_state_detail": {},
     "object_grounding": "N/A"

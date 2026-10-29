@@ -3,13 +3,13 @@
     "name": "CDA",
     "track_a_llm_judge": {
       "TF": 7,
-      "TF_reason": "The plan successfully clears the ottoman, stores the CD, and fills the bathtub. However, it fails to wash the lettuce, as R1 only picks it up without interacting with the faucet or water.",
-      "GF": 8,
-      "GF_reason": "Mostly feasible, but contains minor hallucinations: R1 interacts with a 'sink' in the kitchen (only 'Faucet' is listed), and R3 places the CD on a 'dresser' (not listed, though 'Drawer' is present).",
+      "TF_reason": "The plan successfully clears the ottoman, stores the CD, and fills the bathtub. However, it fails to wash the lettuce, as R1 only picks it up without using the faucet or performing a washing action.",
+      "GF": 9,
+      "GF_reason": "The plan is highly feasible. All objects exist in their respective rooms. R3 uses 'dresser' which is an acceptable synonym for 'Drawer'. Actions are well within the capabilities of the robots.",
       "SC": 10,
-      "SC_reason": "All actions follow a logical sequence with no ordering violations. Objects are picked up before being put down.",
+      "SC_reason": "The sequence of actions is perfectly coherent. Objects are picked up before being put down, and there are no ordering violations.",
       "CQ": 10,
-      "CQ_reason": "The tasks are independent and localized to specific rooms. The agents correctly work in parallel without unnecessary collaboration."
+      "CQ_reason": "The task consists of independent sub-tasks in different rooms. The robots correctly work in parallel without unnecessary collaboration, which perfectly matches the task requirements."
     },
     "track_b_gc": 0,
     "track_b_state_detail": {},
@@ -18,14 +18,14 @@
   "central": {
     "name": "Centralized",
     "track_a_llm_judge": {
-      "TF": 5,
-      "TF_reason": "The plan successfully stores the CD and fills the bathtub. However, washing the lettuce and clearing the ottoman are poorly executed due to illogical cross-room transfers and vague object references.",
+      "TF": 4,
+      "TF_reason": "The plan attempts all goals but fails to properly execute them. The CD is stored without being picked up, clearing the ottoman uses vague object references rather than specific items, and washing the lettuce is unnecessarily delegated to another room.",
       "GF": 2,
-      "GF_reason": "Severe grounding and capability violations. R3 holds multiple objects simultaneously (lettuce and a 'light object'). The plan uses vague expressions like 'light object'. Furthermore, R3 attempts to wash lettuce and clear the ottoman in the bedroom, which lacks a sink and the ottoman.",
-      "SC": 3,
-      "SC_reason": "Critical ordering and logical violations. R3 asks for help to fill the bathtub after R4 has already completed the task. R3 clears the ottoman after R2 has already confirmed it is clear. Step IDs for R3 are also executed out of logical sequence.",
-      "CQ": 1,
-      "CQ_reason": "Collaboration is highly inappropriate and unnecessary. R1 passes the lettuce to R3 instead of washing it in the kitchen where the sink is. R2 passes objects to R3 instead of clearing them locally. R3 requests help for a task R4 already handled."
+      "GF_reason": "Severe grounding violations: R3 stores the CD without ever picking it up, R3 holds multiple objects simultaneously (lettuce and a light object in the 0-5 min block), and the plan relies heavily on vague expressions like 'light object' and 'store them appropriately'.",
+      "SC": 2,
+      "SC_reason": "Critical ordering and logical violations: The CD is used before being picked up, action r3_s2 is illogically repeated in the 15-20 minute block, and R3 attempts to clear the ottoman locally despite R2 being the agent actually located there.",
+      "CQ": 3,
+      "CQ_reason": "Collaboration is highly inefficient and unnecessary. R1 passes the lettuce to R3 to wash in the bathroom instead of simply washing it in the kitchen, and R3 is used as an unrealistic central receiver for multiple tasks, leading to capacity violations."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -34,14 +34,14 @@
   "independent": {
     "name": "Independent",
     "track_a_llm_judge": {
-      "TF": 7,
-      "TF_reason": "The plan addresses all four task goals. However, the 'clear ottoman' goal is addressed with a vague action ('clear any light objects'), and R2 hallucinates a CD on the ottoman to clear and store, which slightly detracts from task fulfillment.",
-      "GF": 4,
-      "GF_reason": "There are significant grounding violations. R2 hallucinates a CD in the living room (FP203) which does not exist. Additionally, R2 uses vague expressions such as 'suitable location (e.g., a shelf or drawer)' and 'any light objects (e.g., remote control, magazines)'.",
-      "SC": 9,
-      "SC_reason": "The sequence of actions is mostly logical. Objects are picked up before being used or stored, and the bathtub is cleaned before being filled.",
-      "CQ": 10,
-      "CQ_reason": "The task consists of four independent, room-specific subtasks. No cross-room collaboration is required, and the agents correctly operate independently without forcing unnecessary collaboration."
+      "TF": 6,
+      "TF_reason": "The plan successfully washes the lettuce (R1), stores the CD (R3), and fills the bathtub (R4). However, clearing the ottoman is poorly executed with vague actions by R2 and hallucinated by R3 in the wrong room.",
+      "GF": 3,
+      "GF_reason": "Severe grounding violations: R2 hallucinates a CD on the ottoman and uses vague expressions ('suitable location', 'any light objects', 'designated area'). R3 hallucinates the ottoman in the bedroom.",
+      "SC": 5,
+      "SC_reason": "Multiple coherence issues: R2 and R3 both attempt to store the CD and clear the ottoman independently. R3 asks for help that never arrives and is completely disconnected from the actual task execution.",
+      "CQ": 2,
+      "CQ_reason": "Collaboration is highly inappropriate. R3 asks for help to wash lettuce and fill the bathtub, which are already being handled by R1 and R4 in other rooms. These requests are unnecessary, uncoordinated, and ignored."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -50,14 +50,14 @@
   "lamma_p": {
     "name": "LaMMA-P",
     "track_a_llm_judge": {
-      "TF": 6,
-      "TF_reason": "The plan successfully addresses washing the lettuce and filling the bathtub. However, clearing the ottoman and storing the CD use vague, ungrounded terms ('items', 'storage', 'CD storage'), meaning those goals are not fully achieved with concrete objects.",
-      "GF": 3,
-      "GF_reason": "The plan contains multiple grounding violations through the use of vague expressions ('items', 'storage', 'CD storage'). Additionally, R3 refers to a 'sink' in the kitchen, but only a 'Faucet' is listed in the kitchen's actual objects.",
-      "SC": 9,
-      "SC_reason": "The sequence of actions for each robot is logical, with proper prerequisites (going to objects, picking them up, then acting on them).",
+      "TF": 5,
+      "TF_reason": "The plan attempts all required goals (wash lettuce, clear ottoman, store CD, fill bathtub). However, the execution relies on vague terms ('items on ottoman', 'storage') and suffers from severe physical impossibilities, meaning the goals are not realistically achieved.",
+      "GF": 2,
+      "GF_reason": "Severe grounding violations: 'items on ottoman' and 'storage' are vague and not specific objects/receptacles from the room lists. Additionally, R3 attempts to hold multiple objects (lettuce and ottoman items) simultaneously.",
+      "SC": 2,
+      "SC_reason": "Critical ordering and location violations throughout. Robots navigate to two different locations in one time block, then attempt to interact with objects at the first location while physically present at the second (e.g., R3 goes to lettuce then ottoman, but then tries to pick up the lettuce while at the ottoman). This pattern repeats for washing the lettuce and turning off the bathtub.",
       "CQ": 8,
-      "CQ_reason": "The tasks are largely independent and located in different rooms, so cross-room collaboration (passing objects) is not strictly required. The robots work in parallel effectively, though R3 handles two rooms."
+      "CQ_reason": "The tasks are largely independent and distributed across different rooms. No collaboration was strictly required, and none was used, which is acceptable for this specific set of disjoint tasks."
     },
     "track_b_gc": 0,
     "track_b_state_detail": {},
@@ -67,13 +67,13 @@
     "name": "SMART-LLM",
     "track_a_llm_judge": {
       "TF": 5,
-      "TF_reason": "The plan successfully achieves washing the lettuce and filling the bathtub. However, clearing the ottoman and storing the CD fail because the plan relies on vague and hallucinated objects ('items', 'Storage Area', 'CD Storage').",
-      "GF": 2,
-      "GF_reason": "Severe grounding violations. The plan uses vague expressions ('items from the Ottoman', 'Storage Area', 'CD Storage') and hallucinated objects ('CounterTop'). Additionally, picking up multiple 'items' at once violates the single-object holding constraint, and robots teleport between rooms without explicit navigation.",
-      "SC": 7,
-      "SC_reason": "The logical sequence of actions (pick up, place, switch on/off) is mostly coherent for the individual tasks. However, the lack of room-to-room navigation and the attempt to pick up multiple items simultaneously detract from the physical coherence.",
+      "TF_reason": "The plan attempts all goals, but relies heavily on vague or hallucinated objects ('items on the Ottoman', 'Storage Location', 'CD storage', 'CounterTop'). Washing the lettuce and filling the bathtub are mostly successful, but clearing the ottoman and storing the CD fail due to lack of concrete object references.",
+      "GF": 3,
+      "GF_reason": "Severe grounding violations. The plan uses vague expressions ('items', 'Storage Location', 'CD storage') and hallucinated objects ('CounterTop'). Additionally, R4 operates on objects in two different rooms (Ottoman in living room, CD in bedroom) without any room transition actions.",
+      "SC": 8,
+      "SC_reason": "The sequence of actions is logically ordered for the tasks attempted (e.g., turning on faucet, waiting, turning off). However, the vague nature of R4's actions makes them physically questionable.",
       "CQ": 9,
-      "CQ_reason": "Collaboration is not required for this task, as the four sub-goals are entirely self-contained within their respective rooms. The robots correctly operate independently without forcing unnecessary collaboration."
+      "CQ_reason": "The tasks are fully self-contained within their respective rooms, so cross-room collaboration is not required. The independent execution strategy is appropriate for this task type."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",

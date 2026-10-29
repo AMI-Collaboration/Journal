@@ -2,14 +2,14 @@
   "cda": {
     "name": "CDA",
     "track_a_llm_judge": {
-      "TF": 4,
-      "TF_reason": "The plan attempts to fulfill the task by placing the egg and tomato on a plate and microwaving it, but it relies on a hallucinated 'microwave' which does not exist in the room.",
-      "GF": 4,
-      "GF_reason": "The plan hallucinates a 'microwave' which is not present in the actual objects list. It also references a 'counter' which is not explicitly listed (though it could be a generic surface, the microwave is a severe hallucination).",
+      "TF": 3,
+      "TF_reason": "The plan correctly identifies the egg, tomato, and plate, but the core goal of microwaving them fails because there is no microwave in the room.",
+      "GF": 2,
+      "GF_reason": "The plan hallucinates a 'microwave' and a 'counter', neither of which exist in the provided room object list.",
       "SC": 9,
-      "SC_reason": "The sequence of actions is logical and respects dependencies (putting items on the plate before moving the plate, and moving the plate to the microwave before turning it on).",
+      "SC_reason": "The sequence of actions is logical (putting items on the plate, moving the plate, then turning on the appliance), assuming the objects existed.",
       "CQ": 10,
-      "CQ_reason": "No collaboration was used, which is appropriate since the task is localized to a single room and could theoretically be completed by a single agent if the required appliances were present."
+      "CQ_reason": "No collaboration was used, which is appropriate since all available objects for the task are located in a single room."
     },
     "track_b_gc": 0,
     "track_b_state_detail": {},
@@ -17,30 +17,39 @@
   },
   "central": {
     "name": "Centralized",
-    "track_a_llm_judge": "N/A",
+    "track_a_llm_judge": {
+      "TF": 4,
+      "TF_reason": "The plan attempts to fulfill the goal by placing the egg and tomato on a plate and putting it in a microwave. However, there is no microwave in the provided room list, making the final and most crucial step impossible.",
+      "GF": 2,
+      "GF_reason": "Severe grounding violations: The microwave is hallucinated. Robots perform actions without picking up necessary tools (e.g., no knife picked up for slicing, R2 does not pick up a plate before placing items on it). R3 interacts with the plate R2 used without a proper PASS/RECEIVE or clear location context.",
+      "SC": 3,
+      "SC_reason": "Multiple sequencing errors: R1 and R2 have duplicate PASS/RECEIVE actions across both time blocks. Objects are sliced without picking up a knife. R3 picks up a plate that R2 was interacting with without a clear transfer or placement location.",
+      "CQ": 2,
+      "CQ_reason": "Collaboration is highly inefficient and unnecessary. Four different robots are used for a simple single-room task that one robot could complete. The handoffs are overly complex, and the transition of the plate from R2 to R3 lacks proper collaborative coordination."
+    },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
     "object_grounding": "N/A"
   },
   "independent": {
     "name": "Independent",
-    "track_a_llm_judge": "N/A",
+    "track_a_llm_judge": {
+      "TF": 0,
+      "TF_reason": "The task fails completely because the microwave is hallucinated (it does not exist in the room's object list). Furthermore, all four robots attempt to complete the exact same task simultaneously, leading to massive redundancy.",
+      "GF": 0,
+      "GF_reason": "The plan involves a hallucinated object (microwave). Additionally, multiple robots are instructed to pick up the exact same unique objects (plate, egg, tomato) at the same time, which is physically impossible.",
+      "SC": 0,
+      "SC_reason": "The sequence is entirely incoherent. Multiple robots pick up the same plate, egg, and tomato simultaneously. There are severe physical and ordering violations throughout the plan.",
+      "CQ": 0,
+      "CQ_reason": "There is absolutely no collaboration. Instead of dividing the task or coordinating, all four robots act completely independently to perform the exact same sequence of actions on the same objects, resulting in total interference."
+    },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
     "object_grounding": "N/A"
   },
   "lamma_p": {
     "name": "LaMMA-P",
-    "track_a_llm_judge": {
-      "TF": 2,
-      "TF_reason": "The plan fails to fulfill the task because the microwave is hallucinated (it does not exist in the provided room list).",
-      "GF": 2,
-      "GF_reason": "The plan hallucinates a microwave which is not in the room. Additionally, R3 places the plate in the microwave without ever picking it up.",
-      "SC": 3,
-      "SC_reason": "Critical logical violation: R3 places the plate in the microwave without having picked it up first.",
-      "CQ": 5,
-      "CQ_reason": "Collaboration between R3 and R4 to open/close the microwave door and place the plate is unnecessary for a simple task that a single robot could perform, though the sequence of their joint actions is logically ordered."
-    },
+    "track_a_llm_judge": "N/A",
     "track_b_gc": 0,
     "track_b_state_detail": {},
     "object_grounding": "N/A"

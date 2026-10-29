@@ -2,14 +2,14 @@
   "cda": {
     "name": "CDA",
     "track_a_llm_judge": {
-      "TF": 5,
-      "TF_reason": "The plan successfully turns on the faucet using a real object. However, turning off the room light is attempted using hallucinated objects ('ceiling light' and 'white light switch') that are not in the actual room lists, instead of using available objects like the DeskLamp.",
-      "GF": 5,
-      "GF_reason": "The plan includes interactions with hallucinated objects ('ceiling light' in the bedroom and 'white light switch' in the bathroom) which violates grounding constraints. The faucet interaction is valid.",
+      "TF": 6,
+      "TF_reason": "The plan successfully turns on the faucet, but attempts to turn off the room light using hallucinated objects ('ceiling light' and 'white light switch') that are not in the actual room lists.",
+      "GF": 4,
+      "GF_reason": "The plan includes interactions with hallucinated objects ('ceiling light' in FP301 and 'white light switch' in FP401), which violates grounding constraints.",
       "SC": 10,
-      "SC_reason": "The sequence of actions is logically coherent with no prerequisite or ordering violations.",
+      "SC_reason": "The action sequence is simple, logical, and contains no ordering violations or prerequisite issues.",
       "CQ": 10,
-      "CQ_reason": "No collaboration is required for this task as the goals are independent and self-contained within each room, and the plan correctly avoids unnecessary collaboration."
+      "CQ_reason": "No collaboration is required for this task, and none is used, which is appropriate."
     },
     "track_b_gc": 0,
     "track_b_state_detail": {},
@@ -19,13 +19,13 @@
     "name": "Centralized",
     "track_a_llm_judge": {
       "TF": 4,
-      "TF_reason": "The plan attempts to fulfill the goals, but 'light switch' is hallucinated (not in the actual objects list, though DeskLamp is). Additionally, there is massive redundancy with multiple robots attempting the exact same goals.",
+      "TF_reason": "The plan attempts to fulfill the goals (turning off the light and turning on the faucet), but it is highly redundant and chaotic. R3 hallucinates a faucet in the bedroom, and multiple robots attempt the same goals simultaneously without coordination.",
       "GF": 2,
-      "GF_reason": "The plan relies on a hallucinated object ('light switch'). Furthermore, robots are assigned multiple conflicting actions within the same time block (e.g., R1 and R2 have two different actions labeled with the same step ID in the 0-5 min block).",
+      "GF_reason": "Severe grounding issues. R3 hallucinates a faucet in the bedroom (FP301). The plan references a 'light switch' which is not in the object list (only DeskLamp is available in the bedroom). Additionally, robots are assigned multiple conflicting actions within the same time blocks.",
       "SC": 2,
-      "SC_reason": "Severe sequencing issues: robots have duplicate step IDs in the same time blocks, R2 turns on the faucet and simultaneously asks for help to turn it on, and R3 turns on the faucet again after R2 has already done so.",
+      "SC_reason": "Critical sequencing violations. R1 and R2 have multiple actions assigned to the same step IDs (e.g., two r1_s1 actions in 0-5 min, two r2_s1 actions). R1 performs a local action and a help action simultaneously in the 5-10 min block.",
       "CQ": 2,
-      "CQ_reason": "Collaboration is completely unnecessary for these simple independent tasks. The plan forces confusing and redundant HELP/ASK_HELP interactions between multiple robots for single-person actions."
+      "CQ_reason": "Collaboration is highly inappropriate and unnecessary. Turning on a faucet does not require two robots (R2 and R4). R3 asks R1 to turn off the light while R1 is already doing it, and multiple robots redundantly attempt to turn off lights without communicating."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -34,14 +34,14 @@
   "independent": {
     "name": "Independent",
     "track_a_llm_judge": {
-      "TF": 3,
-      "TF_reason": "The plan fails to achieve the goals using real objects. 'Light switch' and 'room light' are hallucinated (not in the object list for either room). While the faucet exists in the bathroom, robots hallucinate a faucet in the bedroom as well. Multiple robots redundantly attempt the same tasks.",
+      "TF": 4,
+      "TF_reason": "The plan partially achieves the goals. The faucet in the bathroom is turned on by R4, but the plan fails to properly turn off the room light as it relies on a hallucinated 'light switch' instead of the available 'DeskLamp' in the bedroom. Additionally, there is massive redundancy with all robots attempting the same tasks.",
       "GF": 2,
-      "GF_reason": "Severe grounding violations. Robots hallucinate 'light switch' and 'room light' in both rooms, and 'faucet' in the bedroom. Additionally, multiple robots are assigned to interact with the exact same objects simultaneously without coordination.",
-      "SC": 5,
-      "SC_reason": "While individual action sequences (locate -> turn off/on) are logically ordered, there is massive redundancy with four robots attempting the exact same sequence of actions on the same objects, which is physically unrealistic.",
+      "GF_reason": "Severe grounding violations. The robots hallucinate a 'light switch' which is not in the provided object lists. Furthermore, R1 hallucinates a 'faucet in the bedroom', which does not exist.",
+      "SC": 4,
+      "SC_reason": "While the individual sequence of locating and interacting with objects is logical, having four robots simultaneously attempt to interact with the exact same objects (like the faucet) in the same time block is physically unrealistic and highly redundant.",
       "CQ": 2,
-      "CQ_reason": "There is no collaboration. Instead of dividing the tasks based on room locations (e.g., one robot handles the bedroom, another handles the bathroom), all four robots act completely independently and redundantly on the same goals."
+      "CQ_reason": "Poor multi-agent coordination. While explicit collaboration (passing/helping) is not strictly required for this task, the robots fail to divide the labor appropriately. Instead, all four robots redundantly attempt to complete the exact same goals independently, showing a complete lack of task allocation."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -50,14 +50,14 @@
   "lamma_p": {
     "name": "LaMMA-P",
     "track_a_llm_judge": {
-      "TF": 6,
-      "TF_reason": "The plan successfully achieves the goal of turning on the faucet. However, the goal of turning off the room light is attempted on a hallucinated 'light switch' instead of the available 'DeskLamp' in the bedroom.",
-      "GF": 5,
-      "GF_reason": "R2 interacts with a valid object (Faucet). R1 interacts with a hallucinated object ('light switch' / 'the light') which is not in the provided list of actual objects for the bedroom.",
+      "TF": 9,
+      "TF_reason": "The plan successfully addresses both goals: turning off the light and turning on the faucet. However, 'light switch' is not explicitly listed in the room objects (though 'DeskLamp' is available), which is a minor discrepancy.",
+      "GF": 7,
+      "GF_reason": "The plan hallucinates a 'light switch' which is not in the provided list of actual objects for the bedroom (FP301). The faucet is correctly identified in the bathroom (FP401).",
       "SC": 10,
-      "SC_reason": "The sequence of actions is perfectly coherent, with robots moving to their respective objects before interacting with them.",
+      "SC_reason": "The sequence of actions is perfectly logical, with robots navigating to the objects before interacting with them.",
       "CQ": 10,
-      "CQ_reason": "The task consists of independent goals in separate rooms. The robots correctly work in parallel without unnecessary collaboration."
+      "CQ_reason": "The tasks are independent and located in different rooms. The robots correctly work in parallel without unnecessary collaboration."
     },
     "track_b_gc": 0,
     "track_b_state_detail": {},
@@ -66,14 +66,14 @@
   "smart_llm": {
     "name": "SMART-LLM",
     "track_a_llm_judge": {
-      "TF": 7,
-      "TF_reason": "The plan successfully addresses the goals of turning off a light and turning on the faucet. However, 'light switch' is not in the actual objects list for the bedroom (though 'DeskLamp' is available), which slightly impacts task fulfillment due to hallucination.",
-      "GF": 7,
-      "GF_reason": "R2 interacts with the Faucet, which is a valid object in the bathroom. R1 interacts with a 'light switch', which is hallucinated as it does not exist in the provided object list for the bedroom.",
+      "TF": 5,
+      "TF_reason": "The plan successfully achieves the goal of turning on the faucet using a real object. However, the goal of turning off the room light is attempted using a 'LightSwitch', which is not in the provided object list (hallucinated).",
+      "GF": 5,
+      "GF_reason": "R2 interacts with a valid object (Faucet). R1 interacts with a hallucinated object ('LightSwitch') that does not exist in the room's object list.",
       "SC": 10,
-      "SC_reason": "The sequence of actions is perfectly coherent. Both robots navigate to their respective objects before interacting with them.",
+      "SC_reason": "The sequence of actions is perfectly logical, with robots navigating to objects before interacting with them.",
       "CQ": 10,
-      "CQ_reason": "The task consists of independent goals in separate rooms. The robots correctly work in parallel without unnecessary collaboration."
+      "CQ_reason": "The task consists of independent goals in different rooms. The robots correctly work in parallel without unnecessary collaboration."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",

@@ -3,13 +3,13 @@
     "name": "CDA",
     "track_a_llm_judge": {
       "TF": 6,
-      "TF_reason": "The plan attempts all required goals, but relies on several hallucinated objects (e.g., 'black ball' in the living room, 'yellow sponge' in the bathroom, 'closet' in the bedroom) to complete them, which reduces the overall task fulfillment.",
-      "GF": 4,
-      "GF_reason": "There are multiple grounding violations due to hallucinated objects and receptacles: 'black ball' in the living room, 'closet' in the bedroom, and 'yellow sponge' and 'shelf' in the bathroom. These objects do not exist in the provided room lists.",
+      "TF_reason": "The plan successfully heats the bread and puts away the statues and basketball using real objects. However, the 'clean mirror' goal fails because the mirror and sponge are hallucinated in the bathroom. The 'put away ball' goal is partially fulfilled by the real basketball, but R2 also attempts to put away a hallucinated 'black ball'.",
+      "GF": 3,
+      "GF_reason": "There are multiple severe hallucinations: R2 interacts with a 'black ball' (not in living room), R3 interacts with a 'closet' (not in bedroom), and R4 interacts with a 'yellow sponge', 'shelf', and 'mirror' (none of which are in the bathroom).",
       "SC": 7,
-      "SC_reason": "The sequence of actions is mostly coherent, though R1 toggles the toaster on before inserting the bread, which is an illogical order for heating bread.",
-      "CQ": 9,
-      "CQ_reason": "No collaboration was used, which is appropriate since the task consists of independent sub-tasks distributed across different rooms that can be completed locally by each robot."
+      "SC_reason": "The sequence of actions is mostly coherent, but R1 toggles the toaster on before inserting the bread, which is an illogical ordering for heating an object.",
+      "CQ": 10,
+      "CQ_reason": "The tasks are independent and localized to specific rooms. The plan correctly avoids unnecessary collaboration, with each robot working independently in its respective room."
     },
     "track_b_gc": 0,
     "track_b_state_detail": {},
@@ -18,14 +18,14 @@
   "central": {
     "name": "Centralized",
     "track_a_llm_judge": {
-      "TF": 6,
-      "TF_reason": "The plan achieves heating the bread and cleaning the mirror. However, putting away the ball and statue involves significant hallucinations (e.g., R2 finding a ball in the living room when the BasketBall is in the bedroom, and R4 interacting with a ball and statue in the bathroom).",
-      "GF": 2,
-      "GF_reason": "Severe grounding violations. R2 hallucinates a ball in the living room. R4 hallucinates a ball and a statue in the bathroom. R3 uses vague expressions like 'designated storage area'. R4 picks up a cloth from a 'shelf' which does not exist in the bathroom.",
+      "TF": 7,
+      "TF_reason": "The plan addresses most of the required goals (heating bread, putting away statue, cleaning mirror). However, the ball is hallucinated in the living room (it is actually in the bedroom), which affects the completion of the 'put away ball' task.",
+      "GF": 4,
+      "GF_reason": "There are several grounding violations: R2 hallucinates a ball in the living room (BasketBall is in the bedroom), R3 holds multiple objects simultaneously (statue and ball), and vague expressions like 'designated storage area' are used.",
       "SC": 3,
-      "SC_reason": "Critical ordering violation: R3 receives the ball from R2 in the [0-5 min] block, but R2 does not pass the ball until the [5-10 min] block. Additionally, R4 performs pointless repetitive actions (picking up a statue from a shelf and placing it back on the shelf).",
-      "CQ": 3,
-      "CQ_reason": "Collaboration is unnecessary and poorly executed. The BasketBall is already in the bedroom (R3's room), so R2 passing a hallucinated ball from the living room to R3 is illogical. Furthermore, the PASS/RECEIVE timing is inverted."
+      "SC_reason": "Critical ordering violations exist: R3 receives the ball from R2 in the [0-5 min] block, but R2 does not pick up or pass the ball until the [5-10 min] block. A RECEIVE action cannot occur before the corresponding PASS action.",
+      "CQ": 4,
+      "CQ_reason": "Collaboration is poorly executed. The PASS/RECEIVE actions are out of sync across time blocks. Furthermore, passing the ball from R2 to R3 appears unnecessary, as R2 could have put the ball away itself if it had actually found it."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -35,13 +35,13 @@
     "name": "Independent",
     "track_a_llm_judge": {
       "TF": 5,
-      "TF_reason": "The plan achieves heating the bread (R1), putting away the statue (R2, R3), and putting away the ball (R3). However, the mirror is not in any room's object list, and all robots attempt to clean a hallucinated mirror. Additionally, robots attempt to interact with objects not present in their respective rooms.",
+      "TF_reason": "The core goals (heat bread, put away statue, put away ball, clean mirror) are technically achieved by the robots in the correct rooms (R1 heats bread, R2/R3 put away statues, R3 puts away ball, R4 cleans mirror). However, the plan is heavily penalized because every robot attempts to perform every task locally, leading to massive redundancies and hallucinated goal completions.",
       "GF": 1,
-      "GF_reason": "Severe hallucinations throughout the plan. R1 hallucinates a ball, statue, and mirror in the kitchen. R2 hallucinates a ball and mirror in the living room. R4 hallucinates a statue, ball, and mirror in the bathroom. The plan also uses vague expressions like 'designated storage area' and 'drawer or cabinet'.",
-      "SC": 6,
-      "SC_reason": "The sequence of actions for individual objects is mostly logical (pick up before put away). However, R3 requests assistance to heat bread at the end of the plan, long after R1 has already completed this task, showing a lack of overall coherence.",
-      "CQ": 2,
-      "CQ_reason": "There is no meaningful collaboration. The robots attempt to complete all tasks independently by hallucinating objects in their own rooms rather than coordinating. The only collaborative action is R3's ASK_HELP to heat bread, which is unnecessary, unfulfilled, and requested after the task was already completed by R1."
+      "GF_reason": "Severe violations of grounding. Robots constantly hallucinate objects that do not exist in their respective rooms (e.g., R4 hallucinates a statue and a ball in the bathroom; R1 hallucinates a statue, a ball, and a mirror in the kitchen; R2 hallucinates a ball and a mirror in the living room). The plan also uses vague expressions like 'storage area' and 'cabinet or shelf'.",
+      "SC": 4,
+      "SC_reason": "Multiple sequential errors exist. R2, R3, and R4 attempt to clean a mirror without first picking up a cleaning tool (cloth/sponge). R3 asks for help to heat bread, but this request is never answered or fulfilled. The plan is highly chaotic.",
+      "CQ": 1,
+      "CQ_reason": "Collaboration is extremely poor. Instead of dividing the tasks based on the objects available in their respective rooms, all robots attempt to do all tasks independently. R3 issues an unnecessary ASK_HELP for heating bread (which R1 already did) that goes completely ignored."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -50,14 +50,14 @@
   "lamma_p": {
     "name": "LaMMA-P",
     "track_a_llm_judge": {
-      "TF": 3,
-      "TF_reason": "The plan attempts all goals but fails significantly: 'mirror' is hallucinated, 'storage' is a vague destination for the statue and ball, and the bread heating sequence is flawed because the microwave is never closed before turning it on.",
-      "GF": 3,
-      "GF_reason": "Severe grounding violations: 'mirror' does not exist in the bathroom, 'storage' is a vague term rather than a specific receptacle, and R6 attempts to clean without holding any cleaning tool.",
-      "SC": 5,
-      "SC_reason": "R3's sequence for heating the bread is logically flawed; it opens the microwave, puts the bread in, and turns it on without ever closing the door. It then opens the microwave again later.",
-      "CQ": 10,
-      "CQ_reason": "The tasks are completely independent and located in different rooms. The plan correctly assigns them to different robots without forcing unnecessary collaboration."
+      "TF": 4,
+      "TF_reason": "The plan successfully heats the bread using R3. However, R4 attempts to put away the statue and ball into a hallucinated/vague 'storage' object, and attempts to clean a hallucinated 'mirror'. Thus, only one out of four goals is properly achieved with real objects.",
+      "GF": 2,
+      "GF_reason": "Severe grounding violations: 'storage' and 'mirror' are hallucinated or vague objects not present in the room lists. Additionally, R4 picks up both the statue and the ball in the same time block, violating the constraint of holding only one object at a time.",
+      "SC": 3,
+      "SC_reason": "R4 performs an unrealistic number of physical actions in single 5-minute blocks (e.g., going to three different objects in [0-5 min], and picking up two objects plus cleaning a third in [5-10 min]). R4 also holds multiple objects simultaneously before putting them down.",
+      "CQ": 8,
+      "CQ_reason": "No collaboration is used in this plan. Given that the tasks are located in separate rooms (kitchen for bread, bedroom/living room for statue and ball) and can theoretically be completed independently by different robots, the lack of collaboration is acceptable, though R4 ends up overloaded."
     },
     "track_b_gc": 0,
     "track_b_state_detail": {},
@@ -66,14 +66,14 @@
   "smart_llm": {
     "name": "SMART-LLM",
     "track_a_llm_judge": {
-      "TF": 7,
-      "TF_reason": "The plan successfully heats the bread, puts away the statue, and puts away the ball (assuming 'Basket' is a synonym for LaundryHamper and 'Ball' for BasketBall). However, the 'Mirror' is not in the actual room list for the bathroom, so the 'clean mirror' goal is attempted on a hallucinated object and is considered not achieved.",
-      "GF": 5,
-      "GF_reason": "There are several grounding violations due to hallucinated objects: 'Mirror' in the bathroom, 'Basket' in the bedroom (though close to LaundryHamper), and 'CounterTop' in the kitchen. Additionally, R6 attempts to clean the mirror without first picking up any cleaning supplies (like a cloth or sponge).",
-      "SC": 9,
-      "SC_reason": "The sequential coherence is excellent. R3's sequence for operating the microwave (open, put in, close, turn on, wait, turn off, open, take out) is perfectly ordered. R4 and R5 also follow logical pick-and-place sequences.",
-      "CQ": 10,
-      "CQ_reason": "The task consists of independent sub-tasks in separate rooms. No collaboration is required, and the agents correctly work independently without forcing unnecessary interactions."
+      "TF": 3,
+      "TF_reason": "The plan attempts all goals, but relies heavily on hallucinated objects (Countertop, Mirror) and assumes objects from different rooms (Statue, Ball, Shelf) are in the same room. Goals achieved via hallucinated objects count as not achieved.",
+      "GF": 2,
+      "GF_reason": "Severe violations: R4 picks up and holds two objects simultaneously (Statue and Ball). Additionally, there are multiple hallucinated objects (Countertop, Mirror) and R4 acts on objects that do not coexist in a single room according to the environment list.",
+      "SC": 4,
+      "SC_reason": "Critical ordering/physical violation: R4 picks up a second object (Ball) while already holding the first (Statue) without putting it down, which is physically impossible for a standard robot gripper.",
+      "CQ": 8,
+      "CQ_reason": "The tasks are independent and self-contained, so no cross-room collaboration is strictly required. The robots correctly work in parallel without forcing unnecessary collaboration."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",

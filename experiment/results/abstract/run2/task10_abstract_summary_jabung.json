@@ -2,14 +2,14 @@
   "cda": {
     "name": "CDA",
     "track_a_llm_judge": {
-      "TF": 5,
-      "TF_reason": "The plan attempts to fulfill the goals of clearing surfaces and turning on lights, but it suffers from hallucinations (e.g., 'yellow flower', 'red wallet') and illogical actions (e.g., throwing plates, glasses, and bread into the trash). Redundant actions by multiple robots on the same objects also detract from task completion.",
-      "GF": 5,
-      "GF_reason": "There are noticeable grounding violations. Robots interact with hallucinated objects ('yellow flower' in the kitchen, 'red wallet' in the bedroom, and unlisted 'light switches'). Furthermore, robots attempt to interact with objects that have already been moved or disposed of by other robots.",
-      "SC": 4,
-      "SC_reason": "Critical ordering and logical violations occur due to a lack of coordination. For example, R2 moves the bread to the trash, and immediately after, R1 moves the same bread to the cabinet. Similar conflicts occur with the box, plate, glass, and bottle, making the sequence physically impossible to execute as written.",
+      "TF": 4,
+      "TF_reason": "The plan only partially addresses the task. While lights are turned on and some items are put away or trashed, a vast majority of clutter objects in all rooms are completely ignored. Additionally, robots inappropriately throw away items like plates and bread, and there are conflicting actions on the same objects.",
+      "GF": 4,
+      "GF_reason": "There are several hallucinations (e.g., 'yellow flower' in the kitchen, 'red wallet' in the bedroom). Furthermore, robots interact with duplicate instances of objects that only exist once in the environment (e.g., two boxes in the living room, two breads and two plates in the kitchen).",
+      "SC": 5,
+      "SC_reason": "Sequential coherence is poor due to uncoordinated actions on the same objects. For example, R2 moves the bread and plate to the trash, but R1 later attempts to move the bread and plate to the cabinet. R3 and R4 also simultaneously attempt to turn on the same floor lamp.",
       "CQ": 3,
-      "CQ_reason": "While cross-room collaboration is not strictly required for this task, intra-room coordination is completely absent. Robots in the same room (R1/R2 and R3/R4) step on each other's toes, redundantly turning on the same lamps and conflictingly moving the exact same objects to different locations."
+      "CQ_reason": "Collaboration is very poor. Instead of dividing the work effectively, agents in the same rooms (R1/R2 and R3/R4) step on each other's toes, performing redundant actions (both turning on lights) and conflicting over the same objects (boxes, plates, bread)."
     },
     "track_b_gc": 0.0,
     "track_b_state_detail": {
@@ -24,14 +24,14 @@
   "central": {
     "name": "Centralized",
     "track_a_llm_judge": {
-      "TF": 4,
-      "TF_reason": "The plan attempts to address the task goals (clearing surfaces, arranging items, turning on lights), but relies heavily on vague instructions rather than concrete actions on specific objects. While R1 successfully clears some items (bottle, cup, plate) from the table, other robots fail to achieve their goals due to hallucinations and lack of specificity.",
+      "TF": 5,
+      "TF_reason": "The plan attempts to fulfill the task by having each robot clean its respective room. Some concrete goals are achieved (e.g., R1 clearing the table, R2 and R3 arranging pillows, R4 adjusting the shower curtain). However, many actions rely on hallucinated objects or vague instructions, leaving notable gaps in actual task completion.",
       "GF": 2,
-      "GF_reason": "Severe grounding violations. The plan is dominated by vague expressions ('any light objects', 'any clutter', 'arrange the items', 'ensure all lights', 'check for any remaining clutter'). Additionally, R4 hallucinates objects that do not exist in the bathroom (toothbrush, toothpaste, toothbrush holder, towel rack).",
+      "GF_reason": "The plan contains severe grounding violations. There are numerous hallucinated objects (magazines, books, clothes, closet, toothbrush, toothpaste, curtains, window blinds) and many vague expressions ('any clothes or clutter', 'any light objects', 'ensure all surfaces are clear', 'double-check', 'check the lighting').",
       "SC": 9,
-      "SC_reason": "The sequence of actions is logically ordered. There are no prerequisite violations or impossible dependencies among the actions that are specified.",
+      "SC_reason": "The action sequence is logically ordered within each room. There are no prerequisite violations, as most actions are independent cleaning tasks.",
       "CQ": 10,
-      "CQ_reason": "Collaboration is not required for this task, as each room's cleaning goals are self-contained. The plan correctly assigns independent local tasks to each robot without forcing unnecessary collaboration."
+      "CQ_reason": "Collaboration is not required for this task, as each room's cleaning goals are self-contained. The agents correctly work independently in parallel without unnecessary collaboration."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -41,13 +41,13 @@
     "name": "Independent",
     "track_a_llm_judge": {
       "TF": 5,
-      "TF_reason": "The plan attempts to tidy up all rooms for the photoshoot, but relies heavily on hallucinated objects (toothbrush, bathroom cabinet, window blinds, closet) and vague instructions rather than concrete actions on listed objects.",
+      "TF_reason": "The plan attempts to fulfill the task by clearing surfaces and arranging items in each room. However, it relies heavily on vague instructions ('remove any small clutter', 'ensure all surfaces are clear') and hallucinates objects (toothbrush, toothpaste, closet, second plate), which reduces actual task completion.",
       "GF": 2,
-      "GF_reason": "Severe grounding and capability violations: 1) Hallucinated objects (toothbrush, bathroom cabinet, window blinds, closet). 2) Vague expressions ('any small clutter', 'any visible trash', 'Ensure all surfaces are clear'). 3) R1 holds multiple objects simultaneously (bottle and glass). 4) R3's actions are missing formal action type prefixes.",
-      "SC": 4,
-      "SC_reason": "Action sequencing is flawed. R1 picks up two objects sequentially and then attempts to place both at once. Furthermore, R1 uses 'PassReceiveObject' to place objects into a cabinet or bowl, which is an invalid use of the action primitive.",
-      "CQ": 2,
-      "CQ_reason": "Collaboration is not strictly required for this task as each room can be tidied independently. However, R1 inappropriately uses the 'PassReceiveObject' collaboration primitive as a substitute for a 'PutObject' action to place items in a cabinet and a bowl."
+      "GF_reason": "Severe grounding and capability violations. R1 picks up three objects (glass, cup, bottle) in the first 5 minutes and holds them simultaneously until the next block. The plan includes hallucinated objects (toothbrush, toothpaste, closet) and vague expressions ('any small clutter', 'all available lights'). Additionally, R1 incorrectly uses 'PassReceiveObject' to place items into receptacles.",
+      "SC": 5,
+      "SC_reason": "While the general sequence of picking up before placing is followed, R1 holding three objects simultaneously for 5 minutes is physically unrealistic. Several actions also combine picking and placing into a single step (e.g., R3 picking up shoes and placing them in the closet).",
+      "CQ": 3,
+      "CQ_reason": "Inter-robot collaboration is not strictly required for this task as each room's goals are self-contained. However, R1 inappropriately uses the collaborative action 'PassReceiveObject' to place objects into a cupboard and a recycling bin, demonstrating a misunderstanding of collaborative action types."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -56,14 +56,14 @@
   "lamma_p": {
     "name": "LaMMA-P",
     "track_a_llm_judge": {
-      "TF": 2,
-      "TF_reason": "The plan attempts to address the task goals (clearing surfaces, arranging furniture, disposing of trash, turning on lights) but fails to use concrete objects from the provided room lists. Instead, it relies entirely on abstract concepts like 'clutter' and 'trash', meaning no specific required goals are actually achieved with real objects.",
+      "TF": 3,
+      "TF_reason": "The plan conceptually addresses the task goals (clearing clutter, removing trash, arranging furniture, turning on lights) but fails to use concrete actions with real objects from the provided room lists. It relies entirely on generic terms.",
       "GF": 1,
-      "GF_reason": "The plan is completely ungrounded. It relies heavily on vague expressions ('clutter', 'trash', 'storage area', 'designated area', 'final inspection'). Additionally, 'Turn on lights in all rooms' is a macro-action that ignores the physical reality of navigating to and interacting with specific lamps (e.g., FloorLamp, DeskLamp).",
+      "GF_reason": "Severe grounding violations. The plan uses vague expressions throughout ('clutter', 'trash', 'storage area', 'designated area', 'final inspection'). Additionally, 'Turn on lights in all rooms' is a single action that spans multiple rooms, which is physically impossible to execute as one step.",
       "SC": 5,
-      "SC_reason": "While the high-level logical sequence of actions (move to location, pick up object, move to destination, drop object) is maintained, the physical execution is unrealistic. For example, R4 turning on lights in all rooms in a single step, or conducting five room inspections in a 5-minute window, violates physical time and space constraints.",
-      "CQ": 7,
-      "CQ_reason": "Collaboration is not strictly required for this task, as the robots can divide the rooms and work independently to clean and organize. The robots successfully divide the workload (R3 handles living room, dining room, and bedroom; R4 handles kitchen, bathroom, and inspections), though no actual inter-robot coordination (PASS/RECEIVE) occurs."
+      "SC_reason": "The sequence of actions is logically ordered at a high level (e.g., move to location, pick up, move to storage, store). However, the lack of specific objects and the physically unrealistic single action of turning on lights in all rooms reduce the coherence.",
+      "CQ": 6,
+      "CQ_reason": "Collaboration is not strictly required for this task since the robots can divide the rooms and work in parallel. However, there is no explicit coordination, and they work completely independently."
     },
     "track_b_gc": 0.0,
     "track_b_state_detail": {
@@ -77,16 +77,7 @@
   },
   "smart_llm": {
     "name": "SMART-LLM",
-    "track_a_llm_judge": {
-      "TF": 2,
-      "TF_reason": "The plan fails to achieve the goals using concrete actions on real objects. It relies entirely on high-level, abstract instructions ('Switch on all lights', 'Clear and clean countertops') rather than interacting with specific objects listed in the rooms.",
-      "GF": 1,
-      "GF_reason": "Severe grounding violations. The plan is dominated by vague expressions ('all lights', 'all curtains', 'final check') and hallucinates objects and locations not in the environment ('curtains', 'outside'). Robots do not target specific, observable objects.",
-      "SC": 5,
-      "SC_reason": "While the abstract steps follow a logical human-like sequence (cleaning before arranging, checking at the end), the lack of concrete object manipulation makes it impossible to evaluate true physical prerequisites.",
-      "CQ": 3,
-      "CQ_reason": "There is no explicit collaboration (no PASS/RECEIVE/HELP). The robots divide abstract tasks in parallel, but the lack of grounded actions means meaningful multi-agent coordination on specific objects is absent."
-    },
+    "track_a_llm_judge": "N/A",
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
     "object_grounding": "N/A"

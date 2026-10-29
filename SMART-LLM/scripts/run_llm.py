@@ -46,7 +46,10 @@ def LM(prompt, gpt_version, max_tokens=128, temperature=0, stop=None, logprobs=1
             kwargs["temperature"] = temperature
             kwargs["frequency_penalty"] = frequency_penalty
         response = openai.chat.completions.create(**kwargs)
-        
+        if not hasattr(openai, '_total_tokens'): openai._total_tokens = {'prompt': 0, 'completion': 0}
+        if hasattr(response, 'usage') and response.usage:
+            openai._total_tokens['prompt'] += response.usage.prompt_tokens or 0
+            openai._total_tokens['completion'] += response.usage.completion_tokens or 0
         return response, response.choices[0].message.content.strip()
 
 def set_api_key(openai_api_key):
@@ -69,6 +72,12 @@ def get_ai2_thor_objects(floor_plan_id):
     controller.stop()
     obj = convert_to_dict_objprop(obj, obj_mass)
     return obj
+
+def _print_token_usage():
+    import openai as _oa
+    if hasattr(_oa, '_total_tokens'):
+        t = _oa._total_tokens
+        print(f"[TOKEN_USAGE] prompt={t['prompt']} completion={t['completion']} total={t['prompt']+t['completion']}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -262,4 +271,5 @@ if __name__ == "__main__":
                 
             with open(f"./logs/{folder_name}/code_plan.py", 'w') as x:
                 x.write(code_plan[idx])
-            
+
+_print_token_usage()

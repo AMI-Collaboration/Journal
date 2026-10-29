@@ -3,13 +3,13 @@
     "name": "CDA",
     "track_a_llm_judge": {
       "TF": 10,
-      "TF_reason": "The plan successfully assigns the correct robots to turn on the coffee machine and the TV in their respective rooms. Both objects exist in the rooms and the goals are achieved within the deadline.",
+      "TF_reason": "The plan successfully assigns R1 to turn on the coffee machine in the kitchen and R2 to turn on the TV (Television) in the living room. Both goals are achieved within the deadline using real objects.",
       "GF": 10,
-      "GF_reason": "Both robots perform simple toggle actions on objects that are present in their respective rooms. The actions are well within the capabilities of Mobile_Light robots.",
+      "GF_reason": "Both robots perform actions on objects that exist in their respective rooms. Toggling appliances is within the capabilities of Mobile_Light robots.",
       "SC": 10,
-      "SC_reason": "The actions are independent and can be executed in parallel without any prerequisite or ordering violations.",
+      "SC_reason": "The actions are independent and can be executed in parallel without any sequencing issues.",
       "CQ": 10,
-      "CQ_reason": "No collaboration is required for this task since the goals are self-contained in separate rooms with capable robots present. The plan correctly avoids unnecessary collaboration."
+      "CQ_reason": "The task involves independent goals in separate rooms. The robots correctly work in parallel without unnecessary collaboration, which is the most efficient approach."
     },
     "track_b_gc": 0,
     "track_b_state_detail": {},
@@ -18,14 +18,14 @@
   "central": {
     "name": "Centralized",
     "track_a_llm_judge": {
-      "TF": 8,
-      "TF_reason": "The plan successfully achieves the goals of turning on the coffee machine and the TV using real objects. However, there is a redundancy as both R1 and R4 attempt to turn on the coffee machine.",
-      "GF": 10,
-      "GF_reason": "All actions are physically executable, and the objects interacted with (CoffeeMachine, TV/Television) exist in the specified rooms.",
-      "SC": 7,
-      "SC_reason": "The sequence is mostly coherent, but R1 and R4 perform identical actions on the same object (coffee machine) simultaneously in the 5-10 min block, which is a conflict.",
-      "CQ": 6,
-      "CQ_reason": "Collaboration is not strictly required for this task as independent agents can handle separate rooms. However, R1 and R4 redundantly target the same object without coordination, showing poor task allocation."
+      "TF": 6,
+      "TF_reason": "The core goals of turning on the coffee machine and the TV are achieved, but the plan includes significant redundancy (multiple robots turning on the same devices) and hallucinations (looking for a TV in the kitchen).",
+      "GF": 3,
+      "GF_reason": "There are several grounding violations: R3 hallucinates a TV in the kitchen, R2 uses vague expressions ('ensure it is accessible'), and R1 and R2 appear to move between rooms without explicit navigation actions or context of which room they are in.",
+      "SC": 3,
+      "SC_reason": "The sequence is highly incoherent. R2, R3, and R4 all attempt to turn on the TV simultaneously in the 5-10 min block. Furthermore, R1 and R2 repeat the exact same actions of turning on the TV and coffee machine in the 15-20 min block after they were already turned on.",
+      "CQ": 2,
+      "CQ_reason": "Collaboration is completely uncoordinated. Instead of dividing the tasks efficiently, multiple robots redundantly attempt to perform the exact same actions on the same objects without any communication or synchronization."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -35,13 +35,13 @@
     "name": "Independent",
     "track_a_llm_judge": {
       "TF": 7,
-      "TF_reason": "The required goals (turning on the coffee machine and TV) are achieved using real objects. However, there is massive redundancy as multiple robots perform the exact same actions on the same objects.",
-      "GF": 9,
-      "GF_reason": "The plan is physically executable and uses objects that actually exist in the specified rooms. No hallucinated objects are used.",
+      "TF_reason": "The core goals of turning on the coffee machine and the TV are achieved, but there is significant redundancy with multiple robots performing the same tasks.",
+      "GF": 8,
+      "GF_reason": "The plan uses real objects (CoffeeMachine, TV/Television) and the actions are physically executable, though the reasoning for R3 asking for help (TV being a heavy object to turn on) is illogical.",
       "SC": 4,
-      "SC_reason": "There are severe sequential violations due to repeated identical actions on the same objects. For example, the TV is turned on by R4, then R2, then R3. The coffee machine is turned on by R1 and R3 simultaneously.",
+      "SC_reason": "There are severe ordering and coordination issues, including repeated identical actions on the same objects (R2 turning on the TV after R4 already did, R1 turning on the coffee machine after R3).",
       "CQ": 2,
-      "CQ_reason": "Collaboration is not required for this simple task, yet multiple robots are assigned to the same objects without coordination. R4 also makes an unnecessary ASK_HELP request for a task that is already being handled redundantly."
+      "CQ_reason": "Collaboration is completely unnecessary for this simple task. Furthermore, the ASK_HELP requests are redundant and poorly timed, as they ask for help with tasks that other robots have already completed."
     },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
@@ -51,13 +51,13 @@
     "name": "LaMMA-P",
     "track_a_llm_judge": {
       "TF": 10,
-      "TF_reason": "The plan successfully achieves both required goals (turning on the coffee machine and the TV) using the correct objects in their respective rooms.",
+      "TF_reason": "The plan successfully fulfills the task goals by having R1 turn on the coffee machine and R2 turn on the TV, using real objects present in their respective rooms.",
       "GF": 10,
       "GF_reason": "The plan is fully grounded and feasible. The objects exist in the specified rooms, and the actions are standard and within typical robot capabilities.",
       "SC": 10,
-      "SC_reason": "The sequence of actions is perfectly coherent. Each robot moves to its target object before attempting to turn it on.",
+      "SC_reason": "The sequence of actions is perfectly coherent. Each robot moves to the target object before attempting to turn it on.",
       "CQ": 10,
-      "CQ_reason": "Collaboration is not required for this task as the goals are independent and located in different rooms. The plan correctly assigns independent tasks to each robot without unnecessary collaboration."
+      "CQ_reason": "The task consists of independent goals in separate rooms. The plan correctly executes these in parallel without unnecessary collaboration."
     },
     "track_b_gc": 0,
     "track_b_state_detail": {},
@@ -67,11 +67,11 @@
     "name": "SMART-LLM",
     "track_a_llm_judge": {
       "TF": 10,
-      "TF_reason": "The plan successfully fulfills both goals by having R1 turn on the Coffee Machine and R2 turn on the TV.",
+      "TF_reason": "The plan successfully fulfills the task by having R4 turn on the coffee machine and R5 turn on the TV.",
       "GF": 10,
-      "GF_reason": "The plan is fully grounded. Both the Coffee Machine and the TV exist in the respective rooms, and the actions are physically executable.",
+      "GF_reason": "The plan uses valid objects present in the rooms (Coffee Machine in FP1, TV/Television in FP201) and standard actions without any hallucinations or capability violations.",
       "SC": 10,
-      "SC_reason": "The sequence of actions is logical, with each robot first navigating to the target object before interacting with it.",
+      "SC_reason": "The sequence of actions is perfectly coherent, with robots first navigating to the objects before interacting with them.",
       "CQ": 10,
       "CQ_reason": "Collaboration is not required for this task as the goals are independent and located in different rooms. The robots correctly work in parallel without unnecessary collaboration."
     },
