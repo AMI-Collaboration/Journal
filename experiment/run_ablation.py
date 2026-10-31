@@ -52,6 +52,7 @@ VARIANTS = ['full', 'no_offer', 'no_edge', 'no_graph']
 async def run_variant(cfg, llm, variant):
     log = EventLog(verbose=False)
     ids = cfg.ids
+    llm.reset_usage()  # variant 시작 전 리셋
 
     # Stage 1: Offer
     if variant == 'no_offer':

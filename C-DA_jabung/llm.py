@@ -56,6 +56,11 @@ class BaseLLM:
     async def _raw(self, system, user, *, key, images) -> str:
         raise NotImplementedError
 
+    def reset_usage(self):
+        self.calls = 0
+        self.prompt_tokens = 0
+        self.completion_tokens = 0
+
     def usage(self) -> dict:
         return {"llm_calls": self.calls, "prompt_tokens": self.prompt_tokens,
                 "completion_tokens": self.completion_tokens}
