@@ -1,5 +1,6 @@
 from ai2thor.controller import Controller
 from PIL import Image
+import json
 import os
 import sys
 import tty
@@ -30,7 +31,7 @@ def get_nearest(event, current_agent, attr):
     return min(visible_objs, key=dist)
 
 
-def interactive_capture(scene, agent_count, out_dir, prefix, robot_labels, width=640, height=480, random_spawn=False, dirty_all=False):
+def interactive_capture(scene, agent_count, out_dir, prefix, robot_labels, robot_types=None, width=640, height=480, random_spawn=False, dirty_all=False):
     os.makedirs(out_dir, exist_ok=True)
     controller = Controller(scene=scene, agentCount=agent_count, width=width, height=height)
 
@@ -47,6 +48,14 @@ def interactive_capture(scene, agent_count, out_dir, prefix, robot_labels, width
     current_agent = 0
     shot_count = {i: 0 for i in range(agent_count)}
     held = {i: None for i in range(agent_count)}  # 현재 들고 있는 물건 objectId
+
+    # 캡처할 때마다 로봇 위치/방향을 함께 기록 (PDDL 실행 시 초기 pose로 재사용 가능하도록)
+    positions_path = os.path.join(out_dir, f"{prefix}_positions.json")
+    if os.path.exists(positions_path):
+        with open(positions_path, encoding="utf-8") as f:
+            positions = json.load(f)
+    else:
+        positions = {}
 
     print(f"\n현재 조작 중인 로봇: {robot_labels[current_agent]}")
     print("숫자키(1~9): 로봇 전환 | w/a/s/d: 이동 | i/k: 고개 위/아래 | j/l: 좌/우 회전")
@@ -150,7 +159,21 @@ def interactive_capture(scene, agent_count, out_dir, prefix, robot_labels, width
             label = robot_labels[current_agent]
             path = os.path.join(out_dir, f"{prefix}_{label}_{shot_count[current_agent]}.png")
             Image.fromarray(agent_event.frame).save(path)
-            print(f"saved: {path}")
+
+            agent_meta = agent_event.metadata["agent"]
+            entry_key = f"{label}_{shot_count[current_agent]}"
+            positions[entry_key] = {
+                "image": os.path.basename(path),
+                "robot_label": label,
+                "robot_type": robot_types[current_agent] if robot_types else None,
+                "position": agent_meta["position"],
+                "rotation": agent_meta["rotation"],
+                "cameraHorizon": agent_meta.get("cameraHorizon", 0),
+            }
+            with open(positions_path, "w", encoding="utf-8") as f:
+                json.dump(positions, f, ensure_ascii=False, indent=2)
+
+            print(f"saved: {path}  pos={agent_meta['position']} rot={agent_meta['rotation']}")
 
         elif key == "m":
             teleport_to_can(controller, current_agent)
@@ -165,10 +188,12 @@ if __name__ == "__main__":
     interactive_capture(
         scene="FloorPlan15",
         agent_count=4,
-        out_dir="/home/user/journal_co/experiment/scene/images/FP15",
-        prefix="FP15",
-        robot_labels=["R1:Gripper", "R2:Mobile_Light", "R3:Mobile_Heavy", "R4:Gripper"],
+        out_dir="/mnt/c/Users/shin/Desktop/AAMAS/experiment/image/matthor/mat_complex",
+        prefix="mat_complex_FP15",
+        robot_labels=["R1", "R2", "R3", "R4"],  # Gripper, Mobile_Light, Mobile_Heavy, Gripper
     )
+
+
 
 def teleport_to_can(controller, current_agent):
     """가까운 오브젝트를 가장 가까운 GarbageCan 안으로 이동"""

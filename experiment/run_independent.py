@@ -16,7 +16,7 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-from loader import load_all, build_agent_inputs, log_usage  # noqa: E402
+from loader import load_all, build_agent_inputs, log_usage, save_method_raw_result  # noqa: E402
 
 from openai import OpenAI  # noqa: E402
 
@@ -153,20 +153,18 @@ result = merge_r.choices[0].message.content.strip()
 print("\n✅ 완료\n")
 print(result)
 
-if "simple" in args.task:
-    results_dir = os.path.join(HERE, "results", "simple")
-elif args.task.startswith("mat_"):
+result_record = {
+    "task_n": args.task, "method": "independent", "mode": args.mode,
+    "task_text": task_text, "plans": plans, "joint_plan_text": result,
+    "metrics": {"wall_time_sec": _wall_time if "_wall_time" in dir() else 0, "prompt_tokens": merge_r.usage.prompt_tokens, "completion_tokens": merge_r.usage.completion_tokens},
+}
+
+if args.task.startswith("mat_"):
     results_dir = os.path.join(HERE, "results", "matthor")
-elif "abstract" in args.task:
-    results_dir = os.path.join(HERE, "results", "abstract", f"run{args.run}")
+    os.makedirs(results_dir, exist_ok=True)
+    out_path = os.path.join(results_dir, f"{args.task}_independent_result.json")
+    with open(out_path, "w", encoding="utf-8") as f:
+        json.dump(result_record, f, ensure_ascii=False, indent=2)
 else:
-    results_dir = os.path.join(HERE, "results", f"run{args.run}")
-os.makedirs(results_dir, exist_ok=True)
-out_path = os.path.join(results_dir, f"{args.task}_independent_result.json")
-with open(out_path, "w", encoding="utf-8") as f:
-    json.dump({
-        "task_n": args.task, "method": "independent", "mode": args.mode,
-        "task_text": task_text, "plans": plans, "joint_plan_text": result,
-        "metrics": {"wall_time_sec": _wall_time if "_wall_time" in dir() else 0, "prompt_tokens": merge_r.usage.prompt_tokens, "completion_tokens": merge_r.usage.completion_tokens},
-    }, f, ensure_ascii=False, indent=2)
+    out_path = save_method_raw_result(args.task, "independent", result_record, n_robots=args.n_robots, run=args.run)
 print(f"\n📁 저장: {out_path}")

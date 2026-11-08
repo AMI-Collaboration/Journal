@@ -2,14 +2,14 @@
   "cda": {
     "name": "CDA",
     "track_a_llm_judge": {
-      "TF": 10,
-      "TF_reason": "The plan successfully fulfills both goals: preparing hot water for the shower and putting the toilet paper in the trash, using valid objects in the room.",
-      "GF": 10,
-      "GF_reason": "All actions are physically executable, and the objects mentioned (shower handle/knob for Faucet, toilet paper, trash bin for GarbageCan) map correctly to the actual objects in the room.",
-      "SC": 10,
-      "SC_reason": "The sequence of actions is logical and respects all prerequisites. Object manipulation follows the correct pick-and-place order.",
-      "CQ": 10,
-      "CQ_reason": "Collaboration is not strictly required for this single-room task, but the robots work in parallel efficiently without unnecessary or inappropriate collaborative actions."
+      "TF": 4,
+      "TF_reason": "The plan attempts to declutter the reading area by moving items like books, pillows, and remotes to shelves or tables. However, it hallucinates several objects (blankets, mugs) and misses the 10-minute deadline.",
+      "GF": 3,
+      "GF_reason": "Severe grounding violations. The plan hallucinates objects not in the room (blanket, mug). It also uses incorrect action formats, such as 'adjust the green pillow from the sofa to the shelf' and 'fold the brown blanket from the sofa to the shelf', which are physically nonsensical.",
+      "SC": 4,
+      "SC_reason": "Multiple sequential and logical errors. R3 and R4 both interact with a 'yellow blanket' from different locations simultaneously. R2 performs 'adjust' and 'fold' actions that attempt to move objects between receptacles without picking them up.",
+      "CQ": 5,
+      "CQ_reason": "No explicit collaboration (PASS/HELP) is used, which is acceptable for a single-room task. However, the parallel execution is poorly coordinated, with robots hallucinating duplicate objects and acting independently without awareness of each other's actions."
     },
     "track_b_gc": 0,
     "track_b_state_detail": {},
@@ -17,46 +17,46 @@
   },
   "central": {
     "name": "Centralized",
-    "track_a_llm_judge": {
-      "TF": 4,
-      "TF_reason": "The plan attempts to fulfill the goals, but includes hallucinated objects ('water container') and highly redundant actions where multiple robots (R2, R3, R4) attempt to handle the same toilet paper simultaneously.",
-      "GF": 3,
-      "GF_reason": "The plan uses hallucinated objects ('water container') and includes many vague, non-physical actions ('Monitor the water temperature', 'Confirm the hot water is ready'). R4 also attempts to pick up an object that R2 has already picked up.",
-      "SC": 2,
-      "SC_reason": "Severe sequential violations: R2 picks up the toilet paper twice, R2 and R3 have duplicate PASS/RECEIVE actions in the same time block, and R4 attempts to pick up and dispose of the toilet paper while R2 and R3 are already handling it.",
-      "CQ": 2,
-      "CQ_reason": "Collaboration is completely unnecessary as all robots are in the same room and any single robot could complete the tasks. Furthermore, R1 uses [HELP] actions without a valid target, and R4 redundantly attempts the exact same task as R2/R3."
-    },
+    "track_a_llm_judge": "N/A",
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
     "object_grounding": "N/A"
   },
   "independent": {
     "name": "Independent",
-    "track_a_llm_judge": {
-      "TF": 5,
-      "TF_reason": "The plan addresses the core goals (turning on the shower/faucet for hot water and putting toilet paper in the trash). However, all four robots attempt to complete the exact same goals redundantly, leading to severe conflicts.",
-      "GF": 2,
-      "GF_reason": "There are multiple feasibility violations: R4 uses incorrect and hallucinated affordances ('SliceObject' to tear toilet paper, 'PourObject' to place it in the trash, 'PickupLightObject' to turn a handle). Additionally, multiple robots attempt to manipulate the same objects (ToiletPaper, Faucet) simultaneously, which is physically impossible.",
-      "SC": 2,
-      "SC_reason": "Severe ordering and state violations. R4 picks up the toilet paper in the 0-5 minute block, meaning R1, R2, and R3 cannot pick up the same object in the 5-10 minute block. Similarly, the shower is turned on multiple times by different robots.",
-      "CQ": 1,
-      "CQ_reason": "There is zero effective collaboration. Instead of dividing the tasks or having one robot complete this simple single-room task, all four robots act completely independently to perform the exact same actions, resulting in massive redundancy and interference."
-    },
+    "track_a_llm_judge": "N/A",
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
     "object_grounding": "N/A"
   },
   "lamma_p": {
     "name": "LaMMA-P",
-    "track_a_llm_judge": "N/A",
+    "track_a_llm_judge": {
+      "TF": 5,
+      "TF_reason": "The plan attempts to declutter the reading area by moving a book and a magazine (which could map to the newspaper) to the shelf. However, it relies heavily on vague descriptions rather than specific objects.",
+      "GF": 3,
+      "GF_reason": "The plan contains numerous vague expressions ('cluttered object', 'next cluttered object', 'furniture', 'surface to clean', 'table surface', 'next surface') which violates grounding constraints.",
+      "SC": 6,
+      "SC_reason": "The basic pick-and-place sequence is logical, but the robot requests help to move furniture and then immediately abandons that task to go clean a surface without waiting for or utilizing the requested help.",
+      "CQ": 2,
+      "CQ_reason": "The robot issues an ASK_HELP request for moving furniture, but there are no other robots in the plan to provide assistance, making the request unfulfilled and inappropriate."
+    },
     "track_b_gc": 0,
     "track_b_state_detail": {},
     "object_grounding": "N/A"
   },
   "smart_llm": {
     "name": "SMART-LLM",
-    "track_a_llm_judge": "N/A",
+    "track_a_llm_judge": {
+      "TF": 10,
+      "TF_reason": "The plan successfully fulfills the task of de-cluttering the reading area by having the robots put away the Book, Newspaper, and RemoteControl onto appropriate surfaces (Shelf, CoffeeTable, SideTable). All objects used are present in the room.",
+      "GF": 10,
+      "GF_reason": "All objects interacted with exist in the room. The actions (go to, pick up, put) are standard and feasible, with no hallucinated objects or vague expressions.",
+      "SC": 10,
+      "SC_reason": "The sequence of actions is perfectly coherent. Each robot goes to an object, picks it up, goes to a destination, and places the object, respecting all physical dependencies.",
+      "CQ": 10,
+      "CQ_reason": "The task is self-contained within one room and can be parallelized. The robots work efficiently in parallel without unnecessary explicit collaboration (like passing objects), which is highly appropriate for this scenario."
+    },
     "track_b_gc": "N/A (설계상 제외)",
     "track_b_state_detail": "N/A (설계상 제외)",
     "object_grounding": "N/A"

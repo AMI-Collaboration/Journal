@@ -44,7 +44,7 @@ _load_cda_module("cda.stage3_edge_proposal", "stage3_edge_proposal.py")
 _load_cda_module("cda.stage4_graph_reasoning", "stage4_graph_reasoning.py")
 _load_cda_module("cda.pipeline", "pipeline.py")
 
-from loader import load_all, build_cda_task_config, log_usage_from_metrics
+from loader import load_all, build_cda_task_config, log_usage_from_metrics, save_method_raw_result, final_task_dir
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--task", required=True)
@@ -142,12 +142,6 @@ raw_plan = result["joint_plan_text"]
 naturalized = _naturalize(raw_plan)
 print(naturalized)
 
-if "simple" in args.task:
-    results_dir = os.path.join(HERE, "results", "simple")
-else:
-    results_dir = os.path.join(HERE, "results", "abstract", {4: "run1", 6: "run2", 8: "run3"}.get(args.n_robots, "run1"))
-os.makedirs(results_dir, exist_ok=True)
-
 result_record = {
     "task_n": args.task,
     "mode": args.mode,
@@ -174,12 +168,24 @@ if args.no_proposal:
 if args.no_graph_llm:
     suffix += "_no_graph_llm"
 
-out_path = os.path.join(results_dir, f"{args.task}_{args.mode}_cda_jabung{suffix}_result.json")
-with open(out_path, "w", encoding="utf-8") as f:
-    json.dump(result_record, f, ensure_ascii=False, indent=2)
+if args.task.startswith("mat_"):
+    results_dir = os.path.join(HERE, "results", "matthor")
+    os.makedirs(results_dir, exist_ok=True)
+    out_path = os.path.join(results_dir, f"{args.task}_{args.mode}_cda_jabung{suffix}_result.json")
+    io_log_path = os.path.join(results_dir, f"{args.task}_{args.mode}_cda_jabung{suffix}_io_log.json")
+elif suffix:
+    # ad-hoc single-flag ablation (--no-proposal / --no-graph-llm), distinct from run_ablation.py's
+    # variant system -- kept alongside the canonical ours_cda.json rather than overwriting it.
+    task_dir = final_task_dir(args.task, n_robots=args.n_robots, run=args.run)
+    out_path = os.path.join(task_dir, f"ours_cda{suffix}.json")
+    io_log_path = os.path.join(task_dir, f"ours_cda{suffix}_io_log.json")
+else:
+    out_path = save_method_raw_result(args.task, "cda", result_record, n_robots=args.n_robots, run=args.run)
+    io_log_path = os.path.join(os.path.dirname(out_path), "ours_cda_io_log.json")
 
-# io_log 저장
-io_log_path = os.path.join(results_dir, f"{args.task}_{args.mode}_cda_jabung{suffix}_io_log.json")
+if suffix or args.task.startswith("mat_"):
+    with open(out_path, "w", encoding="utf-8") as f:
+        json.dump(result_record, f, ensure_ascii=False, indent=2)
 with open(io_log_path, "w", encoding="utf-8") as f:
     json.dump(llm.io_log, f, ensure_ascii=False, indent=2)
 print(f"📋 IO 로그: {io_log_path}")

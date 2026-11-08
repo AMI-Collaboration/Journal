@@ -12,6 +12,105 @@ import sys
 BASE = os.path.dirname(os.path.abspath(__file__))
 EXPERIMENT_DIR = BASE
 
+# ---------------------------------------------------------------- final results layout
+# results/final/run{1,2,3}/{4,6,8}robot/{abstract,simple}/task{N}/
+#   ours_cda.json, baseline_{central,independent,lamma_p,smart_llm}.json, ablation.json (abstract only)
+# run{N} = repetition index (1-3), NOT robot count. Each per-method file merges
+# {"method", "task_n", "raw_result", "llm_judge"} -- the two are written by separate
+# scripts (pipeline run vs. judge) at separate times, so every write here is a
+# read-merge-write that preserves whichever half it isn't touching.
+METHOD_FILE_NAME = {
+    "cda": "ours_cda.json",
+    "central": "baseline_central.json",
+    "independent": "baseline_independent.json",
+    "lamma_p": "baseline_lamma_p.json",
+    "smart_llm": "baseline_smart_llm.json",
+}
+
+
+def final_task_dir(task_n: str, n_robots: int = 4, run: int = 1) -> str:
+    task_type = "simple" if "simple" in task_n else "abstract"
+    task_num = task_n.split("_")[0].replace("task", "")
+    out_dir = os.path.join(EXPERIMENT_DIR, "results", "final", f"run{run}",
+                            f"{n_robots}robot", task_type, f"task{task_num}")
+    os.makedirs(out_dir, exist_ok=True)
+    return out_dir
+
+
+def final_method_path(task_n: str, method: str, n_robots: int = 4, run: int = 1) -> str:
+    return os.path.join(final_task_dir(task_n, n_robots, run), METHOD_FILE_NAME[method])
+
+
+def _read_json(path):
+    if os.path.exists(path):
+        with open(path, encoding="utf-8") as f:
+            return json.load(f)
+    return {}
+
+
+def save_method_raw_result(task_n: str, method: str, raw_result: dict, n_robots: int = 4, run: int = 1) -> str:
+    path = final_method_path(task_n, method, n_robots, run)
+    doc = _read_json(path)
+    doc["method"] = method
+    doc["task_n"] = task_n
+    doc["raw_result"] = raw_result
+    doc.setdefault("llm_judge", None)
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(doc, f, ensure_ascii=False, indent=2)
+    return path
+
+
+def save_method_judge(task_n: str, method: str, judge: dict, n_robots: int = 4, run: int = 1) -> str:
+    path = final_method_path(task_n, method, n_robots, run)
+    doc = _read_json(path)
+    doc["method"] = method
+    doc["task_n"] = task_n
+    doc["llm_judge"] = judge
+    doc.setdefault("raw_result", None)
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(doc, f, ensure_ascii=False, indent=2)
+    return path
+
+
+def load_method_raw_result(task_n: str, method: str, n_robots: int = 4, run: int = 1):
+    doc = _read_json(final_method_path(task_n, method, n_robots, run))
+    return doc.get("raw_result")
+
+
+def final_ablation_path(task_n: str, n_robots: int = 4, run: int = 1) -> str:
+    return os.path.join(final_task_dir(task_n, n_robots, run), "ablation.json")
+
+
+def save_ablation_raw(task_n: str, variant: str, raw_result: dict, n_robots: int = 4, run: int = 1) -> str:
+    path = final_ablation_path(task_n, n_robots, run)
+    doc = _read_json(path)
+    doc.setdefault("task_n", task_n)
+    doc.setdefault("variants", {})
+    doc["variants"].setdefault(variant, {})
+    doc["variants"][variant]["raw_result"] = raw_result
+    doc["variants"][variant].setdefault("llm_judge", None)
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(doc, f, ensure_ascii=False, indent=2)
+    return path
+
+
+def load_ablation_raw(task_n: str, variant: str, n_robots: int = 4, run: int = 1):
+    doc = _read_json(final_ablation_path(task_n, n_robots, run))
+    return doc.get("variants", {}).get(variant, {}).get("raw_result")
+
+
+def save_ablation_judge(task_n: str, variant: str, judge: dict, n_robots: int = 4, run: int = 1) -> str:
+    path = final_ablation_path(task_n, n_robots, run)
+    doc = _read_json(path)
+    doc.setdefault("task_n", task_n)
+    doc.setdefault("variants", {})
+    doc["variants"].setdefault(variant, {})
+    doc["variants"][variant]["llm_judge"] = judge
+    doc["variants"][variant].setdefault("raw_result", None)
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(doc, f, ensure_ascii=False, indent=2)
+    return path
+
 
 def load_all():
     """experiment 데이터를 모두 읽어 반환."""

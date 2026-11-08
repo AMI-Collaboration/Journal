@@ -12,7 +12,7 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-from loader import load_all  # noqa: E402
+from loader import load_all, load_method_raw_result, save_method_raw_result, final_method_path  # noqa: E402
 
 from openai import OpenAI  # noqa: E402
 
@@ -21,6 +21,7 @@ parser.add_argument("--task", required=True)
 parser.add_argument("--method", required=True, choices=["lamma_p", "smart_llm"])
 parser.add_argument("--gpt-version", default="gpt-4o")
 parser.add_argument("--run", type=int, default=1)
+parser.add_argument("--n-robots", type=int, default=4)
 args = parser.parse_args()
 
 data = load_all()
@@ -28,17 +29,15 @@ task_text = data["tasks"][args.task]["task"]
 
 if args.task.startswith("mat_"):
     result_path = os.path.join(HERE, "results", "matthor", f"{args.task}_{args.method}_result.json")
-elif "simple" in args.task:
-    result_path = os.path.join(HERE, "results", "simple", f"{args.task}_{args.method}_result.json")
-elif "abstract" in args.task:
-    result_path = os.path.join(HERE, "results", "abstract", f"run{args.run}", f"{args.task}_{args.method}_result.json")
+    if not os.path.exists(result_path):
+        raise SystemExit(f"결과 파일이 없습니다: {result_path}")
+    with open(result_path, encoding="utf-8") as f:
+        method_result = json.load(f)
 else:
-    result_path = os.path.join(HERE, "results", f"run{args.run}", f"{args.task}_{args.method}_result.json")
-if not os.path.exists(result_path):
-    raise SystemExit(f"결과 파일이 없습니다: {result_path}")
-
-with open(result_path, encoding="utf-8") as f:
-    method_result = json.load(f)
+    result_path = final_method_path(args.task, args.method, n_robots=args.n_robots, run=args.run)
+    method_result = load_method_raw_result(args.task, args.method, n_robots=args.n_robots, run=args.run)
+    if not method_result:
+        raise SystemExit(f"결과 파일이 없습니다: {result_path}")
 
 decomposed = method_result.get("decomposed_plan_py", "")
 allocated = method_result.get("allocated_plan_py", "")
@@ -88,15 +87,27 @@ Rules:
 print(f"Task: {args.task} (method={args.method})")
 print("Joint Plan 변환 중...")
 
+import time as _time
+_t0 = _time.time()
 response = client.chat.completions.create(
     model=args.gpt_version, temperature=0.0,
     messages=[{"role": "user", "content": PROMPT}],
 )
+_convert_wall = _time.time() - _t0
 joint_plan_text = response.choices[0].message.content.strip()
 
 print("\n" + joint_plan_text)
 
 method_result["joint_plan_text"] = joint_plan_text
-with open(result_path, "w", encoding="utf-8") as f:
-    json.dump(method_result, f, ensure_ascii=False, indent=2)
+usage = getattr(response, "usage", None)
+metrics = method_result.setdefault("metrics", {})
+metrics["prompt_tokens"] = metrics.get("prompt_tokens", 0) + (usage.prompt_tokens if usage else 0)
+metrics["completion_tokens"] = metrics.get("completion_tokens", 0) + (usage.completion_tokens if usage else 0)
+metrics["wall_time_sec"] = metrics.get("wall_time_sec", 0) + _convert_wall
+
+if args.task.startswith("mat_"):
+    with open(result_path, "w", encoding="utf-8") as f:
+        json.dump(method_result, f, ensure_ascii=False, indent=2)
+else:
+    result_path = save_method_raw_result(args.task, args.method, method_result, n_robots=args.n_robots, run=args.run)
 print(f"\n저장: {result_path}")

@@ -10,7 +10,7 @@ CDA_DIR = os.path.join(HERE, '..', 'C-DA_jabung')
 sys.path.insert(0, os.path.join(HERE, '..'))
 sys.path.insert(0, HERE)
 
-from loader import load_all, build_cda_task_config
+from loader import load_all, build_cda_task_config, save_ablation_raw
 
 def _load_cda_module(name, relpath):
     path = os.path.join(CDA_DIR, relpath)
@@ -77,9 +77,11 @@ async def run_variant(cfg, llm, variant):
         collab, judgments = await edge_proposal(cfg, plans, offers, llm, log)
 
     # Stage 4: Graph Reasoning
-    use_graph_llm = (variant != 'no_graph')
-    g = await graph_reasoning(cfg, plans, collab, offers, judgments,
-                              llm if use_graph_llm else None, log, max_rounds=2)
+    if variant == 'no_graph':
+        from cda.graph import PlanGraph
+        g = PlanGraph(cfg, plans, collab, offers, judgments)
+    else:
+        g = await graph_reasoning(cfg, plans, collab, offers, judgments, llm, log, max_rounds=2)
 
     text = render(g)
     m = metrics(g, plan_meta, llm.usage())
@@ -87,7 +89,7 @@ async def run_variant(cfg, llm, variant):
     return {"variant": variant, "joint_plan_text": text, "metrics": m}
 
 
-async def run_all(task_n, n_robots, run_n, data, mode):
+async def run_all(task_n, n_robots, run_n, data, mode, selected_variants=None):
     cfg_dict = build_cda_task_config(task_n, data, mode=mode, n_robots=n_robots)
     cfg = TaskConfig.from_notebook(
         task=cfg_dict["task"],
@@ -97,7 +99,7 @@ async def run_all(task_n, n_robots, run_n, data, mode):
     )
     llm = OpenAILLM()
     results = {}
-    for variant in VARIANTS:
+    for variant in (selected_variants or VARIANTS):
         print(f"  [{variant}] running...", flush=True)
         try:
             _t0 = __import__("time").time()
@@ -111,11 +113,9 @@ async def run_all(task_n, n_robots, run_n, data, mode):
             traceback.print_exc()
             results[variant] = {"variant": variant, "error": str(e)}
 
-    out_dir = os.path.join(HERE, 'results', 'ablation')
-    os.makedirs(out_dir, exist_ok=True)
-    out_path = os.path.join(out_dir, f'{task_n}_ablation_run{run_n}.json')
-    with open(out_path, 'w', encoding='utf-8') as f:
-        json.dump(results, f, ensure_ascii=False, indent=2)
+    out_path = None
+    for variant, r in results.items():
+        out_path = save_ablation_raw(task_n, variant, r, n_robots=n_robots, run=run_n)
     print(f"💾 saved: {out_path}")
     return results
 
@@ -126,10 +126,11 @@ def main():
     ap.add_argument('--n-robots', type=int, default=4)
     ap.add_argument('--run', type=int, default=1)
     ap.add_argument('--mode', default='multi_room')
+    ap.add_argument('--variants', nargs='+', default=None)
     a = ap.parse_args()
     data = load_all()
     print(f"=== Ablation: {a.task} (n={a.n_robots}, run{a.run}) ===")
-    asyncio.run(run_all(a.task, a.n_robots, a.run, data, a.mode))
+    asyncio.run(run_all(a.task, a.n_robots, a.run, data, a.mode, a.variants))
 
 if __name__ == '__main__':
     main()

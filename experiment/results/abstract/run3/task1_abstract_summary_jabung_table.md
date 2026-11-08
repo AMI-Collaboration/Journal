@@ -4,28 +4,8 @@
 
 | 방법 | TF | GF | SC | CQ |
 |---|---|---|---|---|
-| CDA | 3 | 2 | 2 | 3 |
-| Centralized | 6 | 3 | 5 | 9 |
-| Independent | 5 | 3 | 3 | 2 |
-| LaMMA-P | 4 | 2 | 3 | 7 |
-| SMART-LLM | - | - | - | - |
-
-## Track B -- GC (ours, LaMMA-P만)
-
-| 방법 | GC |
-|---|---|
-| CDA | 0.0 |
-| Centralized | N/A (설계상 제외) |
-| Independent | N/A (설계상 제외) |
-| LaMMA-P | 0.0 |
-| SMART-LLM | N/A (설계상 제외) |
-
-## Object Grounding
-
-| 방법 | Grounding Rate | Hallucinated |
-|---|---|---|
-| CDA | N/A | N/A |
-| Centralized | N/A | N/A |
-| Independent | N/A | N/A |
-| LaMMA-P | N/A | N/A |
-| SMART-LLM | N/A | N/A |
+| CDA | 4 | 2 | 2 | 1 |
+| Centralized | 4 | 1 | 2 | 3 |
+| Independent | 4 | 2 | 3 | 2 |
+| LaMMA-P | 4 | 2 | 4 | 8 |
+| SMART-LLM | 9 | 8 | 9 | 10 |

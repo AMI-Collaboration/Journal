@@ -1,0 +1,150 @@
+{
+  "cda": {
+    "name": "CDA",
+    "track_a_llm_judge_v2": {
+      "n_steps": 17,
+      "non_atomic_step_ids": [
+        "r2_s1",
+        "r5_s1",
+        "r6_s1",
+        "r5_s2",
+        "r2_s4"
+      ],
+      "n_non_atomic_steps": 5,
+      "ungrounded_step_ids": [
+        "r2_s1",
+        "r4_s1",
+        "r5_s1",
+        "r4_s2",
+        "r2_s4"
+      ],
+      "n_ungrounded_steps": 5,
+      "subgoals_required": [
+        "prepare quick food",
+        "tidy living room"
+      ],
+      "subgoals_covered": [
+        "prepare quick food",
+        "tidy living room"
+      ],
+      "TF": 8,
+      "TF_reason": "The plan successfully addresses the task by preparing quick food (toasting bread, plating an apple) and tidying the living room (moving the laptop and pillow to appropriate places) within the 10-minute deadline.",
+      "GF": 4,
+      "GF_reason": "The plan contains multiple non-atomic 'move' steps and references ungrounded objects (e.g., 'table' in the kitchen, 'magazine', 'white paper'). Furthermore, R3 (Mobile_Light) picks up both a plate and an apple to its hand simultaneously, violating its single-gripper capability.",
+      "SC": 3,
+      "SC_reason": "There is a critical sequence violation: R1 passes a mug to R2 in step r1_s6, but R1 never picked up the mug (it only picked up an egg in r1_s3).",
+      "CQ": 4,
+      "CQ_reason": "Collaboration was not strictly required to complete these tasks. The attempted collaboration (R1 passing a mug to R2) is flawed because R1 does not possess the mug, rendering the exchange invalid."
+    }
+  },
+  "lamma_p": {
+    "name": "LaMMA-P",
+    "track_a_llm_judge_v2": {
+      "n_steps": 6,
+      "non_atomic_step_ids": [
+        "r4_s2",
+        "r4_s4",
+        "r2_s4"
+      ],
+      "n_non_atomic_steps": 3,
+      "ungrounded_step_ids": [
+        "r4_s2",
+        "r4_s4",
+        "r2_s4"
+      ],
+      "n_ungrounded_steps": 3,
+      "subgoals_required": [
+        "prepare quick food",
+        "tidy living room"
+      ],
+      "subgoals_covered": [
+        "tidy living room"
+      ],
+      "TF": 4,
+      "TF_reason": "The plan attempts to fulfill the task within the 10-minute deadline, but the food preparation and part of the tidying are handled via non-atomic and ungrounded steps ('Gather ingredients', 'Assemble sandwich', 'Clean the table'). Only the newspaper tidying is concretely achieved.",
+      "GF": 3,
+      "GF_reason": "Half of the actionable steps are non-atomic and use ungrounded or generic terms ('ingredients', 'sandwich', 'Clean the table'). This exceeds the 30% threshold, capping GF at 4.",
+      "SC": 9,
+      "SC_reason": "The sequence of actions is logical, with picking up preceding placing, and slicing preceding assembling.",
+      "CQ": 8,
+      "CQ_reason": "Parallel execution is used effectively to meet the tight 10-minute deadline, with one robot handling the kitchen and the other the living room."
+    }
+  },
+  "smart_llm": {
+    "name": "SMART-LLM",
+    "track_a_llm_judge_v2": {
+      "n_steps": 19,
+      "non_atomic_step_ids": [
+        "r3_s6"
+      ],
+      "n_non_atomic_steps": 1,
+      "ungrounded_step_ids": [
+        "r2_s7",
+        "r2_s10",
+        "r3_s6"
+      ],
+      "n_ungrounded_steps": 3,
+      "subgoals_required": [
+        "prepare quick food",
+        "tidy living room"
+      ],
+      "subgoals_covered": [
+        "prepare quick food",
+        "tidy living room"
+      ],
+      "TF": 7,
+      "TF_reason": "Both subgoals are addressed within the 10-minute deadline. However, the food preparation step has a critical execution error (failing to pick up the plate before moving it), which partially compromises task fulfillment.",
+      "GF": 5,
+      "GF_reason": "The plan includes ungrounded objects ('Cheese' does not exist in the kitchen) and a non-atomic step ('Clean Floor'). Furthermore, R2 attempts to place the Plate in the Microwave without ever picking it up, which is physically impossible.",
+      "SC": 3,
+      "SC_reason": "There is a critical missing prerequisite: R2 places the Plate in the Microwave (r2_s13) but never actually picked up the Plate from the counter after placing the bread on it. This makes the sequence impossible to execute.",
+      "CQ": 10,
+      "CQ_reason": "Collaboration is not strictly required, and the agents efficiently divide the independent tasks (kitchen prep and living room tidying) to work in parallel, which is optimal for the tight deadline."
+    }
+  },
+  "central": {
+    "name": "Centralized",
+    "track_a_llm_judge_v2": {
+      "n_steps": 19,
+      "non_atomic_step_ids": [
+        "r1_s5",
+        "r3_s1",
+        "r4_s1",
+        "r1_s6",
+        "r1_s7",
+        "r3_s2",
+        "r3_s3",
+        "r4_s3",
+        "r4_s4"
+      ],
+      "n_non_atomic_steps": 9,
+      "ungrounded_step_ids": [
+        "r2_s1",
+        "r3_s1",
+        "r4_s1",
+        "r1_s6",
+        "r2_s2",
+        "r2_s3",
+        "r2_s4",
+        "r3_s2",
+        "r3_s3",
+        "r4_s3",
+        "r4_s4"
+      ],
+      "n_ungrounded_steps": 11,
+      "subgoals_required": [
+        "prepare quick meal",
+        "tidy living room"
+      ],
+      "subgoals_covered": [],
+      "TF": 2,
+      "TF_reason": "The plan fails to cover the required subgoals with atomic and grounded steps. The meal preparation is left incomplete due to non-atomic assembly and ungrounded references to a 'meal' and 'drink'. The tidying of the living room relies entirely on vague, non-atomic, and ungrounded instructions (e.g., 'tidy up', 'pick up light objects').",
+      "GF": 2,
+      "GF_reason": "The plan has a very high ratio of non-atomic (47%) and ungrounded (58%) steps. Robots are instructed to interact with generic concepts like 'meal', 'light objects', 'heavy objects', and 'drink' rather than specific objects in the environment. R1 is also instructed to pass multiple objects at once.",
+      "SC": 3,
+      "SC_reason": "Sequential coherence is poor. R1 passes a 'plate and cup' but R2 receives a 'meal'. R2 then passes the 'meal' to R3, who is instructed to 'ensure the meal is ready for consumption', which breaks logical task flow and execution feasibility.",
+      "CQ": 3,
+      "CQ_reason": "Collaboration is highly inefficient and illogical. R2 acts as an unnecessary middleman to carry the 'meal' to R3, who then performs vague preparation steps on it. The passes involve ungrounded composite objects ('meal') and multiple items at once, making the exchanges invalid."
+    }
+  }
+}

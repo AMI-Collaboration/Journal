@@ -1,92 +1,22 @@
 {
   "cda": {
     "name": "CDA",
-    "track_a_llm_judge": {
-      "TF": 6,
-      "TF_reason": "The plan partially fulfills the goals. The living room is tidied by moving the newspaper, laptop, pillow, and plant. Food (bread and apple) is prepared in the kitchen, but the attempt to deliver the bread to the living room fails due to a blocked receive action.",
-      "GF": 5,
-      "GF_reason": "There are some grounding issues. The kitchen only has one 'Apple', but R2 interacts with a 'green apple' and a 'red apple', hallucinating a second one. 'Magazine' maps to Newspaper and 'red flowers' maps to HousePlant/Vase, which is acceptable. R2 moving a bowl to a 'yellow chair' is physically illogical for food preparation.",
-      "SC": 7,
-      "SC_reason": "The sequence is mostly coherent, but there are illogical actions: R4 turns on the floor lamp and R3 immediately turns it off. The pass/receive sequence between R1 and R2 is ordered correctly, but the subsequent pass to R4 fails.",
-      "CQ": 4,
-      "CQ_reason": "Collaboration is necessary to move food from the kitchen (Gripper R1 -> Mobile R2) to the living room. However, the cross-room transfer fails because R4's receive action is blocked (likely due to requesting from the wrong agent or system state mismatch after R1 passed to R2), leaving the collaboration incomplete."
-    },
-    "track_b_gc": 0.0,
-    "track_b_state_detail": {
-      "A1_work_clothes_ready": false,
-      "A2_work_bag_ready": false,
-      "A3_essential_items_ready": false,
-      "A4_exit_area_ready": false
-    },
-    "object_grounding": "N/A"
+    "track_a_llm_judge": "N/A"
   },
   "central": {
     "name": "Centralized",
-    "track_a_llm_judge": {
-      "TF": 5,
-      "TF_reason": "The plan attempts to fulfill the goals by preparing a meal (bread, tomato, drink) and tidying the living room. However, the tidying actions are highly vague and do not target specific out-of-place objects from the room list, relying instead on generalized commands.",
-      "GF": 2,
-      "GF_reason": "Severe grounding violations. The plan relies heavily on vague expressions ('any light objects', 'any out-of-place furniture', 'ensure meal is ready', 'organizing items'). It also hallucinates objects like 'books' and 'cushions', and R1 attempts to pass multiple objects (plate and cup) simultaneously.",
-      "SC": 3,
-      "SC_reason": "Critical ordering violations exist. R3 attempts to receive the meal from R2 in the 0-5 minute block, but R2 does not receive the meal from R1 until the 5-10 minute block. Additionally, R1 interacts with the bread, tomato, and cup without first picking them up.",
-      "CQ": 3,
-      "CQ_reason": "Collaboration is poorly structured. R1 passes the meal to R2, who then moves to the living room and passes it to R3. This intermediate transfer to R3 is unnecessary, as R2 could simply place the meal on a table. Furthermore, the timing of the PASS/RECEIVE actions between R2 and R3 is completely misaligned across time blocks."
-    },
-    "track_b_gc": "N/A (설계상 제외)",
-    "track_b_state_detail": "N/A (설계상 제외)",
-    "object_grounding": "N/A"
+    "track_a_llm_judge": "N/A"
   },
   "independent": {
     "name": "Independent",
-    "track_a_llm_judge": {
-      "TF": 4,
-      "TF_reason": "The plan attempts to fulfill the goals of preparing a quick meal and tidying the living room. However, it relies heavily on hallucinated objects (e.g., 'fruit' in the living room, 'table' in the kitchen) and vague actions, meaning the core goals are largely not achieved with concrete, real objects.",
-      "GF": 2,
-      "GF_reason": "Severe grounding violations exist. R4's actions are entirely vague ('any clutter', 'ensure it is neat', 'designated area'). There are hallucinated objects ('fruit' in the living room, 'table' in the kitchen). R4 also misuses a collaborative action type (PassReceiveObject) for a vague local placement.",
-      "SC": 2,
-      "SC_reason": "Critical sequential violations make execution impossible. R1 slices bread without picking up the bread or knife, and pours coffee without making it or picking up the cup. R3 slices fruit without a knife. R1 places bread on a plate that R2 picked up, without any transfer occurring.",
-      "CQ": 2,
-      "CQ_reason": "Collaboration is completely absent despite being needed (e.g., R1 needs the plate that R2 picked up, but no PASS/RECEIVE occurs). Furthermore, R4 inappropriately uses a collaborative action (PassReceiveObject) as a single-agent action to place items in a 'designated area'."
-    },
-    "track_b_gc": "N/A (설계상 제외)",
-    "track_b_state_detail": "N/A (설계상 제외)",
-    "object_grounding": "N/A"
+    "track_a_llm_judge": "N/A"
   },
   "lamma_p": {
     "name": "LaMMA-P",
-    "track_a_llm_judge": {
-      "TF": 4,
-      "TF_reason": "The plan addresses the core goals (getting food and tidying the living room) within the 10-minute deadline. However, it relies heavily on vague expressions ('misplaced items', 'quick snack item', 'trash or clutter') instead of interacting with specific, concrete objects from the environment.",
-      "GF": 2,
-      "GF_reason": "Severe grounding violations. The plan uses numerous vague expressions ('misplaced items', 'designated spots', 'trash or clutter', 'quick snack item', 'clean surfaces if necessary') rather than specific objects. Additionally, R4 slices bread without a knife, and R2 attempts to pick up multiple 'items' simultaneously.",
-      "SC": 4,
-      "SC_reason": "Multiple sequential and logical errors. R4 slices bread without first obtaining a knife. R4 places items on a plate without ever locating or picking up a plate. R2's actions are too abstract to form a coherent physical sequence.",
-      "CQ": 10,
-      "CQ_reason": "The tasks in the kitchen and living room are completely independent. The agents correctly work in parallel without forcing unnecessary collaboration."
-    },
-    "track_b_gc": 0.0,
-    "track_b_state_detail": {
-      "A1_work_clothes_ready": false,
-      "A2_work_bag_ready": false,
-      "A3_essential_items_ready": false,
-      "A4_exit_area_ready": false
-    },
-    "object_grounding": "N/A"
+    "track_a_llm_judge": "N/A"
   },
   "smart_llm": {
     "name": "SMART-LLM",
-    "track_a_llm_judge": {
-      "TF": 8,
-      "TF_reason": "The plan successfully addresses both goals within the 10-minute deadline: making a quick meal (sandwich) and tidying the living room. However, R4 uses a hallucinated 'CounterTop' instead of an available surface like a Plate or Cabinet.",
-      "GF": 6,
-      "GF_reason": "R4 interacts with 'CounterTop', which is not in the provided object list for the kitchen. Additionally, R4 refers to 'another slice of Bread' and 'sandwich', which are not distinct objects in the environment (only 'Bread' is listed).",
-      "SC": 9,
-      "SC_reason": "The sequence of actions is logical and respects physical dependencies. The only minor issue is stacking multiple items on 'Bread' and 'sandwich' which is slightly abstract but sequentially coherent.",
-      "CQ": 10,
-      "CQ_reason": "The tasks in the kitchen and living room are independent, so no collaboration is required. The agents correctly work in parallel without unnecessary interactions."
-    },
-    "track_b_gc": "N/A (설계상 제외)",
-    "track_b_state_detail": "N/A (설계상 제외)",
-    "object_grounding": "N/A"
+    "track_a_llm_judge": "N/A"
   }
 }

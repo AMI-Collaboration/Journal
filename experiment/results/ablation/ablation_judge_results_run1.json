@@ -1,0 +1,322 @@
+{
+  "task1": {
+    "no_offer": {
+      "TF": 3,
+      "TF_reason": "The plan misses the 10-minute deadline by taking 15 minutes. The food (apple) is sliced but left in the kitchen rather than brought to the user. Tidying the living room involves several hallucinated objects and redundant actions.",
+      "GF": 3,
+      "GF_reason": "The plan relies on multiple hallucinated objects not present in the rooms, such as 'Cutting Board', 'TV stand', and 'books'. Additionally, R4 (Mobile_Heavy) is assigned fine-manipulation tasks (picking up books and a remote control) which typically fall outside its capabilities.",
+      "SC": 4,
+      "SC_reason": "There are significant state contradictions and duplicate actions. For example, R3 picks up the remote control and places it on the TV stand in the first 5 minutes, but R4 later attempts to pick up the same remote control from the floor.",
+      "CQ": 2,
+      "CQ_reason": "Collaboration was attempted to bring the food from the kitchen to the living room, but it completely failed due to incorrect PASS/RECEIVE setups, resulting in dropped and blocked actions. No successful cross-room collaboration occurred."
+    },
+    "no_edge": {
+      "TF": 3,
+      "TF_reason": "The plan attempts to gather food (bread, apples, egg) and tidy the living room, but the food is never prepared or delivered to the user due to failed passes. The tidying involves hallucinated objects (mug and paper bag in the living room).",
+      "GF": 2,
+      "GF_reason": "Multiple grounding and capability violations: R1 and R2 pick up multiple objects without putting the previous ones down (holding multiple objects simultaneously). R4 interacts with hallucinated objects ('white mug' and 'brown paper bag' are not in the living room).",
+      "SC": 4,
+      "SC_reason": "Robots attempt to pick up multiple items without putting them down. The collaboration sequence is broken, leading to dropped passes and blocked receives.",
+      "CQ": 2,
+      "CQ_reason": "Collaboration was attempted to move food from the kitchen to the living room, but it completely failed. Offers were not taken, resulting in dropped PASS actions and blocked RECEIVE actions."
+    },
+    "no_graph": {
+      "TF": 6,
+      "TF_reason": "The plan partially fulfills the goals by tidying the living room (moving laptop and newspaper, arranging pillow) and preparing food (slicing bread, moving apples). However, the food preparation is incomplete as the bread is passed but never received or plated, and there are hallucinated objects like a 'white mug' in the living room.",
+      "GF": 3,
+      "GF_reason": "Several feasibility issues: R1 slices bread without holding a knife; R4 interacts with a hallucinated 'white mug' in the living room; R2 picks up multiple apples simultaneously; and R3 receives objects from 'None'.",
+      "SC": 3,
+      "SC_reason": "Severe sequencing errors: R1 passes bread without picking it up; R1 and R4 pass objects to R2, but R2 never receives them; R3 and R4 both attempt to receive the same apples from R2 (with R3 receiving from 'None').",
+      "CQ": 3,
+      "CQ_reason": "Collaboration is highly disjointed. Multiple PASS actions lack corresponding RECEIVE actions (R1 to R2, R4 to R2). There is also a phantom RECEIVE by R3 from 'None', and duplicate receiving of the same apples by R3 and R4."
+    }
+  },
+  "task2": {
+    "no_offer": {
+      "TF": 4,
+      "TF_reason": "The plan partially fulfills the task by having R3 pour warm water into the bathtub. However, the goal of having a towel nearby fails because R2 attempts to find a towel in the bedroom (where none exists) and the transfer to the bathroom fails.",
+      "GF": 3,
+      "GF_reason": "Severe grounding violations: R2 hallucinates a towel in the bedroom (FP304), as the towel is actually located in the bathroom (FP404). Additionally, 'source' is a vague term for the water.",
+      "SC": 5,
+      "SC_reason": "The sequence is broken regarding the towel transfer. The PASS action was dropped and the RECEIVE action was blocked, meaning the towel never reaches its destination.",
+      "CQ": 2,
+      "CQ_reason": "Collaboration was poorly planned and unnecessary. The towel is already in the bathroom, so R3 or R4 could have simply picked it up locally. Instead, the plan attempts an unnecessary cross-room transfer from the bedroom, which ultimately fails."
+    },
+    "no_edge": {
+      "TF": 3,
+      "TF_reason": "The plan fails to achieve the primary goal of filling the bathtub with warm water, as the action to toggle the faucet was dropped. It only succeeds in placing a towel nearby.",
+      "GF": 5,
+      "GF_reason": "R2 hallucinates a 'blue towel' in the bedroom, which does not exist in the actual object list for that room. R4's actions with the towel in the bathroom are feasible.",
+      "SC": 9,
+      "SC_reason": "The executed actions follow a logical sequence without any prerequisite violations, though most of the plan was dropped.",
+      "CQ": 3,
+      "CQ_reason": "Collaboration was poorly managed. R2 attempted an unnecessary cross-room transfer of a hallucinated towel, and R3's request for help to turn on the faucet was withdrawn, leading to task failure. The bathroom robots (R3 and R4) could have completed the task independently."
+    },
+    "no_graph": {
+      "TF": 7,
+      "TF_reason": "The main goals (filling the bathtub and placing a towel nearby) are achieved within the 5-minute deadline by R4 and R3. However, there is duplicate work (both R3 and R4 place towels) and some actions extend into the 5-10 minute block unnecessarily.",
+      "GF": 4,
+      "GF_reason": "Several grounding issues: R2 picks up a 'blue towel' in the bedroom, but no towel exists there. R3's action 'pour the bathtub' is physically nonsensical for filling a tub. Hallucinated receptacles like 'bath mat' and 'striped rug' are used.",
+      "SC": 7,
+      "SC_reason": "The sequence of actions is mostly coherent, with R3 correctly waiting for R4 to toggle the faucet before proceeding. However, R1 and R2 pick up objects and never use or place them due to dropped passes.",
+      "CQ": 4,
+      "CQ_reason": "Collaboration has significant issues: R1 and R2 attempt unnecessary cross-room passes that are dropped, and R3 and R4 perform duplicate work by both fetching towels in the bathroom."
+    }
+  },
+  "task3": {
+    "no_offer": {
+      "TF": 2,
+      "TF_reason": "The plan fails to address the core requirement of turning on the bedroom light so the user can see clearly. It attempts to clear a desk area but relies entirely on hallucinated objects (cables, papers, magazine) rather than actual objects in the rooms.",
+      "GF": 1,
+      "GF_reason": "Severe grounding violations. The plan hallucinates multiple objects that do not exist in the environment, including 'magazine', 'cables', 'papers', 'desk', 'TV stand', and 'bookshelf'. Additionally, R4 attempts to interact with 'books' in the bedroom, but the 'Book' is only located in the living room.",
+      "SC": 7,
+      "SC_reason": "The sequence of pick_up and put_down actions is logically ordered, though there is a minor formatting error in R2's first action ('pick_up... to shelf' instead of 'to gripper').",
+      "CQ": 5,
+      "CQ_reason": "No collaboration is present. While cross-room collaboration is not strictly required to turn on a light and clear a table in the bedroom, the robots operate completely independently without addressing the actual task needs."
+    },
+    "no_edge": {
+      "TF": 3,
+      "TF_reason": "The plan addresses some goals (turning on the bedroom light, opening the laptop, and attempting to clear the desk area), but it misses the 5-minute deadline by scheduling the laptop opening in the 5-10 minute block. Additionally, it relies heavily on hallucinated objects to make the area 'presentable'.",
+      "GF": 2,
+      "GF_reason": "Severe grounding violations due to hallucinated objects and furniture. R2 interacts with a 'cabinet' and 'dining table' not present in the living room. R3 interacts with an 'orange book' (not in bedroom), 'chess board', 'blue USB drive', and 'monitor' which do not exist. R4 interacts with a hallucinated 'baseball bat'.",
+      "SC": 8,
+      "SC_reason": "The sequence of actions is mostly logical for the objects being manipulated, with pick_up actions preceding move actions. However, the plan is somewhat disjointed across the two rooms.",
+      "CQ": 4,
+      "CQ_reason": "Collaboration is not required for this task since all necessary objects (Laptop, Chair, Lamp) are already in the bedroom. The plan includes unnecessary attempted passes that were dropped, and R1/R2 perform completely irrelevant tasks in the living room instead of focusing on the prompt's goal."
+    },
+    "no_graph": {
+      "TF": 2,
+      "TF_reason": "The plan attempts to prepare a desk area for a video call by turning on lights and clearing objects, but it fails to move the laptop to the desk and relies almost entirely on hallucinated objects (desk, bat, cup, keyboard, bed).",
+      "GF": 1,
+      "GF_reason": "Severe violations of grounding. The plan hallucinates numerous objects not present in the bedroom (book, bat, cup, keyboard, bed, desk). Additionally, R3 picks up a second object (cup) before R4 has received the first object (book), meaning R3 is holding multiple objects simultaneously.",
+      "SC": 4,
+      "SC_reason": "There are significant ordering and logical issues. R2 picks up and immediately puts down the laptop without achieving anything. R3 offers objects in the 0-5 minute block that R4 does not receive until the 5-10 and 10-15 minute blocks, causing R3 to hold multiple objects.",
+      "CQ": 2,
+      "CQ_reason": "Collaboration is highly inappropriate and unnecessary. R3 and R4 are in the same room, yet R3 passes objects to R4 instead of simply placing them down itself. This introduces inefficient and redundant steps."
+    }
+  },
+  "task4": {
+    "no_offer": {
+      "TF": 6,
+      "TF_reason": "The plan partially fulfills the goals. R2 prepares the living room (pushing the sofa, turning on the TV, tidying a magazine/newspaper), and R1 prepares a drink (kettle and mug). However, the drink remains in the kitchen because the pass action was dropped, meaning the guest is not actually offered the drink in the living room.",
+      "GF": 7,
+      "GF_reason": "Most actions are feasible and use objects present in the rooms (magazine is a reasonable synonym for Newspaper). However, R1 picks up the mug and then attempts to 'pour the kettle from kettle to mug'. Typically, a robot must hold the source object (kettle) to pour it, not the destination object (mug).",
+      "SC": 7,
+      "SC_reason": "The sequence is mostly logical, but R1's sequence of picking up the mug and then pouring the kettle into it is physically flawed, as it would need to hold the kettle to pour.",
+      "CQ": 3,
+      "CQ_reason": "Collaboration was necessary to bring the drink from the kitchen to the living room. R1 attempted to pass the mug to R3 (bedroom), which is the wrong target for a guest arriving in the living room, and the action was dropped due to a syntax/state error."
+    },
+    "no_edge": {
+      "TF": 4,
+      "TF_reason": "The plan partially addresses the goals by arranging seating in the living room (pushing the sofa and chair). However, it fails to provide something to offer the guest because the attempts to pass the mug and other items to the living room robot (R2) were dropped.",
+      "GF": 3,
+      "GF_reason": "There are several grounding and capability violations: R3 picks up multiple objects (two pillows and a teddy bear) simultaneously, which violates gripper capacity. The 'teddy bear' and 'ceiling light' are hallucinated objects not in the room lists. R4 puts down a soap bar it never successfully picked up.",
+      "SC": 3,
+      "SC_reason": "Severe sequencing violations exist: R3 performs three consecutive pick_up actions without putting anything down or passing them. R4 executes a put_down action for an object (pink soap bar) whose preceding pick_up action was dropped.",
+      "CQ": 2,
+      "CQ_reason": "Collaboration was necessary to bring items from the kitchen and bedroom to the living room for the guest. However, all PASS actions were dropped because R2 did not have corresponding RECEIVE actions, resulting in a complete failure of cross-room coordination."
+    },
+    "no_graph": {
+      "TF": 5,
+      "TF_reason": "The plan partially fulfills the task. The living room is made more comfortable (sofa and chair moved, lamp turned on, pillow brought in), but the goal of having something to offer the guest is not achieved, as R1's attempts to prepare coffee and food were dropped or incomplete.",
+      "GF": 6,
+      "GF_reason": "Most actions are feasible and respect robot capabilities (R2 is Mobile_Heavy and pushes furniture). However, there are hallucinations: R4 interacts with a 'brown toothbrush holder' (not in bathroom list) and R2 puts a box on a 'cabinet' (not in living room list).",
+      "SC": 8,
+      "SC_reason": "The sequence of actions is mostly coherent, with prerequisites respected (e.g., R3 picks up the pillow before passing, R2 receives before putting down). However, R4 performs a series of pointless pick-up and put-down actions with bathroom items.",
+      "CQ": 4,
+      "CQ_reason": "Collaboration is mixed. R3 passing a pillow to R2 is a good use of cross-room collaboration to improve the living room. However, R1 attempting to pass a tomato and a coffee maker to R4 (the bathroom robot) is completely nonsensical for preparing an offering for a guest."
+    }
+  },
+  "task5": {
+    "no_offer": {
+      "TF": 3,
+      "TF_reason": "The plan partially addresses the living room setup by turning on the TV and pushing the sofa. However, the snack requirement is completely unfulfilled due to blocked and dropped actions, and the dimming of the room relies on a hallucinated ceiling light.",
+      "GF": 4,
+      "GF_reason": "There are significant grounding issues: R4 (in the bedroom) attempts a LOCAL action on the floor lamp (in the living room), and R2 interacts with a 'ceiling light' which is not in the provided object list. R1's vague request for 'snack items' also lacks grounding.",
+      "SC": 8,
+      "SC_reason": "The executed actions follow a physically possible sequence without major dependency violations, though the overall plan is sparse due to dropped and blocked steps.",
+      "CQ": 2,
+      "CQ_reason": "Collaboration was necessary to transport snacks from the kitchen to the living room, but it failed completely. R1 made an illogical request for R2 to bring snacks from the living room to the kitchen, and later attempted to pass snacks to R4 (in the bedroom) instead of R2 (in the living room)."
+    },
+    "no_edge": {
+      "TF": 4,
+      "TF_reason": "The plan partially fulfills the goals by making the living room dim and turning on the TV. However, the snack and blanket were never delivered to the living room because all cross-room collaboration actions were dropped.",
+      "GF": 4,
+      "GF_reason": "There are several grounding and capability violations: R2 interacts with a 'chandelier' which is not in the living room object list (hallucination), and R4 picks up two objects ('red blanket' and 'white lamp') simultaneously, violating the single-object holding constraint.",
+      "SC": 8,
+      "SC_reason": "The sequence of actions is mostly logical, though R4 picking up two objects in the same time block without dropping one is a physical constraint violation (penalized in GF).",
+      "CQ": 2,
+      "CQ_reason": "Collaboration was essential for this task to bring snacks from the kitchen and a blanket from the bedroom to the living room. However, all PASS actions were dropped because the receiving robot (R2) did not accept the offers, resulting in a complete failure of cross-room coordination."
+    },
+    "no_graph": {
+      "TF": 5,
+      "TF_reason": "The plan partially fulfills the task goals by turning on the TV, turning off the floor lamp, pushing the armchair, and preparing an apple as a snack. However, it relies heavily on hallucinated objects (orange, blanket, coffee table) to complete the comfort and snack requirements.",
+      "GF": 3,
+      "GF_reason": "Severe grounding violations due to hallucinated objects: 'cutting board', 'orange', 'yellow rubber duck', 'red apple' (in bedroom), and 'coffee table'. Additionally, R4 (Mobile_Light) picks up two objects simultaneously (red apple and blue blanket).",
+      "SC": 4,
+      "SC_reason": "Ordering and logical violations exist: R1 passes the green apple without ever picking it up after slicing it. R4 picks up multiple objects without putting them down. Several passes are dropped because they were not properly coordinated or accepted.",
+      "CQ": 5,
+      "CQ_reason": "Cross-room collaboration is correctly identified as necessary to bring snacks and comfort items to the living room. However, there are completely irrelevant and dropped collaborative attempts (R3 passing a rubber duck, R4 passing a red apple) that degrade the quality of coordination."
+    }
+  },
+  "task6": {
+    "no_offer": {
+      "TF": 2,
+      "TF_reason": "The plan only partially fulfills the task. It successfully clears floor space by moving the sofa and coffee table. However, it hallucinates a 'yoga mat' and 'water bottle' instead of using real objects like the Dumbbell in the bedroom or a Cup/Mug in the kitchen. The bathroom preparation step was dropped entirely.",
+      "GF": 2,
+      "GF_reason": "There are significant grounding violations due to hallucinated objects ('yoga mat', 'water bottle'). R2's heavy moving actions are valid given its Mobile_Heavy capability, but the reliance on non-existent objects makes the plan largely unexecutable.",
+      "SC": 3,
+      "SC_reason": "The sequence of actions is mostly logical, but R1's subsequent action to pass the water bottle was dropped, leaving R1 holding the object indefinitely. R1 waits for R2 to pick up an object that R1 could have picked up itself.",
+      "CQ": 2,
+      "CQ_reason": "Collaboration is highly inefficient and unnecessary. R1 (Mobile_Light in the kitchen) asks R2 (Mobile_Heavy in the living room) to travel to the kitchen just to pick up a light object ('water bottle') and pass it to R1. R1 could have picked this up itself."
+    },
+    "no_edge": {
+      "TF": 3,
+      "TF_reason": "The plan successfully clears floor space in the living room and bedroom, and prepares the bathroom by wiping the shower. However, the goal to provide a drink fails because the pass from the kitchen is dropped and a hallucinated bottle is used instead.",
+      "GF": 2,
+      "GF_reason": "R2 interacts with a hallucinated 'yellow bottle' in the living room. Additionally, R1 picks up a second object (red apple) without putting down the first (clear glass), violating the single-object gripper constraint.",
+      "SC": 3,
+      "SC_reason": "There are significant sequential issues: R3 attempts to receive a 'yellow bottle' that was never passed, and R1's passes are completely ignored by R2.",
+      "CQ": 1,
+      "CQ_reason": "Collaboration is required to bring a drink from the kitchen to the exercise area, but it completely breaks down. R1's offers are dropped, R2 ignores the passes, and R3 attempts to receive an object from no one."
+    },
+    "no_graph": {
+      "TF": 3,
+      "TF_reason": "The plan partially fulfills the task. Floor space is cleared in the living room, and exercise equipment is organized in the bedroom. However, the drink requirement relies on a hallucinated 'yellow bottle' and a failed apple transfer, and the bathroom preparation uses vague object descriptions.",
+      "GF": 2,
+      "GF_reason": "There are several grounding violations: R2 interacts with a hallucinated 'yellow bottle' in the living room, R3 interacts with a hallucinated 'white towel' in the bedroom, and R4 uses a vague expression ('any toiletries').",
+      "SC": 3,
+      "SC_reason": "Sequential coherence has notable issues. R3 attempts to receive a 'yellow bottle' that R2 never passed (R2 put it down locally instead), and R1's pass action is dropped because R2 never attempts to receive it.",
+      "CQ": 1,
+      "CQ_reason": "Collaboration is highly disjointed and ineffective. R1 attempts to pass an apple to R2, but the offer is ignored. R3 attempts to receive an object from R2 that was never passed, resulting in declined and dropped actions. Cross-room coordination fails completely."
+    }
+  },
+  "task7": {
+    "no_offer": {
+      "TF": 4,
+      "TF_reason": "The plan attempts to fulfill the task by closing windows/doors and securing items, but it relies heavily on vague expressions ('loose kitchen item') and hallucinated object names ('loose papers', 'loose cushions') instead of the actual objects in the rooms.",
+      "GF": 2,
+      "GF_reason": "Severe grounding and capability violations. The plan uses vague expressions ('loose kitchen item') and hallucinated objects. Furthermore, Mobile_Light robots (R2, R4) are assigned manipulation tasks (pick_up/put_down), which violates their capabilities. The pick_up actions are also malformed (e.g., 'pick_up... to cabinet' instead of 'to gripper').",
+      "SC": 4,
+      "SC_reason": "Action sequences contain logical errors due to malformed actions. For example, R4 picks up books 'to cabinet' but then attempts to put them down 'from gripper', creating a state mismatch.",
+      "CQ": 3,
+      "CQ_reason": "Collaboration and task allocation are very poor. R1 (a Gripper robot in the kitchen) is completely ignored, while R2 and R4 (Mobile_Light robots) are inappropriately assigned manipulation tasks that should have been allocated to the Gripper robots."
+    },
+    "no_edge": {
+      "TF": 5,
+      "TF_reason": "The plan partially fulfills the task by closing the windows in both rooms and securing a few objects (R4 secures the pillow and bowl). However, many loose objects are left unsecured or improperly handled by R1 and R3, who fail to put them away.",
+      "GF": 2,
+      "GF_reason": "Severe violations: R1 and R3 pick up multiple objects consecutively without putting them down, violating the constraint that a robot can only hold one object at a time. Additionally, R3 hallucinates a 'red phone' in the living room (CellPhone is only in the bedroom).",
+      "SC": 4,
+      "SC_reason": "The sequence of actions is incomplete and physically impossible for R1 and R3, as they continuously perform 'pick_up' actions without corresponding 'put_down' actions, leading to state violations.",
+      "CQ": 3,
+      "CQ_reason": "Collaboration was attempted (R1 and R3 tried to pass objects to R2 and R4) but failed completely, as all PASS offers were dropped and not received. This lack of coordination caused the Gripper robots to get stuck holding objects."
+    },
+    "no_graph": {
+      "TF": 4,
+      "TF_reason": "The plan exceeds the 10-minute deadline, taking 20 minutes to complete. While it attempts to secure loose items, it fails to address closing windows/doors (e.g., Curtains) and interacts with hallucinated or duplicated objects.",
+      "GF": 4,
+      "GF_reason": "Several grounding violations occur: R3 interacts with a 'red phone' in the living room (CellPhone is in the bedroom), R2 interacts with an 'orange' (hallucinated), and R3/R4 both pick up a laptop and a remote despite only one of each existing in the living room.",
+      "SC": 4,
+      "SC_reason": "There are critical ordering and state violations. R3 initiates a PASS (r3_s2) and then picks up another object (r3_s3) before R4 actually executes the RECEIVE (r4_s9), implying R3 is holding multiple objects or not waiting for the handoff to complete.",
+      "CQ": 3,
+      "CQ_reason": "Collaboration is highly inefficient and unnecessary. R3 and R4 are in the same room, yet R3 repeatedly passes objects to R4 just for R4 to put them down on the coffee table. Both robots are capable of picking up and putting down objects locally."
+    }
+  },
+  "task8": {
+    "no_offer": {
+      "TF": 2,
+      "TF_reason": "The plan fails to achieve the core goals of the task. While it attempts to make the bed and turn on a lamp, the critical requirement of providing water and basics for the sick person is completely missed due to dropped steps.",
+      "GF": 4,
+      "GF_reason": "There are multiple grounding and capability violations. Objects like 'blanket', 'towel rack', 'glass of water', 'cushion', and 'TV' are hallucinated or improperly referenced. Most of the meaningful actions were dropped due to capability check failures and improper formatting.",
+      "SC": 4,
+      "SC_reason": "Because most steps were dropped, the remaining sequence is disjointed. For example, R4 picks up a towel but never does anything with it since the subsequent PASS action was withdrawn.",
+      "CQ": 2,
+      "CQ_reason": "Collaboration was required to bring water and supplies from other rooms to the resting room. However, all collaborative attempts (PASS, ASK_HELP) were dropped due to invalid formatting and failing to possess the items before passing."
+    },
+    "no_edge": {
+      "TF": 3,
+      "TF_reason": "The plan partially sets up the bedroom (arranging pillows and turning on a lamp), but fails to deliver water or other basics because the cross-room transfers were dropped. Additionally, several objects are hallucinated.",
+      "GF": 4,
+      "GF_reason": "There are multiple hallucinations: 'red blanket' in the living room, 'black and white blanket' in the bedroom, and 'white tissue box' in the bedroom (TissueBox is actually in the living room).",
+      "SC": 5,
+      "SC_reason": "The sequence of local actions is mostly coherent, but the collaborative sequence is broken. R2 attempts to receive a cup, but the text mismatch causes the receive to fail and the corresponding pass actions to be dropped.",
+      "CQ": 2,
+      "CQ_reason": "Collaboration is essential for this task (bringing water from the kitchen to the resting room), but it completely fails. The robots attempt to pass items, but due to text mismatches and poor coordination, R2 fails to receive anything, resulting in dropped actions."
+    },
+    "no_graph": {
+      "TF": 5,
+      "TF_reason": "The plan partially fulfills the task by providing water (cup filled from kettle) and basics (paper towel) to the living room. However, it relies on hallucinated objects (blanket, bottle, tissues in the wrong room) for the rest of the setup.",
+      "GF": 4,
+      "GF_reason": "Several objects are hallucinated: R2 interacts with a 'red blanket' (not in living room), and R3 interacts with an 'orange bottle' and 'tissues' (not in bedroom). Additionally, R2 performs redundant pick up and put down actions on the same objects in the same location.",
+      "SC": 7,
+      "SC_reason": "The sequence of actions is mostly coherent. R1 passes objects to R2, who receives them in subsequent time blocks. However, R2 performs an unrealistic number of pick up and put down actions in the first 5 minutes.",
+      "CQ": 7,
+      "CQ_reason": "Collaboration is necessary to bring items from the kitchen to the resting area. R1 correctly passes the cup and paper towel to R2. There are some failed collaboration attempts (R3 declined, R4 dropped), but the core transfer is successful."
+    }
+  },
+  "task9": {
+    "no_offer": {
+      "TF": 3,
+      "TF_reason": "The plan addresses the core goals (turning off lights, clearing the bed, preparing for sleep), but it fails to use the actual objects present in the rooms. It relies heavily on hallucinated or vague object names (e.g., 'kitchen lights', 'items on bed', 'nightstand', 'bedding') instead of specific available items like DeskLamp, FloorLamp, Book, or SideTable.",
+      "GF": 1,
+      "GF_reason": "Severe grounding violations. Almost every action interacts with hallucinated objects ('kitchen lights', 'living room lights', 'bedroom lights', 'bathroom light', 'nightstand', 'bedding') or uses vague expressions ('items on bed').",
+      "SC": 7,
+      "SC_reason": "The sequence of actions is generally logical, though turning off the bedroom lights before clearing and arranging the bed is slightly counterintuitive. The pick-and-place sequence itself is coherent.",
+      "CQ": 8,
+      "CQ_reason": "No collaboration was used, which is appropriate since the task involves independent actions in separate rooms (turning off lights and tidying up locally). No cross-room object transfers were strictly necessary."
+    },
+    "no_edge": {
+      "TF": 6,
+      "TF_reason": "The plan addresses the core goals of turning down lights and putting things away across the house. However, it relies on hallucinated objects (e.g., 'cabinet' in the kitchen and living room) and includes nonsensical actions like emptying a trash bin into a cabinet, which reduces the overall task fulfillment.",
+      "GF": 5,
+      "GF_reason": "There are several grounding violations: 'cabinet' is hallucinated in both the kitchen and living room, and 'football' is hallucinated in the bedroom (basketball is listed). Additionally, 'empty' is used as an action to transfer trash into a cabinet, which is physically nonsensical, and 'move' is used instead of 'place' for putting objects down.",
+      "SC": 9,
+      "SC_reason": "The sequence of actions is mostly logical, with robots picking up objects before attempting to place or move them. There are no major ordering violations.",
+      "CQ": 9,
+      "CQ_reason": "The task requires a house-wide state change (quiet and settled), which is effectively handled by each robot working independently in its respective room. Cross-room collaboration is not strictly necessary for this specific task, so parallel independent execution is appropriate."
+    },
+    "no_graph": {
+      "TF": 4,
+      "TF_reason": "The plan attempts to fulfill the goals of turning off lights and putting things away, but relies heavily on hallucinated objects (football, toothbrush, blanket) and fails to complete the cross-room transfer of the mug.",
+      "GF": 2,
+      "GF_reason": "Severe grounding violations. The plan includes multiple hallucinated objects (ceiling lights, brown football, wooden dresser in bedroom, toothbrush, blue blanket). It also uses non-standard, hallucinated actions like 'move' (instead of put_down) and 'arrange'.",
+      "SC": 6,
+      "SC_reason": "The logical ordering of pick_up and put_down is generally correct, but the use of invalid action types ('move', 'arrange') disrupts the executability of the sequence.",
+      "CQ": 4,
+      "CQ_reason": "Collaboration was not strictly necessary for most of the task, but the one attempted collaboration (R1 passing a mug to R4 in the bathroom) was illogical for the task context and was dropped."
+    }
+  },
+  "task10": {
+    "no_offer": {
+      "TF": 3,
+      "TF_reason": "The plan attempts to fulfill the task goals (turning on lights, clearing surfaces, arranging items) but fails to address the actual clutter objects present in the rooms (e.g., Apple, CD, CreditCard). It relies almost entirely on hallucinated or vague objects.",
+      "GF": 1,
+      "GF_reason": "Severe grounding violations. The plan is dominated by vague expressions ('small items on counter', 'visible light clutter') and hallucinated objects ('magazines', 'clothes on chair', 'wardrobe', 'kitchen light', 'bathroom lights').",
+      "SC": 9,
+      "SC_reason": "The sequence of actions is logically coherent, with pick_up actions correctly preceding put_down actions for the manipulated (albeit hallucinated) objects.",
+      "CQ": 8,
+      "CQ_reason": "Collaboration is not strictly required for this task, as each robot can independently clean and prepare its assigned room. The independent parallel execution is appropriate."
+    },
+    "no_edge": {
+      "TF": 4,
+      "TF_reason": "The plan partially addresses the goals (turning on lamps, clearing some surfaces, arranging pillows), but misses many objects. Trash is not successfully hidden, and several actions involve hallucinated objects (golden blanket, red object, golden object).",
+      "GF": 4,
+      "GF_reason": "There are multiple hallucinations: 'golden blanket', 'red object', and 'golden object' in the bedroom, as well as a 'cabinet' in the bathroom (which only has a SideTable).",
+      "SC": 7,
+      "SC_reason": "The sequence of actions is mostly logical for individual robots, but the plan contains unresolved/blocked passes and dropped offers, disrupting the flow.",
+      "CQ": 2,
+      "CQ_reason": "Collaboration is poorly planned and unnecessary. R2 tries to pass a box to R4 (in the bathroom), and R4 tries to pass a trash bin to R1 (in the kitchen). Both are Mobile_Light robots and could handle these items locally or move them without passing. Both collaboration attempts fail."
+    },
+    "no_graph": {
+      "TF": 4,
+      "TF_reason": "The plan attempts to address the task goals (lighting, clearing surfaces, arranging), but fails to complete many of them because robots end up holding objects indefinitely after dropped passes. Additionally, several actions rely on hallucinated objects.",
+      "GF": 3,
+      "GF_reason": "Multiple violations: R1 holds two objects simultaneously (green bottle, white cup). Several hallucinated objects are interacted with, including 'kitchen lights', 'bathroom light', 'gold blanket', and 'white cabinet' in the living room.",
+      "SC": 5,
+      "SC_reason": "R1 picks up a second object without putting the first one down. Because the PASS actions were dropped, R1 and R4 never place the objects they picked up, leaving their action sequences incomplete.",
+      "CQ": 2,
+      "CQ_reason": "Collaboration was attempted but was entirely unnecessary and illogical (e.g., R4 passing a bathroom trash can to the kitchen robot R1, R1 passing kitchen items to the living room robot R2). All collaboration attempts were dropped."
+    }
+  }
+}

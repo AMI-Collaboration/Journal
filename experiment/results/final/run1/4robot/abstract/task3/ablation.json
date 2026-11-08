@@ -1,0 +1,1211 @@
+{
+  "task_n": "task3_abstract",
+  "variants": {
+    "full": {
+      "raw_result": {
+        "task_n": "task3_abstract",
+        "mode": "multi_room",
+        "model": "gpt-4o",
+        "task_text": "I have a video call starting in 5 minutes. My desk area needs to look presentable and I should be able to see and hear clearly. The bedroom light is off.",
+        "joint_plan_text": "```plaintext\n### Joint Plan — task3_abstract  (about 5 min / deadline 10 min: OK)\n### Robots: R1:Gripper(living_room), R2:Mobile_Light(living_room), R3:Gripper(bedroom), R4:Mobile_Heavy(bedroom)\n\n\n[0-5 min]\n- R2 [LOCAL] pick up the black laptop from the beige sofa to the gripper  (r2_s1)\n- R3 [LOCAL] toggle the small lamp from off to on  (r3_s1)\n- R4 [LOCAL] toggle the white floor lamp from off to on  (r4_s1)\n- R2 [LOCAL] put down the black laptop from the gripper to the wooden cabinet  (r2_s2)\n- R3 [LOCAL] pick up the blue USB drive from the desk to the gripper  (r3_s2)\n- R4 [LOCAL] move the black trash bin from the floor to under the desk  (r4_s2)\n- R2 [LOCAL] toggle the floor lamp from off to on  (r2_s3)\n- R3 [LOCAL] pick up the blue pen from the desk to the gripper  (r3_s4)\n- R4 [LOCAL] push the black office chair from the desk to facing the desk  (r4_s3)",
+        "joint_plan_full": "### Joint Plan — task3_abstract  (about 5 min / deadline 10 min: OK)\n### Robots: R1:Gripper(living_room), R2:Mobile_Light(living_room), R3:Gripper(bedroom), R4:Mobile_Heavy(bedroom)\n\n\n[0-5 min]\n- R2 [LOCAL] pick_up the black laptop from beige sofa to gripper  (r2_s1)\n- R3 [LOCAL] toggle the small lamp from off to on  (r3_s1)\n- R4 [LOCAL] toggle the white floor lamp from off to on  (r4_s1)\n- R2 [LOCAL] put_down the black laptop from gripper to wooden cabinet  (r2_s2)\n- R3 [LOCAL] pick_up the blue USB drive from desk to gripper  (r3_s2)\n- R4 [LOCAL] move the black trash bin from floor to under desk  (r4_s2)\n- R2 [LOCAL] toggle the floor lamp from off to on  (r2_s3)\n- R3 [LOCAL] pick_up the blue pen from desk to gripper  (r3_s4)\n- R4 [LOCAL] push the black office chair from desk to facing desk  (r4_s3)\n\n### Dropped\n- R1 [PASS] pass floor lamp (next to table, image 1) to R2 (floor lamp (next to table, image 1)) — offer not taken by R2 (by rule)\n- R3 [PASS] pass blue USB drive (desk, image 2) to R4 (blue USB drive (desk, image 2)) — offer not taken by R4 (by rule)\n- R3 [PASS] pass blue pen (desk, image 1) to R4 (blue pen (desk, image 1)) — offer not taken by R4 (by rule)\n\n### Not covered (from the robots' own checklists)\n- R1: floor lamp: move to bedroom",
+        "offers": {
+          "R1": {
+            "agent": "R1",
+            "capability": "I am fixed in place and can manipulate objects within reach using a gripper.",
+            "can_do": [
+              "PickupLightObject: lift light items like boxes, small objects",
+              "SliceObject: cut paper or string",
+              "PourObject: pour liquids if within reach",
+              "PassReceiveObject: transfer items to/from other robots"
+            ],
+            "has_items": [
+              "brown box (table, image 1)",
+              "floor lamp (next to table, image 1)",
+              "vase with green plant (side table, image 2)",
+              "brown sofa (living room, image 2)",
+              "brown armchair (living room, image 2)",
+              "ceiling light (living room, image 2)",
+              "wall painting (living room, image 2)"
+            ],
+            "need_from_others": [
+              "Another robot to toggle the bedroom light on and arrange the desk area"
+            ],
+            "intends": [
+              "pass floor lamp to another robot for the bedroom"
+            ],
+            "suggests": [
+              "floor lamp"
+            ],
+            "obs_scope": "I can observe and interact with items in the living room only.",
+            "cannot_do": [
+              "PickupHeavyObject: cannot lift heavy furniture",
+              "PushFurniture: cannot push sofa",
+              "ToggleObject: cannot turn on/off lights, TV, appliances"
+            ],
+            "reasoning": "a) The desk area must be tidy and well-lit for the video call. b) The bedroom needs lighting for visibility, and a tidy desk area for presentation. c) I can ensure the living room is tidy by managing visible items and lighting. d) Adjusting lighting is crucial for visibility. e) The floor lamp can be used to improve lighting in the bedroom."
+          },
+          "R2": {
+            "agent": "R2",
+            "capability": "I am mobile and can carry light objects up to 5 kg.",
+            "can_do": [
+              "PickupLightObject: lift mugs, fruit, small items",
+              "PassReceiveObject: transfer items to/from other robots",
+              "ToggleObject: turn on/off lights, TV, appliances"
+            ],
+            "has_items": [
+              "black laptop (sofa, image 1)",
+              "beige sofa (center, image 1)",
+              "brown side table (next to sofa, image 1)",
+              "floor lamp (corner, image 1)",
+              "TV (wall, image 2)",
+              "wooden cabinet (under TV, image 2)",
+              "potted plant (cabinet, image 2)"
+            ],
+            "need_from_others": [
+              "Bedroom light to be turned on for better visibility"
+            ],
+            "intends": [
+              "pick up black laptop from sofa",
+              "move black laptop to wooden cabinet"
+            ],
+            "suggests": [
+              "black laptop"
+            ],
+            "obs_scope": "I can observe and interact with items in the living room only.",
+            "cannot_do": [
+              "PickupHeavyObject: cannot lift heavy furniture",
+              "PushFurniture: cannot push sofa",
+              "SliceObject: cannot slice food",
+              "PourObject: cannot pour precisely"
+            ],
+            "reasoning": "a) For a video call: clear desk area, good lighting, quiet environment. b) Bedroom needs lighting on for visibility. c) I can ensure lighting is good and check the laptop. d) Ensuring the laptop is on the desk and lighting is adequate is crucial. e) The black laptop should be moved to the desk."
+          },
+          "R3": {
+            "agent": "R3",
+            "capability": "I can manipulate light objects on the desk with my gripper.",
+            "can_do": [
+              "PickupLightObject: lift books, pens, small items",
+              "PassReceiveObject: transfer items to/from other robots",
+              "ToggleObject: turn on/off small lamp"
+            ],
+            "has_items": [
+              "brown book (desk, image 1)",
+              "black and white notebook (desk, image 1)",
+              "blue pen (desk, image 1)",
+              "white smartphone (desk, image 1)",
+              "small lamp (desk, image 1)",
+              "green plant (desk, image 1)",
+              "black laptop (desk, image 2)",
+              "blue USB drive (desk, image 2)",
+              "black monitor (desk, image 2)",
+              "blue mug (desk, image 2)"
+            ],
+            "need_from_others": [
+              "Another robot to receive items like the USB drive and pen to clear the desk further"
+            ],
+            "intends": [
+              "toggle small lamp from off to on",
+              "pick up blue USB drive from desk",
+              "pass blue USB drive to another robot",
+              "pick up blue pen from desk",
+              "pass blue pen to another robot"
+            ],
+            "suggests": [
+              "blue USB drive",
+              "blue pen",
+              "brown book",
+              "black and white notebook",
+              "white smartphone"
+            ],
+            "obs_scope": "I can observe and interact with items on and around the desk in the bedroom only.",
+            "cannot_do": [
+              "PickupHeavyObject: cannot lift heavy furniture",
+              "PushFurniture: cannot push chair",
+              "Move: cannot move from the desk area"
+            ],
+            "reasoning": "a) For the video call, the desk must be tidy, and lighting should be optimal for visibility. b) The desk should be clear of unnecessary items; lighting must be sufficient. c) I can toggle the small lamp to improve lighting and organize visible items. d) Prioritize lighting and clearing the desk. e) If needed, pass items to another robot to clear the desk."
+          },
+          "R4": {
+            "agent": "R4",
+            "capability": "I am mobile and can carry heavy objects up to 20 kg.",
+            "can_do": [
+              "PickupLightObject: lift small items",
+              "PickupHeavyObject: move large items",
+              "PushFurniture: adjust chair, desk",
+              "PassReceiveObject: transfer items to/from other robots",
+              "ToggleObject: turn on/off lights, appliances"
+            ],
+            "has_items": [
+              "brown baseball bat (corner, image 1)",
+              "black office chair (desk, image 1)",
+              "black keyboard (desk, image 1)",
+              "black laptop (desk, image 1)",
+              "black monitor (desk, image 1)",
+              "black trash bin (floor, image 1)",
+              "white floor lamp (floor, image 1)",
+              "black desk lamp (desk, image 2)",
+              "potted plant (floor, image 2)",
+              "blue blanket (bed, image 2)",
+              "brown pillow (bed, image 2)",
+              "black nightstand (floor, image 2)"
+            ],
+            "need_from_others": [],
+            "intends": [
+              "toggle white floor lamp from off to on",
+              "move black trash bin from floor to under desk",
+              "adjust black office chair to face desk"
+            ],
+            "suggests": [],
+            "obs_scope": "I can observe and interact with items in the bedroom only.",
+            "cannot_do": [
+              "SliceObject: cannot slice food",
+              "PourObject: cannot pour liquids"
+            ],
+            "reasoning": "a) The desk area must be tidy and well-lit for a clear video call. b) The bedroom must provide a clean, organized desk space with good lighting. c) I can turn on the white floor lamp and organize the desk. d) Turning on the light and clearing the desk are priorities. e) No items need to be moved to another room."
+          }
+        },
+        "local_plans": {
+          "R1": [
+            {
+              "id": "r1_s1",
+              "agent": "R1",
+              "type": "PASS",
+              "action": "pass floor lamp (next to table, image 1) to R2",
+              "item": "floor lamp (next to table, image 1)",
+              "target": "R2",
+              "uses": null,
+              "location": "living_room",
+              "origin": "offer",
+              "answers": null,
+              "enables": null,
+              "serves": "Ensure the desk area in the bedroom is well-lit and presentable for a video call.",
+              "prepared_by": null,
+              "status": "active",
+              "violations": [],
+              "size": null,
+              "phase": null,
+              "t_start": null,
+              "t_end": null
+            }
+          ],
+          "R2": [
+            {
+              "id": "r2_s1",
+              "agent": "R2",
+              "type": "LOCAL",
+              "action": {
+                "verb": "pick_up",
+                "object": "black laptop",
+                "from": "beige sofa",
+                "to": "gripper"
+              },
+              "item": null,
+              "target": null,
+              "uses": 0,
+              "location": "living_room",
+              "origin": "local",
+              "answers": null,
+              "enables": null,
+              "serves": "Ensure the living room is presentable for a video call with good lighting and a clear desk area.",
+              "prepared_by": null,
+              "status": "active",
+              "violations": [],
+              "size": null,
+              "phase": null,
+              "t_start": null,
+              "t_end": null
+            },
+            {
+              "id": "r2_s2",
+              "agent": "R2",
+              "type": "LOCAL",
+              "action": {
+                "verb": "put_down",
+                "object": "black laptop",
+                "from": "gripper",
+                "to": "wooden cabinet"
+              },
+              "item": null,
+              "target": null,
+              "uses": 0,
+              "location": "living_room",
+              "origin": "local",
+              "answers": null,
+              "enables": null,
+              "serves": "Ensure the living room is presentable for a video call with good lighting and a clear desk area.",
+              "prepared_by": null,
+              "status": "active",
+              "violations": [],
+              "size": null,
+              "phase": null,
+              "t_start": null,
+              "t_end": null
+            },
+            {
+              "id": "r2_s3",
+              "agent": "R2",
+              "type": "LOCAL",
+              "action": {
+                "verb": "toggle",
+                "object": "floor lamp",
+                "from": "off",
+                "to": "on"
+              },
+              "item": null,
+              "target": null,
+              "uses": 0,
+              "location": "living_room",
+              "origin": "local",
+              "answers": null,
+              "enables": null,
+              "serves": "Ensure the living room is presentable for a video call with good lighting and a clear desk area.",
+              "prepared_by": null,
+              "status": "active",
+              "violations": [],
+              "size": null,
+              "phase": null,
+              "t_start": null,
+              "t_end": null
+            }
+          ],
+          "R3": [
+            {
+              "id": "r3_s1",
+              "agent": "R3",
+              "type": "LOCAL",
+              "action": {
+                "verb": "toggle",
+                "object": "small lamp",
+                "from": "off",
+                "to": "on"
+              },
+              "item": null,
+              "target": null,
+              "uses": 0,
+              "location": "bedroom",
+              "origin": "local",
+              "answers": null,
+              "enables": null,
+              "serves": "Make the desk area presentable and well-lit for the video call.",
+              "prepared_by": null,
+              "status": "active",
+              "violations": [],
+              "size": null,
+              "phase": null,
+              "t_start": null,
+              "t_end": null
+            },
+            {
+              "id": "r3_s2",
+              "agent": "R3",
+              "type": "LOCAL",
+              "action": {
+                "verb": "pick_up",
+                "object": "blue USB drive",
+                "from": "desk",
+                "to": "gripper"
+              },
+              "item": null,
+              "target": null,
+              "uses": 0,
+              "location": "bedroom",
+              "origin": "local",
+              "answers": null,
+              "enables": null,
+              "serves": "Make the desk area presentable and well-lit for the video call.",
+              "prepared_by": null,
+              "status": "active",
+              "violations": [],
+              "size": null,
+              "phase": null,
+              "t_start": null,
+              "t_end": null
+            },
+            {
+              "id": "r3_s3",
+              "agent": "R3",
+              "type": "PASS",
+              "action": "pass blue USB drive (desk, image 2) to R4",
+              "item": "blue USB drive (desk, image 2)",
+              "target": "R4",
+              "uses": null,
+              "location": "bedroom",
+              "origin": "offer",
+              "answers": null,
+              "enables": null,
+              "serves": "Make the desk area presentable and well-lit for the video call.",
+              "prepared_by": null,
+              "status": "active",
+              "violations": [],
+              "size": null,
+              "phase": null,
+              "t_start": null,
+              "t_end": null
+            },
+            {
+              "id": "r3_s4",
+              "agent": "R3",
+              "type": "LOCAL",
+              "action": {
+                "verb": "pick_up",
+                "object": "blue pen",
+                "from": "desk",
+                "to": "gripper"
+              },
+              "item": null,
+              "target": null,
+              "uses": 0,
+              "location": "bedroom",
+              "origin": "local",
+              "answers": null,
+              "enables": null,
+              "serves": "Make the desk area presentable and well-lit for the video call.",
+              "prepared_by": null,
+              "status": "active",
+              "violations": [],
+              "size": null,
+              "phase": null,
+              "t_start": null,
+              "t_end": null
+            },
+            {
+              "id": "r3_s5",
+              "agent": "R3",
+              "type": "PASS",
+              "action": "pass blue pen (desk, image 1) to R4",
+              "item": "blue pen (desk, image 1)",
+              "target": "R4",
+              "uses": null,
+              "location": "bedroom",
+              "origin": "offer",
+              "answers": null,
+              "enables": null,
+              "serves": "Make the desk area presentable and well-lit for the video call.",
+              "prepared_by": null,
+              "status": "active",
+              "violations": [],
+              "size": null,
+              "phase": null,
+              "t_start": null,
+              "t_end": null
+            }
+          ],
+          "R4": [
+            {
+              "id": "r4_s1",
+              "agent": "R4",
+              "type": "LOCAL",
+              "action": {
+                "verb": "toggle",
+                "object": "white floor lamp",
+                "from": "off",
+                "to": "on"
+              },
+              "item": null,
+              "target": null,
+              "uses": 0,
+              "location": "bedroom",
+              "origin": "local",
+              "answers": null,
+              "enables": null,
+              "serves": "Ensure the desk area is tidy and well-lit for the video call.",
+              "prepared_by": null,
+              "status": "active",
+              "violations": [],
+              "size": null,
+              "phase": null,
+              "t_start": null,
+              "t_end": null
+            },
+            {
+              "id": "r4_s2",
+              "agent": "R4",
+              "type": "LOCAL",
+              "action": {
+                "verb": "move",
+                "object": "black trash bin",
+                "from": "floor",
+                "to": "under desk"
+              },
+              "item": null,
+              "target": null,
+              "uses": 0,
+              "location": "bedroom",
+              "origin": "local",
+              "answers": null,
+              "enables": null,
+              "serves": "Ensure the desk area is tidy and well-lit for the video call.",
+              "prepared_by": null,
+              "status": "active",
+              "violations": [],
+              "size": null,
+              "phase": null,
+              "t_start": null,
+              "t_end": null
+            },
+            {
+              "id": "r4_s3",
+              "agent": "R4",
+              "type": "LOCAL",
+              "action": {
+                "verb": "push",
+                "object": "black office chair",
+                "from": "desk",
+                "to": "facing desk"
+              },
+              "item": null,
+              "target": null,
+              "uses": 0,
+              "location": "bedroom",
+              "origin": "local",
+              "answers": null,
+              "enables": null,
+              "serves": "Ensure the desk area is tidy and well-lit for the video call.",
+              "prepared_by": null,
+              "status": "active",
+              "violations": [],
+              "size": null,
+              "phase": null,
+              "t_start": null,
+              "t_end": null
+            }
+          ]
+        },
+        "judgments": [
+          {
+            "agent": "R2",
+            "offer": "r1_s1",
+            "decision": "reject",
+            "reason": "I already have the capability to toggle the floor lamp in the living room and ensure adequate lighting. Receiving a floor lamp is unnecessary and not feasible for my task.",
+            "result": "decline"
+          },
+          {
+            "agent": "R4",
+            "offer": "r3_s3",
+            "decision": "decline",
+            "reason": "The blue USB drive does not contribute to tidying or lighting the desk area for the video call.",
+            "result": "decline"
+          },
+          {
+            "agent": "R4",
+            "offer": "r3_s5",
+            "decision": "decline",
+            "reason": "The blue pen does not contribute to tidying or lighting the desk area for the video call.",
+            "result": "decline"
+          }
+        ],
+        "graph": {
+          "nodes": [
+            {
+              "id": "r1_s1",
+              "agent": "R1",
+              "type": "PASS",
+              "action": "pass floor lamp (next to table, image 1) to R2",
+              "item": "floor lamp (next to table, image 1)",
+              "target": "R2",
+              "uses": null,
+              "location": "living_room",
+              "origin": "offer",
+              "answers": null,
+              "enables": null,
+              "serves": "Ensure the desk area in the bedroom is well-lit and presentable for a video call.",
+              "prepared_by": null,
+              "status": "dropped",
+              "violations": [],
+              "size": null,
+              "phase": null,
+              "t_start": null,
+              "t_end": null
+            },
+            {
+              "id": "r2_s1",
+              "agent": "R2",
+              "type": "LOCAL",
+              "action": {
+                "verb": "pick_up",
+                "object": "black laptop",
+                "from": "beige sofa",
+                "to": "gripper"
+              },
+              "item": null,
+              "target": null,
+              "uses": 0,
+              "location": "living_room",
+              "origin": "local",
+              "answers": null,
+              "enables": null,
+              "serves": "Ensure the living room is presentable for a video call with good lighting and a clear desk area.",
+              "prepared_by": null,
+              "status": "active",
+              "violations": [],
+              "size": "short",
+              "phase": 1,
+              "t_start": 0,
+              "t_end": 1
+            },
+            {
+              "id": "r2_s2",
+              "agent": "R2",
+              "type": "LOCAL",
+              "action": {
+                "verb": "put_down",
+                "object": "black laptop",
+                "from": "gripper",
+                "to": "wooden cabinet"
+              },
+              "item": null,
+              "target": null,
+              "uses": 0,
+              "location": "living_room",
+              "origin": "local",
+              "answers": null,
+              "enables": null,
+              "serves": "Ensure the living room is presentable for a video call with good lighting and a clear desk area.",
+              "prepared_by": null,
+              "status": "active",
+              "violations": [],
+              "size": "short",
+              "phase": 1,
+              "t_start": 1,
+              "t_end": 2
+            },
+            {
+              "id": "r2_s3",
+              "agent": "R2",
+              "type": "LOCAL",
+              "action": {
+                "verb": "toggle",
+                "object": "floor lamp",
+                "from": "off",
+                "to": "on"
+              },
+              "item": null,
+              "target": null,
+              "uses": 0,
+              "location": "living_room",
+              "origin": "local",
+              "answers": null,
+              "enables": null,
+              "serves": "Ensure the living room is presentable for a video call with good lighting and a clear desk area.",
+              "prepared_by": null,
+              "status": "active",
+              "violations": [],
+              "size": "short",
+              "phase": 1,
+              "t_start": 2,
+              "t_end": 3
+            },
+            {
+              "id": "r3_s1",
+              "agent": "R3",
+              "type": "LOCAL",
+              "action": {
+                "verb": "toggle",
+                "object": "small lamp",
+                "from": "off",
+                "to": "on"
+              },
+              "item": null,
+              "target": null,
+              "uses": 0,
+              "location": "bedroom",
+              "origin": "local",
+              "answers": null,
+              "enables": null,
+              "serves": "Make the desk area presentable and well-lit for the video call.",
+              "prepared_by": null,
+              "status": "active",
+              "violations": [],
+              "size": "short",
+              "phase": 1,
+              "t_start": 0,
+              "t_end": 1
+            },
+            {
+              "id": "r3_s2",
+              "agent": "R3",
+              "type": "LOCAL",
+              "action": {
+                "verb": "pick_up",
+                "object": "blue USB drive",
+                "from": "desk",
+                "to": "gripper"
+              },
+              "item": null,
+              "target": null,
+              "uses": 0,
+              "location": "bedroom",
+              "origin": "local",
+              "answers": null,
+              "enables": null,
+              "serves": "Make the desk area presentable and well-lit for the video call.",
+              "prepared_by": null,
+              "status": "active",
+              "violations": [],
+              "size": "short",
+              "phase": 1,
+              "t_start": 1,
+              "t_end": 2
+            },
+            {
+              "id": "r3_s3",
+              "agent": "R3",
+              "type": "PASS",
+              "action": "pass blue USB drive (desk, image 2) to R4",
+              "item": "blue USB drive (desk, image 2)",
+              "target": "R4",
+              "uses": null,
+              "location": "bedroom",
+              "origin": "offer",
+              "answers": null,
+              "enables": null,
+              "serves": "Make the desk area presentable and well-lit for the video call.",
+              "prepared_by": null,
+              "status": "dropped",
+              "violations": [],
+              "size": null,
+              "phase": null,
+              "t_start": null,
+              "t_end": null
+            },
+            {
+              "id": "r3_s4",
+              "agent": "R3",
+              "type": "LOCAL",
+              "action": {
+                "verb": "pick_up",
+                "object": "blue pen",
+                "from": "desk",
+                "to": "gripper"
+              },
+              "item": null,
+              "target": null,
+              "uses": 0,
+              "location": "bedroom",
+              "origin": "local",
+              "answers": null,
+              "enables": null,
+              "serves": "Make the desk area presentable and well-lit for the video call.",
+              "prepared_by": null,
+              "status": "active",
+              "violations": [],
+              "size": "short",
+              "phase": 1,
+              "t_start": 2,
+              "t_end": 3
+            },
+            {
+              "id": "r3_s5",
+              "agent": "R3",
+              "type": "PASS",
+              "action": "pass blue pen (desk, image 1) to R4",
+              "item": "blue pen (desk, image 1)",
+              "target": "R4",
+              "uses": null,
+              "location": "bedroom",
+              "origin": "offer",
+              "answers": null,
+              "enables": null,
+              "serves": "Make the desk area presentable and well-lit for the video call.",
+              "prepared_by": null,
+              "status": "dropped",
+              "violations": [],
+              "size": null,
+              "phase": null,
+              "t_start": null,
+              "t_end": null
+            },
+            {
+              "id": "r4_s1",
+              "agent": "R4",
+              "type": "LOCAL",
+              "action": {
+                "verb": "toggle",
+                "object": "white floor lamp",
+                "from": "off",
+                "to": "on"
+              },
+              "item": null,
+              "target": null,
+              "uses": 0,
+              "location": "bedroom",
+              "origin": "local",
+              "answers": null,
+              "enables": null,
+              "serves": "Ensure the desk area is tidy and well-lit for the video call.",
+              "prepared_by": null,
+              "status": "active",
+              "violations": [],
+              "size": "short",
+              "phase": 1,
+              "t_start": 0,
+              "t_end": 1
+            },
+            {
+              "id": "r4_s2",
+              "agent": "R4",
+              "type": "LOCAL",
+              "action": {
+                "verb": "move",
+                "object": "black trash bin",
+                "from": "floor",
+                "to": "under desk"
+              },
+              "item": null,
+              "target": null,
+              "uses": 0,
+              "location": "bedroom",
+              "origin": "local",
+              "answers": null,
+              "enables": null,
+              "serves": "Ensure the desk area is tidy and well-lit for the video call.",
+              "prepared_by": null,
+              "status": "active",
+              "violations": [],
+              "size": "medium",
+              "phase": 1,
+              "t_start": 1,
+              "t_end": 2
+            },
+            {
+              "id": "r4_s3",
+              "agent": "R4",
+              "type": "LOCAL",
+              "action": {
+                "verb": "push",
+                "object": "black office chair",
+                "from": "desk",
+                "to": "facing desk"
+              },
+              "item": null,
+              "target": null,
+              "uses": 0,
+              "location": "bedroom",
+              "origin": "local",
+              "answers": null,
+              "enables": null,
+              "serves": "Ensure the desk area is tidy and well-lit for the video call.",
+              "prepared_by": null,
+              "status": "active",
+              "violations": [],
+              "size": "medium",
+              "phase": 1,
+              "t_start": 2,
+              "t_end": 3
+            }
+          ],
+          "order": {
+            "R1": [
+              "r1_s1"
+            ],
+            "R2": [
+              "r2_s1",
+              "r2_s2",
+              "r2_s3"
+            ],
+            "R3": [
+              "r3_s1",
+              "r3_s2",
+              "r3_s3",
+              "r3_s4",
+              "r3_s5"
+            ],
+            "R4": [
+              "r4_s1",
+              "r4_s2",
+              "r4_s3"
+            ]
+          },
+          "edges": [
+            {
+              "src": "r2_s1",
+              "dst": "r2_s2",
+              "kind": "SEQ",
+              "status": "CONFIRMED",
+              "source": "local",
+              "targeted": false
+            },
+            {
+              "src": "r2_s2",
+              "dst": "r2_s3",
+              "kind": "SEQ",
+              "status": "CONFIRMED",
+              "source": "local",
+              "targeted": false
+            },
+            {
+              "src": "r3_s1",
+              "dst": "r3_s2",
+              "kind": "SEQ",
+              "status": "CONFIRMED",
+              "source": "local",
+              "targeted": false
+            },
+            {
+              "src": "r3_s2",
+              "dst": "r3_s4",
+              "kind": "SEQ",
+              "status": "CONFIRMED",
+              "source": "local",
+              "targeted": false
+            },
+            {
+              "src": "r4_s1",
+              "dst": "r4_s2",
+              "kind": "SEQ",
+              "status": "CONFIRMED",
+              "source": "local",
+              "targeted": false
+            },
+            {
+              "src": "r4_s2",
+              "dst": "r4_s3",
+              "kind": "SEQ",
+              "status": "CONFIRMED",
+              "source": "local",
+              "targeted": false
+            }
+          ],
+          "drops": [
+            {
+              "node": "r1_s1",
+              "agent": "R1",
+              "type": "PASS",
+              "text": "pass floor lamp (next to table, image 1) to R2 (floor lamp (next to table, image 1))",
+              "reason": "offer not taken by R2",
+              "by": "rule"
+            },
+            {
+              "node": "r3_s3",
+              "agent": "R3",
+              "type": "PASS",
+              "text": "pass blue USB drive (desk, image 2) to R4 (blue USB drive (desk, image 2))",
+              "reason": "offer not taken by R4",
+              "by": "rule"
+            },
+            {
+              "node": "r3_s5",
+              "agent": "R3",
+              "type": "PASS",
+              "text": "pass blue pen (desk, image 1) to R4 (blue pen (desk, image 1))",
+              "reason": "offer not taken by R4",
+              "by": "rule"
+            }
+          ],
+          "unresolved": [],
+          "warnings": [],
+          "ops_log": []
+        },
+        "metrics": {
+          "task_id": "task3_abstract",
+          "n_steps_total": 12,
+          "n_steps_active": 9,
+          "n_blocked": 0,
+          "n_dropped": 3,
+          "n_requests": 0,
+          "n_requests_served": 0,
+          "n_collab_edges_final": 0,
+          "confirmed_ratio": null,
+          "selected_by_graph": 0,
+          "selected_by_rule": 0,
+          "capability_violations_after_fix": 0,
+          "n_requests_withdrawn": 0,
+          "n_served_by_own_existing_step": 0,
+          "n_duplicates_merged": 0,
+          "n_duplicates_dropped": 0,
+          "n_redundant_branches_released": 0,
+          "n_requests_moved_later": 0,
+          "n_warnings": 0,
+          "plan_fix_rounds": {
+            "R1": 2,
+            "R2": 1,
+            "R3": 1,
+            "R4": 1
+          },
+          "n_checklist_items": 9,
+          "n_uncovered_checklist": 1,
+          "n_uncovered_essential": 0,
+          "graph_ops_applied": 0,
+          "graph_ops_rejected": 0,
+          "makespan_steps": 3,
+          "makespan_min": 5,
+          "deadline": 10,
+          "deadline_ok": true,
+          "size_source": "graph_llm",
+          "n_size_missing": 0,
+          "n_candidates_from_stage3": 0,
+          "n_order_edges_added": 0,
+          "n_order_pairs_independent": 0,
+          "success_no_blocked": true,
+          "n_requests_declined": 0,
+          "n_requests_failed": 0,
+          "n_requests_moot": 0,
+          "n_blocked_by_decline": 0,
+          "n_blocked_by_failure": 0,
+          "success_no_failure": true,
+          "n_handoff_prep_dropped": 0,
+          "n_offers_made": 3,
+          "n_offers_taken": 0,
+          "n_offers_untaken": 3,
+          "n_preparations_released": 0,
+          "n_help_edges": 0,
+          "n_transfer_edges": 0,
+          "llm_calls": 16,
+          "prompt_tokens": 58181,
+          "completion_tokens": 3945,
+          "config": {
+            "use_edge_proposal": true,
+            "use_graph_llm": true,
+            "max_graph_rounds": 2
+          },
+          "wall_time_sec": 14.1
+        },
+        "config": {
+          "use_edge_proposal": true,
+          "use_graph_llm": true,
+          "max_graph_rounds": 2,
+          "deadline_min": 20
+        }
+      },
+      "llm_judge": {
+        "TF": 2,
+        "TF_reason": "The plan partially addresses the goals by turning on the bedroom lamps (DeskLamp, FloorLamp) to improve lighting and moving the chair. However, it fails to prepare the laptop in the bedroom for the video call (instead, R2 interacts with a laptop in the living room), and it attempts to clear hallucinated clutter.",
+        "GF": 1,
+        "GF_reason": "Severe grounding violations: The plan hallucinates objects ('blue USB drive', 'blue pen') and furniture ('desk' in the bedroom, 'wooden cabinet' in the living room). Additionally, R3 (a Gripper) violates physical constraints by attempting to pick up and hold two objects simultaneously without putting the first one down.",
+        "SC": 2,
+        "SC_reason": "There is a critical sequencing violation: R3 picks up a second object ('blue pen') while its gripper is already holding the first object ('blue USB drive'), which is physically impossible without a 'put down' action in between.",
+        "CQ": 3,
+        "CQ_reason": "No inter-robot collaboration is used. While cross-room collaboration is not strictly required since the bedroom contains all necessary items (laptop, chair, lamps) for the video call, the multi-agent potential is wasted as R2 performs irrelevant actions in the living room."
+      }
+    },
+    "no_offer": {
+      "raw_result": {
+        "variant": "no_offer",
+        "joint_plan_text": "### Joint Plan — task3_abstract  (about 5 min / deadline 20 min: OK)\n### Robots: R1:Gripper(living_room), R2:Mobile_Light(living_room), R3:Gripper(bedroom), R4:Mobile_Heavy(bedroom)\n\n\n[0-5 min]\n- R2 [LOCAL] pick_up the magazine from coffee table to shelf  (r2_s1)\n- R3 [LOCAL] pick_up the cables from desk to gripper  (r3_s1)\n- R4 [LOCAL] pick_up the papers from desk to gripper  (r4_s1)\n- R2 [LOCAL] put_down the magazine from gripper to shelf  (r2_s2)\n- R3 [LOCAL] put_down the cables from gripper to drawer  (r3_s2)\n- R4 [LOCAL] put_down the papers from gripper to shelf  (r4_s2)\n- R2 [LOCAL] pick_up the remote control from sofa to gripper  (r2_s3)\n- R4 [LOCAL] pick_up the books from desk to gripper  (r4_s3)\n- R2 [LOCAL] put_down the remote control from gripper to TV stand  (r2_s4)\n- R4 [LOCAL] put_down the books from gripper to bookshelf  (r4_s4)\n\n### Warnings\n- {'issue': 'possible DUPLICATE_WORK left', 'nodes': ['r3_s1', 'r4_s1'], 'similarity': 0.6}\n- {'issue': 'possible DUPLICATE_WORK left', 'nodes': ['r3_s1', 'r4_s3'], 'similarity': 0.6}",
+        "metrics": {
+          "task_id": "task3_abstract",
+          "n_steps_total": 10,
+          "n_steps_active": 10,
+          "n_blocked": 0,
+          "n_dropped": 0,
+          "n_requests": 0,
+          "n_requests_served": 0,
+          "n_collab_edges_final": 0,
+          "confirmed_ratio": null,
+          "selected_by_graph": 0,
+          "selected_by_rule": 0,
+          "capability_violations_after_fix": 0,
+          "n_requests_withdrawn": 0,
+          "n_served_by_own_existing_step": 0,
+          "n_duplicates_merged": 0,
+          "n_duplicates_dropped": 0,
+          "n_redundant_branches_released": 0,
+          "n_requests_moved_later": 0,
+          "n_warnings": 2,
+          "plan_fix_rounds": {
+            "R1": 2,
+            "R2": 1,
+            "R3": 1,
+            "R4": 2
+          },
+          "n_checklist_items": 5,
+          "n_uncovered_checklist": 0,
+          "n_uncovered_essential": 0,
+          "graph_ops_applied": 0,
+          "graph_ops_rejected": 4,
+          "makespan_steps": 4,
+          "makespan_min": 5,
+          "deadline": 20,
+          "deadline_ok": true,
+          "size_source": "graph_llm",
+          "n_size_missing": 0,
+          "n_candidates_from_stage3": 0,
+          "n_order_edges_added": 0,
+          "n_order_pairs_independent": 0,
+          "success_no_blocked": true,
+          "n_requests_declined": 0,
+          "n_requests_failed": 0,
+          "n_requests_moot": 0,
+          "n_blocked_by_decline": 0,
+          "n_blocked_by_failure": 0,
+          "success_no_failure": true,
+          "n_handoff_prep_dropped": 0,
+          "n_offers_made": 0,
+          "n_offers_taken": 0,
+          "n_offers_untaken": 0,
+          "n_preparations_released": 0,
+          "n_help_edges": 0,
+          "n_transfer_edges": 0,
+          "llm_calls": 17,
+          "prompt_tokens": 57395,
+          "completion_tokens": 4015,
+          "variant": "no_offer",
+          "wall_time_sec": 16.98849630355835
+        }
+      },
+      "llm_judge": {
+        "TF": 1,
+        "TF_reason": "The plan fails to address the core requirements of the task. It does not turn on any lights (DeskLamp or FloorLamp) in the bedroom to solve the lighting issue, and it hallucinates objects like 'cables' and 'papers' to clear the desk instead of interacting with real objects. The laptop is also ignored.",
+        "GF": 1,
+        "GF_reason": "Severe hallucinations dominate the plan. Objects and furniture such as 'magazine', 'cables', 'papers', 'desk', 'TV stand', and 'bookshelf' do not exist in the provided room lists.",
+        "SC": 4,
+        "SC_reason": "The sequence of pick_up and put_down actions is logically ordered, although the action descriptions contain minor syntax errors (e.g., 'pick_up the magazine from coffee table to shelf').",
+        "CQ": 4,
+        "CQ_reason": "No collaboration is present in the plan. Since the necessary objects (Laptop, DeskLamp) are available in the bedroom, cross-room collaboration is not strictly required, making independent work acceptable."
+      }
+    },
+    "no_edge": {
+      "raw_result": {
+        "variant": "no_edge",
+        "joint_plan_text": "### Joint Plan — task3_abstract  (about 10 min / deadline 20 min: OK)\n### Robots: R1:Gripper(living_room), R2:Mobile_Light(living_room), R3:Gripper(bedroom), R4:Mobile_Heavy(bedroom)\n\n\n[0-5 min]\n- R1 [LOCAL] toggle the floor lamp from off to on  (r1_s2)\n- R2 [LOCAL] pick_up the brown sculpture from cabinet to gripper  (r2_s1)\n- R3 [LOCAL] arrange the orange book from desk to neatly on desk  (r3_s2)\n- R4 [LOCAL] toggle the floor lamp from off to on  (r4_s1)\n- R2 [LOCAL] move the brown sculpture from gripper to dining table  (r2_s2)\n- R3 [LOCAL] arrange the chess board from desk to neatly on desk  (r3_s3)\n- R4 [LOCAL] push the black office chair from desk to aligned with desk  (r4_s2)\n- R2 [LOCAL] pick_up the green plant from cabinet to gripper  (r2_s3)\n- R3 [LOCAL] move the blue USB drive from desk to behind the monitor  (r3_s4)\n- R4 [LOCAL] pick_up the grey trash bin from desk to gripper  (r4_s3)\n- R2 [LOCAL] move the green plant from gripper to dining table  (r2_s4)\n- R4 [LOCAL] move the grey trash bin from gripper to corner  (r4_s4)\n\n[5-10 min]\n- R2 [LOCAL] pick_up the black laptop from sofa to gripper  (r2_s5)\n- R4 [LOCAL] pick_up the brown baseball bat from wall to gripper  (r4_s5)\n- R2 [LOCAL] move the black laptop from gripper to table  (r2_s6)\n- R4 [LOCAL] move the brown baseball bat from gripper to corner  (r4_s6)\n- R4 [LOCAL] open the black laptop from closed to open  (r4_s7)\n\n### Dropped\n- R1 [PASS] pass brown box (table, image 1) to R2 (brown box (table, image 1)) — offer not taken by R2 (by rule)\n- R3 [PASS] pass orange book (desk, image 1) to R4 (orange book (desk, image 1)) — offer not taken by R4 (by rule)\n- R3 [PASS] pass chess board (desk, image 1) to R4 (chess board (desk, image 1)) — offer not taken by R4 (by rule)\n- R3 [PASS] pass blue USB drive (desk, image 2) to R4 (blue USB drive (desk, image 2)) — offer not taken by R4 (by rule)\n- R3 [LOCAL] toggle the lamp from off to on — graph: DUPLICATE_WORK with R4 who also toggles the bedroom lamp. R4 should handle this task to avoid redundancy. (by graph)",
+        "metrics": {
+          "task_id": "task3_abstract",
+          "n_steps_total": 22,
+          "n_steps_active": 17,
+          "n_blocked": 0,
+          "n_dropped": 5,
+          "n_requests": 0,
+          "n_requests_served": 0,
+          "n_collab_edges_final": 0,
+          "confirmed_ratio": null,
+          "selected_by_graph": 0,
+          "selected_by_rule": 0,
+          "capability_violations_after_fix": 0,
+          "n_requests_withdrawn": 0,
+          "n_served_by_own_existing_step": 0,
+          "n_duplicates_merged": 0,
+          "n_duplicates_dropped": 1,
+          "n_redundant_branches_released": 0,
+          "n_requests_moved_later": 0,
+          "n_warnings": 0,
+          "plan_fix_rounds": {
+            "R1": 2,
+            "R2": 1,
+            "R3": 2,
+            "R4": 1
+          },
+          "n_checklist_items": 17,
+          "n_uncovered_checklist": 4,
+          "n_uncovered_essential": 0,
+          "graph_ops_applied": 1,
+          "graph_ops_rejected": 0,
+          "makespan_steps": 7,
+          "makespan_min": 10,
+          "deadline": 20,
+          "deadline_ok": true,
+          "size_source": "graph_llm",
+          "n_size_missing": 0,
+          "n_candidates_from_stage3": 0,
+          "n_order_edges_added": 0,
+          "n_order_pairs_independent": 0,
+          "success_no_blocked": true,
+          "n_requests_declined": 0,
+          "n_requests_failed": 0,
+          "n_requests_moot": 0,
+          "n_blocked_by_decline": 0,
+          "n_blocked_by_failure": 0,
+          "success_no_failure": true,
+          "n_handoff_prep_dropped": 0,
+          "n_offers_made": 4,
+          "n_offers_taken": 0,
+          "n_offers_untaken": 4,
+          "n_preparations_released": 0,
+          "n_help_edges": 0,
+          "n_transfer_edges": 0,
+          "llm_calls": 16,
+          "prompt_tokens": 64535,
+          "completion_tokens": 5385,
+          "variant": "no_edge",
+          "wall_time_sec": 18.41186261177063
+        }
+      },
+      "llm_judge": {
+        "TF": 2,
+        "TF_reason": "The plan addresses some core goals (turning on the bedroom light, aligning the chair, opening the laptop, moving the trash bin). However, it misses the 5-minute deadline by extending into the 5-10 minute block, and relies on several hallucinated objects to make the desk presentable.",
+        "GF": 1,
+        "GF_reason": "Severe grounding violations. The plan hallucinates multiple objects not present in the rooms, including an 'orange book' (in the bedroom), 'chess board', 'blue USB drive', 'brown baseball bat', 'desk', and 'dining table'.",
+        "SC": 4,
+        "SC_reason": "Sequential coherence is mostly maintained. Objects that are picked up are subsequently moved. R4 opens the laptop without explicitly navigating to it, but assuming it is already in the workspace, the sequence is acceptable.",
+        "CQ": 2,
+        "CQ_reason": "Collaboration is poorly executed. R1 and R2 perform completely irrelevant tasks in the living room while the video call setup is happening in the bedroom. Additionally, several PASS actions were proposed by R1 and R3 but dropped because they were not accepted by the target robots."
+      }
+    },
+    "no_graph": {
+      "raw_result": {
+        "variant": "no_graph",
+        "joint_plan_text": "### Joint Plan — task3_abstract  (about 15 min / deadline 20 min: OK)\n### Robots: R1:Gripper(living_room), R2:Mobile_Light(living_room), R3:Gripper(bedroom), R4:Mobile_Heavy(bedroom)\n\n\n[0-5 min]\n- R2 [LOCAL] toggle the lamp from off to on  (r2_s1)\n- R3 [LOCAL] toggle the lamp from off to on  (r3_s1)\n- R4 [LOCAL] toggle the white floor lamp from off to on  (r4_s1)\n- R2 [LOCAL] pick_up the black laptop from sofa to gripper  (r2_s2)\n- R3 [LOCAL] pick_up the book from desk to gripper  (r3_s2)\n- R4 [LOCAL] move the black office chair from desk to facing desk  (r4_s2)\n- R2 [LOCAL] put_down the black laptop from gripper to sofa  (r2_s3)\n- R3 [PASS] pass book (desk, image 1) to R4 (offered) (hands it over; R4 collects it)  (r3_s3)\n- R4 [LOCAL] pick_up the brown bat from corner to gripper  (r4_s3)\n- R3 [LOCAL] pick_up the blue cup from desk to gripper  (r3_s4)\n- R4 [LOCAL] put_down the brown bat from gripper to bed  (r4_s4)\n- R3 [PASS] pass blue cup (desk, image 2) to R4 (offered) (hands it over; R4 collects it)  (r3_s5)\n- R4 [LOCAL] pick_up the black keyboard from desk to gripper  (r4_s5)\n\n[5-10 min]\n- R4 [LOCAL] put_down the black keyboard from gripper to brown desk  (r4_s6)\n- R4 [RECEIVE] receive book (desk, image 1) from R3 (collects it from the bedroom)  (r4_s7)\n- R4 [LOCAL] put down the book (desk, image 1) on the coffee table  (r4_s8)\n\n[10-15 min]\n- R4 [RECEIVE] receive blue cup (desk, image 2) from R3 (collects it from the bedroom)  (r4_s9)\n- R4 [LOCAL] put down the blue cup (desk, image 2) on the coffee table  (r4_s10)\n\n### Warnings\n- {'issue': 'possible DUPLICATE_WORK left', 'nodes': ['r3_s1', 'r4_s1'], 'similarity': 0.6}\n- {'issue': 'possible DUPLICATE_WORK left', 'nodes': ['r3_s2', 'r4_s5'], 'similarity': 0.5}\n\n### Dropped\n- R1 [LOCAL] pick_up the brown box from table to gripper — capability check failed: step must cite in 'serves' the index of one of your goals (got 1); drop steps that serve none of the task's goals (by rule)\n- R1 [PASS] pass brown box (table, image 1) to R2 (brown box (table, image 1)) — offer not taken by R2 (by rule)",
+        "metrics": {
+          "task_id": "task3_abstract",
+          "n_steps_total": 20,
+          "n_steps_active": 18,
+          "n_blocked": 0,
+          "n_dropped": 2,
+          "n_requests": 2,
+          "n_requests_served": 2,
+          "n_collab_edges_final": 2,
+          "confirmed_ratio": 1.0,
+          "selected_by_graph": 0,
+          "selected_by_rule": 2,
+          "capability_violations_after_fix": 1,
+          "n_requests_withdrawn": 0,
+          "n_served_by_own_existing_step": 0,
+          "n_duplicates_merged": 0,
+          "n_duplicates_dropped": 0,
+          "n_redundant_branches_released": 0,
+          "n_requests_moved_later": 0,
+          "n_warnings": 2,
+          "plan_fix_rounds": {
+            "R1": 2,
+            "R2": 1,
+            "R3": 1,
+            "R4": 2
+          },
+          "n_checklist_items": 10,
+          "n_uncovered_checklist": 1,
+          "n_uncovered_essential": 0,
+          "graph_ops_applied": 0,
+          "graph_ops_rejected": 0,
+          "makespan_steps": 10,
+          "makespan_min": 15,
+          "deadline": 20,
+          "deadline_ok": true,
+          "size_source": "rule",
+          "n_size_missing": 0,
+          "n_candidates_from_stage3": 2,
+          "n_order_edges_added": 0,
+          "n_order_pairs_independent": 0,
+          "success_no_blocked": true,
+          "n_requests_declined": 0,
+          "n_requests_failed": 0,
+          "n_requests_moot": 0,
+          "n_blocked_by_decline": 0,
+          "n_blocked_by_failure": 0,
+          "success_no_failure": true,
+          "n_handoff_prep_dropped": 0,
+          "n_offers_made": 3,
+          "n_offers_taken": 2,
+          "n_offers_untaken": 1,
+          "n_preparations_released": 0,
+          "n_help_edges": 0,
+          "n_transfer_edges": 2,
+          "llm_calls": 16,
+          "prompt_tokens": 63450,
+          "completion_tokens": 4823,
+          "variant": "no_graph",
+          "wall_time_sec": 16.45633363723755
+        }
+      },
+      "llm_judge": {
+        "TF": 2,
+        "TF_reason": "The plan partially addresses the goals by turning on lamps and moving a chair. However, it fails to properly set up the laptop for the video call (R2 just picks it up and puts it back down), and attempts to clear the desk by interacting with several hallucinated objects.",
+        "GF": 1,
+        "GF_reason": "Severe hallucinations dominate the plan. The robots interact with a 'book', 'blue cup', 'brown bat', and 'black keyboard' in the bedroom, none of which exist in the provided room list for FP316.",
+        "SC": 2,
+        "SC_reason": "There are critical ordering and state violations. R3 initiates a PASS for the book in the 0-5 min block but R4 does not RECEIVE it until the 5-10 min block. Meanwhile, R3 picks up another object (blue cup) while its gripper should still be occupied waiting for R4.",
+        "CQ": 1,
+        "CQ_reason": "Collaboration is highly inefficient and unnecessary. R3 and R4 are in the same room, yet R3 passes objects to R4 just for R4 to put them down on a table in that same room. R3 could have placed the objects directly."
+      }
+    }
+  }
+}
