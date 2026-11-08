@@ -184,13 +184,56 @@ def interactive_capture(scene, agent_count, out_dir, prefix, robot_labels, robot
 
     controller.stop()
 
+ROBOT_NAME_BY_N = {0: "Gripper", 1: "Mobile_Light", 2: "Mobile_Heavy"}
+
+EXPERIMENT_DIR = "/mnt/c/Users/shin/Desktop/AAMAS/experiment"
+
+
+def load_task_config(task_n):
+    with open(os.path.join(EXPERIMENT_DIR, "task", "task.json"), encoding="utf-8-sig") as f:
+        tasks = {t["task_n"]: t for t in json.load(f)["tasks"]}
+    t = tasks[task_n]
+    floorplan_key = next(iter(t["rooms"]))  # e.g. "FP303"
+    floorplan_n = floorplan_key[2:]
+    robot_config = t["configs"]["4"]
+    robot_types = [ROBOT_NAME_BY_N[r["robot_n"]] for r in robot_config]
+
+    # task_n is "mat_compound" (-> task1) or "mat_compound_5" (-> task5)
+    parts = task_n.rsplit("_", 1)
+    if len(parts) == 2 and parts[1].isdigit():
+        category, task_num = parts[0], parts[1]
+    else:
+        category, task_num = task_n, "1"
+
+    return {
+        "scene": f"FloorPlan{floorplan_n}",
+        "agent_count": len(robot_config),
+        "out_dir": os.path.join(EXPERIMENT_DIR, "image", "matthor", category, f"task{task_num}"),
+        "prefix": f"{task_n}_{floorplan_key}",
+        "robot_labels": [f"R{i+1}" for i in range(len(robot_config))],
+        "robot_types": robot_types,
+        "task_text": t["task"],
+    }
+
+
 if __name__ == "__main__":
+    import argparse
+
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--task", required=True, help="task.json 안의 task_n (예: mat_compound_5)")
+    args = ap.parse_args()
+
+    cfg = load_task_config(args.task)
+    print(f"=== {args.task}: {cfg['task_text']}  (scene={cfg['scene']}) ===")
+    print(f"robot_types: {cfg['robot_types']}")
+
     interactive_capture(
-        scene="FloorPlan15",
-        agent_count=4,
-        out_dir="/mnt/c/Users/shin/Desktop/AAMAS/experiment/image/matthor/mat_complex",
-        prefix="mat_complex_FP15",
-        robot_labels=["R1", "R2", "R3", "R4"],  # Gripper, Mobile_Light, Mobile_Heavy, Gripper
+        scene=cfg["scene"],
+        agent_count=cfg["agent_count"],
+        out_dir=cfg["out_dir"],
+        prefix=cfg["prefix"],
+        robot_labels=cfg["robot_labels"],
+        robot_types=cfg["robot_types"],
     )
 
 
