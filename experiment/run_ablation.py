@@ -76,12 +76,10 @@ async def run_variant(cfg, llm, variant):
     if variant != 'no_edge':
         collab, judgments = await edge_proposal(cfg, plans, offers, llm, log)
 
-    # Stage 4: Graph Reasoning
-    if variant == 'no_graph':
-        from cda.graph import PlanGraph
-        g = PlanGraph(cfg, plans, collab, offers, judgments)
-    else:
-        g = await graph_reasoning(cfg, plans, collab, offers, judgments, llm, log, max_rounds=2)
+    # Stage 4: Graph Reasoning (no_graph: keep the deterministic rule/finalize/schedule code,
+    # drop only the two LLM calls inside it — same pattern as pipeline.py's use_graph_llm)
+    g = await graph_reasoning(cfg, plans, collab, offers, judgments,
+                              None if variant == 'no_graph' else llm, log, max_rounds=2)
 
     text = render(g)
     m = metrics(g, plan_meta, llm.usage())

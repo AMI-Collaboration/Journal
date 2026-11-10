@@ -1,0 +1,797 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>방법론 정리</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+/* Override strong tags inside headings to maintain consistent weight */
+h1 strong,
+h2 strong,
+h3 strong {
+	font-weight: 600;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 10px;
+	padding: 1rem;
+	/* Paint a complete callout box on every PDF page fragment. */
+	-webkit-box-decoration-break: clone;
+	box-decoration-break: clone;
+}
+
+/* For default-background callouts, render the border outline. */
+.callout.block-color-default_background {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+/*
+ * Toggles and callouts hold arbitrary content, so they can easily be taller
+ * than a page. They must stay breakable: avoiding breaks inside them makes
+ * Chromium push the whole block onto the next page, which leaves the previous
+ * page mostly empty before every long toggle.
+ */
+details,
+aside {
+	margin: 1.25em 0;
+}
+
+/* Keep a toggle's title on the same page as the start of its content. */
+summary {
+	page-break-after: avoid;
+	break-after: avoid;
+}
+
+/*
+ * Toggle headings render as <h1/h2/h3 style="display:inline-block"> inside
+ * <summary>. Without this reset, the heading's margin-top pushes it below the
+ * ::marker (▼), so the triangle and the title appear on separate lines.
+ */
+summary h1,
+summary h2,
+summary h3,
+summary h4 {
+	margin-top: 0;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+
+	table.collection-content {
+		width: 100%;
+		table-layout: fixed;
+	}
+
+	table.collection-content th,
+	table.collection-content td {
+		overflow-wrap: anywhere;
+	}
+
+	table.collection-content td > .user,
+	table.collection-content td > time {
+		white-space: pre-wrap;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content-wrapper {
+	overflow-x: auto;
+}
+
+@media only print {
+	.collection-content-wrapper {
+		overflow-x: visible;
+	}
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.collection-content td {
+	white-space: pre-wrap;
+	word-break: break-word;
+}
+
+.column-list {
+	display: flex;
+	gap: 46px;
+}
+
+.column {
+	min-width: 0;
+	overflow: hidden;
+}
+
+.column > *:first-child {
+	margin-top: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding-inline: 0.125rem;
+	padding-block: 0.375rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+table {
+	border-collapse: collapse;
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol.numbered-list.numbered-list-digits-2 {
+	padding-inline-start: 2em;
+}
+
+ol.numbered-list.numbered-list-digits-3plus {
+	padding-inline-start: 2.4em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+	margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+/*
+ * Render emoji icons using a ::before pseudo-element to keep the glyph
+ * out of the DOM textContent traversal. This avoids double-rendering icons
+ * in callouts and page titles.
+ * NOTE(slim/html-export-pseudo-icons): I can't tagref this because it will
+ * flag as a duplicate tag after codegen.
+ */
+.icon[data-emoji]::before {
+	content: attr(data-emoji);
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.callout img.notion-static-icon {
+	width: 1em;
+	height: 1em;
+}
+
+.callout p {
+	margin: 0;
+}
+
+.callout h1,
+.callout h2,
+.callout h3 {
+	margin: 0 0 0.6rem;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	margin-right: 0.4em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+blockquote.quote-large {
+	font-size: 1.25em;
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.tab {
+	margin: 1.25em 0;
+	padding-inline: 1rem;
+	border: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(44, 44, 43, 1);
+}
+.highlight-gray {
+	color: rgba(125, 122, 117, 1);
+	fill: rgba(125, 122, 117, 1);
+}
+.highlight-brown {
+	color: rgba(159, 118, 90, 1);
+	fill: rgba(159, 118, 90, 1);
+}
+.highlight-orange {
+	color: rgba(210, 123, 45, 1);
+	fill: rgba(210, 123, 45, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 148, 52, 1);
+	fill: rgba(203, 148, 52, 1);
+}
+.highlight-teal {
+	color: rgba(80, 148, 110, 1);
+	fill: rgba(80, 148, 110, 1);
+}
+.highlight-blue {
+	color: rgba(56, 125, 201, 1);
+	fill: rgba(56, 125, 201, 1);
+}
+.highlight-purple {
+	color: rgba(154, 107, 180, 1);
+	fill: rgba(154, 107, 180, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(207, 81, 72, 1);
+	fill: rgba(207, 81, 72, 1);
+}
+.highlight-default_background {
+	color: rgba(44, 44, 43, 1);
+}
+.highlight-gray_background {
+	background: rgba(42, 28, 0, 0.07);
+}
+.highlight-brown_background {
+	background: rgba(139, 46, 0, 0.086);
+}
+.highlight-orange_background {
+	background: rgba(224, 101, 1, 0.129);
+}
+.highlight-yellow_background {
+	background: rgba(211, 168, 0, 0.137);
+}
+.highlight-teal_background {
+	background: rgba(0, 100, 45, 0.09);
+}
+.highlight-blue_background {
+	background: rgba(0, 124, 215, 0.094);
+}
+.highlight-purple_background {
+	background: rgba(102, 0, 178, 0.078);
+}
+.highlight-pink_background {
+	background: rgba(197, 0, 93, 0.086);
+}
+.highlight-red_background {
+	background: rgba(223, 22, 0, 0.094);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(125, 122, 117, 1);
+	fill: rgba(125, 122, 117, 1);
+}
+.block-color-brown {
+	color: rgba(159, 118, 90, 1);
+	fill: rgba(159, 118, 90, 1);
+}
+.block-color-orange {
+	color: rgba(210, 123, 45, 1);
+	fill: rgba(210, 123, 45, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 148, 52, 1);
+	fill: rgba(203, 148, 52, 1);
+}
+.block-color-teal {
+	color: rgba(80, 148, 110, 1);
+	fill: rgba(80, 148, 110, 1);
+}
+.block-color-blue {
+	color: rgba(56, 125, 201, 1);
+	fill: rgba(56, 125, 201, 1);
+}
+.block-color-purple {
+	color: rgba(154, 107, 180, 1);
+	fill: rgba(154, 107, 180, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(207, 81, 72, 1);
+	fill: rgba(207, 81, 72, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(240, 239, 237, 1);
+}
+.block-color-brown_background {
+	background: rgba(245, 237, 233, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 235, 222, 1);
+}
+.block-color-yellow_background {
+	background: rgba(249, 243, 220, 1);
+}
+.block-color-teal_background {
+	background: rgba(232, 241, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(229, 242, 252, 1);
+}
+.block-color-purple_background {
+	background: rgba(243, 235, 249, 1);
+}
+.block-color-pink_background {
+	background: rgba(250, 233, 241, 1);
+}
+.block-color-red_background {
+	background: rgba(252, 233, 231, 1);
+}
+.select-value-color-default { background-color: rgba(42, 28, 0, 0.07); }
+.select-value-color-gray { background-color: rgba(28, 19, 1, 0.11); }
+.select-value-color-brown { background-color: rgba(127, 51, 0, 0.156); }
+.select-value-color-orange { background-color: rgba(196, 88, 0, 0.203); }
+.select-value-color-yellow { background-color: rgba(209, 156, 0, 0.282); }
+.select-value-color-green { background-color: rgba(0, 96, 38, 0.156); }
+.select-value-color-blue { background-color: rgba(0, 118, 217, 0.203); }
+.select-value-color-purple { background-color: rgba(92, 0, 163, 0.141); }
+.select-value-color-pink { background-color: rgba(183, 0, 78, 0.152); }
+.select-value-color-red { background-color: rgba(206, 24, 0, 0.164); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style><style>@import url('https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex-swap.min.css')</style></head><body><article id="40d4a9a2-8acf-806a-ac60-cf3d464c5100" class="page sans"><header><h1 class="page-title" dir="auto">방법론 정리</h1><p class="page-description" dir="auto"></p><table class="properties"><tbody><tr class="property-row property-row-status"><th><span class="icon property-icon"><img src="https://app.notion.com/icons/burst_gray.svg" style="width:14px;height:14px;display:block"/></span>상태</th><td><span class="status-value"><div class="status-dot"></div>시작 전</span></td></tr><tr class="property-row property-row-select"><th><span class="icon property-icon"><img src="https://app.notion.com/icons/arrow-circle-down_gray.svg" style="width:14px;height:14px;display:block"/></span>선택</th><td><span class="selected-value select-value-color-purple">Idea &amp; Research</span></td></tr></tbody></table></header><div class="page-body"><h2 id="d5af6ae5-720f-41e5-8a82-50bbddb7eedb" class="" dir="auto">CDA 방법론 정리 — Graph-based Plan Alignment 개편안 </h2><blockquote id="97ddf99f-9a36-415a-af7d-413cd1ff6cd8" class="" dir="auto"><strong>한 줄 요약</strong><p id="3b4ad787-880d-4073-bdde-9ee223be86fb" class="" dir="auto">각 로봇이 분산적으로 협업을 <em>제안</em>하고 <em>YES/NO로 응답</em>하며, Graph LLM이 계획 그래프를 <em>제약된 편집 연산</em>으로 정렬하면서 목표 달성 여부까지 <em>판정</em>한다. 룰은 형식과 구조적 무결성만 <em>검증</em>한다. 해결되지 않은 부분은 강제로 배정하지 않고 사용자에게 <em>보고</em>한다.</p></blockquote><hr id="28b07119-18f9-4506-aeb8-364c54a9db62" dir="auto"/><h3 id="3e429f6f-7a86-4e34-ba09-3d878fb0fbf3" class="" dir="auto">0. 설계 원칙</h3><table id="cdfbfb37-81f6-41fb-a10a-8cf9cc88c831" class="simple-table" dir="ltr"><thead class="simple-table-header"><tr id="8a6b0036-e302-439a-baf2-017adfabfdd4" dir="ltr"><th id="s]`a" class="simple-table-header-color simple-table-header">원칙</th><th id="PYbm" class="simple-table-header-color simple-table-header">의미</th></tr></thead><tbody><tr id="e56dc625-b66c-4720-bd43-de0678cb764b" dir="ltr"><td id="s]`a" class=""><strong>Allocation-free</strong></td><td id="PYbm" class="">중앙 배정자 없이, 제공자가 동의(YES)한 협업만 실행된다.</td></tr><tr id="190370f4-38f5-403c-9a6b-5093a44f43e5" dir="ltr"><td id="s]`a" class=""><strong>LLM decides, rules verify</strong></td><td id="PYbm" class="">의미 판단(문제 식별, 편집, 실행 가능성, 목표 커버리지)은 모두 LLM이 한다. 룰은 형식 검사, 그래프 구성, 구조 검증, 연쇄 정리, 스케줄링만 담당한다. 단어·유사도 기반의 의미 판단 룰은 두지 않는다.</td></tr><tr id="d9732720-48e7-429f-86c9-fa16ecb73132" dir="ltr"><td id="s]`a" class=""><strong>No silent failure</strong></td><td id="PYbm" class="">실행 불가능하거나 커버되지 않은 목표는 원인과 함께 명시적으로 보고한다.</td></tr><tr id="c4fa1f65-1192-4674-b823-7b857c1f7410" dir="ltr"><td id="s]`a" class=""><strong>One-way pipeline</strong></td><td id="PYbm" class="">단계 간 피드백 루프 없이 단방향으로 진행한다. 단계 안에서 로봇이 자기 출력의 형식 오류를 1회 스스로 고치는 것은 허용한다 (단계 간 피드백은 Limitation / Future work).</td></tr></tbody></table><h4 id="e3d783c5-f94c-4471-b8bb-21e2d953f427" class="" dir="auto">역할 분담</h4><table id="a2c3a941-beb2-4ddc-9969-307b82f54798" class="simple-table" dir="ltr"><thead class="simple-table-header"><tr id="874d6a6e-723b-4e3a-a9b1-022705cbb6c1" dir="ltr"><th id="[UhS" class="simple-table-header-color simple-table-header">주체</th><th id="Z&gt;uW" class="simple-table-header-color simple-table-header">담당</th></tr></thead><tbody><tr id="a7210b63-b3eb-4ef4-95c1-de19253e10b2" dir="ltr"><td id="[UhS" class=""><strong>로봇 VLM</strong> (분산)</td><td id="Z&gt;uW" class="">Offer 선언, Local Plan 생성, 협업 제안에 대한 YES/NO 응답</td></tr><tr id="4f3c3683-39c2-4f0d-b881-a81d491b4609" dir="ltr"><td id="[UhS" class=""><strong>Graph LLM</strong> (중앙, 1회 호출)</td><td id="Z&gt;uW" class="">문제 식별, 편집 시퀀스 Δ, 목표 커버리지 판정, 미해결 원인 분류</td></tr><tr id="da9e6502-9977-473e-ba56-83fca28007fe" dir="ltr"><td id="[UhS" class=""><strong>룰</strong> (결정론적)</td><td id="Z&gt;uW" class="">Stage 2·3 형식 검사, 그래프 구성, 편집의 구조적 허용성 검사, 엣지 확정, 의존성 연쇄 정리, 스케줄링, 리포트 확정</td></tr></tbody></table><hr id="789587fb-74c8-48ec-a127-a82e211da75f" dir="auto"/><h3 id="74aeefee-589d-4d0a-ac22-aba964259a26" class="" dir="auto">1. 문제 설정 (Problem Setting)</h3><ul id="4d225b0b-4cbd-40fc-b3fe-cea0c4a934cc" class="bulleted-list" dir="auto"><li style="list-style-type:disc">이종 로봇 집합 <strong>R = {r₁, …, r_N}</strong>, 공통 자연어 지시 <strong>I</strong></li></ul><ul id="16f5078e-8b7c-4270-8722-911b5bd04afa" class="bulleted-list" dir="auto"><li style="list-style-type:disc">각 로봇 rᵢ는 자신만의 관측 <strong>oᵢ</strong>(이미지)를 가지며, 관측 범위(obs_scope)는 공유하지 않는다 → <strong>부분 관측(partial observability)</strong></li></ul><ul id="090b4260-f1ec-46a9-bb8b-ae5a7a950107" class="bulleted-list" dir="auto"><li style="list-style-type:disc">목표: 중앙 배정 없이 실행 가능한 <strong>Joint Plan</strong>을 생성하고, 달성하지 못한 목표는 원인과 함께 <strong>Report</strong>로 반환</li></ul><hr id="ece84c82-7bb4-44ed-8971-5614e1a37085" dir="auto"/><h3 id="0309065a-c740-466a-8b09-a8db337b0395" class="" dir="auto">2. 파이프라인 개요</h3><table id="b0b26a33-6cd8-4bfa-86fc-4e89021edcbd" class="simple-table" dir="ltr"><thead class="simple-table-header"><tr id="a1b4fbb0-e372-4d08-aef6-701b5135240c" dir="ltr"><th id="vNMk" class="simple-table-header-color simple-table-header">Stage</th><th id="zjT=" class="simple-table-header-color simple-table-header">이름</th><th id="KqCJ" class="simple-table-header-color simple-table-header">주체</th><th id="Mxb&gt;" class="simple-table-header-color simple-table-header">입력 → 출력</th></tr></thead><tbody><tr id="0171f425-6710-4526-bf9b-50129eeac9f1" dir="ltr"><td id="vNMk" class="">1</td><td id="zjT=" class="">Offer Generation</td><td id="KqCJ" class="">각 로봇 (VLM)</td><td id="Mxb&gt;" class="">oᵢ, I → Offer Oᵢ</td></tr><tr id="595e0609-f91b-4d3a-92f6-51d13f52f4e2" dir="ltr"><td id="vNMk" class="">2</td><td id="zjT=" class="">Local Plan Generation</td><td id="KqCJ" class="">각 로봇 (VLM) + 형식 검사(룰)</td><td id="Mxb&gt;" class="">Oᵢ, {Oⱼ} → Local Plan Pᵢ</td></tr><tr id="7d50ea6b-c472-42be-a0da-24406009e979" dir="ltr"><td id="vNMk" class="">3</td><td id="zjT=" class="">Edge Proposal</td><td id="KqCJ" class="">각 로봇 (VLM) + 형식 검사(룰)</td><td id="Mxb&gt;" class="">공개된 요청·제안 → YES/NO 응답 → 후보 협업 엣지 + 동의 라벨</td></tr><tr id="62538a9e-64df-41ac-a9e5-a61613081bb4" dir="ltr"><td id="vNMk" class="">4</td><td id="zjT=" class="">Graph-based Plan Alignment</td><td id="KqCJ" class="">Graph LLM + 룰</td><td id="Mxb&gt;" class="">계획 그래프 G → Joint Plan, Provenance, Report</td></tr></tbody></table><hr id="2acb29ad-b904-4f45-bdd9-29d087df80ed" dir="auto"/><h3 id="6730e373-c347-4f3c-b0ee-aff63ecf36db" class="" dir="auto">3. Stage 1–3: 분산 제안 단계</h3><h4 id="e4c23c53-5bdf-43fc-bd21-c4fd7665e50d" class="" dir="auto">Stage 1. Offer Generation</h4><p id="f0612904-786d-49af-b656-849031a993c9" class="" dir="auto">각 로봇이 자신의 이미지와 지시를 보고 Offer를 선언하고 브로드캐스트한다.</p><p id="a51ec554-d02b-46ec-9381-07a25bf66074" class="" dir="auto"><strong>Oᵢ = ⟨Cᵢ, Aᵢ⁺, Aᵢ⁻, Hᵢ, Nᵢ, Gᵢ⟩</strong></p><table id="6f8a7b2f-5960-4aa5-b765-7bfc7688bca4" class="simple-table" dir="ltr"><thead class="simple-table-header"><tr id="ae356494-9440-41f4-9cef-771f491d2663" dir="ltr"><th id="o&gt;mE" class="simple-table-header-color simple-table-header">기호</th><th id="G`Js" class="simple-table-header-color simple-table-header">필드</th><th id="dQ:[" class="simple-table-header-color simple-table-header">설명</th><th id="&gt;X?C" class="simple-table-header-color simple-table-header">공개</th></tr></thead><tbody><tr id="cab36d1a-4a45-4643-9da6-37cbfb43a47d" dir="ltr"><td id="o&gt;mE" class="">Cᵢ</td><td id="G`Js" class="">capability</td><td id="dQ:[" class="">로봇의 능력 (이동, 조작 등)</td><td id="&gt;X?C" class="">O</td></tr><tr id="4d51b2fa-a25f-4481-a140-ad64e4d8b741" dir="ltr"><td id="o&gt;mE" class="">Aᵢ⁺</td><td id="G`Js" class="">can_do</td><td id="dQ:[" class="">수행 가능한 행동 (번호가 붙은 목록)</td><td id="&gt;X?C" class="">O</td></tr><tr id="cbcbd8f7-eca2-4630-a7fa-4175ffc4da84" dir="ltr"><td id="o&gt;mE" class="">Aᵢ⁻</td><td id="G`Js" class="">cannot_do</td><td id="dQ:[" class="">수행 불가능한 행동과 이유</td><td id="&gt;X?C" class="">O</td></tr><tr id="5492cfa3-0bc2-4906-b9c8-9c9b7763c9b5" dir="ltr"><td id="o&gt;mE" class="">Hᵢ</td><td id="G`Js" class="">has_items</td><td id="dQ:[" class="">보유 물품 (이미지에서 직접 보이는 것만)</td><td id="&gt;X?C" class="">O</td></tr><tr id="c4b16a1e-9047-4231-b638-f8c4a168ce64" dir="ltr"><td id="o&gt;mE" class="">Nᵢ</td><td id="G`Js" class="">need_from_others</td><td id="dQ:[" class="">타 로봇에게 필요한 것 (기능 단위로 서술)</td><td id="&gt;X?C" class="">O</td></tr><tr id="2ba5c6b4-97d6-44c6-b665-5842c3173e74" dir="ltr"><td id="o&gt;mE" class="">Gᵢ</td><td id="G`Js" class="">intends</td><td id="dQ:[" class="">수행하려는 <strong>하위 목표</strong> (번호가 붙은 목록, 예: &quot;할머니께 따뜻한 차 준비&quot;) → <strong>Stage 2의 serves, Stage 4.2 커버리지 판정의 기준</strong></td><td id="&gt;X?C" class="">O</td></tr></tbody></table><ul id="dab923a5-38e6-446d-96ed-9c801c9aff5f" class="bulleted-list" dir="auto"><li style="list-style-type:disc">obs_scope는 공유하지 않는다.</li></ul><ul id="f05a0004-c285-4b3f-8836-190a9fd332d0" class="bulleted-list" dir="auto"><li style="list-style-type:disc">Gᵢ는 step 순서가 아니라 하위 목표이다. 구체적인 step은 Stage 2에서 작성한다.</li></ul><h4 id="34fb6529-2112-4122-ab78-344313c1586e" class="" dir="auto">Stage 2. Local Plan Generation</h4><p id="846c80e6-bb10-4f47-8abd-82545da54b33" class="" dir="auto">각 로봇이 step 시퀀스 <strong>Pᵢ</strong>를 생성한다. 이 단계에서 작성하는 step 타입은 <strong>τ ∈ {LOCAL, ASK_HELP, RECEIVE, PASS}</strong> 이다. HELP는 Stage 3에서 요청에 YES로 응답할 때만 생성된다.</p><table id="1213609e-2d91-4aaf-8e53-3518fdc47a63" class="simple-table" dir="ltr"><thead class="simple-table-header"><tr id="3623e3f6-3f52-4a68-82c1-5f711eadbb2f" dir="ltr"><th id="Ao``" class="simple-table-header-color simple-table-header">타입</th><th id="{~{f" class="simple-table-header-color simple-table-header">의미</th><th id="|LKg" class="simple-table-header-color simple-table-header">쌍</th></tr></thead><tbody><tr id="cddbf7c7-35e9-4488-9a94-9a1d6af3dfd1" dir="ltr"><td id="Ao``" class="">LOCAL</td><td id="{~{f" class="">단독 수행</td><td id="|LKg" class="">—</td></tr><tr id="189a2df6-a27c-4e0d-ba90-471c187de729" dir="ltr"><td id="Ao``" class="">ASK_HELP ↔ HELP</td><td id="{~{f" class="">능력 부족으로 인한 협업</td><td id="|LKg" class="">요청 ↔ 제공 (HELP는 Stage 3)</td></tr><tr id="fbcad267-e374-4918-a09a-7243e8ee49e5" dir="ltr"><td id="Ao``" class="">RECEIVE ↔ PASS</td><td id="{~{f" class="">물품 전달로 인한 협업</td><td id="|LKg" class="">수령 ↔ 전달</td></tr></tbody></table><p id="97515f3b-e54b-47ad-93c2-007c6532969d" class="" dir="auto"><strong>step 필드</strong></p><table id="b6bd17dc-24a9-4f8c-a102-a4ae094c360f" class="simple-table" dir="ltr"><thead class="simple-table-header"><tr id="cb4218a9-8293-44aa-b658-c58d0db632f1" dir="ltr"><th id="UPpb" class="simple-table-header-color simple-table-header">필드</th><th id="P\pL" class="simple-table-header-color simple-table-header">대상</th><th id="Jhi|" class="simple-table-header-color simple-table-header">설명</th></tr></thead><tbody><tr id="a42ffe1e-2899-4841-b6c9-f24bcf3fbd2e" dir="ltr"><td id="UPpb" class="">uses</td><td id="P\pL" class="">LOCAL</td><td id="Jhi|" class="">근거가 되는 자기 can_do 번호</td></tr><tr id="430b6400-8c91-486b-b9d0-eb11cf43cd01" dir="ltr"><td id="UPpb" class="">target</td><td id="P\pL" class="">ASK_HELP, RECEIVE, PASS</td><td id="Jhi|" class="">상대 로봇. <strong>구속력 없는 힌트</strong> (&quot;이 로봇이 해줬으면&quot;)</td></tr><tr id="1c115982-4df2-4741-a5d0-9b5398804e52" dir="ltr"><td id="UPpb" class="">item</td><td id="P\pL" class="">RECEIVE, PASS</td><td id="Jhi|" class="">물품 이름</td></tr><tr id="e1ee40ce-9e19-4131-b5a9-246eb8ce8835" dir="ltr"><td id="UPpb" class="">enables</td><td id="P\pL" class="">ASK_HELP (필수), RECEIVE (선택)</td><td id="Jhi|" class="">이 요청이 필요한 자기 뒤쪽 LOCAL step 번호 → 4.4 연쇄 정리에 사용</td></tr><tr id="a2c1bf75-d1b5-417a-b854-7851c3526e67" dir="ltr"><td id="UPpb" class="">serves</td><td id="P\pL" class="">모든 step</td><td id="Jhi|" class="">이 step이 기여하는 자기 Gᵢ 번호</td></tr></tbody></table><ul id="1ddc8326-fd68-4c6c-8c25-c771069dd845" class="bulleted-list" dir="auto"><li style="list-style-type:disc">제공 측도 PASS를 먼저 제안(offer)할 수 있다.</li></ul><ul id="e72577d8-9211-40f1-8286-eb96cebd99d9" class="bulleted-list" dir="auto"><li style="list-style-type:disc">물품 운반 담당은 확정하지 않는다. 이동 가능한 쪽이 운반한다 (이동 가능한 giver가 가져다주고, 아니면 이동 가능한 receiver가 가지러 감).</li></ul><p id="7ff2342e-50a5-4def-a28c-ec5d9bf6c831" class="" dir="auto"><strong>형식 검사 (룰)</strong>: 번호·목록이 맞는지만 확인한다.</p><ul id="37b2164c-e64b-4b8e-b014-170eb5fac079" class="bulleted-list" dir="auto"><li style="list-style-type:disc">step 타입이 허용된 값인지</li></ul><ul id="b76940a0-069b-4fb6-b3cb-933b24f08780" class="bulleted-list" dir="auto"><li style="list-style-type:disc">target이 존재하는 다른 로봇인지</li></ul><ul id="2db16260-c809-4688-b5d3-9ee90f49b568" class="bulleted-list" dir="auto"><li style="list-style-type:disc">uses / enables / serves가 존재하는 번호인지</li></ul><ul id="86f06203-95ab-4d8d-8936-e4632749d114" class="bulleted-list" dir="auto"><li style="list-style-type:disc">PASS 물품이 자기 Hᵢ에 있는지, RECEIVE 물품이 target의 Hᵢ에 있는지</li></ul><ul id="4fd1cd39-98b4-41a9-b298-4908f797c025" class="bulleted-list" dir="auto"><li style="list-style-type:disc">둘 다 이동 불가능한 로봇끼리 물품을 주고받으려 하지 않는지</li></ul><ul id="90c44b79-9647-4370-8b54-07e6d391ceb4" class="bulleted-list" dir="auto"><li style="list-style-type:disc">LOCAL의 위치가 자기 공간인지</li></ul><p id="4186da6f-6206-43cd-8a72-a2847f4c8897" class="" dir="auto">형식 오류가 있으면 오류 목록과 함께 <strong>1회만</strong> 로봇이 스스로 다시 작성한다. 그래도 남은 형식 오류 step은 브로드캐스트 전에 제외하고 Provenance에 기록한다.</p><p id="65399795-eafb-4c71-b8b3-044e605c6479" class="" dir="auto">단어나 유사도로 의미를 판단하는 검사(비물리적 행동, 관찰 행동, 선행 step 누락, 무거운 물건 등)는 두지 않는다. 의미상 문제가 있는 step은 Stage 4.2에서 Graph LLM이 식별해 DROP한다.</p><h4 id="84bf5b3c-91ec-431b-aa42-758f333a8d78" class="" dir="auto">Stage 3. Edge Proposal</h4><p id="d8163abb-0346-407d-9815-620bbe1fc24b" class="" dir="auto">Stage 2의 <strong>요청(ASK_HELP, RECEIVE)과 PASS 제안</strong>을 모든 로봇에게 공개하고, 각 로봇이 병렬로 응답한다. 요청과 제안을 구분하지 않고 하나의 응답 형식을 쓴다.</p><table id="11eccacf-c704-4600-8ffb-83ce7649fbd0" class="simple-table" dir="ltr"><thead class="simple-table-header"><tr id="3899d3b6-f7aa-44c2-be2f-36bdf0997555" dir="ltr"><th id="`@[^" class="simple-table-header-color simple-table-header">필드</th><th id="@}Wj" class="simple-table-header-color simple-table-header">설명</th></tr></thead><tbody><tr id="316f8510-d956-406d-b329-18d29d2a195c" dir="ltr"><td id="`@[^" class="">answer</td><td id="@}Wj" class=""><strong>YES</strong> (하겠다 / 받겠다) 또는 <strong>NO</strong></td></tr><tr id="0cd025bf-4e56-48a8-a60a-fe67d33610ce" dir="ltr"><td id="`@[^" class="">reason</td><td id="@}Wj" class="">짧은 이유 (NO일 때 4.2 원인 분류의 근거)</td></tr><tr id="3b6642be-3714-4444-8dc7-fd541b3533ea" dir="ltr"><td id="`@[^" class="">existing_step</td><td id="@}Wj" class="">(선택) 이미 자기 플랜에 같은 일이 있으면 그 step ID</td></tr></tbody></table><ul id="7817c36a-64e6-4bdf-9e6a-4c7c5edd8662" class="bulleted-list" dir="auto"><li style="list-style-type:disc">YES 시 처리 (코드):<ul id="c57cd1f6-9c1c-4705-abfe-3ccc7ae8b1a9" class="bulleted-list" dir="auto"><li style="list-style-type:circle">요청에 YES → 자기 플랜에 HELP / PASS step을 추가하고, 요청 ID로 짝을 기록 (텍스트 비교 없음). existing_step이 있으면 새 step 없이 그 step을 연결</li></ul><ul id="be6105d6-5f99-4db1-892b-4c3be55be81b" class="bulleted-list" dir="auto"><li style="list-style-type:circle">PASS 제안에 YES → RECEIVE step 추가. 로봇이 그 물품을 쓰는 행동을 함께 적었으면 사용 step도 추가하고, 적지 않았으면 RECEIVE만 추가 (고정 문장으로 채우지 않음)</li></ul></li></ul><ul id="006fe3df-dc4c-4c4d-9bf7-f823b3c99186" class="bulleted-list" dir="auto"><li style="list-style-type:disc">NO 시 처리: 엣지를 만들지 않고, 이유를 해당 요청 노드에 기록한다.</li></ul><ul id="0b1d2d77-433c-489f-947b-9a8cba940d77" class="bulleted-list" dir="auto"><li style="list-style-type:disc">같은 물품을 여러 로봇이 요청해도 <strong>모두 후보로 넘긴다</strong>. 누구에게 줄지는 4.2 SELECT에서 정한다.</li></ul><p id="394d7244-aba1-43f1-9eab-f16eae9d98cc" class="" dir="auto"><strong>동의 라벨 κ(e)</strong> — 엣지는 제공 측이 YES 한 경우에만 생기며, 코드가 라벨을 붙인다.</p><table id="5e09ef59-9cd8-41b8-bbfc-a39011cebff5" class="simple-table" dir="ltr"><thead class="simple-table-header"><tr id="ca9c0303-ae84-4165-b1bb-284c3ed7a4d3" dir="ltr"><th id="TzOz" class="simple-table-header-color simple-table-header">κ(e)</th><th id="cRD&lt;" class="simple-table-header-color simple-table-header">조건</th></tr></thead><tbody><tr id="4c39c83d-3296-4e27-af8d-c5810a56bd70" dir="ltr"><td id="TzOz" class="">mutual</td><td id="cRD&lt;" class="">상대가 나를 지목했거나 나에게 제안했고, 내가 YES 함</td></tr><tr id="715ad045-007e-4f20-8d96-55ef3e38f301" dir="ltr"><td id="TzOz" class="">provider-only</td><td id="cRD&lt;" class="">지목받지 않았는데 자원함, 또는 PASS를 제안했는데 받는 쪽이 응답하지 않거나 NO 함</td></tr></tbody></table><ul id="503ce0b5-7b78-4e1b-a803-2413a5954815" class="bulleted-list" dir="auto"><li style="list-style-type:disc">후보 엣지가 하나도 없는 요청은 엣지 라벨이 아니라 <strong>요청 노드의 상태(&quot;후보 없음&quot;)</strong> 로 표시한다.</li></ul><p id="57c5c2c5-8275-472d-a14c-a906b6e9d9ea" class="" dir="auto"><strong>형식 검사 (룰)</strong>: can_do 번호가 맞는지, 자기 Hᵢ에 있는 물품인지, 이동 불가능한 로봇이 다른 공간으로 도우러 가려는지, 이동 불가능한 로봇끼리 물품을 주고받는지만 확인한다. 통과하지 못한 YES는 엣지를 만들지 않고 이유와 함께 기록한다. 유사도 기반 검사는 두지 않는다.</p><hr id="3c9f7359-66d0-4ad8-abaf-b4cec18044e3" dir="auto"/><h3 id="da55f776-e5bc-4ac1-9901-72f01c22e99a" class="" dir="auto">4. Stage 4: Graph-based Plan Alignment</h3><h4 id="99764b51-7e56-4713-98f2-ae20269078ee" class="" dir="auto">4.1 Plan Graph Construction (룰)</h4><p id="262ce38f-9800-40a3-bc3a-dd6898fb48e4" class="" dir="auto"><strong>G = (V, E_seq ∪ E_col, κ)</strong></p><ul id="4202c4a7-4615-4eca-8786-a4de18852937" class="bulleted-list" dir="auto"><li style="list-style-type:disc">V: 모든 로봇의 step</li></ul><ul id="ba9870df-b49e-4f65-a869-cb593c0d7ddd" class="bulleted-list" dir="auto"><li style="list-style-type:disc">E_seq: 로봇 내부 순서 엣지 (Stage 2·3 순서 그대로)</li></ul><ul id="624b4894-b05a-4213-b03e-a1a62b77c41a" class="bulleted-list" dir="auto"><li style="list-style-type:disc">E_col: 협업 엣지 (TRANSFER, HELP). 모두 제공 측이 YES 한 엣지</li></ul><ul id="2e247213-e6b1-41f4-9747-5e06a56adcdf" class="bulleted-list" dir="auto"><li style="list-style-type:disc">상태 라벨만 부착:<ul id="5e412541-2da5-4c8b-b164-55bfd7259cad" class="bulleted-list" dir="auto"><li style="list-style-type:circle">엣지: κ</li></ul><ul id="57c1b3fd-7274-4467-99f3-7a76be9a573e" class="bulleted-list" dir="auto"><li style="list-style-type:circle">요청 노드: 후보 수, &quot;후보 없음&quot;, NO 응답과 이유</li></ul><ul id="a1147832-f2b9-4de3-839b-d481edd2c48e" class="bulleted-list" dir="auto"><li style="list-style-type:circle">사이클에 속한 노드 표시</li></ul></li></ul><ul id="48382403-1831-4284-892b-243b88d1b3c3" class="bulleted-list" dir="auto"><li style="list-style-type:disc">이 단계에서는 어떤 것도 확정하지 않는다.</li></ul><h4 id="c0a975eb-9cbd-4af1-bdf0-4a3a8bc7c720" class="" dir="auto">4.2 Constrained Graph Editing &amp; Coverage Judgment (Graph LLM, 1회 호출)</h4><p id="8192c937-cc8a-4d5b-ab7a-700b88c7456b" class="" dir="auto">LLM이 issue 목록이 아닌 <strong>그래프 전체</strong>와 모든 Offer를 보고, 다음 두 가지를 한 번에 출력한다.</p><p id="6d97e3e3-5488-41bc-bee3-2ffce4ae3297" class="" dir="auto"><strong>(1) 편집 시퀀스 Δ = (δ₁, …, δ_k)</strong></p><table id="9be194dc-d174-45e7-9e69-d73260117ef4" class="simple-table" dir="ltr"><thead class="simple-table-header"><tr id="5b4a3845-038e-47b7-a874-286340c09e8e" dir="ltr"><th id="~~==" class="simple-table-header-color simple-table-header">연산</th><th id="Kk~R" class="simple-table-header-color simple-table-header">설명</th></tr></thead><tbody><tr id="b9c84558-791d-4038-9092-13daeed146bf" dir="ltr"><td id="~~==" class=""><strong>SELECT</strong></td><td id="Kk~R" class="">후보 중 provider 선택 또는 교체 (같은 물품을 여러 요청이 원하는 경우 누구에게 줄지 포함)</td></tr><tr id="5e3f7087-6a7f-4212-a3e3-add8c54597c7" dir="ltr"><td id="~~==" class=""><strong>MERGE</strong></td><td id="Kk~R" class="">이미 다른 엣지로 충족된 요청을 그 엣지에 연결해 해결 처리. <strong>제공자의 step은 바꾸지 않고</strong>, 해결 표시와 선후관계만 추가</td></tr><tr id="71dfecda-e7db-4d1b-a50b-bbf6d92be3dd" dir="ltr"><td id="~~==" class=""><strong>DROP</strong></td><td id="Kk~R" class="">불필요·중복·실행 불가능한 step 제거 (자기 Offer와 모순되는 step, 사이클을 끊기 위한 제거 포함)</td></tr><tr id="4fff44d0-b915-49e6-af3c-06d1c1779452" dir="ltr"><td id="~~==" class=""><strong>ORDER</strong></td><td id="Kk~R" class=""><strong>로봇 간</strong> 선후관계 추가 (로봇 내부 순서는 바꾸지 않음)</td></tr></tbody></table><p id="88f5511d-c42a-4100-9ff0-353045454ed2" class="" dir="auto">각 편집에는 짧은 근거(rationale)를 함께 출력한다 → Provenance에 기록.</p><p id="58480da3-95a0-4a73-b834-55e3efc4314c" class="" dir="auto"><strong>(2) 목표 커버리지 판정 C</strong></p><p id="2624fbb7-08b3-4373-b4d6-389bb19b9787" class="" dir="auto">각 Gᵢ에 대해 다음을 출력한다.</p><ul id="8bec19aa-574a-49ee-9d60-2fa8a0c335f2" class="bulleted-list" dir="auto"><li style="list-style-type:disc">상태: covered / partial / uncovered</li></ul><ul id="d4da37b5-b66b-4de2-a856-4165d2899991" class="bulleted-list" dir="auto"><li style="list-style-type:disc">근거 노드(evidence): 이 목표를 커버하는 노드 ID 목록</li></ul><ul id="74a0114a-6741-439a-9431-c18dcea950b4" class="bulleted-list" dir="auto"><li style="list-style-type:disc">커버되지 않은 경우의 원인: No volunteer / Capability gap / Left unresolved (요청 노드의 NO 이유를 근거로 판단)</li></ul><p id="89c8c12e-51c4-4df1-8d1f-0b0a635651bd" class="" dir="auto"><strong>구조적 제약 (by construction)</strong>: 금지하는 게 아니라 애초에 표현할 수 없게 설계한다.</p><ul id="7d480ccd-4df4-41bb-acd6-078a4c24ff26" class="bulleted-list" dir="auto"><li style="list-style-type:disc">연산은 <strong>기존 노드 ID만 참조</strong> → 새 step 생성 불가</li></ul><ul id="39aa3c5b-7b5a-40b5-bfc9-c00d9d39c12a" class="bulleted-list" dir="auto"><li style="list-style-type:disc">SELECT의 선택지는 <strong>제공 측이 YES 한 엣지(κ ∈ {mutual, provider-only})</strong> 로 한정 → 동의하지 않은 로봇에게 배정 불가</li></ul><ul id="4e4a34a4-3b38-4c46-9cc5-475c63d76829" class="bulleted-list" dir="auto"><li style="list-style-type:disc">SELECT는 <strong>양 끝 노드가 모두 존재하는 엣지</strong>에만 적용 가능. provider-only 엣지에서 받는 쪽 노드가 없으면, LLM은 받는 쪽의 기존 step(그 물품·도움이 필요한 step)에 연결할 수 있다. 연결할 노드가 없으면 그 제공 step은 4.4에서 정리된다.</li></ul><p id="3f7e7fb1-9ca8-4486-965d-e3b2145eb7d9" class="" dir="auto">판단이 애매한 부분은 편집하지 않고 <strong>미해결(Left unresolved)로 남긴다</strong>.</p><p id="c2796304-442f-47a8-9dfd-cc65f84a4fb1" class="" dir="auto"><strong>프롬프트 구성</strong></p><table id="3051862a-e28e-4679-8254-e219520119f6" class="simple-table" dir="ltr"><thead class="simple-table-header"><tr id="24af721a-76a5-43e0-aad8-4884280fba5d" dir="ltr"><th id="\gtn" class="simple-table-header-color simple-table-header">구성</th><th id="SYiU" class="simple-table-header-color simple-table-header">내용</th></tr></thead><tbody><tr id="4744f826-fc04-40bc-ad79-48ade1d0daec" dir="ltr"><td id="\gtn" class="">역할</td><td id="SYiU" class="">배정자가 아니라 이미 제안된 계획을 정렬하는 역할임을 명시 (새 일 생성·비동의 로봇 배정 금지)</td></tr><tr id="b57f7674-b8e0-4afe-8287-7c92f3f2e782" dir="ltr"><td id="\gtn" class="">입력</td><td id="SYiU" class="">노드 목록(ID / 로봇 / 타입 / 내용 / serves / 상태 라벨), 엣지 목록(ID / 종류 / 양 끝 노드 / κ), 모든 로봇의 Offer</td></tr><tr id="8907105e-71a9-4565-b05f-be0d1ac6cfce" dir="ltr"><td id="\gtn" class="">연산·제약</td><td id="SYiU" class="">위의 4개 연산 정의와 구조적 제약, &quot;애매하면 편집하지 말 것&quot;</td></tr><tr id="73f980b5-d1dd-4e3d-81aa-7006100ab97d" dir="ltr"><td id="\gtn" class="">판단 관점</td><td id="SYiU" class="">미해결 요청, 중복 작업, 경쟁하는 후보, 자기 Offer와 모순되는 step, 로봇 간 순서가 필요한 곳, 사이클 (issue 목록이 아니라 살펴볼 관점만 제시)</td></tr><tr id="61ad4ff3-cd26-4cbc-9075-6200d5df0aaa" dir="ltr"><td id="\gtn" class="">출력</td><td id="SYiU" class="">JSON (<code>edits</code>, <code>coverage</code>). 편집은 <strong>SELECT/MERGE → DROP → ORDER 순서</strong>로 출력</td></tr></tbody></table><ul id="8ae5a4a0-1823-4f58-897d-099bb5e6ea52" class="bulleted-list" dir="auto"><li style="list-style-type:disc">CoT와 few-shot 예시는 사용하지 않는다. 판단 근거는 <code>rationale</code> 필드로만 남긴다.</li></ul><ul id="f4d58119-2cfe-44ab-a844-dd4f550dcea5" class="bulleted-list" dir="auto"><li style="list-style-type:disc">형식 오류를 줄이기 위해 JSON 스키마를 필드 단위로 명시하고, API의 structured output(JSON 모드)을 사용한다.</li></ul><h4 id="fd09d296-6465-4030-99c1-50c5cb253055" class="" dir="auto">4.3 Structural Admissibility Check &amp; Edge Finalization (룰)</h4><p id="3d28d2ce-514e-498c-a00a-ede742c459ea" class="" dir="auto"><strong>(1) 허용성 검사</strong>: 편집을 <strong>출력 순서대로</strong> 적용하며, 구조적 무결성을 깨는 편집은 <strong>적용하지 않고 이유와 함께 기록</strong>한다.</p><ul id="f88c2aaa-4949-4e67-90e0-334ea98ee478" class="bulleted-list" dir="auto"><li style="list-style-type:disc">검사 항목 (구조만):<ul id="05aed397-fe6a-4d1e-a736-9f66ba8254b0" class="bulleted-list" dir="auto"><li style="list-style-type:circle">존재하지 않는 ID 참조 (앞선 편집으로 DROP된 노드 포함)</li></ul><ul id="37af520c-1cb2-4836-b249-471dd7031a5d" class="bulleted-list" dir="auto"><li style="list-style-type:circle">SELECT 대상이 제공 측이 YES 한 엣지가 아님, 또는 양 끝 노드가 없음</li></ul><ul id="f33b4371-97fc-487a-898a-4c1c86ff4ee4" class="bulleted-list" dir="auto"><li style="list-style-type:circle">ORDER가 같은 로봇 내부 순서를 건드림</li></ul><ul id="edc7b280-8334-44cf-b918-107574b4b014" class="bulleted-list" dir="auto"><li style="list-style-type:circle">편집 적용 후 새로운 사이클 발생</li></ul></li></ul><ul id="07c98e12-e1e6-4310-a45b-306ec61da742" class="bulleted-list" dir="auto"><li style="list-style-type:disc">capability·보유 물품 같은 의미적 일치는 검사하지 않는다 (4.2에서 LLM이 판단).</li></ul><ul id="d8052aa3-c3e3-4c33-940b-f2eb518f9fc6" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>재시도 없음 (one-way)</strong>: 거절된 편집은 Report의 Rejected edits로 전달.</li></ul><p id="db04c22e-c906-4135-83fa-d9ad12c5819c" class="" dir="auto"><strong>(2) 엣지 확정 (기본 정책)</strong>: 편집 적용이 끝난 뒤, 각 요청에 대해 실행할 협업 엣지를 다음 규칙으로 확정한다.</p><table id="711693da-5550-4e5d-a6e7-7d1a13dac2fa" class="simple-table" dir="ltr"><thead class="simple-table-header"><tr id="326d5b66-76a3-4fe6-9aaa-c57105fbb019" dir="ltr"><th id="uiAe" class="simple-table-header-color simple-table-header">경우</th><th id="Rgv{" class="simple-table-header-color simple-table-header">처리</th></tr></thead><tbody><tr id="67a9e3a6-b30f-45db-b49d-ed4886218ac9" dir="ltr"><td id="uiAe" class="">SELECT로 선택된 엣지</td><td id="Rgv{" class="">실행</td></tr><tr id="1a85960d-c722-4f8b-a610-c1d0a7499826" dir="ltr"><td id="uiAe" class="">편집이 없고, <strong>mutual이며 후보가 하나뿐인</strong> 엣지</td><td id="Rgv{" class="">그대로 유지 (실행)</td></tr><tr id="18e0380f-87c7-4b43-b4c9-450d26a5aaee" dir="ltr"><td id="uiAe" class="">편집이 없고, provider-only이거나 후보가 여럿인 경우</td><td id="Rgv{" class="">실행하지 않음 → 해당 요청은 미해결</td></tr><tr id="a3ab50c3-0770-43ac-b824-1100d12defa1" dir="ltr"><td id="uiAe" class="">후보 없는 요청</td><td id="Rgv{" class="">실행하지 않음 → 해당 요청은 미해결</td></tr></tbody></table><ul id="e790386e-c847-4944-aa29-9648a123bf4e" class="bulleted-list" dir="auto"><li style="list-style-type:disc">양쪽이 모두 동의한 엣지만 기본으로 채택하는 것이므로, 룰이 판단하는 것이 아니라 <strong>동의를 존중하는 것</strong>이다. LLM은 DROP이나 SELECT 교체로 이를 바꿀 수 있다.</li></ul><p id="10c5d3f8-3a30-4213-a46e-1f5cd6c481be" class="" dir="auto"><strong>(3) 불변식 확인</strong>: I1(동의), DAG 여부를 마지막에 확인한다. 위반이 있으면 파이프라인을 멈추지 않고 해당 부분을 Report에 기록한다.</p><h4 id="0ce4983a-b330-44d0-a053-d4c633c404e4" class="" dir="auto">4.4 Dependency Closure (룰)</h4><p id="f04affb1-3f68-49b1-b716-957e91d403cc" class="" dir="auto">DROP되었거나 미해결인 step에 의존하는 step을 연쇄적으로 정리한다.</p><ul id="a0049278-45a1-4b20-8f47-7f880f3923c8" class="bulleted-list" dir="auto"><li style="list-style-type:disc">실패한 요청(ASK_HELP, RECEIVE) → 그 요청이 enables 하는 step → 그 step에 의존하는 다른 로봇의 step 순으로 전파</li></ul><ul id="d264c881-2c07-469e-b4f4-fe5ac707466e" class="bulleted-list" dir="auto"><li style="list-style-type:disc">예: 해결되지 않은 RECEIVE 뒤의 내려놓기, DROP된 PASS 앞의 집기</li></ul><ul id="c6241a9e-8bad-4aaa-bcb3-52bfec158d76" class="bulleted-list" dir="auto"><li style="list-style-type:disc">4.2 이후에도 남아 있는 사이클은 사이클에 속한 step을 정리한다.</li></ul><ul id="e2fa6e24-f709-4adf-88ff-c4d25940a2fd" class="bulleted-list" dir="auto"><li style="list-style-type:disc">정리된 step은 Provenance에 “closure로 제거”로 기록한다.</li></ul><h4 id="a33af953-9b96-4205-82d8-9cee071bbcf6" class="" dir="auto">4.5 Scheduling (룰)</h4><ul id="6401e3d0-9ea1-4045-949c-b2cace2ba9c9" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>요청 대기 위치 조정</strong>: 요청 step을 그것이 enables 하는 step 바로 앞으로 옮긴다. 할 일의 내용과 의존 관계는 그대로이고, 로봇이 불필요하게 기다리지 않도록 대기 위치만 조정한다. 사이클이 생기면 되돌린다.</li></ul><ul id="4fc24b26-687d-45d8-8339-2b42c3719af2" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>step 길이</strong>: 타입별 기본값을 쓴다. HELP, 그리고 이동이 필요한 PASS/RECEIVE는 &quot;보통&quot;, 나머지는 &quot;짧음&quot;. ASK_HELP는 대기이므로 길이가 없다. (추가 LLM 호출 없음)</li></ul><ul id="a434df8a-d54f-4722-b092-e141042428dd" class="bulleted-list" dir="auto"><li style="list-style-type:disc">위상 정렬 순서로 시작·종료 시점을 계산하고, 시간 슬롯 <strong>Δt = 5분</strong> 단위로 배정한다.</li></ul><h4 id="4404418b-33cd-4ce5-8464-f0fa5a59eb6e" class="" dir="auto">4.6 Report Finalization (룰)</h4><p id="228ea55e-8118-4347-82c7-9ba431860c0c" class="" dir="auto">4.2의 커버리지 판정 C를 받아서 <strong>구조적으로만</strong> 보정하고 최종 Report를 만든다. LLM의 판정을 새로 뒤집는 의미 판단은 하지 않는다.</p><ul id="eb046f8b-5deb-4ac5-bca4-4e177227d5ea" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>근거 누락</strong>: covered/partial로 판정했는데 evidence가 비어 있으면 → <strong>Left unresolved</strong>로 처리한다.</li></ul><ul id="f0e44816-6e80-4262-8326-e8b12bf0bdbf" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>무효화</strong>: covered/partial로 판정된 목표의 evidence 노드가 4.3 거절, 4.3 엣지 미확정, 4.4 정리로 사라졌으면 → <strong>Infeasible</strong>로 낮춘다.</li></ul><ul id="fd7c4efa-e7af-41ec-a037-16eb4dee4285" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>데드라인 검사</strong>: 스케줄 결과가 시간 제약을 넘으면 → <strong>Deadline exceeded</strong>로 기록한다.</li></ul><table id="cacdbe7a-c271-49e7-b2c5-3e8498844c46" class="simple-table" dir="ltr"><thead class="simple-table-header"><tr id="e5e1b650-b1c0-449b-a550-ecff6bdac574" dir="ltr"><th id="qpV?" class="simple-table-header-color simple-table-header">원인 분류</th><th id="A{J{" class="simple-table-header-color simple-table-header">판정 주체</th><th id="R:_X" class="simple-table-header-color simple-table-header">설명</th></tr></thead><tbody><tr id="475a1175-0b9a-4a1c-88d5-24586c486e19" dir="ltr"><td id="qpV?" class="">No volunteer</td><td id="A{J{" class="">LLM (4.2)</td><td id="R:_X" class="">요청에 YES 한 로봇이 없음</td></tr><tr id="276e802e-474a-4eed-ad9f-72435bed131a" dir="ltr"><td id="qpV?" class="">Capability gap</td><td id="A{J{" class="">LLM (4.2)</td><td id="R:_X" class="">시스템 내 어떤 로봇도 수행 능력이 없음</td></tr><tr id="41625c3c-aa72-4bfb-924c-505d31c938b4" dir="ltr"><td id="qpV?" class="">Left unresolved</td><td id="A{J{" class="">LLM (4.2) / 룰 (4.6)</td><td id="R:_X" class="">애매해서 편집하지 않음, 또는 근거 없이 covered로 판정됨</td></tr><tr id="4fd2a72f-a3cc-4345-be7f-42a7891b65f5" dir="ltr"><td id="qpV?" class="">Infeasible</td><td id="A{J{" class="">룰 (4.6)</td><td id="R:_X" class="">근거 노드가 거절·미확정·정리로 사라짐</td></tr><tr id="f4065e52-3d38-4b5a-ae0e-18cbd0208064" dir="ltr"><td id="qpV?" class="">Deadline exceeded</td><td id="A{J{" class="">룰 (4.6)</td><td id="R:_X" class="">스케줄이 시간 제약을 넘음</td></tr></tbody></table><h4 id="0b1473d3-7275-4c74-b128-f7b27144336b" class="" dir="auto">최종 출력</h4><table id="e99b34e2-481f-4d8f-be35-1158437eff42" class="simple-table" dir="ltr"><thead class="simple-table-header"><tr id="01f83856-3141-49e6-8a03-05dfe701b760" dir="ltr"><th id="uI@:" class="simple-table-header-color simple-table-header">출력</th><th id="}M=e" class="simple-table-header-color simple-table-header">내용</th></tr></thead><tbody><tr id="23824ca1-437f-40d7-9e2c-05e4d8bf9011" dir="ltr"><td id="uI@:" class=""><strong>Joint Plan</strong></td><td id="}M=e" class="">시간 슬롯별 step (LOCAL / PASS 등 step 태그 유지)</td></tr><tr id="8c493545-6062-4c83-83fc-a4046385e94b" dir="ltr"><td id="uI@:" class=""><strong>Provenance</strong></td><td id="}M=e" class="">Stage 2 형식 검사 제외 내역 → Stage 3 YES/NO 응답·κ 라벨 → 4.2 편집과 근거 → 적용/거절 → 엣지 확정 → closure</td></tr><tr id="f3b7f197-b789-43fd-b196-7340ab70c5bf" dir="ltr"><td id="uI@:" class=""><strong>Report</strong></td><td id="}M=e" class="">목표별 커버리지 상태와 원인, Rejected edits 목록, 불변식 위반 기록</td></tr></tbody></table><hr id="b3ab6b2b-327d-4445-bf7b-a78fadb86b4d" dir="auto"/><h3 id="3e52c74d-403e-494a-a6c9-09ea4cfa5e2f" class="" dir="auto">5. 불변식 (Invariants)</h3><table id="0b68b09d-1812-44a3-ab38-6f7d16f0e5e2" class="simple-table" dir="ltr"><thead class="simple-table-header"><tr id="1ff1e360-14fa-4f09-be51-be031c4b13d7" dir="ltr"><th id="}Ta?" class="simple-table-header-color simple-table-header">불변식</th><th id="BELF" class="simple-table-header-color simple-table-header">내용</th><th id="&lt;SX;" class="simple-table-header-color simple-table-header">보장 방식</th></tr></thead><tbody><tr id="0accafea-7736-4ed0-a0fa-26ffed8ca4d1" dir="ltr"><td id="}Ta?" class=""><strong>I1 동의 (Consent)</strong></td><td id="BELF" class="">실행되는 모든 협업 엣지는 제공자의 동의(YES)가 있고, 모든 step에는 이를 생성한 로봇이 존재한다</td><td id="&lt;SX;" class="">Stage 3에서 YES 한 경우에만 엣지 생성, 4.2에서 <strong>구조적으로 보장</strong>, 4.3에서 재확인 (기본 채택도 mutual만)</td></tr><tr id="9015b153-d8e9-41e6-8eb1-55bb836c49db" dir="ltr"><td id="}Ta?" class=""><strong>I2 목표 보존 (Goal Coverage)</strong></td><td id="BELF" class="">모든 Gᵢ가 최종 계획의 step으로 커버된다</td><td id="&lt;SX;" class="">4.2에서 <strong>LLM이 판정</strong>, 4.6에서 구조적으로 보정 후 <strong>보고</strong> (보장이 아니라 판정·보고이며, 실제 커버 여부는 평가 지표 TF로 외부 검증)</td></tr><tr id="6e93dfc2-ba56-4f2b-9a3b-b911a9d6ed6e" dir="ltr"><td id="}Ta?" class=""><strong>I3 실행 가능성 (Feasibility)</strong></td><td id="BELF" class="">순서 그래프는 DAG, 각 step은 능력·보유 물품과 일치, 시간 제약 충족</td><td id="&lt;SX;" class="">DAG: 4.3에서 <strong>검사 후 거부</strong>, 남은 사이클은 4.4에서 정리 / 형식상 일치(번호·물품 목록): Stage 2·3에서 <strong>룰이 검사</strong> / 의미상 일치: 4.2에서 <strong>LLM이 판단</strong> / 시간: 4.6에서 <strong>판정 후 보고</strong></td></tr></tbody></table></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
