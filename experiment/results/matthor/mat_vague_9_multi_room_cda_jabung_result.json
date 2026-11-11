@@ -1,0 +1,1255 @@
+{
+  "task_n": "mat_vague_9",
+  "mode": "multi_room",
+  "model": "gpt-4o",
+  "task_text": "prepare hot water for shower and put toilet paper in the trash",
+  "joint_plan_text": "```plaintext\n### Joint Plan — mat_vague_9  (about 5 min / deadline 20 min: OK)\n### Robots: R1:Mobile_Light(bathroom), R2:Mobile_Heavy(bathroom), R3:Mobile_Light(bathroom), R4:Mobile_Heavy(bathroom)\n\n[0-5 min]\n- R2 [LOCAL] turn on the silver shower knob from the shower wall to on  (r2_s1)\n- R4 [LOCAL] push the silver shower knob from the shower to the on position  (r4_s1)\n- R1 [LOCAL] pick up the white toilet paper from the floor to the gripper [after r2_s1]  (r1_s1)\n- R1 [LOCAL] put down the white toilet paper from the gripper to the white trash can  (r1_s2)",
+  "joint_plan_full": "### Joint Plan — mat_vague_9  (about 5 min / deadline 20 min: OK)\n### Robots: R1:Mobile_Light(bathroom), R2:Mobile_Heavy(bathroom), R3:Mobile_Light(bathroom), R4:Mobile_Heavy(bathroom)\n\n[0-5 min]\n- R2 [LOCAL] turn_on the silver shower knob from shower wall to on  (r2_s1)\n- R4 [LOCAL] push the silver shower knob from shower to on position  (r4_s1)\n- R1 [LOCAL] pick_up the white toilet paper from floor to gripper [after r2_s1]  (r1_s1)\n- R1 [LOCAL] put_down the white toilet paper from gripper to white trash can  (r1_s2)\n\n### Provenance (collaboration edges)\n\n### Graph LLM edits (applied)\n- DROP node=r2_s2 — R2's toilet paper handling is redundant as R1 already disposes of toilet paper.\n- DROP node=r2_s3 — R2's toilet paper handling is redundant as R1 already disposes of toilet paper.\n- DROP node=r3_s1 — R3's toilet paper handling is redundant as R1 already disposes of toilet paper.\n- DROP node=r3_s2 — R3's toilet paper handling is redundant as R1 already disposes of toilet paper.\n- DROP node=r4_s2 — R4's toilet paper handling is redundant as R1 already disposes of toilet paper.\n- DROP node=r4_s3 — R4's trash bin moving is unnecessary as R1 already disposes of toilet paper.\n- DROP node=r4_s4 — R4's toilet paper handling is redundant as R1 already disposes of toilet paper.\n- ORDER before=r2_s1 after=r1_s1 — R2's shower knob turn-on must occur after R1's toilet paper disposal to avoid space conflict.\n\n### Report: goal coverage\n- R1.g0 hot water ready for the shower: uncovered — Capability gap\n- R1.g1 toilet paper disposed of in the trash can: covered [r1_s1, r1_s2]\n- R2.g0 turn on the shower for hot water: covered [r2_s1]\n- R2.g1 move toilet paper to the trash can: uncovered — No volunteer\n- R3.g0 prepare hot water for shower: uncovered — Capability gap\n- R3.g1 put toilet paper in the trash: uncovered — No volunteer\n- R4.g0 hot water ready for the shower: covered [r4_s1]\n- R4.g1 toilet paper disposed of in the trash bin: uncovered — No volunteer\n\n### Dropped by the Graph LLM\n- R2 [LOCAL] pick_up the white toilet paper from floor to gripper (r2_s2) — R2's toilet paper handling is redundant as R1 already disposes of toilet paper.\n- R2 [LOCAL] put_down the white toilet paper from gripper to white trash can (r2_s3) — R2's toilet paper handling is redundant as R1 already disposes of toilet paper.\n- R3 [LOCAL] pick_up the white toilet paper from shelf to gripper (r3_s1) — R3's toilet paper handling is redundant as R1 already disposes of toilet paper.\n- R3 [LOCAL] put_down the white toilet paper from gripper to trash can (r3_s2) — R3's toilet paper handling is redundant as R1 already disposes of toilet paper.\n- R4 [LOCAL] pick_up the white toilet paper from floor to gripper (r4_s2) — R4's toilet paper handling is redundant as R1 already disposes of toilet paper.\n- R4 [LOCAL] move the white trash bin from corner to near toilet paper location (r4_s3) — R4's trash bin moving is unnecessary as R1 already disposes of toilet paper.\n- R4 [LOCAL] put_down the white toilet paper from gripper to white trash bin (r4_s4) — R4's toilet paper handling is redundant as R1 already disposes of toilet paper.",
+  "offers": {
+    "R1": {
+      "agent": "R1",
+      "capability": "I am mobile and can carry light objects up to 5 kg with one arm.",
+      "can_do": [
+        "PickupLightObject: lift small items like toilet paper",
+        "PassReceiveObject: exchange objects with others"
+      ],
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift heavy items",
+        "PushFurniture: cannot move furniture",
+        "SliceObject: no cutting tool",
+        "PourObject: cannot pour water"
+      ],
+      "has_items": [
+        "white toilet paper (floor, image 1)",
+        "silver shower handle (wall, image 2)",
+        "white trash can (corner, image 2)"
+      ],
+      "need_from_others": [],
+      "intends": [
+        "hot water ready for the shower",
+        "toilet paper disposed of in the trash can"
+      ],
+      "obs_scope": "I can observe the bathroom only.",
+      "reasoning": "a) The bathroom needs hot water ready for a shower, and toilet paper disposed of in the trash. b) Bathroom: provide hot water and handle waste disposal. c) I can activate the shower for hot water and dispose of the toilet paper. d) Ensuring hot water is ready for the shower is the top priority given the deadline."
+    },
+    "R2": {
+      "agent": "R2",
+      "capability": "I am mobile and can carry heavy objects up to 20 kg.",
+      "can_do": [
+        "PickupLightObject: lift toilet paper, small items",
+        "PickupHeavyObject: lift heavy items up to 20 kg",
+        "PushFurniture: move furniture if needed",
+        "PassReceiveObject: exchange objects with others"
+      ],
+      "cannot_do": [
+        "SliceObject: no cutting tool",
+        "PourObject: cannot pour liquids"
+      ],
+      "has_items": [
+        "white toilet paper (floor, image 1)",
+        "silver shower knob (shower wall, image 2)",
+        "white trash can (corner, image 1)"
+      ],
+      "need_from_others": [],
+      "intends": [
+        "turn on the shower for hot water",
+        "move toilet paper to the trash can"
+      ],
+      "obs_scope": "I can observe the bathroom only.",
+      "reasoning": "a) The task requires the shower to have hot water ready and the toilet paper to be disposed of. b) The bathroom is where the shower and trash can are located. c) I can turn the shower knob to prepare hot water and move the toilet paper to the trash can. d) Both tasks are equally important and need to be completed within the deadline."
+    },
+    "R3": {
+      "agent": "R3",
+      "capability": "I am mobile and can carry light objects up to 5 kg.",
+      "can_do": [
+        "PickupLightObject: lift toilet paper and small items",
+        "PassReceiveObject: exchange objects with others"
+      ],
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift heavy items",
+        "PushFurniture: cannot move furniture",
+        "SliceObject: no cutting tool",
+        "PourObject: cannot pour liquids"
+      ],
+      "has_items": [
+        "white toilet paper (shelf, image 1)",
+        "silver shower knob (shower wall, image 2)"
+      ],
+      "need_from_others": [],
+      "intends": [
+        "prepare hot water for shower",
+        "put toilet paper in the trash"
+      ],
+      "obs_scope": "I can observe the bathroom only.",
+      "reasoning": "a) The task requires the shower to have hot water ready and the toilet paper to be disposed of in the trash. b) The bathroom provides access to the shower controls and contains the toilet paper. c) I can turn the shower knob to prepare hot water and move the toilet paper to the trash. d) Preparing hot water for the shower is crucial since it directly impacts the task's completion."
+    },
+    "R4": {
+      "agent": "R4",
+      "capability": "I am mobile and can carry heavy objects up to 20 kg.",
+      "can_do": [
+        "PickupLightObject: lift toilet paper",
+        "PickupHeavyObject: move trash bin",
+        "PushFurniture: adjust shower knob",
+        "PassReceiveObject: exchange objects"
+      ],
+      "cannot_do": [
+        "SliceObject: no cutting tool",
+        "PourObject: cannot pour liquids"
+      ],
+      "has_items": [
+        "white toilet paper (floor, image 1)",
+        "white trash bin (corner, image 1)",
+        "silver shower knob (shower, image 2)"
+      ],
+      "need_from_others": [],
+      "intends": [
+        "hot water ready for the shower",
+        "toilet paper disposed of in the trash bin"
+      ],
+      "obs_scope": "I can observe the bathroom only.",
+      "reasoning": "a) The shower should have hot water ready, and the toilet paper should be disposed of. b) The bathroom provides the shower facility and a place for waste disposal. c) I can turn on the shower for hot water and dispose of the toilet paper in the trash bin. d) Preparing hot water for the shower is the priority as it may take time to heat up."
+    }
+  },
+  "local_plans": {
+    "R1": [
+      {
+        "id": "r1_s1",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "white toilet paper",
+          "from": "floor",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "toilet paper disposed of in the trash can",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r1_s2",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "white toilet paper",
+          "from": "gripper",
+          "to": "white trash can"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "toilet paper disposed of in the trash can",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "R2": [
+      {
+        "id": "r2_s1",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "turn_on",
+          "object": "silver shower knob",
+          "from": "shower wall",
+          "to": "on"
+        },
+        "item": null,
+        "target": null,
+        "uses": 2,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "turn on the shower for hot water",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s2",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "white toilet paper",
+          "from": "floor",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "move toilet paper to the trash can",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s3",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "white toilet paper",
+          "from": "gripper",
+          "to": "white trash can"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "move toilet paper to the trash can",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "R3": [
+      {
+        "id": "r3_s1",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "white toilet paper",
+          "from": "shelf",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "put toilet paper in the trash",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s2",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "white toilet paper",
+          "from": "gripper",
+          "to": "trash can"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "put toilet paper in the trash",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "R4": [
+      {
+        "id": "r4_s1",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "push",
+          "object": "silver shower knob",
+          "from": "shower",
+          "to": "on position"
+        },
+        "item": null,
+        "target": null,
+        "uses": 2,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "hot water ready for the shower",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s2",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "white toilet paper",
+          "from": "floor",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "toilet paper disposed of in the trash bin",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s3",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "move",
+          "object": "white trash bin",
+          "from": "corner",
+          "to": "near toilet paper location"
+        },
+        "item": null,
+        "target": null,
+        "uses": 1,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "toilet paper disposed of in the trash bin",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s4",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "white toilet paper",
+          "from": "gripper",
+          "to": "white trash bin"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "toilet paper disposed of in the trash bin",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ]
+  },
+  "answers": [],
+  "graph": {
+    "nodes": [
+      {
+        "id": "r1_s1",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "white toilet paper",
+          "from": "floor",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "toilet paper disposed of in the trash can",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 1,
+        "t_end": 2
+      },
+      {
+        "id": "r1_s2",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "white toilet paper",
+          "from": "gripper",
+          "to": "white trash can"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "toilet paper disposed of in the trash can",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 2,
+        "t_end": 3
+      },
+      {
+        "id": "r2_s1",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "turn_on",
+          "object": "silver shower knob",
+          "from": "shower wall",
+          "to": "on"
+        },
+        "item": null,
+        "target": null,
+        "uses": 2,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "turn on the shower for hot water",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 1
+      },
+      {
+        "id": "r2_s2",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "white toilet paper",
+          "from": "floor",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "move toilet paper to the trash can",
+        "replies": [],
+        "status": "dropped",
+        "status_reason": "4.2 DROP: R2's toilet paper handling is redundant as R1 already disposes of toilet paper.",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s3",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "white toilet paper",
+          "from": "gripper",
+          "to": "white trash can"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "move toilet paper to the trash can",
+        "replies": [],
+        "status": "dropped",
+        "status_reason": "4.2 DROP: R2's toilet paper handling is redundant as R1 already disposes of toilet paper.",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s1",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "white toilet paper",
+          "from": "shelf",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "put toilet paper in the trash",
+        "replies": [],
+        "status": "dropped",
+        "status_reason": "4.2 DROP: R3's toilet paper handling is redundant as R1 already disposes of toilet paper.",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s2",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "white toilet paper",
+          "from": "gripper",
+          "to": "trash can"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "put toilet paper in the trash",
+        "replies": [],
+        "status": "dropped",
+        "status_reason": "4.2 DROP: R3's toilet paper handling is redundant as R1 already disposes of toilet paper.",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s1",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "push",
+          "object": "silver shower knob",
+          "from": "shower",
+          "to": "on position"
+        },
+        "item": null,
+        "target": null,
+        "uses": 2,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "hot water ready for the shower",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 1
+      },
+      {
+        "id": "r4_s2",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "white toilet paper",
+          "from": "floor",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "toilet paper disposed of in the trash bin",
+        "replies": [],
+        "status": "dropped",
+        "status_reason": "4.2 DROP: R4's toilet paper handling is redundant as R1 already disposes of toilet paper.",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s3",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "move",
+          "object": "white trash bin",
+          "from": "corner",
+          "to": "near toilet paper location"
+        },
+        "item": null,
+        "target": null,
+        "uses": 1,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "toilet paper disposed of in the trash bin",
+        "replies": [],
+        "status": "dropped",
+        "status_reason": "4.2 DROP: R4's trash bin moving is unnecessary as R1 already disposes of toilet paper.",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s4",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "white toilet paper",
+          "from": "gripper",
+          "to": "white trash bin"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bathroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "toilet paper disposed of in the trash bin",
+        "replies": [],
+        "status": "dropped",
+        "status_reason": "4.2 DROP: R4's toilet paper handling is redundant as R1 already disposes of toilet paper.",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "order": {
+      "R1": [
+        "r1_s1",
+        "r1_s2"
+      ],
+      "R2": [
+        "r2_s1",
+        "r2_s2",
+        "r2_s3"
+      ],
+      "R3": [
+        "r3_s1",
+        "r3_s2"
+      ],
+      "R4": [
+        "r4_s1",
+        "r4_s2",
+        "r4_s3",
+        "r4_s4"
+      ]
+    },
+    "edges": [
+      {
+        "src": "r1_s1",
+        "dst": "r1_s2",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r2_s1",
+        "dst": "r1_s1",
+        "kind": "ORDER",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "graph",
+        "existing": false,
+        "decided_by": ""
+      }
+    ],
+    "edit_log": [
+      {
+        "k": 0,
+        "edit": {
+          "op": "DROP",
+          "node": "r2_s2",
+          "rationale": "R2's toilet paper handling is redundant as R1 already disposes of toilet paper."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "R2's toilet paper handling is redundant as R1 already disposes of toilet paper."
+      },
+      {
+        "k": 1,
+        "edit": {
+          "op": "DROP",
+          "node": "r2_s3",
+          "rationale": "R2's toilet paper handling is redundant as R1 already disposes of toilet paper."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "R2's toilet paper handling is redundant as R1 already disposes of toilet paper."
+      },
+      {
+        "k": 2,
+        "edit": {
+          "op": "DROP",
+          "node": "r3_s1",
+          "rationale": "R3's toilet paper handling is redundant as R1 already disposes of toilet paper."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "R3's toilet paper handling is redundant as R1 already disposes of toilet paper."
+      },
+      {
+        "k": 3,
+        "edit": {
+          "op": "DROP",
+          "node": "r3_s2",
+          "rationale": "R3's toilet paper handling is redundant as R1 already disposes of toilet paper."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "R3's toilet paper handling is redundant as R1 already disposes of toilet paper."
+      },
+      {
+        "k": 4,
+        "edit": {
+          "op": "DROP",
+          "node": "r4_s2",
+          "rationale": "R4's toilet paper handling is redundant as R1 already disposes of toilet paper."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "R4's toilet paper handling is redundant as R1 already disposes of toilet paper."
+      },
+      {
+        "k": 5,
+        "edit": {
+          "op": "DROP",
+          "node": "r4_s3",
+          "rationale": "R4's trash bin moving is unnecessary as R1 already disposes of toilet paper."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "R4's trash bin moving is unnecessary as R1 already disposes of toilet paper."
+      },
+      {
+        "k": 6,
+        "edit": {
+          "op": "DROP",
+          "node": "r4_s4",
+          "rationale": "R4's toilet paper handling is redundant as R1 already disposes of toilet paper."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "R4's toilet paper handling is redundant as R1 already disposes of toilet paper."
+      },
+      {
+        "k": 7,
+        "edit": {
+          "op": "ORDER",
+          "before": "r2_s1",
+          "after": "r1_s1",
+          "rationale": "R2's shower knob turn-on must occur after R1's toilet paper disposal to avoid space conflict."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "R2's shower knob turn-on must occur after R1's toilet paper disposal to avoid space conflict."
+      }
+    ],
+    "report": {
+      "goals": [
+        {
+          "robot": "R1",
+          "goal": 0,
+          "text": "hot water ready for the shower",
+          "status": "uncovered",
+          "cause": [
+            "Capability gap"
+          ],
+          "evidence": [],
+          "note": "",
+          "llm_status": "uncovered",
+          "llm_cause": "Capability gap"
+        },
+        {
+          "robot": "R1",
+          "goal": 1,
+          "text": "toilet paper disposed of in the trash can",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r1_s1",
+            "r1_s2"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R2",
+          "goal": 0,
+          "text": "turn on the shower for hot water",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r2_s1"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R2",
+          "goal": 1,
+          "text": "move toilet paper to the trash can",
+          "status": "uncovered",
+          "cause": [
+            "No volunteer"
+          ],
+          "evidence": [],
+          "note": "",
+          "llm_status": "uncovered",
+          "llm_cause": "No volunteer"
+        },
+        {
+          "robot": "R3",
+          "goal": 0,
+          "text": "prepare hot water for shower",
+          "status": "uncovered",
+          "cause": [
+            "Capability gap"
+          ],
+          "evidence": [],
+          "note": "",
+          "llm_status": "uncovered",
+          "llm_cause": "Capability gap"
+        },
+        {
+          "robot": "R3",
+          "goal": 1,
+          "text": "put toilet paper in the trash",
+          "status": "uncovered",
+          "cause": [
+            "No volunteer"
+          ],
+          "evidence": [],
+          "note": "",
+          "llm_status": "uncovered",
+          "llm_cause": "No volunteer"
+        },
+        {
+          "robot": "R4",
+          "goal": 0,
+          "text": "hot water ready for the shower",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r4_s1"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R4",
+          "goal": 1,
+          "text": "toilet paper disposed of in the trash bin",
+          "status": "uncovered",
+          "cause": [
+            "No volunteer"
+          ],
+          "evidence": [],
+          "note": "",
+          "llm_status": "uncovered",
+          "llm_cause": "No volunteer"
+        }
+      ],
+      "unresolved_requests": [],
+      "rejected_edits": [],
+      "dropped": [
+        {
+          "node": "r2_s2",
+          "agent": "R2",
+          "type": "LOCAL",
+          "text": "pick_up the white toilet paper from floor to gripper",
+          "rationale": "R2's toilet paper handling is redundant as R1 already disposes of toilet paper."
+        },
+        {
+          "node": "r2_s3",
+          "agent": "R2",
+          "type": "LOCAL",
+          "text": "put_down the white toilet paper from gripper to white trash can",
+          "rationale": "R2's toilet paper handling is redundant as R1 already disposes of toilet paper."
+        },
+        {
+          "node": "r3_s1",
+          "agent": "R3",
+          "type": "LOCAL",
+          "text": "pick_up the white toilet paper from shelf to gripper",
+          "rationale": "R3's toilet paper handling is redundant as R1 already disposes of toilet paper."
+        },
+        {
+          "node": "r3_s2",
+          "agent": "R3",
+          "type": "LOCAL",
+          "text": "put_down the white toilet paper from gripper to trash can",
+          "rationale": "R3's toilet paper handling is redundant as R1 already disposes of toilet paper."
+        },
+        {
+          "node": "r4_s2",
+          "agent": "R4",
+          "type": "LOCAL",
+          "text": "pick_up the white toilet paper from floor to gripper",
+          "rationale": "R4's toilet paper handling is redundant as R1 already disposes of toilet paper."
+        },
+        {
+          "node": "r4_s3",
+          "agent": "R4",
+          "type": "LOCAL",
+          "text": "move the white trash bin from corner to near toilet paper location",
+          "rationale": "R4's trash bin moving is unnecessary as R1 already disposes of toilet paper."
+        },
+        {
+          "node": "r4_s4",
+          "agent": "R4",
+          "type": "LOCAL",
+          "text": "put_down the white toilet paper from gripper to white trash bin",
+          "rationale": "R4's toilet paper handling is redundant as R1 already disposes of toilet paper."
+        }
+      ],
+      "removed_by_closure": [],
+      "invariant_violations": [],
+      "deadline": {
+        "makespan_min": 5,
+        "deadline_min": 20,
+        "exceeded": false
+      }
+    }
+  },
+  "report": {
+    "goals": [
+      {
+        "robot": "R1",
+        "goal": 0,
+        "text": "hot water ready for the shower",
+        "status": "uncovered",
+        "cause": [
+          "Capability gap"
+        ],
+        "evidence": [],
+        "note": "",
+        "llm_status": "uncovered",
+        "llm_cause": "Capability gap"
+      },
+      {
+        "robot": "R1",
+        "goal": 1,
+        "text": "toilet paper disposed of in the trash can",
+        "status": "covered",
+        "cause": [],
+        "evidence": [
+          "r1_s1",
+          "r1_s2"
+        ],
+        "note": "",
+        "llm_status": "covered",
+        "llm_cause": null
+      },
+      {
+        "robot": "R2",
+        "goal": 0,
+        "text": "turn on the shower for hot water",
+        "status": "covered",
+        "cause": [],
+        "evidence": [
+          "r2_s1"
+        ],
+        "note": "",
+        "llm_status": "covered",
+        "llm_cause": null
+      },
+      {
+        "robot": "R2",
+        "goal": 1,
+        "text": "move toilet paper to the trash can",
+        "status": "uncovered",
+        "cause": [
+          "No volunteer"
+        ],
+        "evidence": [],
+        "note": "",
+        "llm_status": "uncovered",
+        "llm_cause": "No volunteer"
+      },
+      {
+        "robot": "R3",
+        "goal": 0,
+        "text": "prepare hot water for shower",
+        "status": "uncovered",
+        "cause": [
+          "Capability gap"
+        ],
+        "evidence": [],
+        "note": "",
+        "llm_status": "uncovered",
+        "llm_cause": "Capability gap"
+      },
+      {
+        "robot": "R3",
+        "goal": 1,
+        "text": "put toilet paper in the trash",
+        "status": "uncovered",
+        "cause": [
+          "No volunteer"
+        ],
+        "evidence": [],
+        "note": "",
+        "llm_status": "uncovered",
+        "llm_cause": "No volunteer"
+      },
+      {
+        "robot": "R4",
+        "goal": 0,
+        "text": "hot water ready for the shower",
+        "status": "covered",
+        "cause": [],
+        "evidence": [
+          "r4_s1"
+        ],
+        "note": "",
+        "llm_status": "covered",
+        "llm_cause": null
+      },
+      {
+        "robot": "R4",
+        "goal": 1,
+        "text": "toilet paper disposed of in the trash bin",
+        "status": "uncovered",
+        "cause": [
+          "No volunteer"
+        ],
+        "evidence": [],
+        "note": "",
+        "llm_status": "uncovered",
+        "llm_cause": "No volunteer"
+      }
+    ],
+    "unresolved_requests": [],
+    "rejected_edits": [],
+    "dropped": [
+      {
+        "node": "r2_s2",
+        "agent": "R2",
+        "type": "LOCAL",
+        "text": "pick_up the white toilet paper from floor to gripper",
+        "rationale": "R2's toilet paper handling is redundant as R1 already disposes of toilet paper."
+      },
+      {
+        "node": "r2_s3",
+        "agent": "R2",
+        "type": "LOCAL",
+        "text": "put_down the white toilet paper from gripper to white trash can",
+        "rationale": "R2's toilet paper handling is redundant as R1 already disposes of toilet paper."
+      },
+      {
+        "node": "r3_s1",
+        "agent": "R3",
+        "type": "LOCAL",
+        "text": "pick_up the white toilet paper from shelf to gripper",
+        "rationale": "R3's toilet paper handling is redundant as R1 already disposes of toilet paper."
+      },
+      {
+        "node": "r3_s2",
+        "agent": "R3",
+        "type": "LOCAL",
+        "text": "put_down the white toilet paper from gripper to trash can",
+        "rationale": "R3's toilet paper handling is redundant as R1 already disposes of toilet paper."
+      },
+      {
+        "node": "r4_s2",
+        "agent": "R4",
+        "type": "LOCAL",
+        "text": "pick_up the white toilet paper from floor to gripper",
+        "rationale": "R4's toilet paper handling is redundant as R1 already disposes of toilet paper."
+      },
+      {
+        "node": "r4_s3",
+        "agent": "R4",
+        "type": "LOCAL",
+        "text": "move the white trash bin from corner to near toilet paper location",
+        "rationale": "R4's trash bin moving is unnecessary as R1 already disposes of toilet paper."
+      },
+      {
+        "node": "r4_s4",
+        "agent": "R4",
+        "type": "LOCAL",
+        "text": "put_down the white toilet paper from gripper to white trash bin",
+        "rationale": "R4's toilet paper handling is redundant as R1 already disposes of toilet paper."
+      }
+    ],
+    "removed_by_closure": [],
+    "invariant_violations": [],
+    "deadline": {
+      "makespan_min": 5,
+      "deadline_min": 20,
+      "exceeded": false
+    }
+  },
+  "metrics": {
+    "task_id": "mat_vague_9",
+    "n_steps_total": 11,
+    "n_steps_active": 4,
+    "n_requests": 0,
+    "n_requests_served": 0,
+    "n_requests_unresolved": 0,
+    "n_candidates_from_stage3": 0,
+    "n_collab_edges_final": 0,
+    "n_help_edges": 0,
+    "n_transfer_edges": 0,
+    "decided_by_select": 0,
+    "decided_by_merge": 0,
+    "decided_by_default": 0,
+    "kappa_final": {
+      "mutual": 0,
+      "provider-only": 0,
+      "merged": 0
+    },
+    "graph_edits_applied": 8,
+    "graph_edits_rejected": 0,
+    "n_dropped_by_graph": 7,
+    "n_removed_by_closure": 0,
+    "n_requests_moved_later": 0,
+    "n_invariant_violations": 0,
+    "goals_total": 8,
+    "goals_covered": 3,
+    "goals_partial": 0,
+    "goals_uncovered": 5,
+    "goal_causes": {
+      "No volunteer": 3,
+      "Capability gap": 2,
+      "Left unresolved": 0,
+      "Infeasible": 0,
+      "Deadline exceeded": 0
+    },
+    "plan_fix_rounds": {
+      "R1": 0,
+      "R2": 0,
+      "R3": 1,
+      "R4": 0
+    },
+    "n_steps_excluded_stage2": 1,
+    "makespan_min": 5,
+    "deadline": 20,
+    "deadline_ok": true,
+    "llm_calls": 10,
+    "prompt_tokens": 19284,
+    "completion_tokens": 2503,
+    "config": {
+      "use_edge_proposal": true,
+      "use_graph_llm": true
+    },
+    "wall_time_sec": 15.5
+  },
+  "config": {
+    "use_edge_proposal": true,
+    "use_graph_llm": true,
+    "max_graph_rounds": 2,
+    "deadline_min": 20
+  }
+}

@@ -1,0 +1,1372 @@
+{
+  "task_n": "mat_compound_6",
+  "mode": "multi_room",
+  "model": "gpt-4o",
+  "task_text": "Break the Cellphone and the Television and clear the coffee table",
+  "joint_plan_text": "```plaintext\n### Joint Plan — mat_compound_6  (about 10 min / deadline 20 min: OK)\n### Robots: R1:Gripper(bedroom), R2:Gripper(bedroom), R3:Mobile_Heavy(bedroom), R4:Mobile_Light(bedroom)\n\n[0-5 min]\n- R3 [LOCAL] pick up the blue cellphone from the bedside table to the gripper  (r3_s1)\n- R3 [PASS] pass blue cellphone to R2 (offered) (brings it to the bedroom)  (r3_s2)\n- R2 [RECEIVE] receive blue cellphone from R3  (r2_s5)\n- R3 [LOCAL] pick up the black television from the dresser to the gripper  (r3_s3)\n- R2 [LOCAL] slice the blue cellphone from the gripper to broken pieces  (r2_s6)\n\n[5-10 min]\n- R3 [PASS] pass black television to R2 (offered) (brings it to the bedroom)  (r3_s4)\n- R2 [RECEIVE] receive black television from R3  (r2_s7)\n- R3 [LOCAL] push the white coffee table from the center of the room to the side of the room  (r3_s5)\n- R2 [LOCAL] slice the black television from the gripper to broken pieces  (r2_s8)",
+  "joint_plan_full": "### Joint Plan — mat_compound_6  (about 10 min / deadline 20 min: OK)\n### Robots: R1:Gripper(bedroom), R2:Gripper(bedroom), R3:Mobile_Heavy(bedroom), R4:Mobile_Light(bedroom)\n\n[0-5 min]\n- R3 [LOCAL] pick_up the blue cellphone from bedside table to gripper  (r3_s1)\n- R3 [PASS] pass blue cellphone to R2 (offered) (brings it to the bedroom)  (r3_s2)\n- R2 [RECEIVE] receive blue cellphone from R3  (r2_s5)\n- R3 [LOCAL] pick_up the black television from dresser to gripper  (r3_s3)\n- R2 [LOCAL] slice the blue cellphone from gripper to broken pieces  (r2_s6)\n\n[5-10 min]\n- R3 [PASS] pass black television to R2 (offered) (brings it to the bedroom)  (r3_s4)\n- R2 [RECEIVE] receive black television from R3  (r2_s7)\n- R3 [LOCAL] push the white coffee table from center of room to side of room  (r3_s5)\n- R2 [LOCAL] slice the black television from gripper to broken pieces  (r2_s8)\n\n### Provenance (collaboration edges)\n- r2_s5 (R2 RECEIVE) <- r3_s2 (R3 PASS)  κ=mutual, decided by default\n- r2_s7 (R2 RECEIVE) <- r3_s4 (R3 PASS)  κ=mutual, decided by default\n\n### Graph LLM edits (applied)\n- MERGE request=r2_s1 into=r3_s1 — R3 already plans to pick up the blue cellphone, satisfying R2's request.\n- MERGE request=r2_s2 into=r3_s3 — R3 already plans to pick up the black television, satisfying R2's request.\n- DROP node=r2_s3 — Duplicate step for slicing the blue cellphone, already covered by r2_s6.\n- DROP node=r2_s4 — Duplicate step for slicing the black television, already covered by r2_s8.\n- DROP node=r1_s1 — Unnecessary step, as R3 does not need the red book.\n\n### Report: goal coverage\n- R1.g0 provide any useful objects or tools for breaking tasks: uncovered — No volunteer\n- R2.g0 break the cellphone: covered [r2_s5, r2_s6]\n- R2.g1 break the television: covered [r2_s7, r2_s8]\n- R3.g0 break the blue cellphone: covered [r3_s1, r3_s2]\n- R3.g1 break the black television: covered [r3_s3, r3_s4]\n- R3.g2 clear the white coffee table: covered [r3_s5]\n\n### Dropped by the Graph LLM\n- R2 [LOCAL] slice the blue cellphone from gripper to broken pieces (r2_s3) — Duplicate step for slicing the blue cellphone, already covered by r2_s6.\n- R2 [LOCAL] slice the black television from gripper to broken pieces (r2_s4) — Duplicate step for slicing the black television, already covered by r2_s8.\n- R1 [PASS] pass red book (nightstand, image 1) to R3 (r1_s1) — Unnecessary step, as R3 does not need the red book.\n\n### Removed by dependency closure\n- R2 [ASK_HELP] bring the black television from dresser to R2 (r2_s2) — moot: r2_s4 will not happen\n- R2 [ASK_HELP] bring the blue cellphone from bedside table to R2 (r2_s1) — moot: r2_s3 will not happen",
+  "offers": {
+    "R1": {
+      "agent": "R1",
+      "capability": "I am fixed in place and can manipulate light objects with a gripper.",
+      "can_do": [
+        "PickupLightObject: lift small items",
+        "SliceObject: use cutting tools",
+        "PourObject: pour liquids",
+        "PassReceiveObject: hand over or receive items"
+      ],
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift heavy items",
+        "PushFurniture: cannot move furniture"
+      ],
+      "has_items": [
+        "blue pillow (bed, image 1)",
+        "white blanket (bed, image 1)",
+        "brown lamp (nightstand, image 1)",
+        "black alarm clock (nightstand, image 1)",
+        "red book (nightstand, image 1)",
+        "gray chair (corner, image 2)",
+        "wooden desk (corner, image 2)"
+      ],
+      "need_from_others": [
+        "mobile robot to transport any tools or objects to the living room"
+      ],
+      "intends": [
+        "provide any useful objects or tools for breaking tasks"
+      ],
+      "obs_scope": "I can observe the bedroom only.",
+      "reasoning": "a) The cellphone and television must be broken, and the coffee table cleared. b) The bedroom does not directly contribute to breaking or clearing tasks but may provide tools. c) I can potentially provide tools or objects useful for breaking, if they exist here. d) Given the deadline, ensuring any useful objects or tools are passed to a mobile robot quickly is crucial."
+    },
+    "R2": {
+      "agent": "R2",
+      "capability": "I am fixed in place and can manipulate light objects within my reach.",
+      "can_do": [
+        "PickupLightObject: lift small items like books or alarm clocks",
+        "SliceObject: break or cut objects within reach",
+        "PassReceiveObject: hand over or receive items from another robot"
+      ],
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift furniture or heavy electronics",
+        "MoveToAnotherRoom: fixed in place, cannot leave the bedroom"
+      ],
+      "has_items": [
+        "blue bedsheet (bed, image 1)",
+        "white pillow (bed, image 1)",
+        "silver alarm clock (nightstand, image 1)",
+        "black lamp (nightstand, image 1)",
+        "brown wardrobe (corner, image 1)",
+        "red book (nightstand, image 2)",
+        "green plant (windowsill, image 2)"
+      ],
+      "need_from_others": [
+        "someone to bring the cellphone and TV to me for breaking",
+        "someone to clear the coffee table in the living room"
+      ],
+      "intends": [
+        "break the cellphone",
+        "break the television"
+      ],
+      "obs_scope": "I can observe the bedroom only.",
+      "reasoning": "a) The cellphone and TV must be broken, and the coffee table cleared. b) The living room likely has the TV and coffee table, while the cellphone could be in any room. c) I can break objects if they are brought to me and clear surfaces in my room. d) Breaking the cellphone and TV is critical, as clearing the coffee table is secondary."
+    },
+    "R3": {
+      "agent": "R3",
+      "capability": "I am mobile and can carry or move heavy objects up to 20 kg.",
+      "can_do": [
+        "PickupLightObject: lift small items like the cellphone",
+        "PickupHeavyObject: lift larger items like the television",
+        "PushFurniture: move the coffee table if needed"
+      ],
+      "cannot_do": [
+        "SliceObject: no cutting tool",
+        "PourObject: cannot pour liquids"
+      ],
+      "has_items": [
+        "blue cellphone (bedside table, image 1)",
+        "black television (dresser, image 2)",
+        "white coffee table (center of room, image 1)"
+      ],
+      "need_from_others": [],
+      "intends": [
+        "break the blue cellphone",
+        "break the black television",
+        "clear the white coffee table"
+      ],
+      "obs_scope": "I can observe the bedroom only.",
+      "reasoning": "a) The cellphone and television must be broken, and the coffee table must be clear of all items. b) The bedroom contains the cellphone and television, which need to be broken, and the coffee table, which needs clearing. c) I can break the cellphone and television, and clear the coffee table in my room. d) Breaking the cellphone and television are the priority actions since they are the core of the task."
+    },
+    "R4": {
+      "agent": "R4",
+      "capability": "I am mobile and can carry light objects up to 5 kg with one arm.",
+      "can_do": [
+        "PickupLightObject: lift small items like books or pillows",
+        "PassReceiveObject: transfer items to/from others"
+      ],
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift furniture",
+        "PushFurniture: cannot move large objects",
+        "SliceObject: no cutting tool",
+        "PourObject: cannot pour liquids",
+        "ToggleObject: cannot turn on/off electronics"
+      ],
+      "has_items": [
+        "blue pillow (bed, image 1)",
+        "white pillow (bed, image 1)",
+        "gray blanket (bed, image 1)",
+        "wooden nightstand (beside bed, image 1)",
+        "lamp (nightstand, image 1)",
+        "red book (nightstand, image 1)",
+        "black chair (corner, image 2)",
+        "brown wardrobe (wall, image 2)"
+      ],
+      "need_from_others": [
+        "someone who can break electronics",
+        "someone who can clear a coffee table"
+      ],
+      "intends": [],
+      "obs_scope": "I can observe the bedroom only.",
+      "reasoning": "a) The cellphone and television must be broken, and the coffee table cleared. b) The living room likely contains the television and coffee table, while the bedroom does not directly contribute to breaking or clearing tasks. c) My room does not contain the items to be broken or cleared, but I can assist by moving objects if needed. d) My priority is to assist in moving small objects if necessary, as I cannot directly break items or clear the coffee table."
+    }
+  },
+  "local_plans": {
+    "R1": [
+      {
+        "id": "r1_s1",
+        "agent": "R1",
+        "type": "PASS",
+        "action": "pass red book (nightstand, image 1) to R3",
+        "item": "red book (nightstand, image 1)",
+        "target": "R3",
+        "uses": null,
+        "location": "bedroom",
+        "origin": "offer",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "provide any useful objects or tools for breaking tasks",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "R2": [
+      {
+        "id": "r2_s1",
+        "agent": "R2",
+        "type": "ASK_HELP",
+        "action": {
+          "verb": "bring",
+          "object": "blue cellphone",
+          "from": "bedside table",
+          "to": "R2"
+        },
+        "item": null,
+        "target": "R3",
+        "uses": null,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": "r2_s3",
+        "serves": 0,
+        "serves_text": "break the cellphone",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s2",
+        "agent": "R2",
+        "type": "ASK_HELP",
+        "action": {
+          "verb": "bring",
+          "object": "black television",
+          "from": "dresser",
+          "to": "R2"
+        },
+        "item": null,
+        "target": "R3",
+        "uses": null,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": "r2_s4",
+        "serves": 1,
+        "serves_text": "break the television",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s3",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "slice",
+          "object": "blue cellphone",
+          "from": "gripper",
+          "to": "broken pieces"
+        },
+        "item": null,
+        "target": null,
+        "uses": 1,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "break the cellphone",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s4",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "slice",
+          "object": "black television",
+          "from": "gripper",
+          "to": "broken pieces"
+        },
+        "item": null,
+        "target": null,
+        "uses": 1,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "break the television",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "R3": [
+      {
+        "id": "r3_s1",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "blue cellphone",
+          "from": "bedside table",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "break the blue cellphone",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s2",
+        "agent": "R3",
+        "type": "PASS",
+        "action": "pass blue cellphone (bedside table, image 1) to R2",
+        "item": "blue cellphone (bedside table, image 1)",
+        "target": "R2",
+        "uses": null,
+        "location": "bedroom",
+        "origin": "offer",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "break the blue cellphone",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s3",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "black television",
+          "from": "dresser",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 1,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "break the black television",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s4",
+        "agent": "R3",
+        "type": "PASS",
+        "action": "pass black television (dresser, image 2) to R2",
+        "item": "black television (dresser, image 2)",
+        "target": "R2",
+        "uses": null,
+        "location": "bedroom",
+        "origin": "offer",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "break the black television",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s5",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "push",
+          "object": "white coffee table",
+          "from": "center of room",
+          "to": "side of room"
+        },
+        "item": null,
+        "target": null,
+        "uses": 2,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 2,
+        "serves_text": "clear the white coffee table",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "R4": []
+  },
+  "answers": [
+    {
+      "agent": "R1",
+      "id": "r2_s1",
+      "answer": "NO",
+      "reason": "I am fixed in place and cannot transport items to R2.",
+      "result": "no edge"
+    },
+    {
+      "agent": "R1",
+      "id": "r2_s2",
+      "answer": "NO",
+      "reason": "I cannot move heavy items like the television, and I am fixed in place.",
+      "result": "no edge"
+    },
+    {
+      "agent": "R2",
+      "id": "r3_s2",
+      "answer": "YES",
+      "reason": "I need the blue cellphone to break it as part of my task.",
+      "result": "CANDIDATE",
+      "kappa": "mutual",
+      "receive": "r2_s5",
+      "use": "r2_s6"
+    },
+    {
+      "agent": "R2",
+      "id": "r3_s4",
+      "answer": "YES",
+      "reason": "I need the black television to break it as part of my task.",
+      "result": "CANDIDATE",
+      "kappa": "mutual",
+      "receive": "r2_s7",
+      "use": "r2_s8"
+    },
+    {
+      "agent": "R3",
+      "id": "r2_s1",
+      "answer": "YES",
+      "reason": "I already plan to pass the blue cellphone to R2.",
+      "result": "rejected_by_format_check: existing_step 'r3_s2' is not one of your LOCAL/HELP steps"
+    },
+    {
+      "agent": "R3",
+      "id": "r2_s2",
+      "answer": "YES",
+      "reason": "I already plan to pass the black television to R2.",
+      "result": "rejected_by_format_check: existing_step 'r3_s4' is not one of your LOCAL/HELP steps"
+    },
+    {
+      "agent": "R3",
+      "id": "r1_s1",
+      "answer": "NO",
+      "reason": "I do not need the red book to complete my current tasks.",
+      "result": "no edge"
+    },
+    {
+      "agent": "R4",
+      "id": "r2_s1",
+      "answer": "NO",
+      "reason": "I cannot see or interact with the blue cellphone, as it is not listed in my has_items.",
+      "result": "no edge"
+    },
+    {
+      "agent": "R4",
+      "id": "r2_s2",
+      "answer": "NO",
+      "reason": "I cannot see or interact with the black television, as it is not listed in my has_items.",
+      "result": "no edge"
+    }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "r1_s1",
+        "agent": "R1",
+        "type": "PASS",
+        "action": "pass red book (nightstand, image 1) to R3",
+        "item": "red book (nightstand, image 1)",
+        "target": "R3",
+        "uses": null,
+        "location": "bedroom",
+        "origin": "offer",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "provide any useful objects or tools for breaking tasks",
+        "replies": [
+          {
+            "agent": "R3",
+            "answer": "NO",
+            "reason": "I do not need the red book to complete my current tasks."
+          }
+        ],
+        "status": "dropped",
+        "status_reason": "4.2 DROP: Unnecessary step, as R3 does not need the red book.",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s1",
+        "agent": "R2",
+        "type": "ASK_HELP",
+        "action": {
+          "verb": "bring",
+          "object": "blue cellphone",
+          "from": "bedside table",
+          "to": "R2"
+        },
+        "item": null,
+        "target": "R3",
+        "uses": null,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": "r2_s3",
+        "serves": 0,
+        "serves_text": "break the cellphone",
+        "replies": [
+          {
+            "agent": "R1",
+            "answer": "NO",
+            "reason": "I am fixed in place and cannot transport items to R2."
+          },
+          {
+            "agent": "R3",
+            "answer": "YES (format error)",
+            "reason": "existing_step 'r3_s2' is not one of your LOCAL/HELP steps"
+          },
+          {
+            "agent": "R4",
+            "answer": "NO",
+            "reason": "I cannot see or interact with the blue cellphone, as it is not listed in my has_items."
+          }
+        ],
+        "status": "removed",
+        "status_reason": "moot: r2_s3 will not happen",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s5",
+        "agent": "R2",
+        "type": "RECEIVE",
+        "action": "receive blue cellphone (bedside table, image 1)",
+        "item": "blue cellphone (bedside table, image 1)",
+        "target": "R3",
+        "uses": null,
+        "location": "bedroom",
+        "origin": "receive",
+        "answers": null,
+        "enables": "r2_s6",
+        "serves": null,
+        "serves_text": "offered blue cellphone (bedside table, image 1)",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 3,
+        "t_end": 4
+      },
+      {
+        "id": "r2_s6",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": "slice the blue cellphone from gripper to broken pieces",
+        "item": null,
+        "target": null,
+        "uses": 1,
+        "location": "bedroom",
+        "origin": "receive",
+        "answers": null,
+        "enables": null,
+        "serves": null,
+        "serves_text": "offered blue cellphone (bedside table, image 1)",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 4,
+        "t_end": 5
+      },
+      {
+        "id": "r2_s2",
+        "agent": "R2",
+        "type": "ASK_HELP",
+        "action": {
+          "verb": "bring",
+          "object": "black television",
+          "from": "dresser",
+          "to": "R2"
+        },
+        "item": null,
+        "target": "R3",
+        "uses": null,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": "r2_s4",
+        "serves": 1,
+        "serves_text": "break the television",
+        "replies": [
+          {
+            "agent": "R1",
+            "answer": "NO",
+            "reason": "I cannot move heavy items like the television, and I am fixed in place."
+          },
+          {
+            "agent": "R3",
+            "answer": "YES (format error)",
+            "reason": "existing_step 'r3_s4' is not one of your LOCAL/HELP steps"
+          },
+          {
+            "agent": "R4",
+            "answer": "NO",
+            "reason": "I cannot see or interact with the black television, as it is not listed in my has_items."
+          }
+        ],
+        "status": "removed",
+        "status_reason": "moot: r2_s4 will not happen",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s7",
+        "agent": "R2",
+        "type": "RECEIVE",
+        "action": "receive black television (dresser, image 2)",
+        "item": "black television (dresser, image 2)",
+        "target": "R3",
+        "uses": null,
+        "location": "bedroom",
+        "origin": "receive",
+        "answers": null,
+        "enables": "r2_s8",
+        "serves": null,
+        "serves_text": "offered black television (dresser, image 2)",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 2,
+        "t_start": 6,
+        "t_end": 7
+      },
+      {
+        "id": "r2_s8",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": "slice the black television from gripper to broken pieces",
+        "item": null,
+        "target": null,
+        "uses": 1,
+        "location": "bedroom",
+        "origin": "receive",
+        "answers": null,
+        "enables": null,
+        "serves": null,
+        "serves_text": "offered black television (dresser, image 2)",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 2,
+        "t_start": 7,
+        "t_end": 8
+      },
+      {
+        "id": "r2_s3",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "slice",
+          "object": "blue cellphone",
+          "from": "gripper",
+          "to": "broken pieces"
+        },
+        "item": null,
+        "target": null,
+        "uses": 1,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "break the cellphone",
+        "replies": [],
+        "status": "dropped",
+        "status_reason": "4.2 DROP: Duplicate step for slicing the blue cellphone, already covered by r2_s6.",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s4",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "slice",
+          "object": "black television",
+          "from": "gripper",
+          "to": "broken pieces"
+        },
+        "item": null,
+        "target": null,
+        "uses": 1,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "break the television",
+        "replies": [],
+        "status": "dropped",
+        "status_reason": "4.2 DROP: Duplicate step for slicing the black television, already covered by r2_s8.",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s1",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "blue cellphone",
+          "from": "bedside table",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "break the blue cellphone",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 1
+      },
+      {
+        "id": "r3_s2",
+        "agent": "R3",
+        "type": "PASS",
+        "action": "pass blue cellphone (bedside table, image 1) to R2",
+        "item": "blue cellphone (bedside table, image 1)",
+        "target": "R2",
+        "uses": null,
+        "location": "bedroom",
+        "origin": "offer",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "break the blue cellphone",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "medium",
+        "phase": 1,
+        "t_start": 1,
+        "t_end": 3
+      },
+      {
+        "id": "r3_s3",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "black television",
+          "from": "dresser",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 1,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "break the black television",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 3,
+        "t_end": 4
+      },
+      {
+        "id": "r3_s4",
+        "agent": "R3",
+        "type": "PASS",
+        "action": "pass black television (dresser, image 2) to R2",
+        "item": "black television (dresser, image 2)",
+        "target": "R2",
+        "uses": null,
+        "location": "bedroom",
+        "origin": "offer",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "break the black television",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "medium",
+        "phase": 2,
+        "t_start": 4,
+        "t_end": 6
+      },
+      {
+        "id": "r3_s5",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "push",
+          "object": "white coffee table",
+          "from": "center of room",
+          "to": "side of room"
+        },
+        "item": null,
+        "target": null,
+        "uses": 2,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 2,
+        "serves_text": "clear the white coffee table",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 2,
+        "t_start": 6,
+        "t_end": 7
+      }
+    ],
+    "order": {
+      "R1": [
+        "r1_s1"
+      ],
+      "R2": [
+        "r2_s1",
+        "r2_s5",
+        "r2_s6",
+        "r2_s2",
+        "r2_s7",
+        "r2_s8",
+        "r2_s3",
+        "r2_s4"
+      ],
+      "R3": [
+        "r3_s1",
+        "r3_s2",
+        "r3_s3",
+        "r3_s4",
+        "r3_s5"
+      ],
+      "R4": []
+    },
+    "edges": [
+      {
+        "src": "r2_s5",
+        "dst": "r2_s6",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r2_s6",
+        "dst": "r2_s7",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r2_s7",
+        "dst": "r2_s8",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r3_s1",
+        "dst": "r3_s2",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r3_s2",
+        "dst": "r3_s3",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r3_s3",
+        "dst": "r3_s4",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r3_s4",
+        "dst": "r3_s5",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r3_s2",
+        "dst": "r2_s5",
+        "kind": "TRANSFER",
+        "kappa": "mutual",
+        "status": "CONFIRMED",
+        "source": "stage3",
+        "existing": false,
+        "decided_by": "default"
+      },
+      {
+        "src": "r3_s4",
+        "dst": "r2_s7",
+        "kind": "TRANSFER",
+        "kappa": "mutual",
+        "status": "CONFIRMED",
+        "source": "stage3",
+        "existing": false,
+        "decided_by": "default"
+      },
+      {
+        "src": "r3_s1",
+        "dst": "r2_s1",
+        "kind": "HELP",
+        "kappa": "merged",
+        "status": "CONFIRMED",
+        "source": "graph",
+        "existing": false,
+        "decided_by": "MERGE"
+      },
+      {
+        "src": "r3_s3",
+        "dst": "r2_s2",
+        "kind": "HELP",
+        "kappa": "merged",
+        "status": "CONFIRMED",
+        "source": "graph",
+        "existing": false,
+        "decided_by": "MERGE"
+      }
+    ],
+    "edit_log": [
+      {
+        "k": 0,
+        "edit": {
+          "op": "MERGE",
+          "request": "r2_s1",
+          "into": "r3_s1",
+          "rationale": "R3 already plans to pick up the blue cellphone, satisfying R2's request."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "R3 already plans to pick up the blue cellphone, satisfying R2's request."
+      },
+      {
+        "k": 1,
+        "edit": {
+          "op": "MERGE",
+          "request": "r2_s2",
+          "into": "r3_s3",
+          "rationale": "R3 already plans to pick up the black television, satisfying R2's request."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "R3 already plans to pick up the black television, satisfying R2's request."
+      },
+      {
+        "k": 2,
+        "edit": {
+          "op": "DROP",
+          "node": "r2_s3",
+          "rationale": "Duplicate step for slicing the blue cellphone, already covered by r2_s6."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "Duplicate step for slicing the blue cellphone, already covered by r2_s6."
+      },
+      {
+        "k": 3,
+        "edit": {
+          "op": "DROP",
+          "node": "r2_s4",
+          "rationale": "Duplicate step for slicing the black television, already covered by r2_s8."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "Duplicate step for slicing the black television, already covered by r2_s8."
+      },
+      {
+        "k": 4,
+        "edit": {
+          "op": "DROP",
+          "node": "r1_s1",
+          "rationale": "Unnecessary step, as R3 does not need the red book."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "Unnecessary step, as R3 does not need the red book."
+      }
+    ],
+    "report": {
+      "goals": [
+        {
+          "robot": "R1",
+          "goal": 0,
+          "text": "provide any useful objects or tools for breaking tasks",
+          "status": "uncovered",
+          "cause": [
+            "No volunteer"
+          ],
+          "evidence": [],
+          "note": "",
+          "llm_status": "uncovered",
+          "llm_cause": "No volunteer"
+        },
+        {
+          "robot": "R2",
+          "goal": 0,
+          "text": "break the cellphone",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r2_s5",
+            "r2_s6"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R2",
+          "goal": 1,
+          "text": "break the television",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r2_s7",
+            "r2_s8"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R3",
+          "goal": 0,
+          "text": "break the blue cellphone",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r3_s1",
+            "r3_s2"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R3",
+          "goal": 1,
+          "text": "break the black television",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r3_s3",
+            "r3_s4"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R3",
+          "goal": 2,
+          "text": "clear the white coffee table",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r3_s5"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        }
+      ],
+      "unresolved_requests": [],
+      "rejected_edits": [],
+      "dropped": [
+        {
+          "node": "r2_s3",
+          "agent": "R2",
+          "type": "LOCAL",
+          "text": "slice the blue cellphone from gripper to broken pieces",
+          "rationale": "Duplicate step for slicing the blue cellphone, already covered by r2_s6."
+        },
+        {
+          "node": "r2_s4",
+          "agent": "R2",
+          "type": "LOCAL",
+          "text": "slice the black television from gripper to broken pieces",
+          "rationale": "Duplicate step for slicing the black television, already covered by r2_s8."
+        },
+        {
+          "node": "r1_s1",
+          "agent": "R1",
+          "type": "PASS",
+          "text": "pass red book (nightstand, image 1) to R3",
+          "rationale": "Unnecessary step, as R3 does not need the red book."
+        }
+      ],
+      "removed_by_closure": [
+        {
+          "node": "r2_s2",
+          "agent": "R2",
+          "type": "ASK_HELP",
+          "text": "bring the black television from dresser to R2",
+          "reason": "moot: r2_s4 will not happen"
+        },
+        {
+          "node": "r2_s1",
+          "agent": "R2",
+          "type": "ASK_HELP",
+          "text": "bring the blue cellphone from bedside table to R2",
+          "reason": "moot: r2_s3 will not happen"
+        }
+      ],
+      "invariant_violations": [],
+      "deadline": {
+        "makespan_min": 10,
+        "deadline_min": 20,
+        "exceeded": false
+      }
+    }
+  },
+  "report": {
+    "goals": [
+      {
+        "robot": "R1",
+        "goal": 0,
+        "text": "provide any useful objects or tools for breaking tasks",
+        "status": "uncovered",
+        "cause": [
+          "No volunteer"
+        ],
+        "evidence": [],
+        "note": "",
+        "llm_status": "uncovered",
+        "llm_cause": "No volunteer"
+      },
+      {
+        "robot": "R2",
+        "goal": 0,
+        "text": "break the cellphone",
+        "status": "covered",
+        "cause": [],
+        "evidence": [
+          "r2_s5",
+          "r2_s6"
+        ],
+        "note": "",
+        "llm_status": "covered",
+        "llm_cause": null
+      },
+      {
+        "robot": "R2",
+        "goal": 1,
+        "text": "break the television",
+        "status": "covered",
+        "cause": [],
+        "evidence": [
+          "r2_s7",
+          "r2_s8"
+        ],
+        "note": "",
+        "llm_status": "covered",
+        "llm_cause": null
+      },
+      {
+        "robot": "R3",
+        "goal": 0,
+        "text": "break the blue cellphone",
+        "status": "covered",
+        "cause": [],
+        "evidence": [
+          "r3_s1",
+          "r3_s2"
+        ],
+        "note": "",
+        "llm_status": "covered",
+        "llm_cause": null
+      },
+      {
+        "robot": "R3",
+        "goal": 1,
+        "text": "break the black television",
+        "status": "covered",
+        "cause": [],
+        "evidence": [
+          "r3_s3",
+          "r3_s4"
+        ],
+        "note": "",
+        "llm_status": "covered",
+        "llm_cause": null
+      },
+      {
+        "robot": "R3",
+        "goal": 2,
+        "text": "clear the white coffee table",
+        "status": "covered",
+        "cause": [],
+        "evidence": [
+          "r3_s5"
+        ],
+        "note": "",
+        "llm_status": "covered",
+        "llm_cause": null
+      }
+    ],
+    "unresolved_requests": [],
+    "rejected_edits": [],
+    "dropped": [
+      {
+        "node": "r2_s3",
+        "agent": "R2",
+        "type": "LOCAL",
+        "text": "slice the blue cellphone from gripper to broken pieces",
+        "rationale": "Duplicate step for slicing the blue cellphone, already covered by r2_s6."
+      },
+      {
+        "node": "r2_s4",
+        "agent": "R2",
+        "type": "LOCAL",
+        "text": "slice the black television from gripper to broken pieces",
+        "rationale": "Duplicate step for slicing the black television, already covered by r2_s8."
+      },
+      {
+        "node": "r1_s1",
+        "agent": "R1",
+        "type": "PASS",
+        "text": "pass red book (nightstand, image 1) to R3",
+        "rationale": "Unnecessary step, as R3 does not need the red book."
+      }
+    ],
+    "removed_by_closure": [
+      {
+        "node": "r2_s2",
+        "agent": "R2",
+        "type": "ASK_HELP",
+        "text": "bring the black television from dresser to R2",
+        "reason": "moot: r2_s4 will not happen"
+      },
+      {
+        "node": "r2_s1",
+        "agent": "R2",
+        "type": "ASK_HELP",
+        "text": "bring the blue cellphone from bedside table to R2",
+        "reason": "moot: r2_s3 will not happen"
+      }
+    ],
+    "invariant_violations": [],
+    "deadline": {
+      "makespan_min": 10,
+      "deadline_min": 20,
+      "exceeded": false
+    }
+  },
+  "metrics": {
+    "task_id": "mat_compound_6",
+    "n_steps_total": 14,
+    "n_steps_active": 9,
+    "n_requests": 4,
+    "n_requests_served": 2,
+    "n_requests_unresolved": 0,
+    "n_candidates_from_stage3": 2,
+    "n_collab_edges_final": 2,
+    "n_help_edges": 0,
+    "n_transfer_edges": 2,
+    "decided_by_select": 0,
+    "decided_by_merge": 0,
+    "decided_by_default": 2,
+    "kappa_final": {
+      "mutual": 2,
+      "provider-only": 0,
+      "merged": 0
+    },
+    "graph_edits_applied": 5,
+    "graph_edits_rejected": 0,
+    "n_dropped_by_graph": 3,
+    "n_removed_by_closure": 2,
+    "n_requests_moved_later": 0,
+    "n_invariant_violations": 0,
+    "goals_total": 6,
+    "goals_covered": 5,
+    "goals_partial": 0,
+    "goals_uncovered": 1,
+    "goal_causes": {
+      "No volunteer": 1,
+      "Capability gap": 0,
+      "Left unresolved": 0,
+      "Infeasible": 0,
+      "Deadline exceeded": 0
+    },
+    "plan_fix_rounds": {
+      "R1": 0,
+      "R2": 0,
+      "R3": 0,
+      "R4": 1
+    },
+    "n_steps_excluded_stage2": 1,
+    "makespan_min": 10,
+    "deadline": 20,
+    "deadline_ok": true,
+    "llm_calls": 14,
+    "prompt_tokens": 27234,
+    "completion_tokens": 2690,
+    "config": {
+      "use_edge_proposal": true,
+      "use_graph_llm": true
+    },
+    "wall_time_sec": 12.8
+  },
+  "config": {
+    "use_edge_proposal": true,
+    "use_graph_llm": true,
+    "max_graph_rounds": 2,
+    "deadline_min": 20
+  }
+}

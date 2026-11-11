@@ -1,0 +1,241 @@
+{
+  "task_n": "task5_abstract",
+  "variants": {
+    "full": {
+      "raw_result": {
+        "variant": "full",
+        "joint_plan_text": "### Joint Plan — task5_abstract  (about 20 min / deadline 20 min: OK)\n### Robots: R1:Gripper(kitchen), R2:Mobile_Heavy(living_room), R3:Mobile_Light(bathroom), R4:Mobile_Light(bedroom)\n\n[0-5 min]\n- R1 [LOCAL] pick_up the yellow pear from counter to gripper  (r1_s1)\n- R4 [LOCAL] pick_up the blue pillow from bed to gripper  (r4_s1)\n- R1 [LOCAL] slice the yellow pear from gripper to counter  (r1_s2)\n- R4 [PASS] pass blue pillow to R2 (offered) (brings it to the living_room)  (r4_s2)\n- R1 [LOCAL] pick_up the brown bread from counter to gripper  (r1_s3)\n- R1 [LOCAL] slice the brown bread from gripper to counter  (r1_s4)\n- R4 [LOCAL] pick_up the white blanket from bed to gripper  (r4_s3)\n- R1 [PASS] pass yellow pear to R2 (offered) (hands it over; R2 collects it)  (r1_s5)\n\n[5-10 min]\n- R4 [PASS] pass white blanket to R2 (offered) (brings it to the living_room)  (r4_s4)\n- R1 [PASS] pass brown bread to R2 (offered) (hands it over; R2 collects it)  (r1_s6)\n- R2 [RECEIVE] receive brown bread from R1 (collects it from the kitchen)  (r2_s7)\n- R2 [RECEIVE] receive yellow pear from R1 (collects it from the kitchen)  (r2_s6)\n\n[10-15 min]\n- R2 [LOCAL] turn_off the chandelier from ceiling to -  (r2_s1)\n- R2 [LOCAL] turn_on the floor lamp from - to -  (r2_s2)\n- R2 [LOCAL] push the sofa from center to optimal position  (r2_s3)\n- R2 [RECEIVE] receive white blanket from R4  (r2_s10)\n- R2 [LOCAL] put down the white blanket on the sofa  (r2_s11)\n\n[15-20 min]\n- R2 [RECEIVE] receive blue pillow from R4  (r2_s8)\n- R2 [LOCAL] put down the blue pillow on the sofa  (r2_s9)\n- R2 [RECEIVE] receive yellow pear from R1 (collects it from the kitchen)  (r2_s4)\n- R2 [LOCAL] put_down the yellow pear from gripper to coffee table  (r2_s5)\n\n### Provenance (collaboration edges)\n- r2_s10 (R2 RECEIVE) <- r4_s4 (R4 PASS)  κ=mutual, decided by default\n- r2_s4 (R2 RECEIVE) <- r1_s5 (R1 PASS)  κ=mutual, decided by default\n- r2_s6 (R2 RECEIVE) <- r1_s5 (R1 PASS)  κ=mutual, decided by default\n- r2_s7 (R2 RECEIVE) <- r1_s6 (R1 PASS)  κ=mutual, decided by default\n- r2_s8 (R2 RECEIVE) <- r4_s2 (R4 PASS)  κ=mutual, decided by default\n\n### Graph LLM edits (applied)\n- DROP node=r3_s1 — R3's request for the yellow pear is already satisfied by R2's existing plan.\n- DROP node=r3_s2 — R3's request for the brown bread is already satisfied by R2's existing plan.\n\n### Report: goal coverage\n- R1.g0 prepare a snack with bread and pear: covered [r1_s1, r1_s2, r1_s3, r1_s4]\n- R1.g1 pass the snack to a mobile robot: covered [r1_s5, r1_s6]\n- R2.g0 dim lighting in the living room: covered [r2_s1, r2_s2]\n- R2.g1 sofa arranged for comfortable seating: covered [r2_s3, r2_s4, r2_s5, r2_s6, r2_s7, r2_s8, r2_s9, r2_s10, r2_s11]\n- R2.g2 snacks available for the movie: covered [r2_s4, r2_s5, r2_s6, r2_s7]\n- R3.g0 assist in transferring snacks to the living room if needed: uncovered — Left unresolved (judged covered without evidence)\n- R4.g0 move blue pillow to the living room for comfort: covered [r4_s1, r4_s2]\n- R4.g1 move white blanket to the living room for warmth: covered [r4_s3, r4_s4]\n\n### Rejected edits\n- MERGE request=r3_s1 into=r2_s4 — 'r2_s4' must be a LOCAL / HELP / PASS step\n- MERGE request=r3_s2 into=r2_s7 — 'r2_s7' must be a LOCAL / HELP / PASS step\n\n### Dropped by the Graph LLM\n- R3 [RECEIVE] receive yellow pear (counter, image 1) (r3_s1) — R3's request for the yellow pear is already satisfied by R2's existing plan.\n- R3 [RECEIVE] receive brown bread (counter, image 2) (r3_s2) — R3's request for the brown bread is already satisfied by R2's existing plan.",
+        "metrics": {
+          "task_id": "task5_abstract",
+          "n_steps_total": 23,
+          "n_steps_active": 21,
+          "n_requests": 7,
+          "n_requests_served": 5,
+          "n_requests_unresolved": 0,
+          "n_candidates_from_stage3": 5,
+          "n_collab_edges_final": 5,
+          "n_help_edges": 0,
+          "n_transfer_edges": 5,
+          "decided_by_select": 0,
+          "decided_by_merge": 0,
+          "decided_by_default": 5,
+          "kappa_final": {
+            "mutual": 5,
+            "provider-only": 0,
+            "merged": 0
+          },
+          "graph_edits_applied": 2,
+          "graph_edits_rejected": 2,
+          "n_dropped_by_graph": 2,
+          "n_removed_by_closure": 0,
+          "n_requests_moved_later": 0,
+          "n_invariant_violations": 0,
+          "goals_total": 8,
+          "goals_covered": 7,
+          "goals_partial": 0,
+          "goals_uncovered": 1,
+          "goal_causes": {
+            "No volunteer": 0,
+            "Capability gap": 0,
+            "Left unresolved": 1,
+            "Infeasible": 0,
+            "Deadline exceeded": 0
+          },
+          "plan_fix_rounds": {
+            "R1": 1,
+            "R2": 1,
+            "R3": 1,
+            "R4": 0
+          },
+          "n_steps_excluded_stage2": 4,
+          "makespan_min": 20,
+          "deadline": 20,
+          "deadline_ok": true,
+          "llm_calls": 16,
+          "prompt_tokens": 36985,
+          "completion_tokens": 3750,
+          "variant": "full",
+          "wall_time_sec": 20.977845668792725
+        }
+      },
+      "llm_judge": null
+    },
+    "no_offer": {
+      "raw_result": {
+        "variant": "no_offer",
+        "joint_plan_text": "### Joint Plan — task5_abstract  (about 5 min / deadline 20 min: OK)\n### Robots: R1:Gripper(kitchen), R2:Mobile_Heavy(living_room), R3:Mobile_Light(bathroom), R4:Mobile_Light(bedroom)\n\n[0-5 min]\n- R1 [LOCAL] pick_up the fruit from counter to gripper  (r1_s1)\n- R2 [LOCAL] push the sofa from center to corner  (r2_s1)\n- R1 [LOCAL] slice the fruit from gripper to counter  (r1_s2)\n- R2 [LOCAL] turn_off the ceiling lamp from living room to living room  (r2_s2)\n- R1 [LOCAL] pick_up the mug from cabinet to gripper  (r1_s3)\n- R1 [LOCAL] pour the drink from bottle to mug  (r1_s4)\n\n### Provenance (collaboration edges)\n\n### Report: goal coverage\n- R1.g0 snacks prepared for the movie: covered [r1_s1, r1_s2, r1_s3, r1_s4]\n- R2.g0 seating adjusted for comfort: covered [r2_s1]\n- R2.g1 lighting dimmed for a cozy atmosphere: covered [r2_s2]\n- R2.g2 snacks available for the movie: covered [r1_s1, r1_s2, r1_s3, r1_s4]\n- R4.g0 ensure snacks are available for the movie: uncovered — No volunteer\n\n### Rejected edits\n- SELECT provider=r1_s1 request=r2_s2 — 'r1_s1' -> 'r2_s2' is not a YES candidate (SELECT only among agreed edges)",
+        "metrics": {
+          "task_id": "task5_abstract",
+          "n_steps_total": 6,
+          "n_steps_active": 6,
+          "n_requests": 0,
+          "n_requests_served": 0,
+          "n_requests_unresolved": 0,
+          "n_candidates_from_stage3": 0,
+          "n_collab_edges_final": 0,
+          "n_help_edges": 0,
+          "n_transfer_edges": 0,
+          "decided_by_select": 0,
+          "decided_by_merge": 0,
+          "decided_by_default": 0,
+          "kappa_final": {
+            "mutual": 0,
+            "provider-only": 0,
+            "merged": 0
+          },
+          "graph_edits_applied": 0,
+          "graph_edits_rejected": 1,
+          "n_dropped_by_graph": 0,
+          "n_removed_by_closure": 0,
+          "n_requests_moved_later": 0,
+          "n_invariant_violations": 0,
+          "goals_total": 5,
+          "goals_covered": 4,
+          "goals_partial": 0,
+          "goals_uncovered": 1,
+          "goal_causes": {
+            "No volunteer": 1,
+            "Capability gap": 0,
+            "Left unresolved": 0,
+            "Infeasible": 0,
+            "Deadline exceeded": 0
+          },
+          "plan_fix_rounds": {
+            "R1": 1,
+            "R2": 1,
+            "R3": 1,
+            "R4": 1
+          },
+          "n_steps_excluded_stage2": 10,
+          "makespan_min": 5,
+          "deadline": 20,
+          "deadline_ok": true,
+          "llm_calls": 13,
+          "prompt_tokens": 27346,
+          "completion_tokens": 2949,
+          "variant": "no_offer",
+          "wall_time_sec": 14.53907036781311
+        }
+      },
+      "llm_judge": null
+    },
+    "no_edge": {
+      "raw_result": {
+        "variant": "no_edge",
+        "joint_plan_text": "### Joint Plan — task5_abstract  (about 10 min / deadline 20 min: OK)\n### Robots: R1:Gripper(kitchen), R2:Mobile_Heavy(living_room), R3:Mobile_Light(bathroom), R4:Mobile_Light(bedroom)\n\n[0-5 min]\n- R1 [LOCAL] pick_up the yellow pear from counter to gripper  (r1_s1)\n- R2 [LOCAL] turn_off the ceiling light from ceiling to off  (r2_s1)\n- R4 [LOCAL] pick_up the blue blanket from bed to gripper  (r4_s1)\n- R1 [LOCAL] slice the yellow pear from gripper to counter  (r1_s2)\n- R2 [LOCAL] turn_on the floor lamp from left corner to on  (r2_s2)\n- R4 [LOCAL] pick_up the white pillow from bed to gripper  (r4_s2)\n- R1 [LOCAL] pick_up the green apple from counter to gripper  (r1_s3)\n- R2 [LOCAL] push the beige sofa from center to TV  (r2_s3)\n- R1 [LOCAL] slice the green apple from gripper to counter  (r1_s4)\n- R2 [LOCAL] push the white armchair from left to near sofa  (r2_s4)\n- R1 [LOCAL] pick_up the brown bread from counter to gripper  (r1_s5)\n\n[5-10 min]\n- R1 [LOCAL] slice the brown bread from gripper to counter  (r1_s6)\n\n### Provenance (collaboration edges)\n\n### Graph LLM edits (applied)\n- DROP node=r1_s9 — R2 does not need the brown bread, and there is no request for it.\n\n### Report: goal coverage\n- R1.g0 sliced fruit and bread ready as snacks: covered [r1_s1, r1_s2, r1_s3, r1_s4, r1_s5, r1_s6]\n- R2.g0 dim lighting for the movie: covered [r2_s1, r2_s2]\n- R2.g1 arrange seating for comfort: covered [r2_s3, r2_s4]\n- R2.g2 receive snacks for the movie: uncovered — Left unresolved (not judged by the Graph LLM)\n- R4.g0 blue blanket ready for comfort in the living room: partial — Infeasible [r4_s1, r4_s3] (evidence gone: r4_s3)\n- R4.g1 white pillow available for comfort in the living room: partial — Infeasible [r4_s2, r4_s4] (evidence gone: r4_s4)\n\n### Unresolved requests\n- R4 r4_s5 receive yellow pear (counter, image 1) — no candidate (nobody said YES)\n- R4 r4_s6 receive green apple (counter, image 1) — no candidate (nobody said YES)\n\n### Rejected edits\n- SELECT provider=r1_s7 request=r4_s5 — 'r1_s7' -> 'r4_s5' is not a YES candidate (SELECT only among agreed edges)\n- SELECT provider=r1_s8 request=r4_s6 — 'r1_s8' -> 'r4_s6' is not a YES candidate (SELECT only among agreed edges)\n\n### Dropped by the Graph LLM\n- R1 [PASS] pass brown bread (counter, image 2) to R2 (r1_s9) — R2 does not need the brown bread, and there is no request for it.\n\n### Removed by dependency closure\n- R4 [RECEIVE] receive yellow pear (counter, image 1) (r4_s5) — unresolved: no candidate (nobody said YES)\n- R4 [RECEIVE] receive green apple (counter, image 1) (r4_s6) — unresolved: no candidate (nobody said YES)\n- R1 [PASS] pass yellow pear (counter, image 1) to R2 (r1_s7) — offer not taken\n- R1 [PASS] pass green apple (counter, image 1) to R2 (r1_s8) — offer not taken\n- R4 [PASS] pass blue blanket (bed, image 1) to R2 (r4_s3) — offer not taken\n- R4 [PASS] pass white pillow (bed, image 1) to R2 (r4_s4) — offer not taken",
+        "metrics": {
+          "task_id": "task5_abstract",
+          "n_steps_total": 19,
+          "n_steps_active": 12,
+          "n_requests": 2,
+          "n_requests_served": 0,
+          "n_requests_unresolved": 2,
+          "n_candidates_from_stage3": 0,
+          "n_collab_edges_final": 0,
+          "n_help_edges": 0,
+          "n_transfer_edges": 0,
+          "decided_by_select": 0,
+          "decided_by_merge": 0,
+          "decided_by_default": 0,
+          "kappa_final": {
+            "mutual": 0,
+            "provider-only": 0,
+            "merged": 0
+          },
+          "graph_edits_applied": 1,
+          "graph_edits_rejected": 2,
+          "n_dropped_by_graph": 1,
+          "n_removed_by_closure": 6,
+          "n_requests_moved_later": 0,
+          "n_invariant_violations": 0,
+          "goals_total": 6,
+          "goals_covered": 3,
+          "goals_partial": 2,
+          "goals_uncovered": 1,
+          "goal_causes": {
+            "No volunteer": 0,
+            "Capability gap": 0,
+            "Left unresolved": 1,
+            "Infeasible": 2,
+            "Deadline exceeded": 0
+          },
+          "plan_fix_rounds": {
+            "R1": 0,
+            "R2": 1,
+            "R3": 1,
+            "R4": 1
+          },
+          "n_steps_excluded_stage2": 12,
+          "makespan_min": 10,
+          "deadline": 20,
+          "deadline_ok": true,
+          "llm_calls": 12,
+          "prompt_tokens": 29851,
+          "completion_tokens": 3524,
+          "variant": "no_edge",
+          "wall_time_sec": 18.068089962005615
+        }
+      },
+      "llm_judge": null
+    },
+    "no_graph": {
+      "raw_result": {
+        "variant": "no_graph",
+        "joint_plan_text": "### Joint Plan — task5_abstract  (about 25 min / deadline 20 min: EXCEEDED)\n### Robots: R1:Gripper(kitchen), R2:Mobile_Heavy(living_room), R3:Mobile_Light(bathroom), R4:Mobile_Light(bedroom)\n\n[0-5 min]\n- R1 [LOCAL] pick_up the yellow pear from counter to gripper  (r1_s1)\n- R4 [LOCAL] pick_up the blue pillow from bed to gripper  (r4_s1)\n- R1 [LOCAL] slice the yellow pear from gripper to counter  (r1_s2)\n- R4 [PASS] pass blue pillow to R2 (offered) (brings it to the living_room)  (r4_s2)\n- R1 [LOCAL] pick_up the brown bread from counter to gripper  (r1_s3)\n- R1 [LOCAL] slice the brown bread from gripper to counter  (r1_s4)\n- R4 [LOCAL] pick_up the red blanket from bed to gripper  (r4_s3)\n- R1 [PASS] pass yellow pear to R2 (offered) (hands it over; R2 collects it)  (r1_s5)\n\n[5-10 min]\n- R4 [PASS] pass red blanket to R2 (offered) (brings it to the living_room)  (r4_s4)\n- R1 [PASS] pass brown bread to R2 (offered) (hands it over; R2 collects it)  (r1_s6)\n- R2 [RECEIVE] receive red blanket from R4  (r2_s15)\n- R2 [RECEIVE] receive blue pillow from R4  (r2_s14)\n- R2 [LOCAL] turn_off the chandelier from ceiling to off  (r2_s1)\n- R2 [LOCAL] turn_on the floor lamp from near sofa to on  (r2_s2)\n\n[10-15 min]\n- R2 [LOCAL] push the beige sofa from center to facing TV  (r2_s3)\n- R2 [LOCAL] push the white chair from left side to near sofa  (r2_s4)\n- R2 [LOCAL] turn_on the TV from stand to on  (r2_s5)\n- R2 [RECEIVE] receive blue pillow from R4  (r2_s6)\n- R2 [LOCAL] put_down the blue pillow from gripper to sofa  (r2_s8)\n\n[15-20 min]\n- R2 [RECEIVE] receive red blanket from R4  (r2_s7)\n- R2 [LOCAL] put_down the red blanket from gripper to sofa  (r2_s9)\n- R2 [RECEIVE] receive brown bread from R1 (collects it from the kitchen)  (r2_s12)\n- R2 [LOCAL] put down the brown bread on the wooden dining table  (r2_s13)\n\n[20-25 min]\n- R2 [RECEIVE] receive yellow pear from R1 (collects it from the kitchen)  (r2_s10)\n- R2 [LOCAL] put down the yellow pear on the wooden dining table  (r2_s11)\n\n### Provenance (collaboration edges)\n- r2_s10 (R2 RECEIVE) <- r1_s5 (R1 PASS)  κ=mutual, decided by default\n- r2_s12 (R2 RECEIVE) <- r1_s6 (R1 PASS)  κ=mutual, decided by default\n- r2_s14 (R2 RECEIVE) <- r4_s2 (R4 PASS)  κ=mutual, decided by default\n- r2_s15 (R2 RECEIVE) <- r4_s4 (R4 PASS)  κ=mutual, decided by default\n- r2_s6 (R2 RECEIVE) <- r4_s2 (R4 PASS)  κ=mutual, decided by default\n- r2_s7 (R2 RECEIVE) <- r4_s4 (R4 PASS)  κ=mutual, decided by default\n\n### Report: goal coverage\n- R1.g0 prepare a snack using available ingredients: uncovered — Left unresolved (not judged by the Graph LLM)\n- R2.g0 dim lighting in the living room: uncovered — Left unresolved (not judged by the Graph LLM)\n- R2.g1 comfortable seating arrangement: uncovered — Left unresolved (not judged by the Graph LLM)\n- R2.g2 TV ready for watching: uncovered — Left unresolved (not judged by the Graph LLM)\n- R4.g0 pillow available in the living room for comfort: uncovered — Left unresolved (not judged by the Graph LLM)\n- R4.g1 blanket available in the living room for warmth: uncovered — Left unresolved (not judged by the Graph LLM)",
+        "metrics": {
+          "task_id": "task5_abstract",
+          "n_steps_total": 25,
+          "n_steps_active": 25,
+          "n_requests": 6,
+          "n_requests_served": 6,
+          "n_requests_unresolved": 0,
+          "n_candidates_from_stage3": 6,
+          "n_collab_edges_final": 6,
+          "n_help_edges": 0,
+          "n_transfer_edges": 6,
+          "decided_by_select": 0,
+          "decided_by_merge": 0,
+          "decided_by_default": 6,
+          "kappa_final": {
+            "mutual": 6,
+            "provider-only": 0,
+            "merged": 0
+          },
+          "graph_edits_applied": 0,
+          "graph_edits_rejected": 0,
+          "n_dropped_by_graph": 0,
+          "n_removed_by_closure": 0,
+          "n_requests_moved_later": 2,
+          "n_invariant_violations": 0,
+          "goals_total": 6,
+          "goals_covered": 0,
+          "goals_partial": 0,
+          "goals_uncovered": 6,
+          "goal_causes": {
+            "No volunteer": 0,
+            "Capability gap": 0,
+            "Left unresolved": 6,
+            "Infeasible": 0,
+            "Deadline exceeded": 0
+          },
+          "plan_fix_rounds": {
+            "R1": 0,
+            "R2": 0,
+            "R3": 1,
+            "R4": 0
+          },
+          "n_steps_excluded_stage2": 2,
+          "makespan_min": 25,
+          "deadline": 20,
+          "deadline_ok": false,
+          "llm_calls": 13,
+          "prompt_tokens": 25271,
+          "completion_tokens": 2717,
+          "variant": "no_graph",
+          "wall_time_sec": 16.02906632423401
+        }
+      },
+      "llm_judge": null
+    }
+  }
+}

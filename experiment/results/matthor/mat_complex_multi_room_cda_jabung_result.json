@@ -3,18 +3,20 @@
   "mode": "multi_room",
   "model": "gpt-4o",
   "task_text": "Microwave a plate containing an egg and a tomato",
-  "joint_plan_text": "### Joint Plan — mat_complex  (about 5 min / deadline 15 min: OK)\n### Robots: R1:Gripper(kitchen), R2:Mobile_Light(kitchen), R3:Mobile_Heavy(kitchen), R4:Gripper(kitchen)\n\n\n[0-5 min]\n- R1 [LOCAL] pick up the egg from the counter to the white plate  (r1_s1)\n- R1 [LOCAL] pick up the tomato from the counter to the white plate  (r1_s2)\n- R1 [LOCAL] pick up the white plate with egg and tomato from the counter to the microwave  (r1_s3)\n- R1 [LOCAL] toggle the microwave from off to on  (r1_s4)",
-  "joint_plan_full": "### Joint Plan — mat_complex  (about 5 min / deadline 15 min: OK)\n### Robots: R1:Gripper(kitchen), R2:Mobile_Light(kitchen), R3:Mobile_Heavy(kitchen), R4:Gripper(kitchen)\n\n\n[0-5 min]\n- R1 [LOCAL] pick_up the egg from counter to white plate  (r1_s1)\n- R1 [LOCAL] pick_up the tomato from counter to white plate  (r1_s2)\n- R1 [LOCAL] pick_up the white plate with egg and tomato from counter to microwave  (r1_s3)\n- R1 [LOCAL] toggle the microwave from off to on  (r1_s4)\n\n### Dropped\n- R2 [LOCAL] pick_up the egg from counter to white plate — graph: DUPLICATE_WORK across robots. Never a request or CONFIRMED provider. (by graph)\n- R3 [LOCAL] pick_up the egg from counter to white plate — graph: DUPLICATE_WORK across robots. Never a request or CONFIRMED provider. (by graph)\n- R4 [LOCAL] pick_up the brown egg from counter to white plate — graph: DUPLICATE_WORK across robots. Never a request or CONFIRMED provider. (by graph)\n- R2 [LOCAL] pick_up the tomato from counter to white plate — graph: DUPLICATE_WORK across robots. Never a request or CONFIRMED provider. (by graph)\n- R3 [LOCAL] pick_up the tomato from counter to white plate — graph: DUPLICATE_WORK across robots. Never a request or CONFIRMED provider. (by graph)\n- R4 [LOCAL] pick_up the red tomato from counter to white plate — graph: DUPLICATE_WORK across robots. Never a request or CONFIRMED provider. (by graph)\n- R2 [LOCAL] pick_up the white plate from counter to microwave — graph: DUPLICATE_WORK across robots. Never a request or CONFIRMED provider. (by graph)\n- R3 [LOCAL] pick_up the white plate from counter to microwave — graph: DUPLICATE_WORK across robots. Never a request or CONFIRMED provider. (by graph)\n- R2 [LOCAL] turn_on the microwave from off to on — graph: DUPLICATE_WORK across robots. Never a request or CONFIRMED provider. (by graph)\n- R3 [LOCAL] turn_on the microwave from off to on — graph: DUPLICATE_WORK across robots. Never a request or CONFIRMED provider. (by graph)\n- R3 [LOCAL] put_down the white plate from counter to microwave — graph: DUPLICATE_WORK across robots. Never a request or CONFIRMED provider. (by graph)\n\n### Not covered (from the robots' own checklists)\n- R3: white plate with egg and tomato: move to microwave",
+  "joint_plan_text": "```plaintext\n### Joint Plan — mat_complex  (about 10 min / deadline 15 min: OK)\n### Robots: R1:Gripper(kitchen), R2:Mobile_Light(kitchen), R3:Mobile_Heavy(kitchen), R4:Gripper(kitchen)\n\n[0-5 min]\n- R1 [LOCAL] pick up the egg from the counter to the gripper  (r1_s1)\n- R2 [LOCAL] pick up the white plate from the counter to the gripper  (r2_s5)\n- R1 [LOCAL] put down the egg from the gripper to the white plate  (r1_s2)\n- R1 [LOCAL] pick up the tomato from the counter to the gripper  (r1_s3)\n- R1 [LOCAL] put down the tomato from the gripper to the white plate  (r1_s4)\n- R1 [LOCAL] pick up the white plate from the counter to the gripper  (r1_s5)\n\n[5-10 min]\n- R1 [LOCAL] put down the white plate from the gripper to the microwave  (r1_s6)\n- R1 [LOCAL] turn on the microwave from off to on  (r1_s7)",
+  "joint_plan_full": "### Joint Plan — mat_complex  (about 10 min / deadline 15 min: OK)\n### Robots: R1:Gripper(kitchen), R2:Mobile_Light(kitchen), R3:Mobile_Heavy(kitchen), R4:Gripper(kitchen)\n\n[0-5 min]\n- R1 [LOCAL] pick_up the egg from counter to gripper  (r1_s1)\n- R2 [LOCAL] pick_up the white plate from counter to gripper  (r2_s5)\n- R1 [LOCAL] put_down the egg from gripper to white plate  (r1_s2)\n- R1 [LOCAL] pick_up the tomato from counter to gripper  (r1_s3)\n- R1 [LOCAL] put_down the tomato from gripper to white plate  (r1_s4)\n- R1 [LOCAL] pick_up the white plate from counter to gripper  (r1_s5)\n\n[5-10 min]\n- R1 [LOCAL] put_down the white plate from gripper to microwave  (r1_s6)\n- R1 [LOCAL] turn_on the microwave from off to on  (r1_s7)\n\n### Provenance (collaboration edges)\n\n### Graph LLM edits (applied)\n- DROP node=r2_s1 — R1 already picks up the egg.\n- DROP node=r2_s2 — R1 already places the egg on the plate.\n- DROP node=r2_s3 — R1 already picks up the tomato.\n- DROP node=r2_s4 — R1 already places the tomato on the plate.\n- DROP node=r3_s1 — R1 already picks up the egg.\n- DROP node=r3_s2 — R1 already places the egg on the plate.\n- DROP node=r3_s3 — R1 already picks up the tomato.\n- DROP node=r3_s4 — R1 already places the tomato on the plate.\n- DROP node=r3_s5 — R1 already picks up the plate.\n- DROP node=r3_s6 — R1 already places the plate in the microwave.\n- DROP node=r3_s7 — R1 already turns on the microwave.\n- DROP node=r4_s1 — R1 already picks up the egg.\n- DROP node=r4_s2 — R1 already places the egg on the plate.\n- DROP node=r4_s3 — R1 already picks up the tomato.\n- DROP node=r4_s4 — R1 already places the tomato on the plate.\n- DROP node=r4_s5 — R1 already picks up the plate.\n- DROP node=r4_s6 — R1 already places the plate in the microwave.\n\n### Report: goal coverage\n- R1.g0 microwave a plate containing an egg and a tomato: covered [r1_s1, r1_s2, r1_s3, r1_s4, r1_s5, r1_s6, r1_s7]\n- R2.g0 egg and tomato placed on the white plate: partial — Capability gap [r2_s5]\n- R2.g1 plate with egg and tomato ready for microwaving: uncovered — Capability gap\n- R3.g0 egg and tomato microwaved on a white plate: uncovered — Capability gap\n- R4.g0 egg and tomato placed on the white plate: uncovered — Infeasible [r4_s5] (evidence gone: r4_s5)\n- R4.g1 plate with egg and tomato placed in the microwave: uncovered — Capability gap\n\n### Dropped by the Graph LLM\n- R2 [LOCAL] pick_up the egg from counter to gripper (r2_s1) — R1 already picks up the egg.\n- R2 [LOCAL] put_down the egg from gripper to white plate (r2_s2) — R1 already places the egg on the plate.\n- R2 [LOCAL] pick_up the red tomato from counter to gripper (r2_s3) — R1 already picks up the tomato.\n- R2 [LOCAL] put_down the red tomato from gripper to white plate (r2_s4) — R1 already places the tomato on the plate.\n- R3 [LOCAL] pick_up the egg from counter to gripper (r3_s1) — R1 already picks up the egg.\n- R3 [LOCAL] put_down the egg from gripper to white plate (r3_s2) — R1 already places the egg on the plate.\n- R3 [LOCAL] pick_up the tomato from counter to gripper (r3_s3) — R1 already picks up the tomato.\n- R3 [LOCAL] put_down the tomato from gripper to white plate (r3_s4) — R1 already places the tomato on the plate.\n- R3 [LOCAL] pick_up the white plate from counter to gripper (r3_s5) — R1 already picks up the plate.\n- R3 [LOCAL] put_down the white plate from gripper to microwave (r3_s6) — R1 already places the plate in the microwave.\n- R3 [LOCAL] turn_on the microwave from off to on (r3_s7) — R1 already turns on the microwave.\n- R4 [LOCAL] pick_up the egg from counter to gripper (r4_s1) — R1 already picks up the egg.\n- R4 [LOCAL] put_down the egg from gripper to white plate (r4_s2) — R1 already places the egg on the plate.\n- R4 [LOCAL] pick_up the red tomato from counter to gripper (r4_s3) — R1 already picks up the tomato.\n- R4 [LOCAL] put_down the red tomato from gripper to white plate (r4_s4) — R1 already places the tomato on the plate.\n- R4 [LOCAL] pick_up the white plate from counter to gripper (r4_s5) — R1 already picks up the plate.\n- R4 [LOCAL] put_down the white plate from gripper to microwave (r4_s6) — R1 already places the plate in the microwave.",
   "offers": {
     "R1": {
       "agent": "R1",
-      "capability": "I am a fixed kitchen robot with a gripper for manipulating light objects.",
+      "capability": "I am fixed in place and can manipulate objects within my reach using a gripper.",
       "can_do": [
-        "PickupLightObject: pick up small items like an egg or tomato",
-        "SliceObject: cut items like a tomato",
-        "PourObject: pour liquids",
-        "PassReceiveObject: pass items to another robot",
-        "ToggleObject: turn on/off lights, TV, appliances"
+        "PickupLightObject: lift small items like plates, eggs, and tomatoes",
+        "SliceObject: cut food items if necessary",
+        "PassReceiveObject: hand over items to mobile robots"
+      ],
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift heavy items",
+        "PushFurniture: cannot move furniture"
       ],
       "has_items": [
         "white plate (counter, image 1)",
@@ -24,72 +26,52 @@
       ],
       "need_from_others": [],
       "intends": [
-        "PickupLightObject: pick up egg from counter",
-        "PickupLightObject: pick up tomato from counter",
-        "PickupLightObject: place egg on white plate",
-        "PickupLightObject: place tomato on white plate",
-        "ToggleObject: open microwave",
-        "PickupLightObject: place white plate with egg and tomato in microwave",
-        "ToggleObject: close microwave",
-        "ToggleObject: start microwave"
+        "microwave a plate containing an egg and a tomato"
       ],
-      "suggests": [],
-      "obs_scope": "I can observe and interact with objects in the kitchen, specifically on the counter where I am fixed.",
-      "cannot_do": [
-        "PickupHeavyObject: cannot lift heavy items due to gripper limitations",
-        "PushFurniture: cannot move furniture as I am fixed in place"
-      ],
-      "reasoning": "a) GOAL STATE: The egg and tomato are microwaved on a plate. b) PRIORITY: Ensure the egg and tomato are placed on the plate and microwaved within the deadline. c) MY ROOM: Place the egg and tomato on the white plate, then microwave the plate. d) FOR OTHERS: None of my has_items serve another room's needs."
+      "obs_scope": "I can observe the kitchen only.",
+      "reasoning": "a) The task requires the egg and tomato to be microwaved on a plate. b) The kitchen is where the food preparation and microwaving will occur. c) I can place the egg and tomato on the white plate, and then put the plate into the microwave. d) Placing the egg and tomato on the plate and microwaving them is the highest priority."
     },
     "R2": {
       "agent": "R2",
-      "capability": "I am a mobile robot capable of handling light objects in the kitchen.",
+      "capability": "I am mobile and can carry light objects up to 5 kg with one arm.",
       "can_do": [
-        "PickupLightObject: lift small items like plates, eggs, and tomatoes",
-        "PassReceiveObject: exchange items with other robots",
-        "ToggleObject: turn on/off lights, TV, appliances"
+        "PickupLightObject: lift mugs, fruit, small items",
+        "PassReceiveObject: exchange objects with others"
+      ],
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift furniture",
+        "SliceObject: no cutting tool",
+        "PourObject: no pouring capability",
+        "ToggleObject: cannot operate appliances"
       ],
       "has_items": [
         "white plate (counter, image 1)",
         "egg (counter, image 1)",
-        "tomato (counter, image 1)",
+        "red tomato (counter, image 1)",
         "microwave (counter, image 2)"
       ],
-      "need_from_others": [],
+      "need_from_others": [
+        "someone who can operate the microwave"
+      ],
       "intends": [
-        "PickupLightObject: lift egg from counter",
-        "PickupLightObject: lift tomato from counter",
-        "PickupLightObject: lift white plate from counter",
-        "PlaceObject: put egg on white plate",
-        "PlaceObject: put tomato on white plate",
-        "OpenObject: open microwave door",
-        "PlaceObject: put white plate with egg and tomato in microwave",
-        "ToggleObject: turn on microwave",
-        "Wait: allow microwave to run for set time",
-        "ToggleObject: turn off microwave",
-        "OpenObject: open microwave door",
-        "PickupLightObject: remove white plate with egg and tomato from microwave",
-        "PlaceObject: put white plate back on counter"
+        "egg and tomato placed on the white plate",
+        "plate with egg and tomato ready for microwaving"
       ],
-      "suggests": [],
-      "obs_scope": "I can observe and interact with objects in the kitchen, specifically those on the counter.",
-      "cannot_do": [
-        "PickupHeavyObject: cannot lift heavy items due to weight limit",
-        "PushFurniture: cannot move furniture",
-        "SliceObject: cannot cut or slice items",
-        "PourObject: cannot pour liquids"
-      ],
-      "reasoning": "a) GOAL STATE: The egg and tomato are microwaved on the white plate. b) PRIORITY: Ensuring the egg and tomato are microwaved within the deadline. c) MY ROOM: The egg and tomato will be placed on the white plate and microwaved. d) FOR OTHERS: None of my has_items serve another room's needs."
+      "obs_scope": "I can observe the kitchen only.",
+      "reasoning": "a) The task requires that an egg and a tomato are microwaved on a plate. b) The kitchen provides the necessary appliances and ingredients to accomplish this task. c) I can place the egg and tomato on a plate and put them in the microwave. d) Placing the items on the plate and microwaving them is the highest priority to meet the deadline."
     },
     "R3": {
       "agent": "R3",
-      "capability": "I am a mobile robot capable of moving objects and operating in the kitchen.",
+      "capability": "I am mobile and can carry heavy objects up to 20 kg.",
       "can_do": [
-        "PickupLightObject: lift small items like the egg and tomato",
-        "PickupHeavyObject: lift heavier items like the plate",
-        "PushFurniture: move furniture if needed",
-        "PassReceiveObject: exchange objects with others",
-        "ToggleObject: turn on/off lights, TV, appliances"
+        "PickupLightObject: lift small items like eggs, tomatoes",
+        "PickupHeavyObject: lift heavier items and furniture",
+        "PushFurniture: move furniture as needed",
+        "PassReceiveObject: exchange items with others"
+      ],
+      "cannot_do": [
+        "SliceObject: no cutting tool",
+        "PourObject: cannot pour liquids"
       ],
       "has_items": [
         "white plate (counter, image 1)",
@@ -99,51 +81,36 @@
       ],
       "need_from_others": [],
       "intends": [
-        "PickupLightObject: place egg on white plate",
-        "PickupLightObject: place tomato on white plate",
-        "PickupHeavyObject: move white plate with egg and tomato to microwave",
-        "ToggleObject: turn on microwave to heat the plate"
+        "egg and tomato microwaved on a white plate"
       ],
-      "suggests": [],
-      "obs_scope": "I can observe and interact with objects in the kitchen, including the counter and microwave.",
-      "cannot_do": [
-        "SliceObject: I cannot cut or slice objects",
-        "PourObject: I cannot pour liquids or substances"
-      ],
-      "reasoning": "a) GOAL STATE: The egg and tomato should be microwaved on a plate. b) PRIORITY: Ensuring the egg and tomato are placed on the plate and microwaved within the deadline. c) MY ROOM: Place the egg and tomato on the white plate and microwave them. d) FOR OTHERS: None of my has_items serve another room's needs."
+      "obs_scope": "I can observe the kitchen only.",
+      "reasoning": "a) The task requires microwaving a plate containing an egg and a tomato. b) The kitchen provides the necessary tools and ingredients for microwaving. c) I can place the egg and tomato on the plate and operate the microwave. d) Prioritizing placing the items on the plate and microwaving them within the deadline."
     },
     "R4": {
       "agent": "R4",
-      "capability": "I am a fixed kitchen robot with a gripper for handling light objects.",
+      "capability": "I am fixed in place and can manipulate light objects using a gripper.",
       "can_do": [
-        "PickupLightObject: lift small items like eggs and tomatoes",
+        "PickupLightObject: lift plates, small food items",
         "SliceObject: cut food items",
-        "PourObject: pour liquids",
-        "PassReceiveObject: hand over items to mobile robots",
-        "ToggleObject: turn on/off lights, TV, appliances"
+        "PassReceiveObject: exchange objects within the room"
+      ],
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift or move heavy items",
+        "PushFurniture: cannot move furniture"
       ],
       "has_items": [
         "white plate (counter, image 1)",
-        "brown egg (counter, image 1)",
+        "egg (counter, image 1)",
         "red tomato (counter, image 1)",
         "microwave (counter, image 2)"
       ],
       "need_from_others": [],
       "intends": [
-        "PickupLightObject: pick up brown egg from counter",
-        "PickupLightObject: pick up red tomato from counter",
-        "PickupLightObject: place brown egg on white plate",
-        "PickupLightObject: place red tomato on white plate",
-        "PickupLightObject: place white plate in microwave",
-        "ToggleObject: turn on microwave"
+        "egg and tomato placed on the white plate",
+        "plate with egg and tomato placed in the microwave"
       ],
-      "suggests": [],
-      "obs_scope": "I can observe the kitchen counter and the items on it, but cannot see beyond my fixed position.",
-      "cannot_do": [
-        "PickupHeavyObject: cannot lift heavy items due to gripper limitations",
-        "PushFurniture: cannot move furniture as I am fixed in place"
-      ],
-      "reasoning": "a) The egg and tomato must be microwaved on a plate. b) Ensuring the egg and tomato are microwaved properly is the priority. c) I will place the egg and tomato on the white plate, then microwave them. d) None of my items serve another room's needs."
+      "obs_scope": "I can observe the kitchen only.",
+      "reasoning": "a) The task requires heating an egg and a tomato on a plate in the microwave. b) The kitchen is where the microwave and ingredients are located. c) I can place the egg and tomato on the plate and put it into the microwave. d) Assembling the plate and microwaving are the highest priorities, given the deadline."
     }
   },
   "local_plans": {
@@ -156,7 +123,7 @@
           "verb": "pick_up",
           "object": "egg",
           "from": "counter",
-          "to": "white plate"
+          "to": "gripper"
         },
         "item": null,
         "target": null,
@@ -165,10 +132,11 @@
         "origin": "local",
         "answers": null,
         "enables": null,
-        "serves": "Microwave a plate containing an egg and a tomato",
-        "prepared_by": null,
+        "serves": 0,
+        "serves_text": "microwave a plate containing an egg and a tomato",
+        "replies": [],
         "status": "active",
-        "violations": [],
+        "status_reason": "",
         "size": null,
         "phase": null,
         "t_start": null,
@@ -179,9 +147,9 @@
         "agent": "R1",
         "type": "LOCAL",
         "action": {
-          "verb": "pick_up",
-          "object": "tomato",
-          "from": "counter",
+          "verb": "put_down",
+          "object": "egg",
+          "from": "gripper",
           "to": "white plate"
         },
         "item": null,
@@ -191,10 +159,11 @@
         "origin": "local",
         "answers": null,
         "enables": null,
-        "serves": "Microwave a plate containing an egg and a tomato",
-        "prepared_by": null,
+        "serves": 0,
+        "serves_text": "microwave a plate containing an egg and a tomato",
+        "replies": [],
         "status": "active",
-        "violations": [],
+        "status_reason": "",
         "size": null,
         "phase": null,
         "t_start": null,
@@ -206,9 +175,9 @@
         "type": "LOCAL",
         "action": {
           "verb": "pick_up",
-          "object": "white plate with egg and tomato",
+          "object": "tomato",
           "from": "counter",
-          "to": "microwave"
+          "to": "gripper"
         },
         "item": null,
         "target": null,
@@ -217,10 +186,11 @@
         "origin": "local",
         "answers": null,
         "enables": null,
-        "serves": "Microwave a plate containing an egg and a tomato",
-        "prepared_by": null,
+        "serves": 0,
+        "serves_text": "microwave a plate containing an egg and a tomato",
+        "replies": [],
         "status": "active",
-        "violations": [],
+        "status_reason": "",
         "size": null,
         "phase": null,
         "t_start": null,
@@ -231,7 +201,88 @@
         "agent": "R1",
         "type": "LOCAL",
         "action": {
-          "verb": "toggle",
+          "verb": "put_down",
+          "object": "tomato",
+          "from": "gripper",
+          "to": "white plate"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "microwave a plate containing an egg and a tomato",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r1_s5",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "white plate",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "microwave a plate containing an egg and a tomato",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r1_s6",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "white plate",
+          "from": "gripper",
+          "to": "microwave"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "microwave a plate containing an egg and a tomato",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r1_s7",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "turn_on",
           "object": "microwave",
           "from": "off",
           "to": "on"
@@ -243,10 +294,11 @@
         "origin": "local",
         "answers": null,
         "enables": null,
-        "serves": "Microwave a plate containing an egg and a tomato",
-        "prepared_by": null,
+        "serves": 0,
+        "serves_text": "microwave a plate containing an egg and a tomato",
+        "replies": [],
         "status": "active",
-        "violations": [],
+        "status_reason": "",
         "size": null,
         "phase": null,
         "t_start": null,
@@ -262,7 +314,7 @@
           "verb": "pick_up",
           "object": "egg",
           "from": "counter",
-          "to": "white plate"
+          "to": "gripper"
         },
         "item": null,
         "target": null,
@@ -271,10 +323,11 @@
         "origin": "local",
         "answers": null,
         "enables": null,
-        "serves": "Microwave the egg and tomato on the white plate",
-        "prepared_by": null,
+        "serves": 0,
+        "serves_text": "egg and tomato placed on the white plate",
+        "replies": [],
         "status": "active",
-        "violations": [],
+        "status_reason": "",
         "size": null,
         "phase": null,
         "t_start": null,
@@ -285,9 +338,9 @@
         "agent": "R2",
         "type": "LOCAL",
         "action": {
-          "verb": "pick_up",
-          "object": "tomato",
-          "from": "counter",
+          "verb": "put_down",
+          "object": "egg",
+          "from": "gripper",
           "to": "white plate"
         },
         "item": null,
@@ -297,10 +350,11 @@
         "origin": "local",
         "answers": null,
         "enables": null,
-        "serves": "Microwave the egg and tomato on the white plate",
-        "prepared_by": null,
+        "serves": 0,
+        "serves_text": "egg and tomato placed on the white plate",
+        "replies": [],
         "status": "active",
-        "violations": [],
+        "status_reason": "",
         "size": null,
         "phase": null,
         "t_start": null,
@@ -312,9 +366,9 @@
         "type": "LOCAL",
         "action": {
           "verb": "pick_up",
-          "object": "white plate",
+          "object": "red tomato",
           "from": "counter",
-          "to": "microwave"
+          "to": "gripper"
         },
         "item": null,
         "target": null,
@@ -323,10 +377,11 @@
         "origin": "local",
         "answers": null,
         "enables": null,
-        "serves": "Microwave the egg and tomato on the white plate",
-        "prepared_by": null,
+        "serves": 0,
+        "serves_text": "egg and tomato placed on the white plate",
+        "replies": [],
         "status": "active",
-        "violations": [],
+        "status_reason": "",
         "size": null,
         "phase": null,
         "t_start": null,
@@ -337,10 +392,10 @@
         "agent": "R2",
         "type": "LOCAL",
         "action": {
-          "verb": "turn_on",
-          "object": "microwave",
-          "from": "off",
-          "to": "on"
+          "verb": "put_down",
+          "object": "red tomato",
+          "from": "gripper",
+          "to": "white plate"
         },
         "item": null,
         "target": null,
@@ -349,10 +404,38 @@
         "origin": "local",
         "answers": null,
         "enables": null,
-        "serves": "Microwave the egg and tomato on the white plate",
-        "prepared_by": null,
+        "serves": 0,
+        "serves_text": "egg and tomato placed on the white plate",
+        "replies": [],
         "status": "active",
-        "violations": [],
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s5",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "white plate",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "plate with egg and tomato ready for microwaving",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
         "size": null,
         "phase": null,
         "t_start": null,
@@ -368,7 +451,7 @@
           "verb": "pick_up",
           "object": "egg",
           "from": "counter",
-          "to": "white plate"
+          "to": "gripper"
         },
         "item": null,
         "target": null,
@@ -377,10 +460,11 @@
         "origin": "local",
         "answers": null,
         "enables": null,
-        "serves": "Microwave a plate containing an egg and a tomato",
-        "prepared_by": null,
+        "serves": 0,
+        "serves_text": "egg and tomato microwaved on a white plate",
+        "replies": [],
         "status": "active",
-        "violations": [],
+        "status_reason": "",
         "size": null,
         "phase": null,
         "t_start": null,
@@ -391,9 +475,9 @@
         "agent": "R3",
         "type": "LOCAL",
         "action": {
-          "verb": "pick_up",
-          "object": "tomato",
-          "from": "counter",
+          "verb": "put_down",
+          "object": "egg",
+          "from": "gripper",
           "to": "white plate"
         },
         "item": null,
@@ -403,10 +487,11 @@
         "origin": "local",
         "answers": null,
         "enables": null,
-        "serves": "Microwave a plate containing an egg and a tomato",
-        "prepared_by": null,
+        "serves": 0,
+        "serves_text": "egg and tomato microwaved on a white plate",
+        "replies": [],
         "status": "active",
-        "violations": [],
+        "status_reason": "",
         "size": null,
         "phase": null,
         "t_start": null,
@@ -418,9 +503,9 @@
         "type": "LOCAL",
         "action": {
           "verb": "pick_up",
-          "object": "white plate",
+          "object": "tomato",
           "from": "counter",
-          "to": "microwave"
+          "to": "gripper"
         },
         "item": null,
         "target": null,
@@ -429,10 +514,11 @@
         "origin": "local",
         "answers": null,
         "enables": null,
-        "serves": "Microwave a plate containing an egg and a tomato",
-        "prepared_by": null,
+        "serves": 0,
+        "serves_text": "egg and tomato microwaved on a white plate",
+        "replies": [],
         "status": "active",
-        "violations": [],
+        "status_reason": "",
         "size": null,
         "phase": null,
         "t_start": null,
@@ -444,9 +530,9 @@
         "type": "LOCAL",
         "action": {
           "verb": "put_down",
-          "object": "white plate",
-          "from": "counter",
-          "to": "microwave"
+          "object": "tomato",
+          "from": "gripper",
+          "to": "white plate"
         },
         "item": null,
         "target": null,
@@ -455,10 +541,11 @@
         "origin": "local",
         "answers": null,
         "enables": null,
-        "serves": "Microwave a plate containing an egg and a tomato",
-        "prepared_by": null,
+        "serves": 0,
+        "serves_text": "egg and tomato microwaved on a white plate",
+        "replies": [],
         "status": "active",
-        "violations": [],
+        "status_reason": "",
         "size": null,
         "phase": null,
         "t_start": null,
@@ -469,6 +556,60 @@
         "agent": "R3",
         "type": "LOCAL",
         "action": {
+          "verb": "pick_up",
+          "object": "white plate",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 1,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "egg and tomato microwaved on a white plate",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s6",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "white plate",
+          "from": "gripper",
+          "to": "microwave"
+        },
+        "item": null,
+        "target": null,
+        "uses": 1,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "egg and tomato microwaved on a white plate",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s7",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
           "verb": "turn_on",
           "object": "microwave",
           "from": "off",
@@ -476,15 +617,16 @@
         },
         "item": null,
         "target": null,
-        "uses": 0,
+        "uses": 1,
         "location": "kitchen",
         "origin": "local",
         "answers": null,
         "enables": null,
-        "serves": "Microwave a plate containing an egg and a tomato",
-        "prepared_by": null,
+        "serves": 0,
+        "serves_text": "egg and tomato microwaved on a white plate",
+        "replies": [],
         "status": "active",
-        "violations": [],
+        "status_reason": "",
         "size": null,
         "phase": null,
         "t_start": null,
@@ -498,9 +640,9 @@
         "type": "LOCAL",
         "action": {
           "verb": "pick_up",
-          "object": "brown egg",
+          "object": "egg",
           "from": "counter",
-          "to": "white plate"
+          "to": "gripper"
         },
         "item": null,
         "target": null,
@@ -509,10 +651,11 @@
         "origin": "local",
         "answers": null,
         "enables": null,
-        "serves": "Place egg and tomato on the plate",
-        "prepared_by": null,
+        "serves": 0,
+        "serves_text": "egg and tomato placed on the white plate",
+        "replies": [],
         "status": "active",
-        "violations": [],
+        "status_reason": "",
         "size": null,
         "phase": null,
         "t_start": null,
@@ -523,9 +666,9 @@
         "agent": "R4",
         "type": "LOCAL",
         "action": {
-          "verb": "pick_up",
-          "object": "red tomato",
-          "from": "counter",
+          "verb": "put_down",
+          "object": "egg",
+          "from": "gripper",
           "to": "white plate"
         },
         "item": null,
@@ -535,10 +678,119 @@
         "origin": "local",
         "answers": null,
         "enables": null,
-        "serves": "Place egg and tomato on the plate",
-        "prepared_by": null,
+        "serves": 0,
+        "serves_text": "egg and tomato placed on the white plate",
+        "replies": [],
         "status": "active",
-        "violations": [],
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s3",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "red tomato",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "egg and tomato placed on the white plate",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s4",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "red tomato",
+          "from": "gripper",
+          "to": "white plate"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "egg and tomato placed on the white plate",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s5",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "white plate",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "plate with egg and tomato placed in the microwave",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s6",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "white plate",
+          "from": "gripper",
+          "to": "microwave"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "plate with egg and tomato placed in the microwave",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
         "size": null,
         "phase": null,
         "t_start": null,
@@ -546,7 +798,7 @@
       }
     ]
   },
-  "judgments": [],
+  "answers": [],
   "graph": {
     "nodes": [
       {
@@ -557,7 +809,7 @@
           "verb": "pick_up",
           "object": "egg",
           "from": "counter",
-          "to": "white plate"
+          "to": "gripper"
         },
         "item": null,
         "target": null,
@@ -566,10 +818,11 @@
         "origin": "local",
         "answers": null,
         "enables": null,
-        "serves": "Microwave a plate containing an egg and a tomato",
-        "prepared_by": null,
+        "serves": 0,
+        "serves_text": "microwave a plate containing an egg and a tomato",
+        "replies": [],
         "status": "active",
-        "violations": [],
+        "status_reason": "",
         "size": "short",
         "phase": 1,
         "t_start": 0,
@@ -580,9 +833,9 @@
         "agent": "R1",
         "type": "LOCAL",
         "action": {
-          "verb": "pick_up",
-          "object": "tomato",
-          "from": "counter",
+          "verb": "put_down",
+          "object": "egg",
+          "from": "gripper",
           "to": "white plate"
         },
         "item": null,
@@ -592,10 +845,11 @@
         "origin": "local",
         "answers": null,
         "enables": null,
-        "serves": "Microwave a plate containing an egg and a tomato",
-        "prepared_by": null,
+        "serves": 0,
+        "serves_text": "microwave a plate containing an egg and a tomato",
+        "replies": [],
         "status": "active",
-        "violations": [],
+        "status_reason": "",
         "size": "short",
         "phase": 1,
         "t_start": 1,
@@ -607,9 +861,9 @@
         "type": "LOCAL",
         "action": {
           "verb": "pick_up",
-          "object": "white plate with egg and tomato",
+          "object": "tomato",
           "from": "counter",
-          "to": "microwave"
+          "to": "gripper"
         },
         "item": null,
         "target": null,
@@ -618,11 +872,12 @@
         "origin": "local",
         "answers": null,
         "enables": null,
-        "serves": "Microwave a plate containing an egg and a tomato",
-        "prepared_by": null,
+        "serves": 0,
+        "serves_text": "microwave a plate containing an egg and a tomato",
+        "replies": [],
         "status": "active",
-        "violations": [],
-        "size": "medium",
+        "status_reason": "",
+        "size": "short",
         "phase": 1,
         "t_start": 2,
         "t_end": 3
@@ -632,7 +887,88 @@
         "agent": "R1",
         "type": "LOCAL",
         "action": {
-          "verb": "toggle",
+          "verb": "put_down",
+          "object": "tomato",
+          "from": "gripper",
+          "to": "white plate"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "microwave a plate containing an egg and a tomato",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 3,
+        "t_end": 4
+      },
+      {
+        "id": "r1_s5",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "white plate",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "microwave a plate containing an egg and a tomato",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 4,
+        "t_end": 5
+      },
+      {
+        "id": "r1_s6",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "white plate",
+          "from": "gripper",
+          "to": "microwave"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "microwave a plate containing an egg and a tomato",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 2,
+        "t_start": 5,
+        "t_end": 6
+      },
+      {
+        "id": "r1_s7",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "turn_on",
           "object": "microwave",
           "from": "off",
           "to": "on"
@@ -644,14 +980,15 @@
         "origin": "local",
         "answers": null,
         "enables": null,
-        "serves": "Microwave a plate containing an egg and a tomato",
-        "prepared_by": null,
+        "serves": 0,
+        "serves_text": "microwave a plate containing an egg and a tomato",
+        "replies": [],
         "status": "active",
-        "violations": [],
+        "status_reason": "",
         "size": "short",
-        "phase": 1,
-        "t_start": 3,
-        "t_end": 4
+        "phase": 2,
+        "t_start": 6,
+        "t_end": 7
       },
       {
         "id": "r2_s1",
@@ -661,7 +998,7 @@
           "verb": "pick_up",
           "object": "egg",
           "from": "counter",
-          "to": "white plate"
+          "to": "gripper"
         },
         "item": null,
         "target": null,
@@ -670,10 +1007,11 @@
         "origin": "local",
         "answers": null,
         "enables": null,
-        "serves": "Microwave the egg and tomato on the white plate",
-        "prepared_by": null,
+        "serves": 0,
+        "serves_text": "egg and tomato placed on the white plate",
+        "replies": [],
         "status": "dropped",
-        "violations": [],
+        "status_reason": "4.2 DROP: R1 already picks up the egg.",
         "size": null,
         "phase": null,
         "t_start": null,
@@ -684,9 +1022,9 @@
         "agent": "R2",
         "type": "LOCAL",
         "action": {
-          "verb": "pick_up",
-          "object": "tomato",
-          "from": "counter",
+          "verb": "put_down",
+          "object": "egg",
+          "from": "gripper",
           "to": "white plate"
         },
         "item": null,
@@ -696,10 +1034,11 @@
         "origin": "local",
         "answers": null,
         "enables": null,
-        "serves": "Microwave the egg and tomato on the white plate",
-        "prepared_by": null,
+        "serves": 0,
+        "serves_text": "egg and tomato placed on the white plate",
+        "replies": [],
         "status": "dropped",
-        "violations": [],
+        "status_reason": "4.2 DROP: R1 already places the egg on the plate.",
         "size": null,
         "phase": null,
         "t_start": null,
@@ -711,9 +1050,9 @@
         "type": "LOCAL",
         "action": {
           "verb": "pick_up",
-          "object": "white plate",
+          "object": "red tomato",
           "from": "counter",
-          "to": "microwave"
+          "to": "gripper"
         },
         "item": null,
         "target": null,
@@ -722,10 +1061,11 @@
         "origin": "local",
         "answers": null,
         "enables": null,
-        "serves": "Microwave the egg and tomato on the white plate",
-        "prepared_by": null,
+        "serves": 0,
+        "serves_text": "egg and tomato placed on the white plate",
+        "replies": [],
         "status": "dropped",
-        "violations": [],
+        "status_reason": "4.2 DROP: R1 already picks up the tomato.",
         "size": null,
         "phase": null,
         "t_start": null,
@@ -736,35 +1076,9 @@
         "agent": "R2",
         "type": "LOCAL",
         "action": {
-          "verb": "turn_on",
-          "object": "microwave",
-          "from": "off",
-          "to": "on"
-        },
-        "item": null,
-        "target": null,
-        "uses": 0,
-        "location": "kitchen",
-        "origin": "local",
-        "answers": null,
-        "enables": null,
-        "serves": "Microwave the egg and tomato on the white plate",
-        "prepared_by": null,
-        "status": "dropped",
-        "violations": [],
-        "size": null,
-        "phase": null,
-        "t_start": null,
-        "t_end": null
-      },
-      {
-        "id": "r3_s1",
-        "agent": "R3",
-        "type": "LOCAL",
-        "action": {
-          "verb": "pick_up",
-          "object": "egg",
-          "from": "counter",
+          "verb": "put_down",
+          "object": "red tomato",
+          "from": "gripper",
           "to": "white plate"
         },
         "item": null,
@@ -774,10 +1088,65 @@
         "origin": "local",
         "answers": null,
         "enables": null,
-        "serves": "Microwave a plate containing an egg and a tomato",
-        "prepared_by": null,
+        "serves": 0,
+        "serves_text": "egg and tomato placed on the white plate",
+        "replies": [],
         "status": "dropped",
-        "violations": [],
+        "status_reason": "4.2 DROP: R1 already places the tomato on the plate.",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s5",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "white plate",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "plate with egg and tomato ready for microwaving",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 1
+      },
+      {
+        "id": "r3_s1",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "egg",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "egg and tomato microwaved on a white plate",
+        "replies": [],
+        "status": "dropped",
+        "status_reason": "4.2 DROP: R1 already picks up the egg.",
         "size": null,
         "phase": null,
         "t_start": null,
@@ -788,9 +1157,9 @@
         "agent": "R3",
         "type": "LOCAL",
         "action": {
-          "verb": "pick_up",
-          "object": "tomato",
-          "from": "counter",
+          "verb": "put_down",
+          "object": "egg",
+          "from": "gripper",
           "to": "white plate"
         },
         "item": null,
@@ -800,10 +1169,11 @@
         "origin": "local",
         "answers": null,
         "enables": null,
-        "serves": "Microwave a plate containing an egg and a tomato",
-        "prepared_by": null,
+        "serves": 0,
+        "serves_text": "egg and tomato microwaved on a white plate",
+        "replies": [],
         "status": "dropped",
-        "violations": [],
+        "status_reason": "4.2 DROP: R1 already places the egg on the plate.",
         "size": null,
         "phase": null,
         "t_start": null,
@@ -815,9 +1185,9 @@
         "type": "LOCAL",
         "action": {
           "verb": "pick_up",
-          "object": "white plate",
+          "object": "tomato",
           "from": "counter",
-          "to": "microwave"
+          "to": "gripper"
         },
         "item": null,
         "target": null,
@@ -826,10 +1196,11 @@
         "origin": "local",
         "answers": null,
         "enables": null,
-        "serves": "Microwave a plate containing an egg and a tomato",
-        "prepared_by": null,
+        "serves": 0,
+        "serves_text": "egg and tomato microwaved on a white plate",
+        "replies": [],
         "status": "dropped",
-        "violations": [],
+        "status_reason": "4.2 DROP: R1 already picks up the tomato.",
         "size": null,
         "phase": null,
         "t_start": null,
@@ -841,9 +1212,9 @@
         "type": "LOCAL",
         "action": {
           "verb": "put_down",
-          "object": "white plate",
-          "from": "counter",
-          "to": "microwave"
+          "object": "tomato",
+          "from": "gripper",
+          "to": "white plate"
         },
         "item": null,
         "target": null,
@@ -852,10 +1223,11 @@
         "origin": "local",
         "answers": null,
         "enables": null,
-        "serves": "Microwave a plate containing an egg and a tomato",
-        "prepared_by": null,
+        "serves": 0,
+        "serves_text": "egg and tomato microwaved on a white plate",
+        "replies": [],
         "status": "dropped",
-        "violations": [],
+        "status_reason": "4.2 DROP: R1 already places the tomato on the plate.",
         "size": null,
         "phase": null,
         "t_start": null,
@@ -866,6 +1238,60 @@
         "agent": "R3",
         "type": "LOCAL",
         "action": {
+          "verb": "pick_up",
+          "object": "white plate",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 1,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "egg and tomato microwaved on a white plate",
+        "replies": [],
+        "status": "dropped",
+        "status_reason": "4.2 DROP: R1 already picks up the plate.",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s6",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "white plate",
+          "from": "gripper",
+          "to": "microwave"
+        },
+        "item": null,
+        "target": null,
+        "uses": 1,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "egg and tomato microwaved on a white plate",
+        "replies": [],
+        "status": "dropped",
+        "status_reason": "4.2 DROP: R1 already places the plate in the microwave.",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s7",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
           "verb": "turn_on",
           "object": "microwave",
           "from": "off",
@@ -873,15 +1299,16 @@
         },
         "item": null,
         "target": null,
-        "uses": 0,
+        "uses": 1,
         "location": "kitchen",
         "origin": "local",
         "answers": null,
         "enables": null,
-        "serves": "Microwave a plate containing an egg and a tomato",
-        "prepared_by": null,
+        "serves": 0,
+        "serves_text": "egg and tomato microwaved on a white plate",
+        "replies": [],
         "status": "dropped",
-        "violations": [],
+        "status_reason": "4.2 DROP: R1 already turns on the microwave.",
         "size": null,
         "phase": null,
         "t_start": null,
@@ -893,9 +1320,9 @@
         "type": "LOCAL",
         "action": {
           "verb": "pick_up",
-          "object": "brown egg",
+          "object": "egg",
           "from": "counter",
-          "to": "white plate"
+          "to": "gripper"
         },
         "item": null,
         "target": null,
@@ -904,10 +1331,11 @@
         "origin": "local",
         "answers": null,
         "enables": null,
-        "serves": "Place egg and tomato on the plate",
-        "prepared_by": null,
+        "serves": 0,
+        "serves_text": "egg and tomato placed on the white plate",
+        "replies": [],
         "status": "dropped",
-        "violations": [],
+        "status_reason": "4.2 DROP: R1 already picks up the egg.",
         "size": null,
         "phase": null,
         "t_start": null,
@@ -918,9 +1346,9 @@
         "agent": "R4",
         "type": "LOCAL",
         "action": {
-          "verb": "pick_up",
-          "object": "red tomato",
-          "from": "counter",
+          "verb": "put_down",
+          "object": "egg",
+          "from": "gripper",
           "to": "white plate"
         },
         "item": null,
@@ -930,10 +1358,119 @@
         "origin": "local",
         "answers": null,
         "enables": null,
-        "serves": "Place egg and tomato on the plate",
-        "prepared_by": null,
+        "serves": 0,
+        "serves_text": "egg and tomato placed on the white plate",
+        "replies": [],
         "status": "dropped",
-        "violations": [],
+        "status_reason": "4.2 DROP: R1 already places the egg on the plate.",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s3",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "red tomato",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "egg and tomato placed on the white plate",
+        "replies": [],
+        "status": "dropped",
+        "status_reason": "4.2 DROP: R1 already picks up the tomato.",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s4",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "red tomato",
+          "from": "gripper",
+          "to": "white plate"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "egg and tomato placed on the white plate",
+        "replies": [],
+        "status": "dropped",
+        "status_reason": "4.2 DROP: R1 already places the tomato on the plate.",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s5",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "white plate",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "plate with egg and tomato placed in the microwave",
+        "replies": [],
+        "status": "dropped",
+        "status_reason": "4.2 DROP: R1 already picks up the plate.",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s6",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "white plate",
+          "from": "gripper",
+          "to": "microwave"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "plate with egg and tomato placed in the microwave",
+        "replies": [],
+        "status": "dropped",
+        "status_reason": "4.2 DROP: R1 already places the plate in the microwave.",
         "size": null,
         "phase": null,
         "t_start": null,
@@ -945,24 +1482,34 @@
         "r1_s1",
         "r1_s2",
         "r1_s3",
-        "r1_s4"
+        "r1_s4",
+        "r1_s5",
+        "r1_s6",
+        "r1_s7"
       ],
       "R2": [
         "r2_s1",
         "r2_s2",
         "r2_s3",
-        "r2_s4"
+        "r2_s4",
+        "r2_s5"
       ],
       "R3": [
         "r3_s1",
         "r3_s2",
         "r3_s3",
         "r3_s4",
-        "r3_s5"
+        "r3_s5",
+        "r3_s6",
+        "r3_s7"
       ],
       "R4": [
         "r4_s1",
-        "r4_s2"
+        "r4_s2",
+        "r4_s3",
+        "r4_s4",
+        "r4_s5",
+        "r4_s6"
       ]
     },
     "edges": [
@@ -970,295 +1517,751 @@
         "src": "r1_s1",
         "dst": "r1_s2",
         "kind": "SEQ",
+        "kappa": null,
         "status": "CONFIRMED",
         "source": "local",
-        "targeted": false
+        "existing": false,
+        "decided_by": ""
       },
       {
         "src": "r1_s2",
         "dst": "r1_s3",
         "kind": "SEQ",
+        "kappa": null,
         "status": "CONFIRMED",
         "source": "local",
-        "targeted": false
+        "existing": false,
+        "decided_by": ""
       },
       {
         "src": "r1_s3",
         "dst": "r1_s4",
         "kind": "SEQ",
+        "kappa": null,
         "status": "CONFIRMED",
         "source": "local",
-        "targeted": false
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r1_s4",
+        "dst": "r1_s5",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r1_s5",
+        "dst": "r1_s6",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r1_s6",
+        "dst": "r1_s7",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
       }
     ],
-    "drops": [
+    "edit_log": [
+      {
+        "k": 0,
+        "edit": {
+          "op": "DROP",
+          "node": "r2_s1",
+          "rationale": "R1 already picks up the egg."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "R1 already picks up the egg."
+      },
+      {
+        "k": 1,
+        "edit": {
+          "op": "DROP",
+          "node": "r2_s2",
+          "rationale": "R1 already places the egg on the plate."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "R1 already places the egg on the plate."
+      },
+      {
+        "k": 2,
+        "edit": {
+          "op": "DROP",
+          "node": "r2_s3",
+          "rationale": "R1 already picks up the tomato."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "R1 already picks up the tomato."
+      },
+      {
+        "k": 3,
+        "edit": {
+          "op": "DROP",
+          "node": "r2_s4",
+          "rationale": "R1 already places the tomato on the plate."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "R1 already places the tomato on the plate."
+      },
+      {
+        "k": 4,
+        "edit": {
+          "op": "DROP",
+          "node": "r3_s1",
+          "rationale": "R1 already picks up the egg."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "R1 already picks up the egg."
+      },
+      {
+        "k": 5,
+        "edit": {
+          "op": "DROP",
+          "node": "r3_s2",
+          "rationale": "R1 already places the egg on the plate."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "R1 already places the egg on the plate."
+      },
+      {
+        "k": 6,
+        "edit": {
+          "op": "DROP",
+          "node": "r3_s3",
+          "rationale": "R1 already picks up the tomato."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "R1 already picks up the tomato."
+      },
+      {
+        "k": 7,
+        "edit": {
+          "op": "DROP",
+          "node": "r3_s4",
+          "rationale": "R1 already places the tomato on the plate."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "R1 already places the tomato on the plate."
+      },
+      {
+        "k": 8,
+        "edit": {
+          "op": "DROP",
+          "node": "r3_s5",
+          "rationale": "R1 already picks up the plate."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "R1 already picks up the plate."
+      },
+      {
+        "k": 9,
+        "edit": {
+          "op": "DROP",
+          "node": "r3_s6",
+          "rationale": "R1 already places the plate in the microwave."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "R1 already places the plate in the microwave."
+      },
+      {
+        "k": 10,
+        "edit": {
+          "op": "DROP",
+          "node": "r3_s7",
+          "rationale": "R1 already turns on the microwave."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "R1 already turns on the microwave."
+      },
+      {
+        "k": 11,
+        "edit": {
+          "op": "DROP",
+          "node": "r4_s1",
+          "rationale": "R1 already picks up the egg."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "R1 already picks up the egg."
+      },
+      {
+        "k": 12,
+        "edit": {
+          "op": "DROP",
+          "node": "r4_s2",
+          "rationale": "R1 already places the egg on the plate."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "R1 already places the egg on the plate."
+      },
+      {
+        "k": 13,
+        "edit": {
+          "op": "DROP",
+          "node": "r4_s3",
+          "rationale": "R1 already picks up the tomato."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "R1 already picks up the tomato."
+      },
+      {
+        "k": 14,
+        "edit": {
+          "op": "DROP",
+          "node": "r4_s4",
+          "rationale": "R1 already places the tomato on the plate."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "R1 already places the tomato on the plate."
+      },
+      {
+        "k": 15,
+        "edit": {
+          "op": "DROP",
+          "node": "r4_s5",
+          "rationale": "R1 already picks up the plate."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "R1 already picks up the plate."
+      },
+      {
+        "k": 16,
+        "edit": {
+          "op": "DROP",
+          "node": "r4_s6",
+          "rationale": "R1 already places the plate in the microwave."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "R1 already places the plate in the microwave."
+      }
+    ],
+    "report": {
+      "goals": [
+        {
+          "robot": "R1",
+          "goal": 0,
+          "text": "microwave a plate containing an egg and a tomato",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r1_s1",
+            "r1_s2",
+            "r1_s3",
+            "r1_s4",
+            "r1_s5",
+            "r1_s6",
+            "r1_s7"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R2",
+          "goal": 0,
+          "text": "egg and tomato placed on the white plate",
+          "status": "partial",
+          "cause": [
+            "Capability gap"
+          ],
+          "evidence": [
+            "r2_s5"
+          ],
+          "note": "",
+          "llm_status": "partial",
+          "llm_cause": "Capability gap"
+        },
+        {
+          "robot": "R2",
+          "goal": 1,
+          "text": "plate with egg and tomato ready for microwaving",
+          "status": "uncovered",
+          "cause": [
+            "Capability gap"
+          ],
+          "evidence": [],
+          "note": "",
+          "llm_status": "uncovered",
+          "llm_cause": "Capability gap"
+        },
+        {
+          "robot": "R3",
+          "goal": 0,
+          "text": "egg and tomato microwaved on a white plate",
+          "status": "uncovered",
+          "cause": [
+            "Capability gap"
+          ],
+          "evidence": [],
+          "note": "",
+          "llm_status": "uncovered",
+          "llm_cause": "Capability gap"
+        },
+        {
+          "robot": "R4",
+          "goal": 0,
+          "text": "egg and tomato placed on the white plate",
+          "status": "uncovered",
+          "cause": [
+            "Infeasible"
+          ],
+          "evidence": [
+            "r4_s5"
+          ],
+          "note": "evidence gone: r4_s5",
+          "llm_status": "partial",
+          "llm_cause": "Capability gap"
+        },
+        {
+          "robot": "R4",
+          "goal": 1,
+          "text": "plate with egg and tomato placed in the microwave",
+          "status": "uncovered",
+          "cause": [
+            "Capability gap"
+          ],
+          "evidence": [],
+          "note": "",
+          "llm_status": "uncovered",
+          "llm_cause": "Capability gap"
+        }
+      ],
+      "unresolved_requests": [],
+      "rejected_edits": [],
+      "dropped": [
+        {
+          "node": "r2_s1",
+          "agent": "R2",
+          "type": "LOCAL",
+          "text": "pick_up the egg from counter to gripper",
+          "rationale": "R1 already picks up the egg."
+        },
+        {
+          "node": "r2_s2",
+          "agent": "R2",
+          "type": "LOCAL",
+          "text": "put_down the egg from gripper to white plate",
+          "rationale": "R1 already places the egg on the plate."
+        },
+        {
+          "node": "r2_s3",
+          "agent": "R2",
+          "type": "LOCAL",
+          "text": "pick_up the red tomato from counter to gripper",
+          "rationale": "R1 already picks up the tomato."
+        },
+        {
+          "node": "r2_s4",
+          "agent": "R2",
+          "type": "LOCAL",
+          "text": "put_down the red tomato from gripper to white plate",
+          "rationale": "R1 already places the tomato on the plate."
+        },
+        {
+          "node": "r3_s1",
+          "agent": "R3",
+          "type": "LOCAL",
+          "text": "pick_up the egg from counter to gripper",
+          "rationale": "R1 already picks up the egg."
+        },
+        {
+          "node": "r3_s2",
+          "agent": "R3",
+          "type": "LOCAL",
+          "text": "put_down the egg from gripper to white plate",
+          "rationale": "R1 already places the egg on the plate."
+        },
+        {
+          "node": "r3_s3",
+          "agent": "R3",
+          "type": "LOCAL",
+          "text": "pick_up the tomato from counter to gripper",
+          "rationale": "R1 already picks up the tomato."
+        },
+        {
+          "node": "r3_s4",
+          "agent": "R3",
+          "type": "LOCAL",
+          "text": "put_down the tomato from gripper to white plate",
+          "rationale": "R1 already places the tomato on the plate."
+        },
+        {
+          "node": "r3_s5",
+          "agent": "R3",
+          "type": "LOCAL",
+          "text": "pick_up the white plate from counter to gripper",
+          "rationale": "R1 already picks up the plate."
+        },
+        {
+          "node": "r3_s6",
+          "agent": "R3",
+          "type": "LOCAL",
+          "text": "put_down the white plate from gripper to microwave",
+          "rationale": "R1 already places the plate in the microwave."
+        },
+        {
+          "node": "r3_s7",
+          "agent": "R3",
+          "type": "LOCAL",
+          "text": "turn_on the microwave from off to on",
+          "rationale": "R1 already turns on the microwave."
+        },
+        {
+          "node": "r4_s1",
+          "agent": "R4",
+          "type": "LOCAL",
+          "text": "pick_up the egg from counter to gripper",
+          "rationale": "R1 already picks up the egg."
+        },
+        {
+          "node": "r4_s2",
+          "agent": "R4",
+          "type": "LOCAL",
+          "text": "put_down the egg from gripper to white plate",
+          "rationale": "R1 already places the egg on the plate."
+        },
+        {
+          "node": "r4_s3",
+          "agent": "R4",
+          "type": "LOCAL",
+          "text": "pick_up the red tomato from counter to gripper",
+          "rationale": "R1 already picks up the tomato."
+        },
+        {
+          "node": "r4_s4",
+          "agent": "R4",
+          "type": "LOCAL",
+          "text": "put_down the red tomato from gripper to white plate",
+          "rationale": "R1 already places the tomato on the plate."
+        },
+        {
+          "node": "r4_s5",
+          "agent": "R4",
+          "type": "LOCAL",
+          "text": "pick_up the white plate from counter to gripper",
+          "rationale": "R1 already picks up the plate."
+        },
+        {
+          "node": "r4_s6",
+          "agent": "R4",
+          "type": "LOCAL",
+          "text": "put_down the white plate from gripper to microwave",
+          "rationale": "R1 already places the plate in the microwave."
+        }
+      ],
+      "removed_by_closure": [],
+      "invariant_violations": [],
+      "deadline": {
+        "makespan_min": 10,
+        "deadline_min": 15,
+        "exceeded": false
+      }
+    }
+  },
+  "report": {
+    "goals": [
+      {
+        "robot": "R1",
+        "goal": 0,
+        "text": "microwave a plate containing an egg and a tomato",
+        "status": "covered",
+        "cause": [],
+        "evidence": [
+          "r1_s1",
+          "r1_s2",
+          "r1_s3",
+          "r1_s4",
+          "r1_s5",
+          "r1_s6",
+          "r1_s7"
+        ],
+        "note": "",
+        "llm_status": "covered",
+        "llm_cause": null
+      },
+      {
+        "robot": "R2",
+        "goal": 0,
+        "text": "egg and tomato placed on the white plate",
+        "status": "partial",
+        "cause": [
+          "Capability gap"
+        ],
+        "evidence": [
+          "r2_s5"
+        ],
+        "note": "",
+        "llm_status": "partial",
+        "llm_cause": "Capability gap"
+      },
+      {
+        "robot": "R2",
+        "goal": 1,
+        "text": "plate with egg and tomato ready for microwaving",
+        "status": "uncovered",
+        "cause": [
+          "Capability gap"
+        ],
+        "evidence": [],
+        "note": "",
+        "llm_status": "uncovered",
+        "llm_cause": "Capability gap"
+      },
+      {
+        "robot": "R3",
+        "goal": 0,
+        "text": "egg and tomato microwaved on a white plate",
+        "status": "uncovered",
+        "cause": [
+          "Capability gap"
+        ],
+        "evidence": [],
+        "note": "",
+        "llm_status": "uncovered",
+        "llm_cause": "Capability gap"
+      },
+      {
+        "robot": "R4",
+        "goal": 0,
+        "text": "egg and tomato placed on the white plate",
+        "status": "uncovered",
+        "cause": [
+          "Infeasible"
+        ],
+        "evidence": [
+          "r4_s5"
+        ],
+        "note": "evidence gone: r4_s5",
+        "llm_status": "partial",
+        "llm_cause": "Capability gap"
+      },
+      {
+        "robot": "R4",
+        "goal": 1,
+        "text": "plate with egg and tomato placed in the microwave",
+        "status": "uncovered",
+        "cause": [
+          "Capability gap"
+        ],
+        "evidence": [],
+        "note": "",
+        "llm_status": "uncovered",
+        "llm_cause": "Capability gap"
+      }
+    ],
+    "unresolved_requests": [],
+    "rejected_edits": [],
+    "dropped": [
       {
         "node": "r2_s1",
         "agent": "R2",
         "type": "LOCAL",
-        "text": "pick_up the egg from counter to white plate",
-        "reason": "graph: DUPLICATE_WORK across robots. Never a request or CONFIRMED provider.",
-        "by": "graph"
-      },
-      {
-        "node": "r3_s1",
-        "agent": "R3",
-        "type": "LOCAL",
-        "text": "pick_up the egg from counter to white plate",
-        "reason": "graph: DUPLICATE_WORK across robots. Never a request or CONFIRMED provider.",
-        "by": "graph"
-      },
-      {
-        "node": "r4_s1",
-        "agent": "R4",
-        "type": "LOCAL",
-        "text": "pick_up the brown egg from counter to white plate",
-        "reason": "graph: DUPLICATE_WORK across robots. Never a request or CONFIRMED provider.",
-        "by": "graph"
+        "text": "pick_up the egg from counter to gripper",
+        "rationale": "R1 already picks up the egg."
       },
       {
         "node": "r2_s2",
         "agent": "R2",
         "type": "LOCAL",
-        "text": "pick_up the tomato from counter to white plate",
-        "reason": "graph: DUPLICATE_WORK across robots. Never a request or CONFIRMED provider.",
-        "by": "graph"
-      },
-      {
-        "node": "r3_s2",
-        "agent": "R3",
-        "type": "LOCAL",
-        "text": "pick_up the tomato from counter to white plate",
-        "reason": "graph: DUPLICATE_WORK across robots. Never a request or CONFIRMED provider.",
-        "by": "graph"
-      },
-      {
-        "node": "r4_s2",
-        "agent": "R4",
-        "type": "LOCAL",
-        "text": "pick_up the red tomato from counter to white plate",
-        "reason": "graph: DUPLICATE_WORK across robots. Never a request or CONFIRMED provider.",
-        "by": "graph"
+        "text": "put_down the egg from gripper to white plate",
+        "rationale": "R1 already places the egg on the plate."
       },
       {
         "node": "r2_s3",
         "agent": "R2",
         "type": "LOCAL",
-        "text": "pick_up the white plate from counter to microwave",
-        "reason": "graph: DUPLICATE_WORK across robots. Never a request or CONFIRMED provider.",
-        "by": "graph"
-      },
-      {
-        "node": "r3_s3",
-        "agent": "R3",
-        "type": "LOCAL",
-        "text": "pick_up the white plate from counter to microwave",
-        "reason": "graph: DUPLICATE_WORK across robots. Never a request or CONFIRMED provider.",
-        "by": "graph"
+        "text": "pick_up the red tomato from counter to gripper",
+        "rationale": "R1 already picks up the tomato."
       },
       {
         "node": "r2_s4",
         "agent": "R2",
         "type": "LOCAL",
-        "text": "turn_on the microwave from off to on",
-        "reason": "graph: DUPLICATE_WORK across robots. Never a request or CONFIRMED provider.",
-        "by": "graph"
+        "text": "put_down the red tomato from gripper to white plate",
+        "rationale": "R1 already places the tomato on the plate."
       },
       {
-        "node": "r3_s5",
+        "node": "r3_s1",
         "agent": "R3",
         "type": "LOCAL",
-        "text": "turn_on the microwave from off to on",
-        "reason": "graph: DUPLICATE_WORK across robots. Never a request or CONFIRMED provider.",
-        "by": "graph"
+        "text": "pick_up the egg from counter to gripper",
+        "rationale": "R1 already picks up the egg."
+      },
+      {
+        "node": "r3_s2",
+        "agent": "R3",
+        "type": "LOCAL",
+        "text": "put_down the egg from gripper to white plate",
+        "rationale": "R1 already places the egg on the plate."
+      },
+      {
+        "node": "r3_s3",
+        "agent": "R3",
+        "type": "LOCAL",
+        "text": "pick_up the tomato from counter to gripper",
+        "rationale": "R1 already picks up the tomato."
       },
       {
         "node": "r3_s4",
         "agent": "R3",
         "type": "LOCAL",
-        "text": "put_down the white plate from counter to microwave",
-        "reason": "graph: DUPLICATE_WORK across robots. Never a request or CONFIRMED provider.",
-        "by": "graph"
+        "text": "put_down the tomato from gripper to white plate",
+        "rationale": "R1 already places the tomato on the plate."
+      },
+      {
+        "node": "r3_s5",
+        "agent": "R3",
+        "type": "LOCAL",
+        "text": "pick_up the white plate from counter to gripper",
+        "rationale": "R1 already picks up the plate."
+      },
+      {
+        "node": "r3_s6",
+        "agent": "R3",
+        "type": "LOCAL",
+        "text": "put_down the white plate from gripper to microwave",
+        "rationale": "R1 already places the plate in the microwave."
+      },
+      {
+        "node": "r3_s7",
+        "agent": "R3",
+        "type": "LOCAL",
+        "text": "turn_on the microwave from off to on",
+        "rationale": "R1 already turns on the microwave."
+      },
+      {
+        "node": "r4_s1",
+        "agent": "R4",
+        "type": "LOCAL",
+        "text": "pick_up the egg from counter to gripper",
+        "rationale": "R1 already picks up the egg."
+      },
+      {
+        "node": "r4_s2",
+        "agent": "R4",
+        "type": "LOCAL",
+        "text": "put_down the egg from gripper to white plate",
+        "rationale": "R1 already places the egg on the plate."
+      },
+      {
+        "node": "r4_s3",
+        "agent": "R4",
+        "type": "LOCAL",
+        "text": "pick_up the red tomato from counter to gripper",
+        "rationale": "R1 already picks up the tomato."
+      },
+      {
+        "node": "r4_s4",
+        "agent": "R4",
+        "type": "LOCAL",
+        "text": "put_down the red tomato from gripper to white plate",
+        "rationale": "R1 already places the tomato on the plate."
+      },
+      {
+        "node": "r4_s5",
+        "agent": "R4",
+        "type": "LOCAL",
+        "text": "pick_up the white plate from counter to gripper",
+        "rationale": "R1 already picks up the plate."
+      },
+      {
+        "node": "r4_s6",
+        "agent": "R4",
+        "type": "LOCAL",
+        "text": "put_down the white plate from gripper to microwave",
+        "rationale": "R1 already places the plate in the microwave."
       }
     ],
-    "unresolved": [],
-    "warnings": [],
-    "ops_log": [
-      {
-        "round": 1,
-        "op": {
-          "op": "drop",
-          "node": "r2_s1",
-          "why": "DUPLICATE_WORK across robots. Never a request or CONFIRMED provider."
-        },
-        "applied": true,
-        "error": null
-      },
-      {
-        "round": 1,
-        "op": {
-          "op": "drop",
-          "node": "r3_s1",
-          "why": "DUPLICATE_WORK across robots. Never a request or CONFIRMED provider."
-        },
-        "applied": true,
-        "error": null
-      },
-      {
-        "round": 1,
-        "op": {
-          "op": "drop",
-          "node": "r4_s1",
-          "why": "DUPLICATE_WORK across robots. Never a request or CONFIRMED provider."
-        },
-        "applied": true,
-        "error": null
-      },
-      {
-        "round": 1,
-        "op": {
-          "op": "drop",
-          "node": "r2_s2",
-          "why": "DUPLICATE_WORK across robots. Never a request or CONFIRMED provider."
-        },
-        "applied": true,
-        "error": null
-      },
-      {
-        "round": 1,
-        "op": {
-          "op": "drop",
-          "node": "r3_s2",
-          "why": "DUPLICATE_WORK across robots. Never a request or CONFIRMED provider."
-        },
-        "applied": true,
-        "error": null
-      },
-      {
-        "round": 1,
-        "op": {
-          "op": "drop",
-          "node": "r4_s2",
-          "why": "DUPLICATE_WORK across robots. Never a request or CONFIRMED provider."
-        },
-        "applied": true,
-        "error": null
-      },
-      {
-        "round": 1,
-        "op": {
-          "op": "drop",
-          "node": "r2_s3",
-          "why": "DUPLICATE_WORK across robots. Never a request or CONFIRMED provider."
-        },
-        "applied": true,
-        "error": null
-      },
-      {
-        "round": 1,
-        "op": {
-          "op": "drop",
-          "node": "r3_s3",
-          "why": "DUPLICATE_WORK across robots. Never a request or CONFIRMED provider."
-        },
-        "applied": true,
-        "error": null
-      },
-      {
-        "round": 1,
-        "op": {
-          "op": "drop",
-          "node": "r2_s4",
-          "why": "DUPLICATE_WORK across robots. Never a request or CONFIRMED provider."
-        },
-        "applied": true,
-        "error": null
-      },
-      {
-        "round": 1,
-        "op": {
-          "op": "drop",
-          "node": "r3_s5",
-          "why": "DUPLICATE_WORK across robots. Never a request or CONFIRMED provider."
-        },
-        "applied": true,
-        "error": null
-      },
-      {
-        "round": 2,
-        "op": {
-          "op": "drop",
-          "node": "r3_s4",
-          "why": "DUPLICATE_WORK across robots. Never a request or CONFIRMED provider."
-        },
-        "applied": true,
-        "error": null
-      }
-    ]
+    "removed_by_closure": [],
+    "invariant_violations": [],
+    "deadline": {
+      "makespan_min": 10,
+      "deadline_min": 15,
+      "exceeded": false
+    }
   },
   "metrics": {
     "task_id": "mat_complex",
-    "n_steps_total": 15,
-    "n_steps_active": 4,
-    "n_blocked": 0,
-    "n_dropped": 11,
+    "n_steps_total": 25,
+    "n_steps_active": 8,
     "n_requests": 0,
     "n_requests_served": 0,
+    "n_requests_unresolved": 0,
+    "n_candidates_from_stage3": 0,
     "n_collab_edges_final": 0,
-    "confirmed_ratio": null,
-    "selected_by_graph": 0,
-    "selected_by_rule": 0,
-    "capability_violations_after_fix": 0,
-    "n_requests_withdrawn": 0,
-    "n_served_by_own_existing_step": 0,
-    "n_duplicates_merged": 0,
-    "n_duplicates_dropped": 11,
-    "n_redundant_branches_released": 0,
+    "n_help_edges": 0,
+    "n_transfer_edges": 0,
+    "decided_by_select": 0,
+    "decided_by_merge": 0,
+    "decided_by_default": 0,
+    "kappa_final": {
+      "mutual": 0,
+      "provider-only": 0,
+      "merged": 0
+    },
+    "graph_edits_applied": 17,
+    "graph_edits_rejected": 0,
+    "n_dropped_by_graph": 17,
+    "n_removed_by_closure": 0,
     "n_requests_moved_later": 0,
-    "n_warnings": 0,
+    "n_invariant_violations": 0,
+    "goals_total": 6,
+    "goals_covered": 1,
+    "goals_partial": 1,
+    "goals_uncovered": 4,
+    "goal_causes": {
+      "No volunteer": 0,
+      "Capability gap": 4,
+      "Left unresolved": 0,
+      "Infeasible": 1,
+      "Deadline exceeded": 0
+    },
     "plan_fix_rounds": {
       "R1": 0,
       "R2": 1,
-      "R3": 2,
-      "R4": 1
+      "R3": 0,
+      "R4": 0
     },
-    "n_checklist_items": 14,
-    "n_uncovered_checklist": 1,
-    "n_uncovered_essential": 0,
-    "graph_ops_applied": 11,
-    "graph_ops_rejected": 0,
-    "makespan_steps": 4,
-    "makespan_min": 5,
+    "n_steps_excluded_stage2": 2,
+    "makespan_min": 10,
     "deadline": 15,
     "deadline_ok": true,
-    "size_source": "graph_llm",
-    "n_size_missing": 0,
-    "n_candidates_from_stage3": 0,
-    "n_order_edges_added": 0,
-    "n_order_pairs_independent": 0,
-    "success_no_blocked": true,
-    "n_requests_declined": 0,
-    "n_requests_failed": 0,
-    "n_requests_moot": 0,
-    "n_blocked_by_decline": 0,
-    "n_blocked_by_failure": 0,
-    "success_no_failure": true,
-    "n_handoff_prep_dropped": 0,
-    "n_offers_made": 0,
-    "n_offers_taken": 0,
-    "n_offers_untaken": 0,
-    "n_preparations_released": 0,
-    "n_help_edges": 0,
-    "n_transfer_edges": 0,
-    "llm_calls": 15,
-    "prompt_tokens": 49380,
-    "completion_tokens": 4288,
+    "llm_calls": 10,
+    "prompt_tokens": 20846,
+    "completion_tokens": 3246,
     "config": {
       "use_edge_proposal": true,
-      "use_graph_llm": true,
-      "max_graph_rounds": 2
+      "use_graph_llm": true
     },
-    "wall_time_sec": 24.9
+    "wall_time_sec": 16.1
   },
   "config": {
     "use_edge_proposal": true,

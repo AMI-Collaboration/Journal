@@ -1,0 +1,744 @@
+{
+  "method": "cda",
+  "task_n": "task1_simple",
+  "raw_result": {
+    "task_n": "task1_simple",
+    "mode": "multi_room",
+    "model": "gpt-4o",
+    "task_text": "Turn on coffee machine and TV",
+    "joint_plan_text": "```plaintext\n### Joint Plan — task1_simple  (about 5 min / deadline 10 min: OK)\n### Robots: R1:Mobile_Light(kitchen), R2:Mobile_Light(living_room), R3:Mobile_Light(kitchen), R4:Mobile_Light(living_room)\n\n[0-5 min]\n- R4 [LOCAL] turn on the black coffee machine from the table  (r4_s1)\n- R4 [LOCAL] turn on the black TV from the stand  (r4_s2)",
+    "joint_plan_full": "### Joint Plan — task1_simple  (about 5 min / deadline 10 min: OK)\n### Robots: R1:Mobile_Light(kitchen), R2:Mobile_Light(living_room), R3:Mobile_Light(kitchen), R4:Mobile_Light(living_room)\n\n[0-5 min]\n- R4 [LOCAL] turn_on the black coffee machine from table  (r4_s1)\n- R4 [LOCAL] turn_on the black TV from stand  (r4_s2)\n\n### Provenance (collaboration edges)\n\n### Graph LLM edits (applied)\n- DROP node=r3_s1 — R4 already turns on the black coffee machine, making R3's action redundant.\n- DROP node=r1_s1 — R4 already turns on a coffee machine, satisfying the coffee machine goal.\n- DROP node=r2_s1 — R4 already turns on the black TV, satisfying the TV goal.\n\n### Report: goal coverage\n- R1.g0 coffee machine turned on: covered [r4_s1]\n- R2.g0 TV turned on in the living room: covered [r4_s2]\n- R3.g0 coffee machine turned on: covered [r4_s1]\n- R4.g0 turn on black coffee machine: covered [r4_s1]\n- R4.g1 turn on black TV: covered [r4_s2]\n\n### Dropped by the Graph LLM\n- R3 [LOCAL] turn_on the black coffee machine from counter (r3_s1) — R4 already turns on the black coffee machine, making R3's action redundant.\n- R1 [LOCAL] turn_on the blue coffee machine from counter (r1_s1) — R4 already turns on a coffee machine, satisfying the coffee machine goal.\n- R2 [LOCAL] turn_on the TV from TV stand to living room (r2_s1) — R4 already turns on the black TV, satisfying the TV goal.",
+    "offers": {
+      "R1": {
+        "agent": "R1",
+        "capability": "I am mobile and can carry light objects up to 5 kg.",
+        "can_do": [
+          "PickupLightObject: lift mugs, fruit, small items",
+          "PassReceiveObject: exchange objects with others",
+          "ToggleObject: turn on/off coffee machine, lights, appliances"
+        ],
+        "cannot_do": [
+          "PickupHeavyObject: cannot lift furniture",
+          "PushFurniture: cannot move large items",
+          "SliceObject: no cutting tool",
+          "PourObject: cannot pour liquids"
+        ],
+        "has_items": [
+          "blue coffee machine (counter, image 2)",
+          "red toaster (counter, image 2)",
+          "green cabbage (counter, image 1)",
+          "potted plant (counter, image 1)"
+        ],
+        "need_from_others": [
+          "someone to turn on the TV"
+        ],
+        "intends": [
+          "coffee machine turned on"
+        ],
+        "obs_scope": "I can observe the kitchen only.",
+        "reasoning": "a) The coffee machine and TV must be turned on. b) Kitchen: coffee preparation; living room: entertainment. c) I can turn on the coffee machine. d) Turning on the coffee machine is my priority."
+      },
+      "R2": {
+        "agent": "R2",
+        "capability": "I am mobile and can carry light objects up to 5 kg with one arm.",
+        "can_do": [
+          "PickupLightObject: lift small items",
+          "PassReceiveObject: exchange objects with others",
+          "ToggleObject: turn on/off TV, lights, appliances"
+        ],
+        "cannot_do": [
+          "PickupHeavyObject: cannot lift furniture",
+          "PushFurniture: cannot move heavy items",
+          "SliceObject: no cutting tool",
+          "PourObject: cannot pour liquids"
+        ],
+        "has_items": [
+          "TV (TV stand, image 1)"
+        ],
+        "need_from_others": [
+          "someone who can turn on the coffee machine"
+        ],
+        "intends": [
+          "TV turned on in the living room"
+        ],
+        "obs_scope": "I can observe the living room only.",
+        "reasoning": "a) The TV and coffee machine must be turned on. b) Living room: TV; kitchen or another area: coffee machine. c) I can turn on the TV. d) The TV is in my room, so I'll prioritize it."
+      },
+      "R3": {
+        "agent": "R3",
+        "capability": "I am mobile and can interact with light objects and appliances up to 5 kg.",
+        "can_do": [
+          "PickupLightObject: lift mugs, fruit, small items",
+          "ToggleObject: turn on/off coffee machine, toaster, kettle"
+        ],
+        "cannot_do": [
+          "PickupHeavyObject: cannot lift furniture",
+          "PushFurniture: cannot move heavy objects",
+          "SliceObject: no cutting tool",
+          "PourObject: cannot pour liquids"
+        ],
+        "has_items": [
+          "black coffee machine (counter, image 1)",
+          "white toaster (counter, image 1)",
+          "silver kettle (counter, image 1)",
+          "green apple (counter, image 2)",
+          "red apple (counter, image 2)"
+        ],
+        "need_from_others": [
+          "someone who can turn on the TV"
+        ],
+        "intends": [
+          "coffee machine turned on"
+        ],
+        "obs_scope": "I can observe the kitchen only.",
+        "reasoning": "a) The coffee machine and TV must be turned on. b) Kitchen: provides the coffee machine. Living room (assumed): provides the TV. c) I can turn on the coffee machine in the kitchen. d) Turning on the coffee machine is my priority since I can only act in the kitchen."
+      },
+      "R4": {
+        "agent": "R4",
+        "capability": "I am mobile and can carry light objects up to 5 kg with one arm.",
+        "can_do": [
+          "PickupLightObject: lift mugs, fruit, small items",
+          "ToggleObject: turn on/off coffee machine, TV"
+        ],
+        "cannot_do": [
+          "PickupHeavyObject: cannot lift furniture",
+          "PushFurniture: cannot move large items",
+          "SliceObject: no cutting tool",
+          "PourObject: cannot pour liquids"
+        ],
+        "has_items": [
+          "black coffee machine (table, image 1)",
+          "black TV (stand, image 2)",
+          "gray sofa (floor, image 2)"
+        ],
+        "need_from_others": [],
+        "intends": [
+          "turn on black coffee machine",
+          "turn on black TV"
+        ],
+        "obs_scope": "I can observe the living room only.",
+        "reasoning": "a) The coffee machine and TV must be turned on. b) The living room provides the location for the TV and coffee machine. c) I can physically toggle the power of both devices. d) Both tasks are equally important, but I will prioritize the coffee machine as it may take time to brew coffee after being turned on."
+      }
+    },
+    "local_plans": {
+      "R1": [
+        {
+          "id": "r1_s1",
+          "agent": "R1",
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "blue coffee machine",
+            "from": "counter",
+            "to": null
+          },
+          "item": null,
+          "target": null,
+          "uses": 2,
+          "location": "kitchen",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "coffee machine turned on",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        }
+      ],
+      "R2": [
+        {
+          "id": "r2_s1",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "TV",
+            "from": "TV stand",
+            "to": "living room"
+          },
+          "item": null,
+          "target": null,
+          "uses": 2,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "TV turned on in the living room",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        }
+      ],
+      "R3": [
+        {
+          "id": "r3_s1",
+          "agent": "R3",
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "black coffee machine",
+            "from": "counter",
+            "to": ""
+          },
+          "item": null,
+          "target": null,
+          "uses": 1,
+          "location": "kitchen",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "coffee machine turned on",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        }
+      ],
+      "R4": [
+        {
+          "id": "r4_s1",
+          "agent": "R4",
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "black coffee machine",
+            "from": "table",
+            "to": null
+          },
+          "item": null,
+          "target": null,
+          "uses": 1,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "turn on black coffee machine",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r4_s2",
+          "agent": "R4",
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "black TV",
+            "from": "stand",
+            "to": null
+          },
+          "item": null,
+          "target": null,
+          "uses": 1,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "turn on black TV",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        }
+      ]
+    },
+    "answers": [],
+    "graph": {
+      "nodes": [
+        {
+          "id": "r1_s1",
+          "agent": "R1",
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "blue coffee machine",
+            "from": "counter",
+            "to": null
+          },
+          "item": null,
+          "target": null,
+          "uses": 2,
+          "location": "kitchen",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "coffee machine turned on",
+          "replies": [],
+          "status": "dropped",
+          "status_reason": "4.2 DROP: R4 already turns on a coffee machine, satisfying the coffee machine goal.",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r2_s1",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "TV",
+            "from": "TV stand",
+            "to": "living room"
+          },
+          "item": null,
+          "target": null,
+          "uses": 2,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "TV turned on in the living room",
+          "replies": [],
+          "status": "dropped",
+          "status_reason": "4.2 DROP: R4 already turns on the black TV, satisfying the TV goal.",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r3_s1",
+          "agent": "R3",
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "black coffee machine",
+            "from": "counter",
+            "to": ""
+          },
+          "item": null,
+          "target": null,
+          "uses": 1,
+          "location": "kitchen",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "coffee machine turned on",
+          "replies": [],
+          "status": "dropped",
+          "status_reason": "4.2 DROP: R4 already turns on the black coffee machine, making R3's action redundant.",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r4_s1",
+          "agent": "R4",
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "black coffee machine",
+            "from": "table",
+            "to": null
+          },
+          "item": null,
+          "target": null,
+          "uses": 1,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "turn on black coffee machine",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 0,
+          "t_end": 1
+        },
+        {
+          "id": "r4_s2",
+          "agent": "R4",
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "black TV",
+            "from": "stand",
+            "to": null
+          },
+          "item": null,
+          "target": null,
+          "uses": 1,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "turn on black TV",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 1,
+          "t_end": 2
+        }
+      ],
+      "order": {
+        "R1": [
+          "r1_s1"
+        ],
+        "R2": [
+          "r2_s1"
+        ],
+        "R3": [
+          "r3_s1"
+        ],
+        "R4": [
+          "r4_s1",
+          "r4_s2"
+        ]
+      },
+      "edges": [
+        {
+          "src": "r4_s1",
+          "dst": "r4_s2",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        }
+      ],
+      "edit_log": [
+        {
+          "k": 0,
+          "edit": {
+            "op": "DROP",
+            "node": "r3_s1",
+            "rationale": "R4 already turns on the black coffee machine, making R3's action redundant."
+          },
+          "applied": true,
+          "error": null,
+          "rationale": "R4 already turns on the black coffee machine, making R3's action redundant."
+        },
+        {
+          "k": 1,
+          "edit": {
+            "op": "DROP",
+            "node": "r1_s1",
+            "rationale": "R4 already turns on a coffee machine, satisfying the coffee machine goal."
+          },
+          "applied": true,
+          "error": null,
+          "rationale": "R4 already turns on a coffee machine, satisfying the coffee machine goal."
+        },
+        {
+          "k": 2,
+          "edit": {
+            "op": "DROP",
+            "node": "r2_s1",
+            "rationale": "R4 already turns on the black TV, satisfying the TV goal."
+          },
+          "applied": true,
+          "error": null,
+          "rationale": "R4 already turns on the black TV, satisfying the TV goal."
+        }
+      ],
+      "report": {
+        "goals": [
+          {
+            "robot": "R1",
+            "goal": 0,
+            "text": "coffee machine turned on",
+            "status": "covered",
+            "cause": [],
+            "evidence": [
+              "r4_s1"
+            ],
+            "note": "",
+            "llm_status": "covered",
+            "llm_cause": null
+          },
+          {
+            "robot": "R2",
+            "goal": 0,
+            "text": "TV turned on in the living room",
+            "status": "covered",
+            "cause": [],
+            "evidence": [
+              "r4_s2"
+            ],
+            "note": "",
+            "llm_status": "covered",
+            "llm_cause": null
+          },
+          {
+            "robot": "R3",
+            "goal": 0,
+            "text": "coffee machine turned on",
+            "status": "covered",
+            "cause": [],
+            "evidence": [
+              "r4_s1"
+            ],
+            "note": "",
+            "llm_status": "covered",
+            "llm_cause": null
+          },
+          {
+            "robot": "R4",
+            "goal": 0,
+            "text": "turn on black coffee machine",
+            "status": "covered",
+            "cause": [],
+            "evidence": [
+              "r4_s1"
+            ],
+            "note": "",
+            "llm_status": "covered",
+            "llm_cause": null
+          },
+          {
+            "robot": "R4",
+            "goal": 1,
+            "text": "turn on black TV",
+            "status": "covered",
+            "cause": [],
+            "evidence": [
+              "r4_s2"
+            ],
+            "note": "",
+            "llm_status": "covered",
+            "llm_cause": null
+          }
+        ],
+        "unresolved_requests": [],
+        "rejected_edits": [],
+        "dropped": [
+          {
+            "node": "r3_s1",
+            "agent": "R3",
+            "type": "LOCAL",
+            "text": "turn_on the black coffee machine from counter",
+            "rationale": "R4 already turns on the black coffee machine, making R3's action redundant."
+          },
+          {
+            "node": "r1_s1",
+            "agent": "R1",
+            "type": "LOCAL",
+            "text": "turn_on the blue coffee machine from counter",
+            "rationale": "R4 already turns on a coffee machine, satisfying the coffee machine goal."
+          },
+          {
+            "node": "r2_s1",
+            "agent": "R2",
+            "type": "LOCAL",
+            "text": "turn_on the TV from TV stand to living room",
+            "rationale": "R4 already turns on the black TV, satisfying the TV goal."
+          }
+        ],
+        "removed_by_closure": [],
+        "invariant_violations": [],
+        "deadline": {
+          "makespan_min": 5,
+          "deadline_min": 10,
+          "exceeded": false
+        }
+      }
+    },
+    "report": {
+      "goals": [
+        {
+          "robot": "R1",
+          "goal": 0,
+          "text": "coffee machine turned on",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r4_s1"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R2",
+          "goal": 0,
+          "text": "TV turned on in the living room",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r4_s2"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R3",
+          "goal": 0,
+          "text": "coffee machine turned on",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r4_s1"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R4",
+          "goal": 0,
+          "text": "turn on black coffee machine",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r4_s1"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R4",
+          "goal": 1,
+          "text": "turn on black TV",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r4_s2"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        }
+      ],
+      "unresolved_requests": [],
+      "rejected_edits": [],
+      "dropped": [
+        {
+          "node": "r3_s1",
+          "agent": "R3",
+          "type": "LOCAL",
+          "text": "turn_on the black coffee machine from counter",
+          "rationale": "R4 already turns on the black coffee machine, making R3's action redundant."
+        },
+        {
+          "node": "r1_s1",
+          "agent": "R1",
+          "type": "LOCAL",
+          "text": "turn_on the blue coffee machine from counter",
+          "rationale": "R4 already turns on a coffee machine, satisfying the coffee machine goal."
+        },
+        {
+          "node": "r2_s1",
+          "agent": "R2",
+          "type": "LOCAL",
+          "text": "turn_on the TV from TV stand to living room",
+          "rationale": "R4 already turns on the black TV, satisfying the TV goal."
+        }
+      ],
+      "removed_by_closure": [],
+      "invariant_violations": [],
+      "deadline": {
+        "makespan_min": 5,
+        "deadline_min": 10,
+        "exceeded": false
+      }
+    },
+    "metrics": {
+      "task_id": "task1_simple",
+      "n_steps_total": 5,
+      "n_steps_active": 2,
+      "n_requests": 0,
+      "n_requests_served": 0,
+      "n_requests_unresolved": 0,
+      "n_candidates_from_stage3": 0,
+      "n_collab_edges_final": 0,
+      "n_help_edges": 0,
+      "n_transfer_edges": 0,
+      "decided_by_select": 0,
+      "decided_by_merge": 0,
+      "decided_by_default": 0,
+      "kappa_final": {
+        "mutual": 0,
+        "provider-only": 0,
+        "merged": 0
+      },
+      "graph_edits_applied": 3,
+      "graph_edits_rejected": 0,
+      "n_dropped_by_graph": 3,
+      "n_removed_by_closure": 0,
+      "n_requests_moved_later": 0,
+      "n_invariant_violations": 0,
+      "goals_total": 5,
+      "goals_covered": 5,
+      "goals_partial": 0,
+      "goals_uncovered": 0,
+      "goal_causes": {
+        "No volunteer": 0,
+        "Capability gap": 0,
+        "Left unresolved": 0,
+        "Infeasible": 0,
+        "Deadline exceeded": 0
+      },
+      "plan_fix_rounds": {
+        "R1": 1,
+        "R2": 0,
+        "R3": 1,
+        "R4": 0
+      },
+      "n_steps_excluded_stage2": 2,
+      "makespan_min": 5,
+      "deadline": 10,
+      "deadline_ok": true,
+      "llm_calls": 11,
+      "prompt_tokens": 22323,
+      "completion_tokens": 2168,
+      "config": {
+        "use_edge_proposal": true,
+        "use_graph_llm": true
+      },
+      "wall_time_sec": 13.0
+    },
+    "config": {
+      "use_edge_proposal": true,
+      "use_graph_llm": true,
+      "max_graph_rounds": 2,
+      "deadline_min": 20
+    }
+  },
+  "llm_judge": {
+    "TF": 2,
+    "TF_reason": "The plan only partially fulfills the task. R4 successfully turns on the TV in the living room, but fails to turn on the coffee machine because it is located in the kitchen, not the living room.",
+    "GF": 2,
+    "GF_reason": "R4 hallucinates the presence of a coffee machine in the living room. The coffee machine is actually in the kitchen.",
+    "SC": 4,
+    "SC_reason": "The sequence of actions is logically ordered for a single robot, though one of the actions is impossible due to the object's absence.",
+    "CQ": 2,
+    "CQ_reason": "The task requires actions in two different rooms (kitchen and living room). The agents failed to distribute the tasks appropriately among the robots in the respective rooms, leading R4 to attempt an impossible local action."
+  }
+}

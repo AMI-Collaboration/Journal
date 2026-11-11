@@ -6,7 +6,7 @@ import asyncio, json, os, sys, argparse, types, importlib.util
 from dataclasses import asdict
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-CDA_DIR = os.path.join(HERE, '..', 'C-DA_jabung')
+CDA_DIR = os.path.join(HERE, '..', 'CDA-1110')
 sys.path.insert(0, os.path.join(HERE, '..'))
 sys.path.insert(0, HERE)
 
@@ -79,7 +79,7 @@ async def run_variant(cfg, llm, variant):
     # Stage 4: Graph Reasoning (no_graph: keep the deterministic rule/finalize/schedule code,
     # drop only the two LLM calls inside it — same pattern as pipeline.py's use_graph_llm)
     g = await graph_reasoning(cfg, plans, collab, offers, judgments,
-                              None if variant == 'no_graph' else llm, log, max_rounds=2)
+                              None if variant == 'no_graph' else llm, log)
 
     text = render(g)
     m = metrics(g, plan_meta, llm.usage())

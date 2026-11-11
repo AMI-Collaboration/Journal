@@ -8,7 +8,7 @@ import os
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-CDA_DIR = os.path.join(HERE, "..", "C-DA_jabung")
+CDA_DIR = os.path.join(HERE, "..", "CDA-1110")
 AAMAS_DIR = os.path.join(HERE, "..")
 sys.path.insert(0, AAMAS_DIR)
 sys.path.insert(0, HERE)
@@ -147,12 +147,13 @@ result_record = {
     "mode": args.mode,
     "model": args.model,
     "task_text": cfg_dict["task"],
-    "joint_plan_text": naturalized.split("### Unresolved")[0].split("### Blocked")[0].split("### Dropped")[0].split("### Skipped")[0].split("### Warnings")[0].strip(),
+    "joint_plan_text": naturalized.split("### Provenance")[0].strip(),
     "joint_plan_full": result["joint_plan_text"],
     "offers": result.get("offers", {}),
     "local_plans": result.get("local_plans", {}),
-    "judgments": result.get("judgments", []),
+    "answers": result.get("answers", []),
     "graph": result.get("graph", {}),
+    "report": result.get("report", {}),
     "metrics": result.get("metrics", {}),
     "config": {
         "use_edge_proposal": not args.no_proposal,

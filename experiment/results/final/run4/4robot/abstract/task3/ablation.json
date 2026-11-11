@@ -1,0 +1,241 @@
+{
+  "task_n": "task3_abstract",
+  "variants": {
+    "full": {
+      "raw_result": {
+        "variant": "full",
+        "joint_plan_text": "### Joint Plan — task3_abstract  (about 10 min / deadline 20 min: OK)\n### Robots: R1:Gripper(living_room), R2:Mobile_Light(living_room), R3:Gripper(bedroom), R4:Mobile_Heavy(bedroom)\n\n[0-5 min]\n- R1 [LOCAL] turn_on the floor lamp from corner to corner  (r1_s1)\n- R2 [LOCAL] turn_on the white lamp from side table  (r2_s1)\n- R3 [ASK_HELP] wait for R4 to: turn_on the white ceiling lamp from ceiling to ceiling  (r3_s1)\n- R4 [LOCAL] turn_on the white ceiling lamp from ceiling to on (also serves R3's request)  (r4_s1)\n- R2 [LOCAL] move the brown laptop from sofa to sofa  (r2_s2)\n- R3 [LOCAL] pick_up the book from desk to gripper  (r3_s2)\n- R4 [LOCAL] pick_up the black laptop from desk to gripper  (r4_s2)\n- R3 [LOCAL] put_down the book from gripper to shelf  (r3_s3)\n- R4 [LOCAL] put_down the black laptop from gripper to brown desk  (r4_s3)\n- R3 [LOCAL] pick_up the pen from desk to gripper  (r3_s4)\n- R4 [LOCAL] pick_up the silver desk lamp from desk to gripper  (r4_s4)\n- R3 [LOCAL] put_down the pen from gripper to cup  (r3_s5)\n- R4 [LOCAL] put_down the silver desk lamp from gripper to brown desk  (r4_s5)\n\n[5-10 min]\n- R3 [LOCAL] pick_up the USB drive from desk to gripper  (r3_s6)\n- R4 [LOCAL] pick_up the black monitor from desk to gripper  (r4_s6)\n- R3 [LOCAL] put_down the USB drive from gripper to drawer  (r3_s7)\n- R4 [LOCAL] put_down the black monitor from gripper to brown desk  (r4_s7)\n- R4 [LOCAL] push the black office chair from desk to brown desk  (r4_s8)\n\n### Provenance (collaboration edges)\n- r3_s1 (R3 ASK_HELP) <- r4_s1 (R4 LOCAL)  κ=mutual, decided by SELECT\n\n### Graph LLM edits (applied)\n- SELECT provider=r4_s1 request=r3_s1 — R4 is the only robot capable of turning on the white ceiling lamp in the bedroom, and R3's request is already mutually agreed upon with R4.\n- DROP node=r1_s2 — R1's step to turn on the ceiling light is unnecessary as it cannot manipulate objects outside the living room, and the task is already covered by R4.\n\n### Report: goal coverage\n- R1.g0 ensure living room lighting is suitable for a video call: partial — Left unresolved [r1_s1]\n- R2.g0 turn on the white lamp for better lighting: covered [r2_s1]\n- R2.g1 ensure the laptop is positioned correctly on the sofa: covered [r2_s2]\n- R3.g0 lamp turned on for better lighting: covered [r3_s1]\n- R3.g1 desk items organized for a tidy appearance: covered [r3_s2, r3_s3, r3_s4, r3_s5, r3_s6, r3_s7]\n- R4.g0 turn on the white ceiling lamp for visibility: covered [r4_s1]\n- R4.g1 ensure the desk is tidy and presentable: covered [r4_s2, r4_s3, r4_s4, r4_s5, r4_s6, r4_s7]\n- R4.g2 position the black office chair properly: covered [r4_s8]\n\n### Dropped by the Graph LLM\n- R1 [LOCAL] turn_on the ceiling light from ceiling to ceiling (r1_s2) — R1's step to turn on the ceiling light is unnecessary as it cannot manipulate objects outside the living room, and the task is already covered by R4.",
+        "metrics": {
+          "task_id": "task3_abstract",
+          "n_steps_total": 19,
+          "n_steps_active": 18,
+          "n_requests": 1,
+          "n_requests_served": 1,
+          "n_requests_unresolved": 0,
+          "n_candidates_from_stage3": 1,
+          "n_collab_edges_final": 1,
+          "n_help_edges": 1,
+          "n_transfer_edges": 0,
+          "decided_by_select": 1,
+          "decided_by_merge": 0,
+          "decided_by_default": 0,
+          "kappa_final": {
+            "mutual": 1,
+            "provider-only": 0,
+            "merged": 0
+          },
+          "graph_edits_applied": 2,
+          "graph_edits_rejected": 0,
+          "n_dropped_by_graph": 1,
+          "n_removed_by_closure": 0,
+          "n_requests_moved_later": 0,
+          "n_invariant_violations": 0,
+          "goals_total": 8,
+          "goals_covered": 7,
+          "goals_partial": 1,
+          "goals_uncovered": 0,
+          "goal_causes": {
+            "No volunteer": 0,
+            "Capability gap": 0,
+            "Left unresolved": 1,
+            "Infeasible": 0,
+            "Deadline exceeded": 0
+          },
+          "plan_fix_rounds": {
+            "R1": 1,
+            "R2": 1,
+            "R3": 0,
+            "R4": 0
+          },
+          "n_steps_excluded_stage2": 2,
+          "makespan_min": 10,
+          "deadline": 20,
+          "deadline_ok": true,
+          "llm_calls": 14,
+          "prompt_tokens": 30818,
+          "completion_tokens": 3222,
+          "variant": "full",
+          "wall_time_sec": 22.922405242919922
+        }
+      },
+      "llm_judge": null
+    },
+    "no_offer": {
+      "raw_result": {
+        "variant": "no_offer",
+        "joint_plan_text": "### Joint Plan — task3_abstract  (about 5 min / deadline 20 min: OK)\n### Robots: R1:Gripper(living_room), R2:Mobile_Light(living_room), R3:Gripper(bedroom), R4:Mobile_Heavy(bedroom)\n\n[0-5 min]\n- R2 [LOCAL] pick_up the papers from desk to gripper  (r2_s1)\n- R3 [ASK_HELP] wait for R4 to: turn_on the bedroom light from off to on  (r3_s1)\n- R4 [LOCAL] turn_on the bedroom light from off to on (also serves R3's request)  (r4_s1)\n- R2 [LOCAL] put_down the papers from gripper to drawer  (r2_s2)\n- R3 [LOCAL] put_down the placeholder from gripper to desk [after r4_s1]  (r3_s2)\n- R4 [LOCAL] pickup the papers from desk to gripper  (r4_s2)\n- R2 [LOCAL] pick_up the small decor from desk to gripper  (r2_s3)\n- R4 [LOCAL] put_down the papers from gripper to shelf  (r4_s3)\n- R2 [LOCAL] put_down the small decor from gripper to shelf  (r2_s4)\n- R4 [LOCAL] pickup the small electronics from desk to gripper  (r4_s4)\n- R4 [LOCAL] put_down the small electronics from gripper to drawer  (r4_s5)\n\n### Provenance (collaboration edges)\n- r3_s1 (R3 ASK_HELP) <- r4_s1 (R4 LOCAL)  κ=mutual, decided by SELECT\n\n### Graph LLM edits (applied)\n- SELECT provider=r4_s1 request=r3_s1 — R4 has the capability to toggle the bedroom light and has agreed to do so.\n- ORDER before=r4_s1 after=r3_s2 — R3's step r3_s2 depends on the light being turned on, which is done by R4's r4_s1.\n\n### Report: goal coverage\n- R2.g0 ensure the living room is distraction-free: covered [r2_s1, r2_s2, r2_s3, r2_s4]\n- R3.g0 ensure the bedroom light is on for visibility: covered [r3_s1, r3_s2]\n- R4.g0 turn on the bedroom light for visibility: covered [r4_s1]\n- R4.g1 clear desk area of any clutter: covered [r4_s2, r4_s3, r4_s4, r4_s5]",
+        "metrics": {
+          "task_id": "task3_abstract",
+          "n_steps_total": 11,
+          "n_steps_active": 11,
+          "n_requests": 1,
+          "n_requests_served": 1,
+          "n_requests_unresolved": 0,
+          "n_candidates_from_stage3": 1,
+          "n_collab_edges_final": 1,
+          "n_help_edges": 1,
+          "n_transfer_edges": 0,
+          "decided_by_select": 1,
+          "decided_by_merge": 0,
+          "decided_by_default": 0,
+          "kappa_final": {
+            "mutual": 1,
+            "provider-only": 0,
+            "merged": 0
+          },
+          "graph_edits_applied": 2,
+          "graph_edits_rejected": 0,
+          "n_dropped_by_graph": 0,
+          "n_removed_by_closure": 0,
+          "n_requests_moved_later": 0,
+          "n_invariant_violations": 0,
+          "goals_total": 4,
+          "goals_covered": 4,
+          "goals_partial": 0,
+          "goals_uncovered": 0,
+          "goal_causes": {
+            "No volunteer": 0,
+            "Capability gap": 0,
+            "Left unresolved": 0,
+            "Infeasible": 0,
+            "Deadline exceeded": 0
+          },
+          "plan_fix_rounds": {
+            "R1": 1,
+            "R2": 1,
+            "R3": 1,
+            "R4": 0
+          },
+          "n_steps_excluded_stage2": 1,
+          "makespan_min": 5,
+          "deadline": 20,
+          "deadline_ok": true,
+          "llm_calls": 15,
+          "prompt_tokens": 28474,
+          "completion_tokens": 2622,
+          "variant": "no_offer",
+          "wall_time_sec": 16.95316457748413
+        }
+      },
+      "llm_judge": null
+    },
+    "no_edge": {
+      "raw_result": {
+        "variant": "no_edge",
+        "joint_plan_text": "### Joint Plan — task3_abstract  (about 5 min / deadline 20 min: OK)\n### Robots: R1:Gripper(living_room), R2:Mobile_Light(living_room), R3:Gripper(bedroom), R4:Mobile_Heavy(bedroom)\n\n[0-5 min]\n- R1 [LOCAL] turn_on the ceiling lamp from living room to living room  (r1_s1)\n- R2 [LOCAL] turn_on the brown floor lamp from living_room to living_room  (r2_s1)\n- R3 [LOCAL] move the notebook from desk to organized stack  (r3_s3)\n- R4 [LOCAL] turn_on the white floor lamp from near desk  (r4_s1)\n- R1 [LOCAL] turn_on the floor lamp from next to table to next to table  (r1_s2)\n- R2 [LOCAL] pick_up the brown laptop from sofa to gripper  (r2_s2)\n- R3 [LOCAL] move the pen from desk to pen holder  (r3_s4)\n- R2 [LOCAL] put_down the brown laptop from gripper to brown side table  (r2_s3)\n- R3 [LOCAL] move the smartphone from desk to side  (r3_s5)\n- R3 [LOCAL] move the plant from desk to corner  (r3_s6)\n- R3 [LOCAL] move the blue cup from desk to corner  (r3_s7)\n\n### Provenance (collaboration edges)\n\n### Graph LLM edits (applied)\n- DROP node=r3_s1 — No candidate available to toggle the bedroom light, and it is not essential for the video call.\n- DROP node=r4_s2 — Moving the silver laptop to the bed does not contribute to any sub-goal.\n- DROP node=r4_s3 — Moving the silver laptop to the bed does not contribute to any sub-goal.\n- DROP node=r4_s4 — Moving the potted plant does not contribute to any sub-goal.\n- DROP node=r4_s5 — Moving the potted plant does not contribute to any sub-goal.\n- DROP node=r4_s6 — Moving the trash bin does not contribute to any sub-goal.\n- DROP node=r4_s7 — Moving the trash bin does not contribute to any sub-goal.\n\n### Report: goal coverage\n- R1.g0 ensure the living room is well-lit for the video call: covered [r1_s1, r1_s2]\n- R2.g0 ensure living room lighting is optimal for video call: covered [r2_s1]\n- R2.g1 move brown laptop to a more appropriate location if needed: covered [r2_s2, r2_s3]\n- R3.g0 lamp on for better lighting: uncovered — Infeasible [r3_s2] (evidence gone: r3_s2)\n- R3.g1 desk organized for a presentable appearance: covered [r3_s3, r3_s4, r3_s5, r3_s6, r3_s7]\n- R4.g0 desk area clear of clutter: partial — Left unresolved [r4_s1]\n- R4.g1 sufficient lighting for video call: uncovered — Left unresolved (not judged by the Graph LLM)\n\n### Dropped by the Graph LLM\n- R3 [ASK_HELP] ToggleObject the bedroom light from off to on (r3_s1) — No candidate available to toggle the bedroom light, and it is not essential for the video call.\n- R4 [LOCAL] pick_up the silver laptop from desk to gripper (r4_s2) — Moving the silver laptop to the bed does not contribute to any sub-goal.\n- R4 [LOCAL] put_down the silver laptop from gripper to bed (r4_s3) — Moving the silver laptop to the bed does not contribute to any sub-goal.\n- R4 [LOCAL] pick_up the potted plant from near desk to gripper (r4_s4) — Moving the potted plant does not contribute to any sub-goal.\n- R4 [LOCAL] put_down the potted plant from gripper to nightstand (r4_s5) — Moving the potted plant does not contribute to any sub-goal.\n- R4 [LOCAL] pick_up the gray trash bin from near desk to gripper (r4_s6) — Moving the trash bin does not contribute to any sub-goal.\n- R4 [LOCAL] put_down the gray trash bin from gripper to corner (r4_s7) — Moving the trash bin does not contribute to any sub-goal.\n\n### Removed by dependency closure\n- R3 [LOCAL] turn_on the lamp from desk (r3_s2) — needs r3_s1, which will not happen",
+        "metrics": {
+          "task_id": "task3_abstract",
+          "n_steps_total": 19,
+          "n_steps_active": 11,
+          "n_requests": 1,
+          "n_requests_served": 0,
+          "n_requests_unresolved": 0,
+          "n_candidates_from_stage3": 0,
+          "n_collab_edges_final": 0,
+          "n_help_edges": 0,
+          "n_transfer_edges": 0,
+          "decided_by_select": 0,
+          "decided_by_merge": 0,
+          "decided_by_default": 0,
+          "kappa_final": {
+            "mutual": 0,
+            "provider-only": 0,
+            "merged": 0
+          },
+          "graph_edits_applied": 7,
+          "graph_edits_rejected": 0,
+          "n_dropped_by_graph": 7,
+          "n_removed_by_closure": 1,
+          "n_requests_moved_later": 0,
+          "n_invariant_violations": 0,
+          "goals_total": 7,
+          "goals_covered": 4,
+          "goals_partial": 1,
+          "goals_uncovered": 2,
+          "goal_causes": {
+            "No volunteer": 0,
+            "Capability gap": 0,
+            "Left unresolved": 2,
+            "Infeasible": 1,
+            "Deadline exceeded": 0
+          },
+          "plan_fix_rounds": {
+            "R1": 0,
+            "R2": 0,
+            "R3": 0,
+            "R4": 0
+          },
+          "n_steps_excluded_stage2": 0,
+          "makespan_min": 5,
+          "deadline": 20,
+          "deadline_ok": true,
+          "llm_calls": 9,
+          "prompt_tokens": 20178,
+          "completion_tokens": 2640,
+          "variant": "no_edge",
+          "wall_time_sec": 23.29528832435608
+        }
+      },
+      "llm_judge": null
+    },
+    "no_graph": {
+      "raw_result": {
+        "variant": "no_graph",
+        "joint_plan_text": "### Joint Plan — task3_abstract  (about 5 min / deadline 20 min: OK)\n### Robots: R1:Gripper(living_room), R2:Mobile_Light(living_room), R3:Gripper(bedroom), R4:Mobile_Heavy(bedroom)\n\n[0-5 min]\n- R1 [LOCAL] turn_on the white ceiling lamp from living_room to living_room  (r1_s1)\n- R2 [LOCAL] pick_up the black laptop from brown sofa to gripper  (r2_s1)\n- R3 [LOCAL] move the book from desk to organized position  (r3_s3)\n- R4 [LOCAL] turn_on the floor lamp from near desk  (r4_s1)\n- R1 [LOCAL] turn_on the floor lamp from living_room to living_room  (r1_s2)\n- R2 [LOCAL] put_down the black laptop from gripper to coffee table  (r2_s2)\n- R3 [LOCAL] move the pen from desk to organized position  (r3_s4)\n- R4 [LOCAL] move the black office chair from desk to corner  (r4_s2)\n- R2 [LOCAL] turn_on the pink lamp from wooden side table to on  (r2_s3)\n- R3 [LOCAL] move the phone from desk to organized position  (r3_s5)\n- R4 [LOCAL] move the gray trash can from next to desk to under desk  (r4_s3)\n- R3 [LOCAL] move the USB drive from desk to organized position  (r3_s6)\n- R3 [LOCAL] move the cup from desk to organized position  (r3_s7)\n\n### Provenance (collaboration edges)\n\n### Report: goal coverage\n- R1.g0 ensure living room lighting is on for clear visibility: uncovered — Left unresolved (not judged by the Graph LLM)\n- R2.g0 ensure black laptop is positioned for use: uncovered — Left unresolved (not judged by the Graph LLM)\n- R2.g1 toggle pink lamp for better lighting: uncovered — Left unresolved (not judged by the Graph LLM)\n- R3.g0 desk lamp on for clear visibility: uncovered — Left unresolved (not judged by the Graph LLM)\n- R3.g1 desk items organized for a tidy appearance: uncovered — Left unresolved (not judged by the Graph LLM)\n- R4.g0 desk area is tidy and ready for the call: uncovered — Left unresolved (not judged by the Graph LLM)\n- R4.g1 lighting is adjusted for clear visibility: uncovered — Left unresolved (not judged by the Graph LLM)\n\n### Unresolved requests\n- R3 r3_s1 toggle the main bedroom light from off to on — no candidate (nobody said YES) | R1: NO I am fixed in the living room and cannot reach the bedroom light.; R2: NO I am unable to assist in the bedroom as I can only operate in the living room.; R4: NO I cannot toggle the main bedroom light as it is not within my capabilities.\n\n### Removed by dependency closure\n- R3 [ASK_HELP] toggle the main bedroom light from off to on (r3_s1) — unresolved: no candidate (nobody said YES)\n- R3 [LOCAL] toggle the lamp from desk to on (r3_s2) — needs r3_s1, which will not happen",
+        "metrics": {
+          "task_id": "task3_abstract",
+          "n_steps_total": 15,
+          "n_steps_active": 13,
+          "n_requests": 1,
+          "n_requests_served": 0,
+          "n_requests_unresolved": 1,
+          "n_candidates_from_stage3": 0,
+          "n_collab_edges_final": 0,
+          "n_help_edges": 0,
+          "n_transfer_edges": 0,
+          "decided_by_select": 0,
+          "decided_by_merge": 0,
+          "decided_by_default": 0,
+          "kappa_final": {
+            "mutual": 0,
+            "provider-only": 0,
+            "merged": 0
+          },
+          "graph_edits_applied": 0,
+          "graph_edits_rejected": 0,
+          "n_dropped_by_graph": 0,
+          "n_removed_by_closure": 2,
+          "n_requests_moved_later": 0,
+          "n_invariant_violations": 0,
+          "goals_total": 7,
+          "goals_covered": 0,
+          "goals_partial": 0,
+          "goals_uncovered": 7,
+          "goal_causes": {
+            "No volunteer": 0,
+            "Capability gap": 0,
+            "Left unresolved": 7,
+            "Infeasible": 0,
+            "Deadline exceeded": 0
+          },
+          "plan_fix_rounds": {
+            "R1": 1,
+            "R2": 1,
+            "R3": 0,
+            "R4": 1
+          },
+          "n_steps_excluded_stage2": 4,
+          "makespan_min": 5,
+          "deadline": 20,
+          "deadline_ok": true,
+          "llm_calls": 14,
+          "prompt_tokens": 30292,
+          "completion_tokens": 3149,
+          "variant": "no_graph",
+          "wall_time_sec": 15.295849561691284
+        }
+      },
+      "llm_judge": null
+    }
+  }
+}

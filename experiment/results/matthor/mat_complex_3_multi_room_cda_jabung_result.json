@@ -1,0 +1,1177 @@
+{
+  "task_n": "mat_complex_3",
+  "mode": "multi_room",
+  "model": "gpt-4o",
+  "task_text": "put mug in the coffee machine and switch on the coffee machine",
+  "joint_plan_text": "```\n### Joint Plan — mat_complex_3  (about 5 min / deadline 20 min: OK)\n### Robots: R1:Gripper(kitchen), R2:Mobile_Light(kitchen), R3:Mobile_Heavy(kitchen), R4:Gripper(kitchen)\n\n[0-5 min]\n- R1 [LOCAL] pick up the blue mug from the counter to the gripper  (r1_s1)\n- R2 [LOCAL] pick up the red mug from the counter to the gripper  (r2_s1)\n- R3 [LOCAL] turn on the black coffee machine from off to on  (r3_s3)\n- R1 [LOCAL] put down the blue mug from the gripper to the coffee machine  (r1_s2)\n- R2 [LOCAL] put down the red mug from the gripper to the black coffee machine  (r2_s2)\n- R1 [LOCAL] turn on the coffee machine from off to on  (r1_s3)",
+  "joint_plan_full": "### Joint Plan — mat_complex_3  (about 5 min / deadline 20 min: OK)\n### Robots: R1:Gripper(kitchen), R2:Mobile_Light(kitchen), R3:Mobile_Heavy(kitchen), R4:Gripper(kitchen)\n\n[0-5 min]\n- R1 [LOCAL] pick_up the blue mug from counter to gripper  (r1_s1)\n- R2 [LOCAL] pick_up the red mug from counter to gripper  (r2_s1)\n- R3 [LOCAL] turn_on the black coffee machine from counter to on  (r3_s3)\n- R1 [LOCAL] put_down the blue mug from gripper to coffee machine  (r1_s2)\n- R2 [LOCAL] put_down the red mug from gripper to black coffee machine  (r2_s2)\n- R1 [LOCAL] turn_on the coffee machine from off to on  (r1_s3)\n\n### Provenance (collaboration edges)\n\n### Graph LLM edits (applied)\n- DROP node=r3_s1 — Duplicate work: R3 and R2 both pick up the red mug.\n- DROP node=r3_s2 — Duplicate work: R3 and R2 both place the red mug in the coffee machine.\n- DROP node=r4_s1 — Duplicate work: R4 and R1 both pick up a mug.\n- DROP node=r4_s2 — Duplicate work: R4 and R1 both place a mug in the coffee machine.\n- DROP node=r4_s3 — Duplicate work: R4 and R1 both turn on the coffee machine.\n\n### Report: goal coverage\n- R1.g0 blue mug placed in the coffee machine: covered [r1_s1, r1_s2]\n- R1.g1 coffee machine turned on: covered [r1_s3]\n- R2.g0 red mug placed in the black coffee machine: covered [r2_s1, r2_s2]\n- R3.g0 red mug placed in the black coffee machine: covered [r2_s1, r2_s2]\n- R3.g1 black coffee machine switched on: covered [r3_s3]\n- R4.g0 white mug placed in the coffee machine: uncovered — Left unresolved\n- R4.g1 coffee machine switched on: uncovered — Left unresolved\n\n### Dropped by the Graph LLM\n- R3 [LOCAL] pick_up the red mug from counter to gripper (r3_s1) — Duplicate work: R3 and R2 both pick up the red mug.\n- R3 [LOCAL] put_down the red mug from gripper to black coffee machine (r3_s2) — Duplicate work: R3 and R2 both place the red mug in the coffee machine.\n- R4 [LOCAL] pick_up the white mug from counter to gripper (r4_s1) — Duplicate work: R4 and R1 both pick up a mug.\n- R4 [LOCAL] put_down the white mug from gripper to coffee machine (r4_s2) — Duplicate work: R4 and R1 both place a mug in the coffee machine.\n- R4 [LOCAL] turn_on the coffee machine from counter to on (r4_s3) — Duplicate work: R4 and R1 both turn on the coffee machine.",
+  "offers": {
+    "R1": {
+      "agent": "R1",
+      "capability": "I am fixed in place with a gripper to handle light objects.",
+      "can_do": [
+        "PickupLightObject: lift mugs, small items",
+        "ToggleObject: turn on/off appliances"
+      ],
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift furniture",
+        "PushFurniture: cannot move furniture due to being fixed"
+      ],
+      "has_items": [
+        "blue mug (counter, image 1)",
+        "coffee machine (counter, image 1)"
+      ],
+      "need_from_others": [],
+      "intends": [
+        "blue mug placed in the coffee machine",
+        "coffee machine turned on"
+      ],
+      "obs_scope": "I can observe the kitchen only.",
+      "reasoning": "a) The task requires the blue mug to be placed in the coffee machine and the machine to be turned on. b) The kitchen is where the coffee machine and mug are located, allowing for the preparation of coffee. c) I can place the blue mug in the coffee machine and turn it on. d) Placing the mug in the coffee machine is essential before turning it on."
+    },
+    "R2": {
+      "agent": "R2",
+      "capability": "I am mobile and can carry light objects up to 5 kg with one arm.",
+      "can_do": [
+        "PickupLightObject: lift mugs, small items",
+        "PassReceiveObject: pass or receive objects"
+      ],
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift furniture",
+        "PushFurniture: cannot move furniture",
+        "SliceObject: no cutting tool",
+        "PourObject: cannot pour liquids",
+        "ToggleObject: cannot turn on/off devices"
+      ],
+      "has_items": [
+        "red mug (counter, image 1)",
+        "black coffee machine (counter, image 1)"
+      ],
+      "need_from_others": [
+        "someone who can toggle the coffee machine"
+      ],
+      "intends": [
+        "red mug placed in the black coffee machine"
+      ],
+      "obs_scope": "I can observe the kitchen only.",
+      "reasoning": "a) The task requires the red mug to be placed in the black coffee machine and the coffee machine to be switched on. b) The kitchen provides both the red mug and the black coffee machine necessary for making coffee. c) I can pick up the red mug and place it in the black coffee machine, but I cannot switch on the coffee machine as I lack the capability to toggle objects. d) Placing the red mug in the black coffee machine is the priority since it is within my capabilities."
+    },
+    "R3": {
+      "agent": "R3",
+      "capability": "I am mobile and can carry heavy objects up to 20 kg.",
+      "can_do": [
+        "PickupLightObject: lift mugs, fruit, small items",
+        "PickupHeavyObject: lift furniture and heavy appliances",
+        "ToggleObject: turn on/off lights, appliances"
+      ],
+      "cannot_do": [
+        "SliceObject: no cutting tool",
+        "PourObject: cannot pour liquids"
+      ],
+      "has_items": [
+        "red mug (counter, image 1)",
+        "black coffee machine (counter, image 1)"
+      ],
+      "need_from_others": [],
+      "intends": [
+        "red mug placed in the black coffee machine",
+        "black coffee machine switched on"
+      ],
+      "obs_scope": "I can observe the kitchen only.",
+      "reasoning": "a) The task is complete when the mug is placed in the coffee machine and the machine is turned on. b) The kitchen provides the necessary equipment: the coffee machine and the mug. c) I can move the mug into the coffee machine and toggle the machine on. d) Placing the mug in the coffee machine is essential before turning it on."
+    },
+    "R4": {
+      "agent": "R4",
+      "capability": "I am fixed in place and can manipulate light objects within my reach using a gripper.",
+      "can_do": [
+        "PickupLightObject: lift mugs and small items",
+        "PassReceiveObject: pass or receive objects to/from another robot",
+        "PourObject: pour from a container",
+        "SliceObject: perform cutting actions"
+      ],
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift furniture or large appliances",
+        "Move: cannot relocate or transport myself"
+      ],
+      "has_items": [
+        "white mug (counter, image 1)",
+        "coffee machine (counter, image 1)"
+      ],
+      "need_from_others": [],
+      "intends": [
+        "white mug placed in the coffee machine",
+        "coffee machine switched on"
+      ],
+      "obs_scope": "I can observe the kitchen only.",
+      "reasoning": "a) The task is complete when the mug is placed in the coffee machine and the coffee machine is turned on. b) The kitchen provides the coffee machine and the mug necessary for making coffee. c) I can place the white mug in the coffee machine and switch it on. d) The priority is to first place the mug in the coffee machine, then switch the coffee machine on."
+    }
+  },
+  "local_plans": {
+    "R1": [
+      {
+        "id": "r1_s1",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "blue mug",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "blue mug placed in the coffee machine",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r1_s2",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "blue mug",
+          "from": "gripper",
+          "to": "coffee machine"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "blue mug placed in the coffee machine",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r1_s3",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "turn_on",
+          "object": "coffee machine",
+          "from": "off",
+          "to": "on"
+        },
+        "item": null,
+        "target": null,
+        "uses": 1,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "coffee machine turned on",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "R2": [
+      {
+        "id": "r2_s1",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "red mug",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "red mug placed in the black coffee machine",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s2",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "red mug",
+          "from": "gripper",
+          "to": "black coffee machine"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "red mug placed in the black coffee machine",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "R3": [
+      {
+        "id": "r3_s1",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "red mug",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "red mug placed in the black coffee machine",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s2",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "red mug",
+          "from": "gripper",
+          "to": "black coffee machine"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "red mug placed in the black coffee machine",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s3",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "turn_on",
+          "object": "black coffee machine",
+          "from": "counter",
+          "to": "on"
+        },
+        "item": null,
+        "target": null,
+        "uses": 2,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "black coffee machine switched on",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "R4": [
+      {
+        "id": "r4_s1",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "white mug",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "white mug placed in the coffee machine",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s2",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "white mug",
+          "from": "gripper",
+          "to": "coffee machine"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "white mug placed in the coffee machine",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s3",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "turn_on",
+          "object": "coffee machine",
+          "from": "counter",
+          "to": "on"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "coffee machine switched on",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ]
+  },
+  "answers": [],
+  "graph": {
+    "nodes": [
+      {
+        "id": "r1_s1",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "blue mug",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "blue mug placed in the coffee machine",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 1
+      },
+      {
+        "id": "r1_s2",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "blue mug",
+          "from": "gripper",
+          "to": "coffee machine"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "blue mug placed in the coffee machine",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 1,
+        "t_end": 2
+      },
+      {
+        "id": "r1_s3",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "turn_on",
+          "object": "coffee machine",
+          "from": "off",
+          "to": "on"
+        },
+        "item": null,
+        "target": null,
+        "uses": 1,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "coffee machine turned on",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 2,
+        "t_end": 3
+      },
+      {
+        "id": "r2_s1",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "red mug",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "red mug placed in the black coffee machine",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 1
+      },
+      {
+        "id": "r2_s2",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "red mug",
+          "from": "gripper",
+          "to": "black coffee machine"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "red mug placed in the black coffee machine",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 1,
+        "t_end": 2
+      },
+      {
+        "id": "r3_s1",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "red mug",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "red mug placed in the black coffee machine",
+        "replies": [],
+        "status": "dropped",
+        "status_reason": "4.2 DROP: Duplicate work: R3 and R2 both pick up the red mug.",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s2",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "red mug",
+          "from": "gripper",
+          "to": "black coffee machine"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "red mug placed in the black coffee machine",
+        "replies": [],
+        "status": "dropped",
+        "status_reason": "4.2 DROP: Duplicate work: R3 and R2 both place the red mug in the coffee machine.",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s3",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "turn_on",
+          "object": "black coffee machine",
+          "from": "counter",
+          "to": "on"
+        },
+        "item": null,
+        "target": null,
+        "uses": 2,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "black coffee machine switched on",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 1
+      },
+      {
+        "id": "r4_s1",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "white mug",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "white mug placed in the coffee machine",
+        "replies": [],
+        "status": "dropped",
+        "status_reason": "4.2 DROP: Duplicate work: R4 and R1 both pick up a mug.",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s2",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "white mug",
+          "from": "gripper",
+          "to": "coffee machine"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "white mug placed in the coffee machine",
+        "replies": [],
+        "status": "dropped",
+        "status_reason": "4.2 DROP: Duplicate work: R4 and R1 both place a mug in the coffee machine.",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s3",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "turn_on",
+          "object": "coffee machine",
+          "from": "counter",
+          "to": "on"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "coffee machine switched on",
+        "replies": [],
+        "status": "dropped",
+        "status_reason": "4.2 DROP: Duplicate work: R4 and R1 both turn on the coffee machine.",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "order": {
+      "R1": [
+        "r1_s1",
+        "r1_s2",
+        "r1_s3"
+      ],
+      "R2": [
+        "r2_s1",
+        "r2_s2"
+      ],
+      "R3": [
+        "r3_s1",
+        "r3_s2",
+        "r3_s3"
+      ],
+      "R4": [
+        "r4_s1",
+        "r4_s2",
+        "r4_s3"
+      ]
+    },
+    "edges": [
+      {
+        "src": "r1_s1",
+        "dst": "r1_s2",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r1_s2",
+        "dst": "r1_s3",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r2_s1",
+        "dst": "r2_s2",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      }
+    ],
+    "edit_log": [
+      {
+        "k": 0,
+        "edit": {
+          "op": "DROP",
+          "node": "r3_s1",
+          "rationale": "Duplicate work: R3 and R2 both pick up the red mug."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "Duplicate work: R3 and R2 both pick up the red mug."
+      },
+      {
+        "k": 1,
+        "edit": {
+          "op": "DROP",
+          "node": "r3_s2",
+          "rationale": "Duplicate work: R3 and R2 both place the red mug in the coffee machine."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "Duplicate work: R3 and R2 both place the red mug in the coffee machine."
+      },
+      {
+        "k": 2,
+        "edit": {
+          "op": "DROP",
+          "node": "r4_s1",
+          "rationale": "Duplicate work: R4 and R1 both pick up a mug."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "Duplicate work: R4 and R1 both pick up a mug."
+      },
+      {
+        "k": 3,
+        "edit": {
+          "op": "DROP",
+          "node": "r4_s2",
+          "rationale": "Duplicate work: R4 and R1 both place a mug in the coffee machine."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "Duplicate work: R4 and R1 both place a mug in the coffee machine."
+      },
+      {
+        "k": 4,
+        "edit": {
+          "op": "DROP",
+          "node": "r4_s3",
+          "rationale": "Duplicate work: R4 and R1 both turn on the coffee machine."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "Duplicate work: R4 and R1 both turn on the coffee machine."
+      }
+    ],
+    "report": {
+      "goals": [
+        {
+          "robot": "R1",
+          "goal": 0,
+          "text": "blue mug placed in the coffee machine",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r1_s1",
+            "r1_s2"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R1",
+          "goal": 1,
+          "text": "coffee machine turned on",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r1_s3"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R2",
+          "goal": 0,
+          "text": "red mug placed in the black coffee machine",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r2_s1",
+            "r2_s2"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R3",
+          "goal": 0,
+          "text": "red mug placed in the black coffee machine",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r2_s1",
+            "r2_s2"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R3",
+          "goal": 1,
+          "text": "black coffee machine switched on",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r3_s3"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R4",
+          "goal": 0,
+          "text": "white mug placed in the coffee machine",
+          "status": "uncovered",
+          "cause": [
+            "Left unresolved"
+          ],
+          "evidence": [],
+          "note": "",
+          "llm_status": "uncovered",
+          "llm_cause": "Left unresolved"
+        },
+        {
+          "robot": "R4",
+          "goal": 1,
+          "text": "coffee machine switched on",
+          "status": "uncovered",
+          "cause": [
+            "Left unresolved"
+          ],
+          "evidence": [],
+          "note": "",
+          "llm_status": "uncovered",
+          "llm_cause": "Left unresolved"
+        }
+      ],
+      "unresolved_requests": [],
+      "rejected_edits": [],
+      "dropped": [
+        {
+          "node": "r3_s1",
+          "agent": "R3",
+          "type": "LOCAL",
+          "text": "pick_up the red mug from counter to gripper",
+          "rationale": "Duplicate work: R3 and R2 both pick up the red mug."
+        },
+        {
+          "node": "r3_s2",
+          "agent": "R3",
+          "type": "LOCAL",
+          "text": "put_down the red mug from gripper to black coffee machine",
+          "rationale": "Duplicate work: R3 and R2 both place the red mug in the coffee machine."
+        },
+        {
+          "node": "r4_s1",
+          "agent": "R4",
+          "type": "LOCAL",
+          "text": "pick_up the white mug from counter to gripper",
+          "rationale": "Duplicate work: R4 and R1 both pick up a mug."
+        },
+        {
+          "node": "r4_s2",
+          "agent": "R4",
+          "type": "LOCAL",
+          "text": "put_down the white mug from gripper to coffee machine",
+          "rationale": "Duplicate work: R4 and R1 both place a mug in the coffee machine."
+        },
+        {
+          "node": "r4_s3",
+          "agent": "R4",
+          "type": "LOCAL",
+          "text": "turn_on the coffee machine from counter to on",
+          "rationale": "Duplicate work: R4 and R1 both turn on the coffee machine."
+        }
+      ],
+      "removed_by_closure": [],
+      "invariant_violations": [],
+      "deadline": {
+        "makespan_min": 5,
+        "deadline_min": 20,
+        "exceeded": false
+      }
+    }
+  },
+  "report": {
+    "goals": [
+      {
+        "robot": "R1",
+        "goal": 0,
+        "text": "blue mug placed in the coffee machine",
+        "status": "covered",
+        "cause": [],
+        "evidence": [
+          "r1_s1",
+          "r1_s2"
+        ],
+        "note": "",
+        "llm_status": "covered",
+        "llm_cause": null
+      },
+      {
+        "robot": "R1",
+        "goal": 1,
+        "text": "coffee machine turned on",
+        "status": "covered",
+        "cause": [],
+        "evidence": [
+          "r1_s3"
+        ],
+        "note": "",
+        "llm_status": "covered",
+        "llm_cause": null
+      },
+      {
+        "robot": "R2",
+        "goal": 0,
+        "text": "red mug placed in the black coffee machine",
+        "status": "covered",
+        "cause": [],
+        "evidence": [
+          "r2_s1",
+          "r2_s2"
+        ],
+        "note": "",
+        "llm_status": "covered",
+        "llm_cause": null
+      },
+      {
+        "robot": "R3",
+        "goal": 0,
+        "text": "red mug placed in the black coffee machine",
+        "status": "covered",
+        "cause": [],
+        "evidence": [
+          "r2_s1",
+          "r2_s2"
+        ],
+        "note": "",
+        "llm_status": "covered",
+        "llm_cause": null
+      },
+      {
+        "robot": "R3",
+        "goal": 1,
+        "text": "black coffee machine switched on",
+        "status": "covered",
+        "cause": [],
+        "evidence": [
+          "r3_s3"
+        ],
+        "note": "",
+        "llm_status": "covered",
+        "llm_cause": null
+      },
+      {
+        "robot": "R4",
+        "goal": 0,
+        "text": "white mug placed in the coffee machine",
+        "status": "uncovered",
+        "cause": [
+          "Left unresolved"
+        ],
+        "evidence": [],
+        "note": "",
+        "llm_status": "uncovered",
+        "llm_cause": "Left unresolved"
+      },
+      {
+        "robot": "R4",
+        "goal": 1,
+        "text": "coffee machine switched on",
+        "status": "uncovered",
+        "cause": [
+          "Left unresolved"
+        ],
+        "evidence": [],
+        "note": "",
+        "llm_status": "uncovered",
+        "llm_cause": "Left unresolved"
+      }
+    ],
+    "unresolved_requests": [],
+    "rejected_edits": [],
+    "dropped": [
+      {
+        "node": "r3_s1",
+        "agent": "R3",
+        "type": "LOCAL",
+        "text": "pick_up the red mug from counter to gripper",
+        "rationale": "Duplicate work: R3 and R2 both pick up the red mug."
+      },
+      {
+        "node": "r3_s2",
+        "agent": "R3",
+        "type": "LOCAL",
+        "text": "put_down the red mug from gripper to black coffee machine",
+        "rationale": "Duplicate work: R3 and R2 both place the red mug in the coffee machine."
+      },
+      {
+        "node": "r4_s1",
+        "agent": "R4",
+        "type": "LOCAL",
+        "text": "pick_up the white mug from counter to gripper",
+        "rationale": "Duplicate work: R4 and R1 both pick up a mug."
+      },
+      {
+        "node": "r4_s2",
+        "agent": "R4",
+        "type": "LOCAL",
+        "text": "put_down the white mug from gripper to coffee machine",
+        "rationale": "Duplicate work: R4 and R1 both place a mug in the coffee machine."
+      },
+      {
+        "node": "r4_s3",
+        "agent": "R4",
+        "type": "LOCAL",
+        "text": "turn_on the coffee machine from counter to on",
+        "rationale": "Duplicate work: R4 and R1 both turn on the coffee machine."
+      }
+    ],
+    "removed_by_closure": [],
+    "invariant_violations": [],
+    "deadline": {
+      "makespan_min": 5,
+      "deadline_min": 20,
+      "exceeded": false
+    }
+  },
+  "metrics": {
+    "task_id": "mat_complex_3",
+    "n_steps_total": 11,
+    "n_steps_active": 6,
+    "n_requests": 0,
+    "n_requests_served": 0,
+    "n_requests_unresolved": 0,
+    "n_candidates_from_stage3": 0,
+    "n_collab_edges_final": 0,
+    "n_help_edges": 0,
+    "n_transfer_edges": 0,
+    "decided_by_select": 0,
+    "decided_by_merge": 0,
+    "decided_by_default": 0,
+    "kappa_final": {
+      "mutual": 0,
+      "provider-only": 0,
+      "merged": 0
+    },
+    "graph_edits_applied": 5,
+    "graph_edits_rejected": 0,
+    "n_dropped_by_graph": 5,
+    "n_removed_by_closure": 0,
+    "n_requests_moved_later": 0,
+    "n_invariant_violations": 0,
+    "goals_total": 7,
+    "goals_covered": 5,
+    "goals_partial": 0,
+    "goals_uncovered": 2,
+    "goal_causes": {
+      "No volunteer": 0,
+      "Capability gap": 0,
+      "Left unresolved": 2,
+      "Infeasible": 0,
+      "Deadline exceeded": 0
+    },
+    "plan_fix_rounds": {
+      "R1": 0,
+      "R2": 1,
+      "R3": 0,
+      "R4": 0
+    },
+    "n_steps_excluded_stage2": 1,
+    "makespan_min": 5,
+    "deadline": 20,
+    "deadline_ok": true,
+    "llm_calls": 10,
+    "prompt_tokens": 19207,
+    "completion_tokens": 2295,
+    "config": {
+      "use_edge_proposal": true,
+      "use_graph_llm": true
+    },
+    "wall_time_sec": 12.9
+  },
+  "config": {
+    "use_edge_proposal": true,
+    "use_graph_llm": true,
+    "max_graph_rounds": 2,
+    "deadline_min": 20
+  }
+}

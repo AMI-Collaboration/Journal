@@ -1,0 +1,959 @@
+{
+  "method": "cda",
+  "task_n": "task2_simple",
+  "raw_result": {
+    "task_n": "task2_simple",
+    "mode": "multi_room",
+    "model": "gpt-4o",
+    "task_text": "Turn off the room light, turn on faucet",
+    "joint_plan_text": "```plaintext\n### Joint Plan — task2_simple  (about 5 min / deadline 10 min: OK)\n### Robots: R1:Mobile_Light(bedroom), R2:Mobile_Light(bathroom), R3:Mobile_Light(bedroom), R4:Mobile_Light(bathroom)\n\n[0-5 min]\n- R1 [LOCAL] turn off the black ceiling lamp from above bed  (r1_s1)\n- R2 [LOCAL] turn off the room light switch from wall to off position  (r2_s1)\n- R3 [LOCAL] turn off the ceiling lamp from ceiling  (r3_s1)\n- R4 [LOCAL] turn on the silver faucet from sink to on  (r4_s2)\n- R1 [LOCAL] turn on the silver faucet from sink  (r1_s2)\n- R2 [LOCAL] turn on the metal faucet from sink to on position  (r2_s2)\n- R3 [LOCAL] turn on the silver faucet from right wall  (r3_s2)",
+    "joint_plan_full": "### Joint Plan — task2_simple  (about 5 min / deadline 10 min: OK)\n### Robots: R1:Mobile_Light(bedroom), R2:Mobile_Light(bathroom), R3:Mobile_Light(bedroom), R4:Mobile_Light(bathroom)\n\n[0-5 min]\n- R1 [LOCAL] turn_off the black ceiling lamp from above bed  (r1_s1)\n- R2 [LOCAL] turn_off the room light switch from wall to off position  (r2_s1)\n- R3 [LOCAL] turn_off the ceiling lamp from ceiling  (r3_s1)\n- R4 [LOCAL] turn_on the silver faucet from sink to on  (r4_s2)\n- R1 [LOCAL] turn_on the silver faucet from sink  (r1_s2)\n- R2 [LOCAL] turn_on the metal faucet from sink to on position  (r2_s2)\n- R3 [LOCAL] turn_on the silver faucet from right wall  (r3_s2)\n\n### Provenance (collaboration edges)\n\n### Graph LLM edits (applied)\n- DROP node=r4_s1 — R4's action of turning off the white ceiling light is not part of any robot's intention and does not contribute to any goal.\n\n### Report: goal coverage\n- R1.g0 ceiling lamp turned off: covered [r1_s1]\n- R1.g1 faucet turned on: covered [r1_s2]\n- R2.g0 room light is turned off: covered [r2_s1]\n- R2.g1 faucet is turned on: covered [r2_s2]\n- R3.g0 turn off ceiling lamp: covered [r3_s1]\n- R3.g1 turn on silver faucet: covered [r3_s2]\n- R4.g0 turn off ceiling light: uncovered — Capability gap\n- R4.g1 turn on silver faucet: covered [r4_s2]\n\n### Dropped by the Graph LLM\n- R4 [LOCAL] turn_off the white ceiling light from ceiling to off (r4_s1) — R4's action of turning off the white ceiling light is not part of any robot's intention and does not contribute to any goal.",
+    "offers": {
+      "R1": {
+        "agent": "R1",
+        "capability": "I am mobile and can carry light objects up to 5 kg with one arm.",
+        "can_do": [
+          "PickupLightObject: lift small items",
+          "PassReceiveObject: exchange objects with others",
+          "ToggleObject: turn on/off lights, appliances"
+        ],
+        "cannot_do": [
+          "PickupHeavyObject: cannot lift furniture",
+          "PushFurniture: cannot move furniture",
+          "SliceObject: no cutting tool",
+          "PourObject: cannot pour liquids"
+        ],
+        "has_items": [
+          "white bed (center, image 1)",
+          "brown nightstand (left of bed, image 1)",
+          "black ceiling lamp (above bed, image 1)",
+          "silver faucet (sink, image 2)"
+        ],
+        "need_from_others": [],
+        "intends": [
+          "ceiling lamp turned off",
+          "faucet turned on"
+        ],
+        "obs_scope": "I can observe the bedroom only.",
+        "reasoning": "a) The room light must be off, and the faucet must be on. b) Bedroom: control lighting and faucet. c) I can toggle the ceiling lamp and faucet. d) Turning off the ceiling lamp is the priority since it's explicitly mentioned first."
+      },
+      "R2": {
+        "agent": "R2",
+        "capability": "I am mobile and can operate light switches and faucets.",
+        "can_do": [
+          "PickupLightObject: lift small items",
+          "PassReceiveObject: exchange items with others",
+          "ToggleObject: turn on/off light switches and faucets"
+        ],
+        "cannot_do": [
+          "PickupHeavyObject: cannot lift furniture",
+          "PushFurniture: cannot move furniture",
+          "SliceObject: no cutting tool",
+          "PourObject: cannot pour liquids"
+        ],
+        "has_items": [
+          "metal faucet (sink, image 1)",
+          "room light switch (wall, image 2)",
+          "soap dispenser (sink, image 1)",
+          "metal rack (floor, image 1)",
+          "towel (rack, image 2)"
+        ],
+        "need_from_others": [],
+        "intends": [
+          "room light is turned off",
+          "faucet is turned on"
+        ],
+        "obs_scope": "I can observe the bathroom only.",
+        "reasoning": "a) Room should be dark, and water should be flowing. b) Bathroom: control lighting and water supply. c) I can toggle the faucet and light switch. d) Turning off the light is crucial for darkness, then turn on the faucet."
+      },
+      "R3": {
+        "agent": "R3",
+        "capability": "I am mobile and can toggle objects like lights and faucets.",
+        "can_do": [
+          "PickupLightObject: lift small items up to 5 kg",
+          "ToggleObject: turn on/off lights, faucets"
+        ],
+        "cannot_do": [
+          "PickupHeavyObject: cannot lift furniture",
+          "PushFurniture: cannot move heavy objects",
+          "SliceObject: no cutting tool",
+          "PourObject: cannot pour liquids"
+        ],
+        "has_items": [
+          "white bed (center, image 1)",
+          "wooden nightstand (left of bed, image 1)",
+          "silver faucet (right wall, image 2)",
+          "ceiling lamp (ceiling, image 1)"
+        ],
+        "need_from_others": [],
+        "intends": [
+          "turn off ceiling lamp",
+          "turn on silver faucet"
+        ],
+        "obs_scope": "I can observe the bedroom only.",
+        "reasoning": "a) The room light must be off, and the faucet must be on. b) The bedroom provides access to the ceiling lamp and the faucet. c) I can toggle the ceiling lamp and the faucet. d) Turning off the light and turning on the faucet are equally important to achieve the task."
+      },
+      "R4": {
+        "agent": "R4",
+        "capability": "I am mobile and can toggle objects like lights and faucets.",
+        "can_do": [
+          "PickupLightObject: lift small items",
+          "PassReceiveObject: exchange objects with others",
+          "ToggleObject: turn on/off lights, faucets"
+        ],
+        "cannot_do": [
+          "PickupHeavyObject: cannot lift heavy items",
+          "PushFurniture: cannot move furniture",
+          "SliceObject: no cutting tool",
+          "PourObject: cannot pour liquids"
+        ],
+        "has_items": [
+          "white sink (floor, image 1)",
+          "silver faucet (sink, image 1)",
+          "white toilet (floor, image 2)",
+          "white ceiling light (ceiling, image 2)"
+        ],
+        "need_from_others": [],
+        "intends": [
+          "turn off ceiling light",
+          "turn on silver faucet"
+        ],
+        "obs_scope": "I can observe the bathroom only.",
+        "reasoning": "a) The room light must be off and the faucet must be on. b) The bathroom needs to have the faucet running and the lights off. c) I can toggle the faucet and the ceiling light. d) Turning off the light and turning on the faucet are equally important for completing the task."
+      }
+    },
+    "local_plans": {
+      "R1": [
+        {
+          "id": "r1_s1",
+          "agent": "R1",
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_off",
+            "object": "black ceiling lamp",
+            "from": "above bed",
+            "to": null
+          },
+          "item": null,
+          "target": null,
+          "uses": 2,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "ceiling lamp turned off",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r1_s2",
+          "agent": "R1",
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "silver faucet",
+            "from": "sink",
+            "to": null
+          },
+          "item": null,
+          "target": null,
+          "uses": 2,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "faucet turned on",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        }
+      ],
+      "R2": [
+        {
+          "id": "r2_s1",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_off",
+            "object": "room light switch",
+            "from": "wall",
+            "to": "off position"
+          },
+          "item": null,
+          "target": null,
+          "uses": 2,
+          "location": "bathroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "room light is turned off",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r2_s2",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "metal faucet",
+            "from": "sink",
+            "to": "on position"
+          },
+          "item": null,
+          "target": null,
+          "uses": 2,
+          "location": "bathroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "faucet is turned on",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        }
+      ],
+      "R3": [
+        {
+          "id": "r3_s1",
+          "agent": "R3",
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_off",
+            "object": "ceiling lamp",
+            "from": "ceiling",
+            "to": ""
+          },
+          "item": null,
+          "target": null,
+          "uses": 1,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "turn off ceiling lamp",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r3_s2",
+          "agent": "R3",
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "silver faucet",
+            "from": "right wall",
+            "to": ""
+          },
+          "item": null,
+          "target": null,
+          "uses": 1,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "turn on silver faucet",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        }
+      ],
+      "R4": [
+        {
+          "id": "r4_s1",
+          "agent": "R4",
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_off",
+            "object": "white ceiling light",
+            "from": "ceiling",
+            "to": "off"
+          },
+          "item": null,
+          "target": null,
+          "uses": 2,
+          "location": "bathroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "turn off ceiling light",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r4_s2",
+          "agent": "R4",
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "silver faucet",
+            "from": "sink",
+            "to": "on"
+          },
+          "item": null,
+          "target": null,
+          "uses": 2,
+          "location": "bathroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "turn on silver faucet",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        }
+      ]
+    },
+    "answers": [],
+    "graph": {
+      "nodes": [
+        {
+          "id": "r1_s1",
+          "agent": "R1",
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_off",
+            "object": "black ceiling lamp",
+            "from": "above bed",
+            "to": null
+          },
+          "item": null,
+          "target": null,
+          "uses": 2,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "ceiling lamp turned off",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 0,
+          "t_end": 1
+        },
+        {
+          "id": "r1_s2",
+          "agent": "R1",
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "silver faucet",
+            "from": "sink",
+            "to": null
+          },
+          "item": null,
+          "target": null,
+          "uses": 2,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "faucet turned on",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 1,
+          "t_end": 2
+        },
+        {
+          "id": "r2_s1",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_off",
+            "object": "room light switch",
+            "from": "wall",
+            "to": "off position"
+          },
+          "item": null,
+          "target": null,
+          "uses": 2,
+          "location": "bathroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "room light is turned off",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 0,
+          "t_end": 1
+        },
+        {
+          "id": "r2_s2",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "metal faucet",
+            "from": "sink",
+            "to": "on position"
+          },
+          "item": null,
+          "target": null,
+          "uses": 2,
+          "location": "bathroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "faucet is turned on",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 1,
+          "t_end": 2
+        },
+        {
+          "id": "r3_s1",
+          "agent": "R3",
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_off",
+            "object": "ceiling lamp",
+            "from": "ceiling",
+            "to": ""
+          },
+          "item": null,
+          "target": null,
+          "uses": 1,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "turn off ceiling lamp",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 0,
+          "t_end": 1
+        },
+        {
+          "id": "r3_s2",
+          "agent": "R3",
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "silver faucet",
+            "from": "right wall",
+            "to": ""
+          },
+          "item": null,
+          "target": null,
+          "uses": 1,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "turn on silver faucet",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 1,
+          "t_end": 2
+        },
+        {
+          "id": "r4_s1",
+          "agent": "R4",
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_off",
+            "object": "white ceiling light",
+            "from": "ceiling",
+            "to": "off"
+          },
+          "item": null,
+          "target": null,
+          "uses": 2,
+          "location": "bathroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "turn off ceiling light",
+          "replies": [],
+          "status": "dropped",
+          "status_reason": "4.2 DROP: R4's action of turning off the white ceiling light is not part of any robot's intention and does not contribute to any goal.",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r4_s2",
+          "agent": "R4",
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "silver faucet",
+            "from": "sink",
+            "to": "on"
+          },
+          "item": null,
+          "target": null,
+          "uses": 2,
+          "location": "bathroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "turn on silver faucet",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 0,
+          "t_end": 1
+        }
+      ],
+      "order": {
+        "R1": [
+          "r1_s1",
+          "r1_s2"
+        ],
+        "R2": [
+          "r2_s1",
+          "r2_s2"
+        ],
+        "R3": [
+          "r3_s1",
+          "r3_s2"
+        ],
+        "R4": [
+          "r4_s1",
+          "r4_s2"
+        ]
+      },
+      "edges": [
+        {
+          "src": "r1_s1",
+          "dst": "r1_s2",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r2_s1",
+          "dst": "r2_s2",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r3_s1",
+          "dst": "r3_s2",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        }
+      ],
+      "edit_log": [
+        {
+          "k": 0,
+          "edit": {
+            "op": "DROP",
+            "node": "r4_s1",
+            "rationale": "R4's action of turning off the white ceiling light is not part of any robot's intention and does not contribute to any goal."
+          },
+          "applied": true,
+          "error": null,
+          "rationale": "R4's action of turning off the white ceiling light is not part of any robot's intention and does not contribute to any goal."
+        }
+      ],
+      "report": {
+        "goals": [
+          {
+            "robot": "R1",
+            "goal": 0,
+            "text": "ceiling lamp turned off",
+            "status": "covered",
+            "cause": [],
+            "evidence": [
+              "r1_s1"
+            ],
+            "note": "",
+            "llm_status": "covered",
+            "llm_cause": null
+          },
+          {
+            "robot": "R1",
+            "goal": 1,
+            "text": "faucet turned on",
+            "status": "covered",
+            "cause": [],
+            "evidence": [
+              "r1_s2"
+            ],
+            "note": "",
+            "llm_status": "covered",
+            "llm_cause": null
+          },
+          {
+            "robot": "R2",
+            "goal": 0,
+            "text": "room light is turned off",
+            "status": "covered",
+            "cause": [],
+            "evidence": [
+              "r2_s1"
+            ],
+            "note": "",
+            "llm_status": "covered",
+            "llm_cause": null
+          },
+          {
+            "robot": "R2",
+            "goal": 1,
+            "text": "faucet is turned on",
+            "status": "covered",
+            "cause": [],
+            "evidence": [
+              "r2_s2"
+            ],
+            "note": "",
+            "llm_status": "covered",
+            "llm_cause": null
+          },
+          {
+            "robot": "R3",
+            "goal": 0,
+            "text": "turn off ceiling lamp",
+            "status": "covered",
+            "cause": [],
+            "evidence": [
+              "r3_s1"
+            ],
+            "note": "",
+            "llm_status": "covered",
+            "llm_cause": null
+          },
+          {
+            "robot": "R3",
+            "goal": 1,
+            "text": "turn on silver faucet",
+            "status": "covered",
+            "cause": [],
+            "evidence": [
+              "r3_s2"
+            ],
+            "note": "",
+            "llm_status": "covered",
+            "llm_cause": null
+          },
+          {
+            "robot": "R4",
+            "goal": 0,
+            "text": "turn off ceiling light",
+            "status": "uncovered",
+            "cause": [
+              "Capability gap"
+            ],
+            "evidence": [],
+            "note": "",
+            "llm_status": "uncovered",
+            "llm_cause": "Capability gap"
+          },
+          {
+            "robot": "R4",
+            "goal": 1,
+            "text": "turn on silver faucet",
+            "status": "covered",
+            "cause": [],
+            "evidence": [
+              "r4_s2"
+            ],
+            "note": "",
+            "llm_status": "covered",
+            "llm_cause": null
+          }
+        ],
+        "unresolved_requests": [],
+        "rejected_edits": [],
+        "dropped": [
+          {
+            "node": "r4_s1",
+            "agent": "R4",
+            "type": "LOCAL",
+            "text": "turn_off the white ceiling light from ceiling to off",
+            "rationale": "R4's action of turning off the white ceiling light is not part of any robot's intention and does not contribute to any goal."
+          }
+        ],
+        "removed_by_closure": [],
+        "invariant_violations": [],
+        "deadline": {
+          "makespan_min": 5,
+          "deadline_min": 10,
+          "exceeded": false
+        }
+      }
+    },
+    "report": {
+      "goals": [
+        {
+          "robot": "R1",
+          "goal": 0,
+          "text": "ceiling lamp turned off",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r1_s1"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R1",
+          "goal": 1,
+          "text": "faucet turned on",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r1_s2"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R2",
+          "goal": 0,
+          "text": "room light is turned off",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r2_s1"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R2",
+          "goal": 1,
+          "text": "faucet is turned on",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r2_s2"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R3",
+          "goal": 0,
+          "text": "turn off ceiling lamp",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r3_s1"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R3",
+          "goal": 1,
+          "text": "turn on silver faucet",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r3_s2"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R4",
+          "goal": 0,
+          "text": "turn off ceiling light",
+          "status": "uncovered",
+          "cause": [
+            "Capability gap"
+          ],
+          "evidence": [],
+          "note": "",
+          "llm_status": "uncovered",
+          "llm_cause": "Capability gap"
+        },
+        {
+          "robot": "R4",
+          "goal": 1,
+          "text": "turn on silver faucet",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r4_s2"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        }
+      ],
+      "unresolved_requests": [],
+      "rejected_edits": [],
+      "dropped": [
+        {
+          "node": "r4_s1",
+          "agent": "R4",
+          "type": "LOCAL",
+          "text": "turn_off the white ceiling light from ceiling to off",
+          "rationale": "R4's action of turning off the white ceiling light is not part of any robot's intention and does not contribute to any goal."
+        }
+      ],
+      "removed_by_closure": [],
+      "invariant_violations": [],
+      "deadline": {
+        "makespan_min": 5,
+        "deadline_min": 10,
+        "exceeded": false
+      }
+    },
+    "metrics": {
+      "task_id": "task2_simple",
+      "n_steps_total": 8,
+      "n_steps_active": 7,
+      "n_requests": 0,
+      "n_requests_served": 0,
+      "n_requests_unresolved": 0,
+      "n_candidates_from_stage3": 0,
+      "n_collab_edges_final": 0,
+      "n_help_edges": 0,
+      "n_transfer_edges": 0,
+      "decided_by_select": 0,
+      "decided_by_merge": 0,
+      "decided_by_default": 0,
+      "kappa_final": {
+        "mutual": 0,
+        "provider-only": 0,
+        "merged": 0
+      },
+      "graph_edits_applied": 1,
+      "graph_edits_rejected": 0,
+      "n_dropped_by_graph": 1,
+      "n_removed_by_closure": 0,
+      "n_requests_moved_later": 0,
+      "n_invariant_violations": 0,
+      "goals_total": 8,
+      "goals_covered": 7,
+      "goals_partial": 0,
+      "goals_uncovered": 1,
+      "goal_causes": {
+        "No volunteer": 0,
+        "Capability gap": 1,
+        "Left unresolved": 0,
+        "Infeasible": 0,
+        "Deadline exceeded": 0
+      },
+      "plan_fix_rounds": {
+        "R1": 0,
+        "R2": 0,
+        "R3": 0,
+        "R4": 0
+      },
+      "n_steps_excluded_stage2": 0,
+      "makespan_min": 5,
+      "deadline": 10,
+      "deadline_ok": true,
+      "llm_calls": 9,
+      "prompt_tokens": 16688,
+      "completion_tokens": 1822,
+      "config": {
+        "use_edge_proposal": true,
+        "use_graph_llm": true
+      },
+      "wall_time_sec": 10.6
+    },
+    "config": {
+      "use_edge_proposal": true,
+      "use_graph_llm": true,
+      "max_graph_rounds": 2,
+      "deadline_min": 20
+    }
+  },
+  "llm_judge": {
+    "TF": 2,
+    "TF_reason": "The faucet is successfully turned on in the bathroom by R4/R2, but the plan fails to turn off a valid light (hallucinates 'ceiling lamp' and 'room light switch' instead of using the DeskLamp). Additionally, robots in the bedroom hallucinate turning on a faucet.",
+    "GF": 1,
+    "GF_reason": "Severe hallucinations: R1 and R3 interact with a non-existent 'ceiling lamp', 'faucet', and 'sink' in the bedroom. R2 interacts with a non-existent 'room light switch' in the bathroom.",
+    "SC": 2,
+    "SC_reason": "Multiple robots perform identical redundant actions simultaneously (e.g., R2 and R4 both turning on the faucet in the bathroom, R1 and R3 both turning off the ceiling lamp and turning on the faucet in the bedroom).",
+    "CQ": 3,
+    "CQ_reason": "No collaboration is required for this simple task, and none is used. However, the lack of task allocation leads to all robots attempting to complete all goals independently, causing redundancy and hallucinations."
+  }
+}

@@ -1,0 +1,241 @@
+{
+  "task_n": "task4_abstract",
+  "variants": {
+    "full": {
+      "raw_result": {
+        "variant": "full",
+        "joint_plan_text": "### Joint Plan — task4_abstract  (about 10 min / deadline 20 min: OK)\n### Robots: R1:Mobile_Light(kitchen), R2:Mobile_Heavy(living_room), R3:Mobile_Light(bedroom), R4:Mobile_Light(bathroom)\n\n[0-5 min]\n- R1 [LOCAL] pick_up the white mug from counter to gripper  (r1_s1)\n- R2 [LOCAL] push the beige sofa from near window to center  (r2_s1)\n- R3 [LOCAL] pick_up the teddy bear from floor to gripper  (r3_s1)\n- R4 [LOCAL] pick_up the green soap from sink to gripper  (r4_s1)\n- R1 [PASS] pass white mug to R2 (offered) (brings it to the living_room)  (r1_s2)\n- R2 [LOCAL] push the beige armchairs from near wall to near sofa  (r2_s2)\n- R3 [LOCAL] put_down the teddy bear from gripper to wooden dresser  (r3_s2)\n- R4 [LOCAL] put_down the green soap from gripper to sink  (r4_s2)\n- R2 [LOCAL] pick_up the cardboard box from coffee table to gripper  (r2_s3)\n- R3 [LOCAL] pick_up the brown paper bag from floor to gripper  (r3_s3)\n- R4 [LOCAL] pick_up the pink soap from sink to gripper  (r4_s3)\n- R2 [LOCAL] put_down the cardboard box from gripper to brown cabinet  (r2_s4)\n- R3 [LOCAL] put_down the brown paper bag from gripper to trash can  (r3_s4)\n- R4 [LOCAL] put_down the pink soap from gripper to sink  (r4_s4)\n- R2 [LOCAL] pick_up the yellow vase from coffee table to gripper  (r2_s5)\n- R4 [LOCAL] pick_up the brown soap dispenser from sink to gripper  (r4_s5)\n\n[5-10 min]\n- R2 [LOCAL] put_down the yellow vase from gripper to brown cabinet  (r2_s6)\n- R4 [LOCAL] put_down the brown soap dispenser from gripper to sink  (r4_s6)\n- R2 [RECEIVE] receive white mug from R1  (r2_s7)\n- R2 [LOCAL] put down the white mug on the coffee table  (r2_s8)\n\n### Provenance (collaboration edges)\n- r2_s7 (R2 RECEIVE) <- r1_s2 (R1 PASS)  κ=mutual, decided by default\n\n### Graph LLM edits (applied)\n- DROP node=r1_s3 — No robot can pour drinks, as indicated by all NO replies.\n- DROP node=r1_s5 — R2 explicitly declined the red tomato, making this step unnecessary.\n- DROP node=r3_s5 — R2 explicitly declined the white pillow, making this step unnecessary.\n\n### Report: goal coverage\n- R1.g0 make a drink ready for the guest: partial — No volunteer [r1_s1, r1_s2]\n- R1.g1 provide a snack option for the guest: uncovered — No volunteer\n- R2.g0 arrange comfortable seating for the guest: covered [r2_s1, r2_s2]\n- R2.g1 clear the coffee table of unnecessary items: covered [r2_s3, r2_s4, r2_s5, r2_s6]\n- R3.g0 bedroom looks neat and tidy: covered [r3_s3, r3_s4]\n- R3.g1 items like the teddy bear are stored away: covered [r3_s1, r3_s2]\n- R4.g0 ensure bathroom has necessary hygiene items accessible: covered [r4_s1, r4_s2, r4_s3, r4_s4, r4_s5, r4_s6]\n\n### Dropped by the Graph LLM\n- R1 [ASK_HELP] pour the drink from coffee maker to white mug (r1_s3) — No robot can pour drinks, as indicated by all NO replies.\n- R1 [PASS] pass red tomato (counter, image 2) to R2 (r1_s5) — R2 explicitly declined the red tomato, making this step unnecessary.\n- R3 [PASS] pass white pillow (bed, image 1) to R2 (r3_s5) — R2 explicitly declined the white pillow, making this step unnecessary.\n\n### Removed by dependency closure\n- R1 [LOCAL] pick_up the red tomato from counter to gripper (r1_s4) — needs r1_s3, which will not happen",
+        "metrics": {
+          "task_id": "task4_abstract",
+          "n_steps_total": 24,
+          "n_steps_active": 20,
+          "n_requests": 2,
+          "n_requests_served": 1,
+          "n_requests_unresolved": 0,
+          "n_candidates_from_stage3": 1,
+          "n_collab_edges_final": 1,
+          "n_help_edges": 0,
+          "n_transfer_edges": 1,
+          "decided_by_select": 0,
+          "decided_by_merge": 0,
+          "decided_by_default": 1,
+          "kappa_final": {
+            "mutual": 1,
+            "provider-only": 0,
+            "merged": 0
+          },
+          "graph_edits_applied": 3,
+          "graph_edits_rejected": 0,
+          "n_dropped_by_graph": 3,
+          "n_removed_by_closure": 1,
+          "n_requests_moved_later": 0,
+          "n_invariant_violations": 0,
+          "goals_total": 7,
+          "goals_covered": 5,
+          "goals_partial": 1,
+          "goals_uncovered": 1,
+          "goal_causes": {
+            "No volunteer": 2,
+            "Capability gap": 0,
+            "Left unresolved": 0,
+            "Infeasible": 0,
+            "Deadline exceeded": 0
+          },
+          "plan_fix_rounds": {
+            "R1": 1,
+            "R2": 1,
+            "R3": 0,
+            "R4": 0
+          },
+          "n_steps_excluded_stage2": 1,
+          "makespan_min": 10,
+          "deadline": 20,
+          "deadline_ok": true,
+          "llm_calls": 14,
+          "prompt_tokens": 31308,
+          "completion_tokens": 3356,
+          "variant": "full",
+          "wall_time_sec": 21.19939637184143
+        }
+      },
+      "llm_judge": null
+    },
+    "no_offer": {
+      "raw_result": {
+        "variant": "no_offer",
+        "joint_plan_text": "### Joint Plan — task4_abstract  (about 5 min / deadline 20 min: OK)\n### Robots: R1:Mobile_Light(kitchen), R2:Mobile_Heavy(living_room), R3:Mobile_Light(bedroom), R4:Mobile_Light(bathroom)\n\n[0-5 min]\n- R2 [LOCAL] push the sofa from corner to center  (r2_s1)\n- R4 [LOCAL] pick_up the toilet paper from storage to gripper  (r4_s1)\n- R2 [LOCAL] pickup_heavy the coffee table from side to center  (r2_s2)\n- R4 [LOCAL] put_down the toilet paper from gripper to toilet paper holder  (r4_s2)\n- R2 [LOCAL] pickup_light the cushions from floor to sofa  (r2_s3)\n- R2 [LOCAL] pickup_light the magazines from floor to coffee table  (r2_s4)\n\n### Provenance (collaboration edges)\n\n### Report: goal coverage\n- R1.g0 coordinate to have refreshments ready for the guest: uncovered — No volunteer\n- R2.g0 comfortable seating arranged in the living room: covered [r2_s1, r2_s2]\n- R2.g1 living room tidy and welcoming: covered [r2_s3, r2_s4]\n- R4.g0 ensure bathroom is stocked with toilet paper: covered [r4_s1, r4_s2]",
+        "metrics": {
+          "task_id": "task4_abstract",
+          "n_steps_total": 6,
+          "n_steps_active": 6,
+          "n_requests": 0,
+          "n_requests_served": 0,
+          "n_requests_unresolved": 0,
+          "n_candidates_from_stage3": 0,
+          "n_collab_edges_final": 0,
+          "n_help_edges": 0,
+          "n_transfer_edges": 0,
+          "decided_by_select": 0,
+          "decided_by_merge": 0,
+          "decided_by_default": 0,
+          "kappa_final": {
+            "mutual": 0,
+            "provider-only": 0,
+            "merged": 0
+          },
+          "graph_edits_applied": 0,
+          "graph_edits_rejected": 0,
+          "n_dropped_by_graph": 0,
+          "n_removed_by_closure": 0,
+          "n_requests_moved_later": 0,
+          "n_invariant_violations": 0,
+          "goals_total": 4,
+          "goals_covered": 3,
+          "goals_partial": 0,
+          "goals_uncovered": 1,
+          "goal_causes": {
+            "No volunteer": 1,
+            "Capability gap": 0,
+            "Left unresolved": 0,
+            "Infeasible": 0,
+            "Deadline exceeded": 0
+          },
+          "plan_fix_rounds": {
+            "R1": 1,
+            "R2": 1,
+            "R3": 1,
+            "R4": 1
+          },
+          "n_steps_excluded_stage2": 3,
+          "makespan_min": 5,
+          "deadline": 20,
+          "deadline_ok": true,
+          "llm_calls": 13,
+          "prompt_tokens": 26408,
+          "completion_tokens": 2508,
+          "variant": "no_offer",
+          "wall_time_sec": 12.189437866210938
+        }
+      },
+      "llm_judge": null
+    },
+    "no_edge": {
+      "raw_result": {
+        "variant": "no_edge",
+        "joint_plan_text": "### Joint Plan — task4_abstract  (about 10 min / deadline 20 min: OK)\n### Robots: R1:Mobile_Light(kitchen), R2:Mobile_Heavy(living_room), R3:Mobile_Light(bedroom), R4:Mobile_Light(bathroom)\n\n[0-5 min]\n- R1 [LOCAL] pick_up the mug from counter to gripper  (r1_s1)\n- R2 [LOCAL] push the beige sofa from against wall to center of room  (r2_s1)\n- R3 [LOCAL] pick_up the teddy bear from floor to gripper  (r3_s1)\n- R4 [LOCAL] pick_up the red trash bin from floor to gripper  (r4_s1)\n- R1 [LOCAL] pick_up the plate from counter to gripper  (r1_s3)\n- R2 [LOCAL] push the beige armchair from near sofa to center of room  (r2_s2)\n- R3 [LOCAL] pick_up the paper bag from floor to gripper  (r3_s3)\n- R4 [LOCAL] move the red trash bin from floor to corner  (r4_s2)\n- R1 [LOCAL] pick_up the lettuce from counter to gripper  (r1_s5)\n- R2 [LOCAL] move the black side table from next to armchair to near sofa  (r2_s3)\n- R4 [LOCAL] pick_up the green bottle from counter to gripper  (r4_s3)\n- R1 [LOCAL] pick_up the tomato from counter to gripper  (r1_s7)\n- R2 [LOCAL] pickup the cardboard box from coffee table to gripper  (r2_s4)\n- R4 [LOCAL] put_down the green bottle from gripper to counter  (r4_s4)\n- R2 [LOCAL] put_down the cardboard box from gripper to black entertainment unit  (r2_s5)\n- R4 [LOCAL] pick_up the pink soap from counter to gripper  (r4_s5)\n\n[5-10 min]\n- R2 [LOCAL] pickup the yellow vase from coffee table to gripper  (r2_s6)\n- R4 [LOCAL] put_down the pink soap from gripper to counter  (r4_s6)\n- R2 [LOCAL] put_down the yellow vase from gripper to black entertainment unit  (r2_s7)\n\n### Provenance (collaboration edges)\n\n### Graph LLM edits (applied)\n- DROP node=r1_s2 — R2 did not request the mug, and R1 cannot pour drinks.\n- DROP node=r1_s4 — R2 did not request the plate, and R1 cannot pour drinks.\n- DROP node=r1_s6 — R2 did not request the lettuce, and R1 cannot slice food.\n- DROP node=r1_s8 — R2 did not request the tomato, and R1 cannot slice food.\n- DROP node=r3_s2 — R2 did not request the teddy bear.\n- DROP node=r3_s4 — R2 did not request the paper bag.\n\n### Report: goal coverage\n- R1.g0 mug and plate ready for serving: uncovered — No volunteer\n- R1.g1 lettuce and tomato available for a snack: uncovered — No volunteer\n- R2.g0 arrange comfortable seating for the guest: covered [r2_s1, r2_s2, r2_s3]\n- R2.g1 clear the coffee table for refreshments: covered [r2_s4, r2_s5, r2_s6, r2_s7]\n- R3.g0 teddy bear available for decoration: covered [r3_s1]\n- R3.g1 paper bag available for decoration: covered [r3_s3]\n- R4.g0 ensure bathroom is clean and stocked: covered [r4_s1, r4_s2, r4_s3, r4_s4, r4_s5, r4_s6]\n\n### Dropped by the Graph LLM\n- R1 [PASS] pass mug (counter, image 2) to R2 (r1_s2) — R2 did not request the mug, and R1 cannot pour drinks.\n- R1 [PASS] pass plate (counter, image 2) to R2 (r1_s4) — R2 did not request the plate, and R1 cannot pour drinks.\n- R1 [PASS] pass lettuce (counter, image 1) to R2 (r1_s6) — R2 did not request the lettuce, and R1 cannot slice food.\n- R1 [PASS] pass tomato (counter, image 2) to R2 (r1_s8) — R2 did not request the tomato, and R1 cannot slice food.\n- R3 [PASS] pass teddy bear (floor, image 2) to R2 (r3_s2) — R2 did not request the teddy bear.\n- R3 [PASS] pass paper bag (floor, image 2) to R2 (r3_s4) — R2 did not request the paper bag.",
+        "metrics": {
+          "task_id": "task4_abstract",
+          "n_steps_total": 25,
+          "n_steps_active": 19,
+          "n_requests": 0,
+          "n_requests_served": 0,
+          "n_requests_unresolved": 0,
+          "n_candidates_from_stage3": 0,
+          "n_collab_edges_final": 0,
+          "n_help_edges": 0,
+          "n_transfer_edges": 0,
+          "decided_by_select": 0,
+          "decided_by_merge": 0,
+          "decided_by_default": 0,
+          "kappa_final": {
+            "mutual": 0,
+            "provider-only": 0,
+            "merged": 0
+          },
+          "graph_edits_applied": 6,
+          "graph_edits_rejected": 0,
+          "n_dropped_by_graph": 6,
+          "n_removed_by_closure": 0,
+          "n_requests_moved_later": 0,
+          "n_invariant_violations": 0,
+          "goals_total": 7,
+          "goals_covered": 5,
+          "goals_partial": 0,
+          "goals_uncovered": 2,
+          "goal_causes": {
+            "No volunteer": 2,
+            "Capability gap": 0,
+            "Left unresolved": 0,
+            "Infeasible": 0,
+            "Deadline exceeded": 0
+          },
+          "plan_fix_rounds": {
+            "R1": 0,
+            "R2": 1,
+            "R3": 0,
+            "R4": 0
+          },
+          "n_steps_excluded_stage2": 1,
+          "makespan_min": 10,
+          "deadline": 20,
+          "deadline_ok": true,
+          "llm_calls": 10,
+          "prompt_tokens": 23890,
+          "completion_tokens": 3129,
+          "variant": "no_edge",
+          "wall_time_sec": 18.248932123184204
+        }
+      },
+      "llm_judge": null
+    },
+    "no_graph": {
+      "raw_result": {
+        "variant": "no_graph",
+        "joint_plan_text": "### Joint Plan — task4_abstract  (about 10 min / deadline 20 min: OK)\n### Robots: R1:Mobile_Light(kitchen), R2:Mobile_Heavy(living_room), R3:Mobile_Light(bedroom), R4:Mobile_Light(bathroom)\n\n[0-5 min]\n- R1 [LOCAL] pick_up the mug from counter to gripper  (r1_s1)\n- R2 [LOCAL] push the beige sofa from floor to better seating position  (r2_s1)\n- R3 [LOCAL] pick_up the teddy bear from floor to gripper  (r3_s1)\n- R4 [LOCAL] pick_up the red trash bin from floor to gripper  (r4_s1)\n- R1 [PASS] pass mug to R2 (offered) (brings it to the living_room)  (r1_s2)\n- R2 [LOCAL] push the beige armchair from floor to better seating position  (r2_s2)\n- R3 [LOCAL] put_down the teddy bear from gripper to dresser  (r3_s2)\n- R4 [LOCAL] put_down the red trash bin from gripper to corner  (r4_s2)\n- R2 [LOCAL] pick_up the cardboard box from coffee table to gripper  (r2_s3)\n- R3 [LOCAL] pick_up the paper bag from floor to gripper  (r3_s3)\n- R4 [LOCAL] pick_up the brown toothbrush holder from sink to gripper  (r4_s3)\n- R1 [LOCAL] pick_up the plate from counter to gripper  (r1_s3)\n- R2 [LOCAL] put_down the cardboard box from gripper to side table  (r2_s4)\n- R3 [LOCAL] put_down the paper bag from gripper to dresser  (r3_s4)\n- R4 [LOCAL] put_down the brown toothbrush holder from gripper to sink  (r4_s4)\n- R2 [LOCAL] pick_up the yellow vase from coffee table to gripper  (r2_s5)\n- R4 [LOCAL] pick_up the pink soap dish from sink to gripper  (r4_s5)\n\n[5-10 min]\n- R1 [PASS] pass plate to R2 (offered) (brings it to the living_room)  (r1_s4)\n- R2 [LOCAL] put_down the yellow vase from gripper to side table  (r2_s6)\n- R4 [LOCAL] put_down the pink soap dish from gripper to sink  (r4_s6)\n- R2 [RECEIVE] receive plate from R1  (r2_s9)\n- R2 [LOCAL] put down the plate on the coffee table  (r2_s10)\n- R2 [RECEIVE] receive mug from R1  (r2_s7)\n- R2 [LOCAL] put down the mug on the coffee table  (r2_s8)\n\n### Provenance (collaboration edges)\n- r2_s7 (R2 RECEIVE) <- r1_s2 (R1 PASS)  κ=mutual, decided by default\n- r2_s9 (R2 RECEIVE) <- r1_s4 (R1 PASS)  κ=mutual, decided by default\n\n### Report: goal coverage\n- R1.g0 mug available for a drink: uncovered — Left unresolved (not judged by the Graph LLM)\n- R1.g1 plate available for serving food: uncovered — Left unresolved (not judged by the Graph LLM)\n- R2.g0 arrange seating for the guest: uncovered — Left unresolved (not judged by the Graph LLM)\n- R2.g1 clear coffee table for serving items: uncovered — Left unresolved (not judged by the Graph LLM)\n- R3.g0 tidy the bedroom by removing items from the floor: uncovered — Left unresolved (not judged by the Graph LLM)\n- R4.g0 ensure the bathroom is tidy and stocked: uncovered — Left unresolved (not judged by the Graph LLM)\n\n### Removed by dependency closure\n- R3 [PASS] pass teddy bear (floor, image 2) to R2 (r3_s5) — offer not taken\n- R3 [PASS] pass paper bag (floor, image 2) to R2 (r3_s6) — offer not taken",
+        "metrics": {
+          "task_id": "task4_abstract",
+          "n_steps_total": 26,
+          "n_steps_active": 24,
+          "n_requests": 2,
+          "n_requests_served": 2,
+          "n_requests_unresolved": 0,
+          "n_candidates_from_stage3": 2,
+          "n_collab_edges_final": 2,
+          "n_help_edges": 0,
+          "n_transfer_edges": 2,
+          "decided_by_select": 0,
+          "decided_by_merge": 0,
+          "decided_by_default": 2,
+          "kappa_final": {
+            "mutual": 2,
+            "provider-only": 0,
+            "merged": 0
+          },
+          "graph_edits_applied": 0,
+          "graph_edits_rejected": 0,
+          "n_dropped_by_graph": 0,
+          "n_removed_by_closure": 2,
+          "n_requests_moved_later": 0,
+          "n_invariant_violations": 0,
+          "goals_total": 6,
+          "goals_covered": 0,
+          "goals_partial": 0,
+          "goals_uncovered": 6,
+          "goal_causes": {
+            "No volunteer": 0,
+            "Capability gap": 0,
+            "Left unresolved": 6,
+            "Infeasible": 0,
+            "Deadline exceeded": 0
+          },
+          "plan_fix_rounds": {
+            "R1": 0,
+            "R2": 1,
+            "R3": 0,
+            "R4": 0
+          },
+          "n_steps_excluded_stage2": 1,
+          "makespan_min": 10,
+          "deadline": 20,
+          "deadline_ok": true,
+          "llm_calls": 10,
+          "prompt_tokens": 21500,
+          "completion_tokens": 2748,
+          "variant": "no_graph",
+          "wall_time_sec": 16.415589332580566
+        }
+      },
+      "llm_judge": null
+    }
+  }
+}

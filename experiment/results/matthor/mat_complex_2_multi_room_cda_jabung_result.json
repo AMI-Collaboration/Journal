@@ -1,0 +1,2320 @@
+{
+  "task_n": "mat_complex_2",
+  "mode": "multi_room",
+  "model": "gpt-4o",
+  "task_text": "Cook the potato and put it in the Fridge",
+  "joint_plan_text": "```plaintext\n### Joint Plan — mat_complex_2  (about 10 min / deadline 20 min: OK)\n### Robots: R1:Gripper(kitchen), R2:Mobile_Light(kitchen), R3:Mobile_Heavy(kitchen), R4:Gripper(kitchen)\n\n[0-5 min]\n- R1 [LOCAL] pick up the brown potato from the counter to the gripper  (r1_s1)\n- R3 [LOCAL] pick up the brown potato from the counter to the gripper  (r3_s1)\n- R4 [LOCAL] pick up the brown potato from the counter to the gripper  (r4_s1)\n- R1 [LOCAL] place the brown potato from the gripper to the silver pot  (r1_s2)\n- R3 [LOCAL] move the brown potato from the gripper to the black stove  (r3_s2)\n- R4 [LOCAL] slice the brown potato from the gripper to the counter  (r4_s2)\n- R1 [PASS] pass brown potato to R2 (offered) (hands it over; R2 collects it)  (r1_s5)\n- R3 [LOCAL] move the brown potato from the gripper to the white fridge  (r3_s5)\n- R4 [LOCAL] pick up the metal pot from the stove to the gripper  (r4_s3)\n- R2 [RECEIVE] receive brown potato from R1 (collects it from the kitchen)  (r2_s8)\n- R4 [LOCAL] pour the water from the kitchen sink to the metal pot  (r4_s4)\n\n[5-10 min]\n- R2 [LOCAL] pick up the brown potato from the counter to the gripper  (r2_s9)\n- R2 [LOCAL] pick up the brown potato from the counter to the gripper  (r2_s2)\n- R2 [LOCAL] move the brown potato from the gripper to the white fridge  (r2_s6)\n- R2 [LOCAL] put down the brown potato from the gripper to the white fridge  (r2_s7)",
+  "joint_plan_full": "### Joint Plan — mat_complex_2  (about 10 min / deadline 20 min: OK)\n### Robots: R1:Gripper(kitchen), R2:Mobile_Light(kitchen), R3:Mobile_Heavy(kitchen), R4:Gripper(kitchen)\n\n[0-5 min]\n- R1 [LOCAL] pick_up the brown potato from counter to gripper  (r1_s1)\n- R3 [LOCAL] pick_up the brown potato from counter to gripper  (r3_s1)\n- R4 [LOCAL] pick_up the brown potato from counter to gripper  (r4_s1)\n- R1 [LOCAL] place the brown potato from gripper to silver pot  (r1_s2)\n- R3 [LOCAL] move the brown potato from gripper to black stove  (r3_s2)\n- R4 [LOCAL] slice the brown potato from gripper to counter  (r4_s2)\n- R1 [PASS] pass brown potato to R2 (offered) (hands it over; R2 collects it)  (r1_s5)\n- R3 [LOCAL] move the brown potato from gripper to white fridge  (r3_s5)\n- R4 [LOCAL] pick_up the metal pot from stove to gripper  (r4_s3)\n- R2 [RECEIVE] receive brown potato from R1 (collects it from the kitchen)  (r2_s8)\n- R4 [LOCAL] pour the water from kitchen sink to metal pot  (r4_s4)\n\n[5-10 min]\n- R2 [LOCAL] pick_up the brown potato from counter to gripper  (r2_s9)\n- R2 [LOCAL] pick_up the brown potato from counter to gripper  (r2_s2)\n- R2 [LOCAL] move the brown potato from gripper to white fridge  (r2_s6)\n- R2 [LOCAL] put_down the brown potato from gripper to white fridge  (r2_s7)\n\n### Provenance (collaboration edges)\n- r2_s8 (R2 RECEIVE) <- r1_s5 (R1 PASS)  κ=mutual, decided by default\n\n### Graph LLM edits (applied)\n- DROP node=r1_s3 — No robot is capable of cooking the potato using the stove. All robots replied NO to the request.\n- DROP node=r2_s1 — No robot is capable of turning on the microwave. All robots replied NO to the request.\n- DROP node=r2_s4 — No robot is capable of cooking the potato using the microwave. All robots replied NO to the request.\n- DROP node=r3_s3 — No robot is capable of cooking the potato using the stove. All robots replied NO to the request.\n- DROP node=r4_s6 — No robot is capable of cooking the potato using the stove. All robots replied NO to the request.\n\n### Report: goal coverage\n- R1.g0 cooked potato available for storage: partial — No volunteer [r1_s1, r1_s2]\n- R1.g1 potato placed in the fridge: uncovered — No volunteer\n- R2.g0 cooked potato placed in the fridge: uncovered — No volunteer\n- R3.g0 potato cooked using the stove: uncovered — No volunteer\n- R3.g1 cooked potato placed in the fridge: uncovered — Left unresolved (not judged by the Graph LLM)\n- R4.g0 cooked potato available: partial — No volunteer [r4_s1, r4_s2, r4_s3, r4_s4]\n- R4.g1 potato stored in the fridge: uncovered — Left unresolved (not judged by the Graph LLM)\n\n### Dropped by the Graph LLM\n- R1 [ASK_HELP] cook the brown potato from silver pot to cooked potato (r1_s3) — No robot is capable of cooking the potato using the stove. All robots replied NO to the request.\n- R2 [ASK_HELP] turn_on the black microwave from counter to on (r2_s1) — No robot is capable of turning on the microwave. All robots replied NO to the request.\n- R2 [ASK_HELP] cook the brown potato from black microwave to cooked (r2_s4) — No robot is capable of cooking the potato using the microwave. All robots replied NO to the request.\n- R3 [ASK_HELP] cook the brown potato from black stove to cooked state (r3_s3) — No robot is capable of cooking the potato using the stove. All robots replied NO to the request.\n- R4 [ASK_HELP] cook the metal pot from stove to stove (r4_s6) — No robot is capable of cooking the potato using the stove. All robots replied NO to the request.\n\n### Removed by dependency closure\n- R4 [PASS] pass metal pot (stove, image 1) to R3 (r4_s5) — offer not taken\n- R4 [LOCAL] put_down the metal pot from gripper to fridge (r4_s7) — needs r4_s6, which will not happen\n- R3 [LOCAL] pick_up the brown potato from black stove to gripper (r3_s4) — needs r3_s3, which will not happen\n- R2 [LOCAL] pick_up the brown potato from black microwave to gripper (r2_s5) — needs r2_s4, which will not happen\n- R2 [LOCAL] place the brown potato from gripper to black microwave (r2_s3) — needs r2_s1, which will not happen\n- R1 [LOCAL] pick_up the brown potato from silver pot to gripper (r1_s4) — needs r1_s3, which will not happen",
+  "offers": {
+    "R1": {
+      "agent": "R1",
+      "capability": "I am a fixed robot with a gripper, capable of handling light kitchen tasks.",
+      "can_do": [
+        "PickupLightObject: lift small items like potatoes",
+        "SliceObject: cut vegetables",
+        "PourObject: pour liquids from one container to another",
+        "PassReceiveObject: hand over objects to mobile robots"
+      ],
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift heavy items like large pots",
+        "PushFurniture: cannot move furniture due to being fixed in place"
+      ],
+      "has_items": [
+        "brown potato (counter, image 1)",
+        "silver pot (stove, image 2)",
+        "white fridge (corner, image 2)"
+      ],
+      "need_from_others": [
+        "mobile robot to move cooked potato into the fridge if it requires mobility"
+      ],
+      "intends": [
+        "cooked potato available for storage",
+        "potato placed in the fridge"
+      ],
+      "obs_scope": "I can observe the kitchen only.",
+      "reasoning": "a) The potato needs to be cooked and stored in the fridge. b) The kitchen provides tools for cooking and the fridge for storage. c) I can cook the potato using the pot and place it in the fridge. d) Cooking the potato is the priority, as it takes time."
+    },
+    "R2": {
+      "agent": "R2",
+      "capability": "I am mobile and can carry light objects up to 5 kg with one arm.",
+      "can_do": [
+        "PickupLightObject: lift potatoes and small items",
+        "PassReceiveObject: exchange items with others"
+      ],
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift furniture",
+        "PushFurniture: cannot move heavy items",
+        "SliceObject: no cutting tool",
+        "PourObject: cannot pour liquids"
+      ],
+      "has_items": [
+        "brown potato (counter, image 1)",
+        "white fridge (corner, image 2)",
+        "black microwave (counter, image 1)"
+      ],
+      "need_from_others": [
+        "someone who can operate the microwave"
+      ],
+      "intends": [
+        "cooked potato placed in the fridge"
+      ],
+      "obs_scope": "I can observe the kitchen only.",
+      "reasoning": "a) The potato must be cooked and then stored in the fridge. b) The kitchen provides the necessary appliances (microwave) for cooking and the fridge for storage. c) I can place the potato in the microwave to cook it and then transfer it to the fridge. d) Cooking the potato first is the priority as it takes time."
+    },
+    "R3": {
+      "agent": "R3",
+      "capability": "I am a mobile robot capable of carrying heavy objects up to 20 kg and moving furniture.",
+      "can_do": [
+        "PickupLightObject: lift small items like the potato",
+        "PickupHeavyObject: lift heavier kitchenware",
+        "PushFurniture: move furniture if needed",
+        "PassReceiveObject: exchange objects with others"
+      ],
+      "cannot_do": [
+        "SliceObject: no cutting tool",
+        "PourObject: cannot pour liquids"
+      ],
+      "has_items": [
+        "brown potato (counter, image 1)",
+        "white fridge (corner, image 2)",
+        "black stove (corner, image 2)",
+        "silver pot (counter, image 1)"
+      ],
+      "need_from_others": [
+        "someone who can control the stove to cook the potato"
+      ],
+      "intends": [
+        "potato cooked using the stove",
+        "cooked potato placed in the fridge"
+      ],
+      "obs_scope": "I can observe the kitchen only.",
+      "reasoning": "a) The potato must be cooked and then stored in the fridge. b) The kitchen provides the necessary appliances for cooking and storage. c) I can move the potato to the stove for cooking and then to the fridge for storage. d) Cooking the potato is the priority due to time constraints."
+    },
+    "R4": {
+      "agent": "R4",
+      "capability": "I am fixed in place and can manipulate light objects with a gripper.",
+      "can_do": [
+        "PickupLightObject: lift small items like a potato",
+        "SliceObject: cut items with a knife",
+        "PourObject: pour water into a pot",
+        "PassReceiveObject: hand over items to another robot in the kitchen"
+      ],
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift heavy kitchen appliances or furniture",
+        "PushFurniture: cannot move large objects"
+      ],
+      "has_items": [
+        "brown potato (counter, image 1)",
+        "metal pot (stove, image 1)",
+        "fridge (corner, image 2)",
+        "kitchen sink (counter, image 2)",
+        "knife (counter, image 2)"
+      ],
+      "need_from_others": [
+        "someone to operate the stove if it requires mobility"
+      ],
+      "intends": [
+        "cooked potato available",
+        "potato stored in the fridge"
+      ],
+      "obs_scope": "I can observe the entire kitchen.",
+      "reasoning": "a) The task is complete when the potato is cooked and placed in the fridge. b) Kitchen: cook the potato and store it in the fridge. c) I can cook the potato using the stove and then place it in the fridge. d) Cooking the potato is the priority since it takes time."
+    }
+  },
+  "local_plans": {
+    "R1": [
+      {
+        "id": "r1_s1",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "brown potato",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "cooked potato available for storage",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r1_s2",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "place",
+          "object": "brown potato",
+          "from": "gripper",
+          "to": "silver pot"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "cooked potato available for storage",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r1_s3",
+        "agent": "R1",
+        "type": "ASK_HELP",
+        "action": {
+          "verb": "cook",
+          "object": "brown potato",
+          "from": "silver pot",
+          "to": "cooked potato"
+        },
+        "item": null,
+        "target": "R3",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": "r1_s4",
+        "serves": 0,
+        "serves_text": "cooked potato available for storage",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r1_s4",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "brown potato",
+          "from": "silver pot",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "potato placed in the fridge",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r1_s5",
+        "agent": "R1",
+        "type": "PASS",
+        "action": "pass brown potato (counter, image 1) to R2",
+        "item": "brown potato (counter, image 1)",
+        "target": "R2",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "offer",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "potato placed in the fridge",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "R2": [
+      {
+        "id": "r2_s1",
+        "agent": "R2",
+        "type": "ASK_HELP",
+        "action": {
+          "verb": "turn_on",
+          "object": "black microwave",
+          "from": "counter",
+          "to": "on"
+        },
+        "item": null,
+        "target": "R1",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": "r2_s3",
+        "serves": 0,
+        "serves_text": "cooked potato placed in the fridge",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s2",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "brown potato",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "cooked potato placed in the fridge",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s3",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "place",
+          "object": "brown potato",
+          "from": "gripper",
+          "to": "black microwave"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "cooked potato placed in the fridge",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s4",
+        "agent": "R2",
+        "type": "ASK_HELP",
+        "action": {
+          "verb": "cook",
+          "object": "brown potato",
+          "from": "black microwave",
+          "to": "cooked"
+        },
+        "item": null,
+        "target": "R1",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": "r2_s5",
+        "serves": 0,
+        "serves_text": "cooked potato placed in the fridge",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s5",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "brown potato",
+          "from": "black microwave",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "cooked potato placed in the fridge",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s6",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "move",
+          "object": "brown potato",
+          "from": "gripper",
+          "to": "white fridge"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "cooked potato placed in the fridge",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s7",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "brown potato",
+          "from": "gripper",
+          "to": "white fridge"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "cooked potato placed in the fridge",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "R3": [
+      {
+        "id": "r3_s1",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "brown potato",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "potato cooked using the stove",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s2",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "move",
+          "object": "brown potato",
+          "from": "gripper",
+          "to": "black stove"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "potato cooked using the stove",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s3",
+        "agent": "R3",
+        "type": "ASK_HELP",
+        "action": {
+          "verb": "cook",
+          "object": "brown potato",
+          "from": "black stove",
+          "to": "cooked state"
+        },
+        "item": null,
+        "target": "R4",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": "r3_s4",
+        "serves": 0,
+        "serves_text": "potato cooked using the stove",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s4",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "brown potato",
+          "from": "black stove",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "cooked potato placed in the fridge",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s5",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "move",
+          "object": "brown potato",
+          "from": "gripper",
+          "to": "white fridge"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "cooked potato placed in the fridge",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "R4": [
+      {
+        "id": "r4_s1",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "brown potato",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "cooked potato available",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s2",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "slice",
+          "object": "brown potato",
+          "from": "gripper",
+          "to": "counter"
+        },
+        "item": null,
+        "target": null,
+        "uses": 1,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "cooked potato available",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s3",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "metal pot",
+          "from": "stove",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "cooked potato available",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s4",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pour",
+          "object": "water",
+          "from": "kitchen sink",
+          "to": "metal pot"
+        },
+        "item": null,
+        "target": null,
+        "uses": 2,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "cooked potato available",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s5",
+        "agent": "R4",
+        "type": "PASS",
+        "action": "pass metal pot (stove, image 1) to R3",
+        "item": "metal pot (stove, image 1)",
+        "target": "R3",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "offer",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "cooked potato available",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s6",
+        "agent": "R4",
+        "type": "ASK_HELP",
+        "action": {
+          "verb": "cook",
+          "object": "metal pot",
+          "from": "stove",
+          "to": "stove"
+        },
+        "item": null,
+        "target": "R3",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": "r4_s7",
+        "serves": 0,
+        "serves_text": "cooked potato available",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s7",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "metal pot",
+          "from": "gripper",
+          "to": "fridge"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "potato stored in the fridge",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ]
+  },
+  "answers": [
+    {
+      "agent": "R1",
+      "id": "r2_s1",
+      "answer": "NO",
+      "reason": "I cannot operate the microwave as I am fixed and do not have the capability to turn it on.",
+      "result": "no edge"
+    },
+    {
+      "agent": "R1",
+      "id": "r2_s4",
+      "answer": "NO",
+      "reason": "I am not capable of cooking using the microwave; I rely on other robots for cooking.",
+      "result": "no edge"
+    },
+    {
+      "agent": "R1",
+      "id": "r3_s3",
+      "answer": "NO",
+      "reason": "I cannot assist with cooking on the stove as I am a fixed robot and do not have the capability to cook.",
+      "result": "no edge"
+    },
+    {
+      "agent": "R1",
+      "id": "r4_s6",
+      "answer": "NO",
+      "reason": "I cannot assist with cooking on the stove as I am a fixed robot and do not have the capability to cook.",
+      "result": "no edge"
+    },
+    {
+      "agent": "R2",
+      "id": "r1_s3",
+      "answer": "NO",
+      "reason": "I cannot cook potatoes; I need help to operate the microwave.",
+      "result": "no edge"
+    },
+    {
+      "agent": "R2",
+      "id": "r3_s3",
+      "answer": "NO",
+      "reason": "I cannot cook potatoes; I need help to operate the microwave.",
+      "result": "no edge"
+    },
+    {
+      "agent": "R2",
+      "id": "r4_s6",
+      "answer": "NO",
+      "reason": "I cannot cook or operate the stove.",
+      "result": "no edge"
+    },
+    {
+      "agent": "R2",
+      "id": "r1_s5",
+      "answer": "YES",
+      "reason": "I need the potato to place it in the microwave and then in the fridge.",
+      "result": "CANDIDATE",
+      "kappa": "mutual",
+      "receive": "r2_s8",
+      "use": "r2_s9"
+    },
+    {
+      "agent": "R3",
+      "id": "r1_s3",
+      "answer": "NO",
+      "reason": "I cannot cook the potato as I cannot control the stove.",
+      "result": "no edge"
+    },
+    {
+      "agent": "R3",
+      "id": "r2_s1",
+      "answer": "NO",
+      "reason": "I am not capable of turning on the microwave.",
+      "result": "no edge"
+    },
+    {
+      "agent": "R3",
+      "id": "r2_s4",
+      "answer": "NO",
+      "reason": "I cannot cook using the microwave.",
+      "result": "no edge"
+    },
+    {
+      "agent": "R3",
+      "id": "r4_s6",
+      "answer": "NO",
+      "reason": "I cannot cook as I cannot control the stove.",
+      "result": "no edge"
+    },
+    {
+      "agent": "R3",
+      "id": "r4_s5",
+      "answer": "NO",
+      "reason": "I do not need the metal pot to complete my task.",
+      "result": "no edge"
+    },
+    {
+      "agent": "R4",
+      "id": "r1_s3",
+      "answer": "NO",
+      "reason": "I am fixed in place and cannot operate the stove.",
+      "result": "no edge"
+    },
+    {
+      "agent": "R4",
+      "id": "r2_s1",
+      "answer": "NO",
+      "reason": "I am fixed in place and cannot operate the microwave.",
+      "result": "no edge"
+    },
+    {
+      "agent": "R4",
+      "id": "r2_s4",
+      "answer": "NO",
+      "reason": "I am fixed in place and cannot operate the microwave.",
+      "result": "no edge"
+    },
+    {
+      "agent": "R4",
+      "id": "r3_s3",
+      "answer": "NO",
+      "reason": "I am fixed in place and cannot operate the stove.",
+      "result": "no edge"
+    }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "r1_s1",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "brown potato",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "cooked potato available for storage",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 1
+      },
+      {
+        "id": "r1_s2",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "place",
+          "object": "brown potato",
+          "from": "gripper",
+          "to": "silver pot"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "cooked potato available for storage",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 1,
+        "t_end": 2
+      },
+      {
+        "id": "r1_s3",
+        "agent": "R1",
+        "type": "ASK_HELP",
+        "action": {
+          "verb": "cook",
+          "object": "brown potato",
+          "from": "silver pot",
+          "to": "cooked potato"
+        },
+        "item": null,
+        "target": "R3",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": "r1_s4",
+        "serves": 0,
+        "serves_text": "cooked potato available for storage",
+        "replies": [
+          {
+            "agent": "R2",
+            "answer": "NO",
+            "reason": "I cannot cook potatoes; I need help to operate the microwave."
+          },
+          {
+            "agent": "R3",
+            "answer": "NO",
+            "reason": "I cannot cook the potato as I cannot control the stove."
+          },
+          {
+            "agent": "R4",
+            "answer": "NO",
+            "reason": "I am fixed in place and cannot operate the stove."
+          }
+        ],
+        "status": "dropped",
+        "status_reason": "4.2 DROP: No robot is capable of cooking the potato using the stove. All robots replied NO to the request.",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r1_s4",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "brown potato",
+          "from": "silver pot",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "potato placed in the fridge",
+        "replies": [],
+        "status": "removed",
+        "status_reason": "needs r1_s3, which will not happen",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r1_s5",
+        "agent": "R1",
+        "type": "PASS",
+        "action": "pass brown potato (counter, image 1) to R2",
+        "item": "brown potato (counter, image 1)",
+        "target": "R2",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "offer",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "potato placed in the fridge",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 2,
+        "t_end": 3
+      },
+      {
+        "id": "r2_s8",
+        "agent": "R2",
+        "type": "RECEIVE",
+        "action": "receive brown potato (counter, image 1)",
+        "item": "brown potato (counter, image 1)",
+        "target": "R1",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "receive",
+        "answers": null,
+        "enables": "r2_s9",
+        "serves": null,
+        "serves_text": "offered brown potato (counter, image 1)",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "medium",
+        "phase": 1,
+        "t_start": 3,
+        "t_end": 5
+      },
+      {
+        "id": "r2_s9",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": "pick_up the brown potato from counter to gripper",
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "receive",
+        "answers": null,
+        "enables": null,
+        "serves": null,
+        "serves_text": "offered brown potato (counter, image 1)",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 2,
+        "t_start": 5,
+        "t_end": 6
+      },
+      {
+        "id": "r2_s1",
+        "agent": "R2",
+        "type": "ASK_HELP",
+        "action": {
+          "verb": "turn_on",
+          "object": "black microwave",
+          "from": "counter",
+          "to": "on"
+        },
+        "item": null,
+        "target": "R1",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": "r2_s3",
+        "serves": 0,
+        "serves_text": "cooked potato placed in the fridge",
+        "replies": [
+          {
+            "agent": "R1",
+            "answer": "NO",
+            "reason": "I cannot operate the microwave as I am fixed and do not have the capability to turn it on."
+          },
+          {
+            "agent": "R3",
+            "answer": "NO",
+            "reason": "I am not capable of turning on the microwave."
+          },
+          {
+            "agent": "R4",
+            "answer": "NO",
+            "reason": "I am fixed in place and cannot operate the microwave."
+          }
+        ],
+        "status": "dropped",
+        "status_reason": "4.2 DROP: No robot is capable of turning on the microwave. All robots replied NO to the request.",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s2",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "brown potato",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "cooked potato placed in the fridge",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 2,
+        "t_start": 6,
+        "t_end": 7
+      },
+      {
+        "id": "r2_s3",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "place",
+          "object": "brown potato",
+          "from": "gripper",
+          "to": "black microwave"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "cooked potato placed in the fridge",
+        "replies": [],
+        "status": "removed",
+        "status_reason": "needs r2_s1, which will not happen",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s4",
+        "agent": "R2",
+        "type": "ASK_HELP",
+        "action": {
+          "verb": "cook",
+          "object": "brown potato",
+          "from": "black microwave",
+          "to": "cooked"
+        },
+        "item": null,
+        "target": "R1",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": "r2_s5",
+        "serves": 0,
+        "serves_text": "cooked potato placed in the fridge",
+        "replies": [
+          {
+            "agent": "R1",
+            "answer": "NO",
+            "reason": "I am not capable of cooking using the microwave; I rely on other robots for cooking."
+          },
+          {
+            "agent": "R3",
+            "answer": "NO",
+            "reason": "I cannot cook using the microwave."
+          },
+          {
+            "agent": "R4",
+            "answer": "NO",
+            "reason": "I am fixed in place and cannot operate the microwave."
+          }
+        ],
+        "status": "dropped",
+        "status_reason": "4.2 DROP: No robot is capable of cooking the potato using the microwave. All robots replied NO to the request.",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s5",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "brown potato",
+          "from": "black microwave",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "cooked potato placed in the fridge",
+        "replies": [],
+        "status": "removed",
+        "status_reason": "needs r2_s4, which will not happen",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s6",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "move",
+          "object": "brown potato",
+          "from": "gripper",
+          "to": "white fridge"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "cooked potato placed in the fridge",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 2,
+        "t_start": 7,
+        "t_end": 8
+      },
+      {
+        "id": "r2_s7",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "brown potato",
+          "from": "gripper",
+          "to": "white fridge"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "cooked potato placed in the fridge",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 2,
+        "t_start": 8,
+        "t_end": 9
+      },
+      {
+        "id": "r3_s1",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "brown potato",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "potato cooked using the stove",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 1
+      },
+      {
+        "id": "r3_s2",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "move",
+          "object": "brown potato",
+          "from": "gripper",
+          "to": "black stove"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "potato cooked using the stove",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 1,
+        "t_end": 2
+      },
+      {
+        "id": "r3_s3",
+        "agent": "R3",
+        "type": "ASK_HELP",
+        "action": {
+          "verb": "cook",
+          "object": "brown potato",
+          "from": "black stove",
+          "to": "cooked state"
+        },
+        "item": null,
+        "target": "R4",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": "r3_s4",
+        "serves": 0,
+        "serves_text": "potato cooked using the stove",
+        "replies": [
+          {
+            "agent": "R1",
+            "answer": "NO",
+            "reason": "I cannot assist with cooking on the stove as I am a fixed robot and do not have the capability to cook."
+          },
+          {
+            "agent": "R2",
+            "answer": "NO",
+            "reason": "I cannot cook potatoes; I need help to operate the microwave."
+          },
+          {
+            "agent": "R4",
+            "answer": "NO",
+            "reason": "I am fixed in place and cannot operate the stove."
+          }
+        ],
+        "status": "dropped",
+        "status_reason": "4.2 DROP: No robot is capable of cooking the potato using the stove. All robots replied NO to the request.",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s4",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "brown potato",
+          "from": "black stove",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "cooked potato placed in the fridge",
+        "replies": [],
+        "status": "removed",
+        "status_reason": "needs r3_s3, which will not happen",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s5",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "move",
+          "object": "brown potato",
+          "from": "gripper",
+          "to": "white fridge"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "cooked potato placed in the fridge",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 2,
+        "t_end": 3
+      },
+      {
+        "id": "r4_s1",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "brown potato",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "cooked potato available",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 1
+      },
+      {
+        "id": "r4_s2",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "slice",
+          "object": "brown potato",
+          "from": "gripper",
+          "to": "counter"
+        },
+        "item": null,
+        "target": null,
+        "uses": 1,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "cooked potato available",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 1,
+        "t_end": 2
+      },
+      {
+        "id": "r4_s3",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "metal pot",
+          "from": "stove",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "cooked potato available",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 2,
+        "t_end": 3
+      },
+      {
+        "id": "r4_s4",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pour",
+          "object": "water",
+          "from": "kitchen sink",
+          "to": "metal pot"
+        },
+        "item": null,
+        "target": null,
+        "uses": 2,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "cooked potato available",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 3,
+        "t_end": 4
+      },
+      {
+        "id": "r4_s5",
+        "agent": "R4",
+        "type": "PASS",
+        "action": "pass metal pot (stove, image 1) to R3",
+        "item": "metal pot (stove, image 1)",
+        "target": "R3",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "offer",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "cooked potato available",
+        "replies": [
+          {
+            "agent": "R3",
+            "answer": "NO",
+            "reason": "I do not need the metal pot to complete my task."
+          }
+        ],
+        "status": "removed",
+        "status_reason": "offer not taken",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s6",
+        "agent": "R4",
+        "type": "ASK_HELP",
+        "action": {
+          "verb": "cook",
+          "object": "metal pot",
+          "from": "stove",
+          "to": "stove"
+        },
+        "item": null,
+        "target": "R3",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": "r4_s7",
+        "serves": 0,
+        "serves_text": "cooked potato available",
+        "replies": [
+          {
+            "agent": "R1",
+            "answer": "NO",
+            "reason": "I cannot assist with cooking on the stove as I am a fixed robot and do not have the capability to cook."
+          },
+          {
+            "agent": "R2",
+            "answer": "NO",
+            "reason": "I cannot cook or operate the stove."
+          },
+          {
+            "agent": "R3",
+            "answer": "NO",
+            "reason": "I cannot cook as I cannot control the stove."
+          }
+        ],
+        "status": "dropped",
+        "status_reason": "4.2 DROP: No robot is capable of cooking the potato using the stove. All robots replied NO to the request.",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s7",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "metal pot",
+          "from": "gripper",
+          "to": "fridge"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "potato stored in the fridge",
+        "replies": [],
+        "status": "removed",
+        "status_reason": "needs r4_s6, which will not happen",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "order": {
+      "R1": [
+        "r1_s1",
+        "r1_s2",
+        "r1_s3",
+        "r1_s4",
+        "r1_s5"
+      ],
+      "R2": [
+        "r2_s8",
+        "r2_s9",
+        "r2_s1",
+        "r2_s2",
+        "r2_s3",
+        "r2_s4",
+        "r2_s5",
+        "r2_s6",
+        "r2_s7"
+      ],
+      "R3": [
+        "r3_s1",
+        "r3_s2",
+        "r3_s3",
+        "r3_s4",
+        "r3_s5"
+      ],
+      "R4": [
+        "r4_s1",
+        "r4_s2",
+        "r4_s3",
+        "r4_s4",
+        "r4_s5",
+        "r4_s6",
+        "r4_s7"
+      ]
+    },
+    "edges": [
+      {
+        "src": "r1_s1",
+        "dst": "r1_s2",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r1_s2",
+        "dst": "r1_s5",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r2_s8",
+        "dst": "r2_s9",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r2_s9",
+        "dst": "r2_s2",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r2_s2",
+        "dst": "r2_s6",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r2_s6",
+        "dst": "r2_s7",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r3_s1",
+        "dst": "r3_s2",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r3_s2",
+        "dst": "r3_s5",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r4_s1",
+        "dst": "r4_s2",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r4_s2",
+        "dst": "r4_s3",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r4_s3",
+        "dst": "r4_s4",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r1_s5",
+        "dst": "r2_s8",
+        "kind": "TRANSFER",
+        "kappa": "mutual",
+        "status": "CONFIRMED",
+        "source": "stage3",
+        "existing": false,
+        "decided_by": "default"
+      }
+    ],
+    "edit_log": [
+      {
+        "k": 0,
+        "edit": {
+          "op": "DROP",
+          "node": "r1_s3",
+          "rationale": "No robot is capable of cooking the potato using the stove. All robots replied NO to the request."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "No robot is capable of cooking the potato using the stove. All robots replied NO to the request."
+      },
+      {
+        "k": 1,
+        "edit": {
+          "op": "DROP",
+          "node": "r2_s1",
+          "rationale": "No robot is capable of turning on the microwave. All robots replied NO to the request."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "No robot is capable of turning on the microwave. All robots replied NO to the request."
+      },
+      {
+        "k": 2,
+        "edit": {
+          "op": "DROP",
+          "node": "r2_s4",
+          "rationale": "No robot is capable of cooking the potato using the microwave. All robots replied NO to the request."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "No robot is capable of cooking the potato using the microwave. All robots replied NO to the request."
+      },
+      {
+        "k": 3,
+        "edit": {
+          "op": "DROP",
+          "node": "r3_s3",
+          "rationale": "No robot is capable of cooking the potato using the stove. All robots replied NO to the request."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "No robot is capable of cooking the potato using the stove. All robots replied NO to the request."
+      },
+      {
+        "k": 4,
+        "edit": {
+          "op": "DROP",
+          "node": "r4_s6",
+          "rationale": "No robot is capable of cooking the potato using the stove. All robots replied NO to the request."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "No robot is capable of cooking the potato using the stove. All robots replied NO to the request."
+      }
+    ],
+    "report": {
+      "goals": [
+        {
+          "robot": "R1",
+          "goal": 0,
+          "text": "cooked potato available for storage",
+          "status": "partial",
+          "cause": [
+            "No volunteer"
+          ],
+          "evidence": [
+            "r1_s1",
+            "r1_s2"
+          ],
+          "note": "",
+          "llm_status": "partial",
+          "llm_cause": "No volunteer"
+        },
+        {
+          "robot": "R1",
+          "goal": 1,
+          "text": "potato placed in the fridge",
+          "status": "uncovered",
+          "cause": [
+            "No volunteer"
+          ],
+          "evidence": [],
+          "note": "",
+          "llm_status": "uncovered",
+          "llm_cause": "No volunteer"
+        },
+        {
+          "robot": "R2",
+          "goal": 0,
+          "text": "cooked potato placed in the fridge",
+          "status": "uncovered",
+          "cause": [
+            "No volunteer"
+          ],
+          "evidence": [],
+          "note": "",
+          "llm_status": "uncovered",
+          "llm_cause": "No volunteer"
+        },
+        {
+          "robot": "R3",
+          "goal": 0,
+          "text": "potato cooked using the stove",
+          "status": "uncovered",
+          "cause": [
+            "No volunteer"
+          ],
+          "evidence": [],
+          "note": "",
+          "llm_status": "uncovered",
+          "llm_cause": "No volunteer"
+        },
+        {
+          "robot": "R3",
+          "goal": 1,
+          "text": "cooked potato placed in the fridge",
+          "status": "uncovered",
+          "cause": [
+            "Left unresolved"
+          ],
+          "evidence": [],
+          "note": "not judged by the Graph LLM"
+        },
+        {
+          "robot": "R4",
+          "goal": 0,
+          "text": "cooked potato available",
+          "status": "partial",
+          "cause": [
+            "No volunteer"
+          ],
+          "evidence": [
+            "r4_s1",
+            "r4_s2",
+            "r4_s3",
+            "r4_s4"
+          ],
+          "note": "",
+          "llm_status": "partial",
+          "llm_cause": "No volunteer"
+        },
+        {
+          "robot": "R4",
+          "goal": 1,
+          "text": "potato stored in the fridge",
+          "status": "uncovered",
+          "cause": [
+            "Left unresolved"
+          ],
+          "evidence": [],
+          "note": "not judged by the Graph LLM"
+        }
+      ],
+      "unresolved_requests": [],
+      "rejected_edits": [],
+      "dropped": [
+        {
+          "node": "r1_s3",
+          "agent": "R1",
+          "type": "ASK_HELP",
+          "text": "cook the brown potato from silver pot to cooked potato",
+          "rationale": "No robot is capable of cooking the potato using the stove. All robots replied NO to the request."
+        },
+        {
+          "node": "r2_s1",
+          "agent": "R2",
+          "type": "ASK_HELP",
+          "text": "turn_on the black microwave from counter to on",
+          "rationale": "No robot is capable of turning on the microwave. All robots replied NO to the request."
+        },
+        {
+          "node": "r2_s4",
+          "agent": "R2",
+          "type": "ASK_HELP",
+          "text": "cook the brown potato from black microwave to cooked",
+          "rationale": "No robot is capable of cooking the potato using the microwave. All robots replied NO to the request."
+        },
+        {
+          "node": "r3_s3",
+          "agent": "R3",
+          "type": "ASK_HELP",
+          "text": "cook the brown potato from black stove to cooked state",
+          "rationale": "No robot is capable of cooking the potato using the stove. All robots replied NO to the request."
+        },
+        {
+          "node": "r4_s6",
+          "agent": "R4",
+          "type": "ASK_HELP",
+          "text": "cook the metal pot from stove to stove",
+          "rationale": "No robot is capable of cooking the potato using the stove. All robots replied NO to the request."
+        }
+      ],
+      "removed_by_closure": [
+        {
+          "node": "r4_s5",
+          "agent": "R4",
+          "type": "PASS",
+          "text": "pass metal pot (stove, image 1) to R3",
+          "reason": "offer not taken"
+        },
+        {
+          "node": "r4_s7",
+          "agent": "R4",
+          "type": "LOCAL",
+          "text": "put_down the metal pot from gripper to fridge",
+          "reason": "needs r4_s6, which will not happen"
+        },
+        {
+          "node": "r3_s4",
+          "agent": "R3",
+          "type": "LOCAL",
+          "text": "pick_up the brown potato from black stove to gripper",
+          "reason": "needs r3_s3, which will not happen"
+        },
+        {
+          "node": "r2_s5",
+          "agent": "R2",
+          "type": "LOCAL",
+          "text": "pick_up the brown potato from black microwave to gripper",
+          "reason": "needs r2_s4, which will not happen"
+        },
+        {
+          "node": "r2_s3",
+          "agent": "R2",
+          "type": "LOCAL",
+          "text": "place the brown potato from gripper to black microwave",
+          "reason": "needs r2_s1, which will not happen"
+        },
+        {
+          "node": "r1_s4",
+          "agent": "R1",
+          "type": "LOCAL",
+          "text": "pick_up the brown potato from silver pot to gripper",
+          "reason": "needs r1_s3, which will not happen"
+        }
+      ],
+      "invariant_violations": [],
+      "deadline": {
+        "makespan_min": 10,
+        "deadline_min": 20,
+        "exceeded": false
+      }
+    }
+  },
+  "report": {
+    "goals": [
+      {
+        "robot": "R1",
+        "goal": 0,
+        "text": "cooked potato available for storage",
+        "status": "partial",
+        "cause": [
+          "No volunteer"
+        ],
+        "evidence": [
+          "r1_s1",
+          "r1_s2"
+        ],
+        "note": "",
+        "llm_status": "partial",
+        "llm_cause": "No volunteer"
+      },
+      {
+        "robot": "R1",
+        "goal": 1,
+        "text": "potato placed in the fridge",
+        "status": "uncovered",
+        "cause": [
+          "No volunteer"
+        ],
+        "evidence": [],
+        "note": "",
+        "llm_status": "uncovered",
+        "llm_cause": "No volunteer"
+      },
+      {
+        "robot": "R2",
+        "goal": 0,
+        "text": "cooked potato placed in the fridge",
+        "status": "uncovered",
+        "cause": [
+          "No volunteer"
+        ],
+        "evidence": [],
+        "note": "",
+        "llm_status": "uncovered",
+        "llm_cause": "No volunteer"
+      },
+      {
+        "robot": "R3",
+        "goal": 0,
+        "text": "potato cooked using the stove",
+        "status": "uncovered",
+        "cause": [
+          "No volunteer"
+        ],
+        "evidence": [],
+        "note": "",
+        "llm_status": "uncovered",
+        "llm_cause": "No volunteer"
+      },
+      {
+        "robot": "R3",
+        "goal": 1,
+        "text": "cooked potato placed in the fridge",
+        "status": "uncovered",
+        "cause": [
+          "Left unresolved"
+        ],
+        "evidence": [],
+        "note": "not judged by the Graph LLM"
+      },
+      {
+        "robot": "R4",
+        "goal": 0,
+        "text": "cooked potato available",
+        "status": "partial",
+        "cause": [
+          "No volunteer"
+        ],
+        "evidence": [
+          "r4_s1",
+          "r4_s2",
+          "r4_s3",
+          "r4_s4"
+        ],
+        "note": "",
+        "llm_status": "partial",
+        "llm_cause": "No volunteer"
+      },
+      {
+        "robot": "R4",
+        "goal": 1,
+        "text": "potato stored in the fridge",
+        "status": "uncovered",
+        "cause": [
+          "Left unresolved"
+        ],
+        "evidence": [],
+        "note": "not judged by the Graph LLM"
+      }
+    ],
+    "unresolved_requests": [],
+    "rejected_edits": [],
+    "dropped": [
+      {
+        "node": "r1_s3",
+        "agent": "R1",
+        "type": "ASK_HELP",
+        "text": "cook the brown potato from silver pot to cooked potato",
+        "rationale": "No robot is capable of cooking the potato using the stove. All robots replied NO to the request."
+      },
+      {
+        "node": "r2_s1",
+        "agent": "R2",
+        "type": "ASK_HELP",
+        "text": "turn_on the black microwave from counter to on",
+        "rationale": "No robot is capable of turning on the microwave. All robots replied NO to the request."
+      },
+      {
+        "node": "r2_s4",
+        "agent": "R2",
+        "type": "ASK_HELP",
+        "text": "cook the brown potato from black microwave to cooked",
+        "rationale": "No robot is capable of cooking the potato using the microwave. All robots replied NO to the request."
+      },
+      {
+        "node": "r3_s3",
+        "agent": "R3",
+        "type": "ASK_HELP",
+        "text": "cook the brown potato from black stove to cooked state",
+        "rationale": "No robot is capable of cooking the potato using the stove. All robots replied NO to the request."
+      },
+      {
+        "node": "r4_s6",
+        "agent": "R4",
+        "type": "ASK_HELP",
+        "text": "cook the metal pot from stove to stove",
+        "rationale": "No robot is capable of cooking the potato using the stove. All robots replied NO to the request."
+      }
+    ],
+    "removed_by_closure": [
+      {
+        "node": "r4_s5",
+        "agent": "R4",
+        "type": "PASS",
+        "text": "pass metal pot (stove, image 1) to R3",
+        "reason": "offer not taken"
+      },
+      {
+        "node": "r4_s7",
+        "agent": "R4",
+        "type": "LOCAL",
+        "text": "put_down the metal pot from gripper to fridge",
+        "reason": "needs r4_s6, which will not happen"
+      },
+      {
+        "node": "r3_s4",
+        "agent": "R3",
+        "type": "LOCAL",
+        "text": "pick_up the brown potato from black stove to gripper",
+        "reason": "needs r3_s3, which will not happen"
+      },
+      {
+        "node": "r2_s5",
+        "agent": "R2",
+        "type": "LOCAL",
+        "text": "pick_up the brown potato from black microwave to gripper",
+        "reason": "needs r2_s4, which will not happen"
+      },
+      {
+        "node": "r2_s3",
+        "agent": "R2",
+        "type": "LOCAL",
+        "text": "place the brown potato from gripper to black microwave",
+        "reason": "needs r2_s1, which will not happen"
+      },
+      {
+        "node": "r1_s4",
+        "agent": "R1",
+        "type": "LOCAL",
+        "text": "pick_up the brown potato from silver pot to gripper",
+        "reason": "needs r1_s3, which will not happen"
+      }
+    ],
+    "invariant_violations": [],
+    "deadline": {
+      "makespan_min": 10,
+      "deadline_min": 20,
+      "exceeded": false
+    }
+  },
+  "metrics": {
+    "task_id": "mat_complex_2",
+    "n_steps_total": 26,
+    "n_steps_active": 15,
+    "n_requests": 6,
+    "n_requests_served": 1,
+    "n_requests_unresolved": 0,
+    "n_candidates_from_stage3": 1,
+    "n_collab_edges_final": 1,
+    "n_help_edges": 0,
+    "n_transfer_edges": 1,
+    "decided_by_select": 0,
+    "decided_by_merge": 0,
+    "decided_by_default": 1,
+    "kappa_final": {
+      "mutual": 1,
+      "provider-only": 0,
+      "merged": 0
+    },
+    "graph_edits_applied": 5,
+    "graph_edits_rejected": 0,
+    "n_dropped_by_graph": 5,
+    "n_removed_by_closure": 6,
+    "n_requests_moved_later": 0,
+    "n_invariant_violations": 0,
+    "goals_total": 7,
+    "goals_covered": 0,
+    "goals_partial": 2,
+    "goals_uncovered": 5,
+    "goal_causes": {
+      "No volunteer": 5,
+      "Capability gap": 0,
+      "Left unresolved": 2,
+      "Infeasible": 0,
+      "Deadline exceeded": 0
+    },
+    "plan_fix_rounds": {
+      "R1": 1,
+      "R2": 0,
+      "R3": 0,
+      "R4": 1
+    },
+    "n_steps_excluded_stage2": 1,
+    "makespan_min": 10,
+    "deadline": 20,
+    "deadline_ok": true,
+    "llm_calls": 15,
+    "prompt_tokens": 31960,
+    "completion_tokens": 3718,
+    "config": {
+      "use_edge_proposal": true,
+      "use_graph_llm": true
+    },
+    "wall_time_sec": 17.4
+  },
+  "config": {
+    "use_edge_proposal": true,
+    "use_graph_llm": true,
+    "max_graph_rounds": 2,
+    "deadline_min": 20
+  }
+}

@@ -1,0 +1,1760 @@
+{
+  "task_n": "mat_compound_4",
+  "mode": "multi_room",
+  "model": "gpt-4o",
+  "task_text": "Break the Cellphone, close the blinds, and put the newspaper in the garbage can",
+  "joint_plan_text": "```plaintext\n### Joint Plan — mat_compound_4  (about 5 min / deadline 20 min: OK)\n### Robots: R1:Gripper(bedroom), R2:Gripper(bedroom), R3:Mobile_Heavy(bedroom), R4:Mobile_Light(bedroom)\n\n[0-5 min]\n- R1 [LOCAL] pick up the black cellphone from the nightstand to the gripper  (r1_s1)\n- R2 [LOCAL] slice the black cellphone from the nightstand to the nightstand  (r2_s1)\n- R3 [LOCAL] pick up the black cellphone from the bed to the gripper  (r3_s1)\n- R4 [LOCAL] close the blue blinds from the window to the window  (r4_s3)\n- R1 [LOCAL] slice the black cellphone from the gripper to broken  (r1_s2)\n- R2 [LOCAL] close the blue blinds from the window to the window  (r2_s2)\n- R3 [LOCAL] close the white blinds from the window to closed  (r3_s3)\n- R1 [LOCAL] close the white blinds from the window to closed  (r1_s3)\n- R2 [LOCAL] pick up the white newspaper from the floor to the gripper  (r2_s3)\n- R1 [LOCAL] pick up the newspaper from the floor to the gripper  (r1_s4)\n- R2 [LOCAL] put down the white newspaper from the gripper to the grey garbage can  (r2_s4)\n- R1 [LOCAL] put down the newspaper from the gripper to the garbage can  (r1_s5)",
+  "joint_plan_full": "### Joint Plan — mat_compound_4  (about 5 min / deadline 20 min: OK)\n### Robots: R1:Gripper(bedroom), R2:Gripper(bedroom), R3:Mobile_Heavy(bedroom), R4:Mobile_Light(bedroom)\n\n[0-5 min]\n- R1 [LOCAL] pick_up the black cellphone from nightstand to gripper  (r1_s1)\n- R2 [LOCAL] slice the black cellphone from nightstand to nightstand  (r2_s1)\n- R3 [LOCAL] pick_up the black cellphone from bed to gripper  (r3_s1)\n- R4 [LOCAL] close the blue blinds from window to window  (r4_s3)\n- R1 [LOCAL] slice the black cellphone from gripper to broken  (r1_s2)\n- R2 [LOCAL] close the blue blinds from window to window  (r2_s2)\n- R3 [LOCAL] close the white blinds from window to closed  (r3_s3)\n- R1 [LOCAL] close the white blinds from window to closed  (r1_s3)\n- R2 [LOCAL] pick_up the white newspaper from floor to gripper  (r2_s3)\n- R1 [LOCAL] pick_up the newspaper from floor to gripper  (r1_s4)\n- R2 [LOCAL] put_down the white newspaper from gripper to grey garbage can  (r2_s4)\n- R1 [LOCAL] put_down the newspaper from gripper to garbage can  (r1_s5)\n\n### Provenance (collaboration edges)\n\n### Graph LLM edits (applied)\n- DROP node=r3_s2 — R1 declined the offer as it already has the cellphone to break.\n- DROP node=r4_s4 — R1 declined the offer as it does not need another cellphone.\n- DROP node=r4_s1 — R4's action is redundant since R2 and R3 also handle the newspaper.\n- DROP node=r4_s2 — R4's action is redundant since R2 and R3 also handle the newspaper.\n- DROP node=r3_s4 — Duplicate action; R2 handles the newspaper.\n- DROP node=r3_s5 — Duplicate action; R2 handles the newspaper.\n\n### Report: goal coverage\n- R1.g0 break the black cellphone: covered [r1_s1, r1_s2]\n- R1.g1 close the white blinds: covered [r1_s3]\n- R1.g2 put the newspaper in the garbage can: covered [r1_s4, r1_s5]\n- R2.g0 break the black cellphone on the nightstand: covered [r2_s1]\n- R2.g1 close the blue blinds on the window: covered [r2_s2]\n- R2.g2 put the white newspaper in the grey garbage can: covered [r2_s3, r2_s4]\n- R3.g0 break the black cellphone: uncovered — No volunteer\n- R3.g1 close the white blinds: covered [r3_s3]\n- R3.g2 put the blue newspaper in the gray garbage can: uncovered — No volunteer\n- R4.g0 newspaper in the gray garbage can: uncovered — No volunteer\n- R4.g1 blue blinds closed: uncovered — No volunteer\n\n### Dropped by the Graph LLM\n- R3 [PASS] pass black cellphone (bed, image 1) to R1 (r3_s2) — R1 declined the offer as it already has the cellphone to break.\n- R4 [PASS] pass black cellphone (bedside table, image 1) to R1 (r4_s4) — R1 declined the offer as it does not need another cellphone.\n- R4 [LOCAL] pick_up the white newspaper from floor to gripper (r4_s1) — R4's action is redundant since R2 and R3 also handle the newspaper.\n- R4 [LOCAL] put_down the white newspaper from gripper to gray garbage can (r4_s2) — R4's action is redundant since R2 and R3 also handle the newspaper.\n- R3 [LOCAL] pick_up the blue newspaper from floor to gripper (r3_s4) — Duplicate action; R2 handles the newspaper.\n- R3 [LOCAL] put_down the blue newspaper from gripper to gray garbage can (r3_s5) — Duplicate action; R2 handles the newspaper.",
+  "offers": {
+    "R1": {
+      "agent": "R1",
+      "capability": "I am fixed in place with a gripper capable of manipulating light objects and slicing.",
+      "can_do": [
+        "PickupLightObject: lift small items like the cellphone or newspaper",
+        "SliceObject: cut or break items like the cellphone",
+        "PassReceiveObject: hand over or receive items from another robot"
+      ],
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift items heavier than a light object",
+        "PushFurniture: unable to move large objects or furniture"
+      ],
+      "has_items": [
+        "black cellphone (nightstand, image 1)",
+        "white blinds (window, image 1)",
+        "newspaper (floor, image 2)",
+        "garbage can (corner, image 2)"
+      ],
+      "need_from_others": [],
+      "intends": [
+        "break the black cellphone",
+        "close the white blinds",
+        "put the newspaper in the garbage can"
+      ],
+      "obs_scope": "I can observe the bedroom only.",
+      "reasoning": "a) The cellphone must be broken, the blinds closed, and the newspaper disposed of in the garbage can. b) The bedroom serves as the location for breaking the cellphone, closing the blinds, and disposing of the newspaper. c) I can break the cellphone, close the blinds, and put the newspaper in the garbage can as I am fixed in the bedroom. d) Breaking the cellphone and closing the blinds are critical actions to complete first, as they directly fulfill the task requirements."
+    },
+    "R2": {
+      "agent": "R2",
+      "capability": "I am fixed in place but can manipulate light objects within my reach using a gripper.",
+      "can_do": [
+        "PickupLightObject: lift small items like the newspaper",
+        "SliceObject: damage or break objects like the cellphone",
+        "PassReceiveObject: pass items to another robot if it comes to my room"
+      ],
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift heavy furniture",
+        "PushFurniture: cannot move furniture due to being fixed in place"
+      ],
+      "has_items": [
+        "black cellphone (nightstand, image 1)",
+        "blue blinds (window, image 1)",
+        "white newspaper (floor, image 2)",
+        "grey garbage can (corner, image 2)"
+      ],
+      "need_from_others": [],
+      "intends": [
+        "break the black cellphone on the nightstand",
+        "close the blue blinds on the window",
+        "put the white newspaper in the grey garbage can"
+      ],
+      "obs_scope": "I can observe the bedroom only.",
+      "reasoning": "a) The cellphone must be broken, the blinds closed, and the newspaper discarded. b) The bedroom provides access to the cellphone, blinds, and newspaper. c) I can break the cellphone, close the blinds, and place the newspaper in the garbage can. d) Breaking the cellphone and closing the blinds are higher priority actions as they directly fulfill the task requirements."
+    },
+    "R3": {
+      "agent": "R3",
+      "capability": "I am mobile and can carry objects up to 20 kg.",
+      "can_do": [
+        "PickupLightObject: lift small items like the cellphone and newspaper",
+        "PickupHeavyObject: lift heavier items within 20 kg",
+        "PushFurniture: move furniture if needed",
+        "PassReceiveObject: exchange objects with others"
+      ],
+      "cannot_do": [
+        "SliceObject: no cutting tool",
+        "PourObject: cannot pour liquids"
+      ],
+      "has_items": [
+        "black cellphone (bed, image 1)",
+        "white blinds (window, image 1)",
+        "blue newspaper (floor, image 2)",
+        "gray garbage can (corner, image 2)"
+      ],
+      "need_from_others": [],
+      "intends": [
+        "break the black cellphone",
+        "close the white blinds",
+        "put the blue newspaper in the gray garbage can"
+      ],
+      "obs_scope": "I can observe the bedroom only.",
+      "reasoning": "a) The cellphone must be broken, the blinds closed, and the newspaper disposed of in the garbage can. b) The bedroom is where all tasks will be completed: breaking the cellphone, closing the blinds, and disposing of the newspaper. c) I can pick up and move the cellphone, close the blinds, and place the newspaper in the garbage can. d) Breaking the cellphone and disposing of the newspaper are priorities as they are specific tasks mentioned in the goal."
+    },
+    "R4": {
+      "agent": "R4",
+      "capability": "I am mobile and can carry light objects up to 5 kg with one arm.",
+      "can_do": [
+        "PickupLightObject: lift small items like the cellphone and newspaper",
+        "PassReceiveObject: exchange objects with others"
+      ],
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift heavy furniture or objects",
+        "PushFurniture: cannot move large furniture",
+        "SliceObject: cannot cut or break objects",
+        "PourObject: cannot pour liquids"
+      ],
+      "has_items": [
+        "black cellphone (bedside table, image 1)",
+        "blue blinds (window, image 1)",
+        "white newspaper (floor, image 2)",
+        "gray garbage can (corner, image 2)"
+      ],
+      "need_from_others": [
+        "someone who can break the cellphone"
+      ],
+      "intends": [
+        "newspaper in the gray garbage can",
+        "blue blinds closed"
+      ],
+      "obs_scope": "I can observe the bedroom only.",
+      "reasoning": "a) The task requires the cellphone to be broken, the blinds to be closed, and the newspaper to be disposed of in the garbage can. b) The bedroom provides the location for the cellphone, blinds, and newspaper, which are all part of the task. c) I can manipulate light objects and move them within the room, which allows me to handle the newspaper and interact with the blinds. d) Breaking the cellphone is the highest priority, followed by closing the blinds, and then disposing of the newspaper."
+    }
+  },
+  "local_plans": {
+    "R1": [
+      {
+        "id": "r1_s1",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "black cellphone",
+          "from": "nightstand",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "break the black cellphone",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r1_s2",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "slice",
+          "object": "black cellphone",
+          "from": "gripper",
+          "to": "broken"
+        },
+        "item": null,
+        "target": null,
+        "uses": 1,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "break the black cellphone",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r1_s3",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "close",
+          "object": "white blinds",
+          "from": "window",
+          "to": "closed"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "close the white blinds",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r1_s4",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "newspaper",
+          "from": "floor",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 2,
+        "serves_text": "put the newspaper in the garbage can",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r1_s5",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "newspaper",
+          "from": "gripper",
+          "to": "garbage can"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 2,
+        "serves_text": "put the newspaper in the garbage can",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "R2": [
+      {
+        "id": "r2_s1",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "slice",
+          "object": "black cellphone",
+          "from": "nightstand",
+          "to": "nightstand"
+        },
+        "item": null,
+        "target": null,
+        "uses": 1,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "break the black cellphone on the nightstand",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s2",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "close",
+          "object": "blue blinds",
+          "from": "window",
+          "to": "window"
+        },
+        "item": null,
+        "target": null,
+        "uses": 1,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "close the blue blinds on the window",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s3",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "white newspaper",
+          "from": "floor",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 2,
+        "serves_text": "put the white newspaper in the grey garbage can",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s4",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "white newspaper",
+          "from": "gripper",
+          "to": "grey garbage can"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 2,
+        "serves_text": "put the white newspaper in the grey garbage can",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "R3": [
+      {
+        "id": "r3_s1",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "black cellphone",
+          "from": "bed",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "break the black cellphone",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s2",
+        "agent": "R3",
+        "type": "PASS",
+        "action": "pass black cellphone (bed, image 1) to R1",
+        "item": "black cellphone (bed, image 1)",
+        "target": "R1",
+        "uses": null,
+        "location": "bedroom",
+        "origin": "offer",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "break the black cellphone",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s3",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "close",
+          "object": "white blinds",
+          "from": "window",
+          "to": "closed"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "close the white blinds",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s4",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "blue newspaper",
+          "from": "floor",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 2,
+        "serves_text": "put the blue newspaper in the gray garbage can",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s5",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "blue newspaper",
+          "from": "gripper",
+          "to": "gray garbage can"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 2,
+        "serves_text": "put the blue newspaper in the gray garbage can",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "R4": [
+      {
+        "id": "r4_s1",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "white newspaper",
+          "from": "floor",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "newspaper in the gray garbage can",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s2",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "white newspaper",
+          "from": "gripper",
+          "to": "gray garbage can"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "newspaper in the gray garbage can",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s3",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "close",
+          "object": "blue blinds",
+          "from": "window",
+          "to": "window"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "blue blinds closed",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s4",
+        "agent": "R4",
+        "type": "PASS",
+        "action": "pass black cellphone (bedside table, image 1) to R1",
+        "item": "black cellphone (bedside table, image 1)",
+        "target": "R1",
+        "uses": null,
+        "location": "bedroom",
+        "origin": "offer",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "newspaper in the gray garbage can",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ]
+  },
+  "answers": [
+    {
+      "agent": "R1",
+      "id": "r3_s2",
+      "answer": "NO",
+      "reason": "I already have the black cellphone on the nightstand to break.",
+      "result": "no edge"
+    },
+    {
+      "agent": "R1",
+      "id": "r4_s4",
+      "answer": "NO",
+      "reason": "I do not need another cellphone to complete my task.",
+      "result": "no edge"
+    }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "r1_s1",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "black cellphone",
+          "from": "nightstand",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "break the black cellphone",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 1
+      },
+      {
+        "id": "r1_s2",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "slice",
+          "object": "black cellphone",
+          "from": "gripper",
+          "to": "broken"
+        },
+        "item": null,
+        "target": null,
+        "uses": 1,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "break the black cellphone",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 1,
+        "t_end": 2
+      },
+      {
+        "id": "r1_s3",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "close",
+          "object": "white blinds",
+          "from": "window",
+          "to": "closed"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "close the white blinds",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 2,
+        "t_end": 3
+      },
+      {
+        "id": "r1_s4",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "newspaper",
+          "from": "floor",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 2,
+        "serves_text": "put the newspaper in the garbage can",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 3,
+        "t_end": 4
+      },
+      {
+        "id": "r1_s5",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "newspaper",
+          "from": "gripper",
+          "to": "garbage can"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 2,
+        "serves_text": "put the newspaper in the garbage can",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 4,
+        "t_end": 5
+      },
+      {
+        "id": "r2_s1",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "slice",
+          "object": "black cellphone",
+          "from": "nightstand",
+          "to": "nightstand"
+        },
+        "item": null,
+        "target": null,
+        "uses": 1,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "break the black cellphone on the nightstand",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 1
+      },
+      {
+        "id": "r2_s2",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "close",
+          "object": "blue blinds",
+          "from": "window",
+          "to": "window"
+        },
+        "item": null,
+        "target": null,
+        "uses": 1,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "close the blue blinds on the window",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 1,
+        "t_end": 2
+      },
+      {
+        "id": "r2_s3",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "white newspaper",
+          "from": "floor",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 2,
+        "serves_text": "put the white newspaper in the grey garbage can",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 2,
+        "t_end": 3
+      },
+      {
+        "id": "r2_s4",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "white newspaper",
+          "from": "gripper",
+          "to": "grey garbage can"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 2,
+        "serves_text": "put the white newspaper in the grey garbage can",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 3,
+        "t_end": 4
+      },
+      {
+        "id": "r3_s1",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "black cellphone",
+          "from": "bed",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "break the black cellphone",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 1
+      },
+      {
+        "id": "r3_s2",
+        "agent": "R3",
+        "type": "PASS",
+        "action": "pass black cellphone (bed, image 1) to R1",
+        "item": "black cellphone (bed, image 1)",
+        "target": "R1",
+        "uses": null,
+        "location": "bedroom",
+        "origin": "offer",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "break the black cellphone",
+        "replies": [
+          {
+            "agent": "R1",
+            "answer": "NO",
+            "reason": "I already have the black cellphone on the nightstand to break."
+          }
+        ],
+        "status": "dropped",
+        "status_reason": "4.2 DROP: R1 declined the offer as it already has the cellphone to break.",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s3",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "close",
+          "object": "white blinds",
+          "from": "window",
+          "to": "closed"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "close the white blinds",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 1,
+        "t_end": 2
+      },
+      {
+        "id": "r3_s4",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "blue newspaper",
+          "from": "floor",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 2,
+        "serves_text": "put the blue newspaper in the gray garbage can",
+        "replies": [],
+        "status": "dropped",
+        "status_reason": "4.2 DROP: Duplicate action; R2 handles the newspaper.",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s5",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "blue newspaper",
+          "from": "gripper",
+          "to": "gray garbage can"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 2,
+        "serves_text": "put the blue newspaper in the gray garbage can",
+        "replies": [],
+        "status": "dropped",
+        "status_reason": "4.2 DROP: Duplicate action; R2 handles the newspaper.",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s1",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "white newspaper",
+          "from": "floor",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "newspaper in the gray garbage can",
+        "replies": [],
+        "status": "dropped",
+        "status_reason": "4.2 DROP: R4's action is redundant since R2 and R3 also handle the newspaper.",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s2",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "white newspaper",
+          "from": "gripper",
+          "to": "gray garbage can"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "newspaper in the gray garbage can",
+        "replies": [],
+        "status": "dropped",
+        "status_reason": "4.2 DROP: R4's action is redundant since R2 and R3 also handle the newspaper.",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s3",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "close",
+          "object": "blue blinds",
+          "from": "window",
+          "to": "window"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "bedroom",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "blue blinds closed",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 1
+      },
+      {
+        "id": "r4_s4",
+        "agent": "R4",
+        "type": "PASS",
+        "action": "pass black cellphone (bedside table, image 1) to R1",
+        "item": "black cellphone (bedside table, image 1)",
+        "target": "R1",
+        "uses": null,
+        "location": "bedroom",
+        "origin": "offer",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "newspaper in the gray garbage can",
+        "replies": [
+          {
+            "agent": "R1",
+            "answer": "NO",
+            "reason": "I do not need another cellphone to complete my task."
+          }
+        ],
+        "status": "dropped",
+        "status_reason": "4.2 DROP: R1 declined the offer as it does not need another cellphone.",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "order": {
+      "R1": [
+        "r1_s1",
+        "r1_s2",
+        "r1_s3",
+        "r1_s4",
+        "r1_s5"
+      ],
+      "R2": [
+        "r2_s1",
+        "r2_s2",
+        "r2_s3",
+        "r2_s4"
+      ],
+      "R3": [
+        "r3_s1",
+        "r3_s2",
+        "r3_s3",
+        "r3_s4",
+        "r3_s5"
+      ],
+      "R4": [
+        "r4_s1",
+        "r4_s2",
+        "r4_s3",
+        "r4_s4"
+      ]
+    },
+    "edges": [
+      {
+        "src": "r1_s1",
+        "dst": "r1_s2",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r1_s2",
+        "dst": "r1_s3",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r1_s3",
+        "dst": "r1_s4",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r1_s4",
+        "dst": "r1_s5",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r2_s1",
+        "dst": "r2_s2",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r2_s2",
+        "dst": "r2_s3",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r2_s3",
+        "dst": "r2_s4",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r3_s1",
+        "dst": "r3_s3",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      }
+    ],
+    "edit_log": [
+      {
+        "k": 0,
+        "edit": {
+          "op": "DROP",
+          "node": "r3_s2",
+          "rationale": "R1 declined the offer as it already has the cellphone to break."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "R1 declined the offer as it already has the cellphone to break."
+      },
+      {
+        "k": 1,
+        "edit": {
+          "op": "DROP",
+          "node": "r4_s4",
+          "rationale": "R1 declined the offer as it does not need another cellphone."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "R1 declined the offer as it does not need another cellphone."
+      },
+      {
+        "k": 2,
+        "edit": {
+          "op": "DROP",
+          "node": "r4_s1",
+          "rationale": "R4's action is redundant since R2 and R3 also handle the newspaper."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "R4's action is redundant since R2 and R3 also handle the newspaper."
+      },
+      {
+        "k": 3,
+        "edit": {
+          "op": "DROP",
+          "node": "r4_s2",
+          "rationale": "R4's action is redundant since R2 and R3 also handle the newspaper."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "R4's action is redundant since R2 and R3 also handle the newspaper."
+      },
+      {
+        "k": 4,
+        "edit": {
+          "op": "DROP",
+          "node": "r3_s4",
+          "rationale": "Duplicate action; R2 handles the newspaper."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "Duplicate action; R2 handles the newspaper."
+      },
+      {
+        "k": 5,
+        "edit": {
+          "op": "DROP",
+          "node": "r3_s5",
+          "rationale": "Duplicate action; R2 handles the newspaper."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "Duplicate action; R2 handles the newspaper."
+      }
+    ],
+    "report": {
+      "goals": [
+        {
+          "robot": "R1",
+          "goal": 0,
+          "text": "break the black cellphone",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r1_s1",
+            "r1_s2"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R1",
+          "goal": 1,
+          "text": "close the white blinds",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r1_s3"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R1",
+          "goal": 2,
+          "text": "put the newspaper in the garbage can",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r1_s4",
+            "r1_s5"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R2",
+          "goal": 0,
+          "text": "break the black cellphone on the nightstand",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r2_s1"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R2",
+          "goal": 1,
+          "text": "close the blue blinds on the window",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r2_s2"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R2",
+          "goal": 2,
+          "text": "put the white newspaper in the grey garbage can",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r2_s3",
+            "r2_s4"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R3",
+          "goal": 0,
+          "text": "break the black cellphone",
+          "status": "uncovered",
+          "cause": [
+            "No volunteer"
+          ],
+          "evidence": [],
+          "note": "",
+          "llm_status": "uncovered",
+          "llm_cause": "No volunteer"
+        },
+        {
+          "robot": "R3",
+          "goal": 1,
+          "text": "close the white blinds",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r3_s3"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R3",
+          "goal": 2,
+          "text": "put the blue newspaper in the gray garbage can",
+          "status": "uncovered",
+          "cause": [
+            "No volunteer"
+          ],
+          "evidence": [],
+          "note": "",
+          "llm_status": "uncovered",
+          "llm_cause": "No volunteer"
+        },
+        {
+          "robot": "R4",
+          "goal": 0,
+          "text": "newspaper in the gray garbage can",
+          "status": "uncovered",
+          "cause": [
+            "No volunteer"
+          ],
+          "evidence": [],
+          "note": "",
+          "llm_status": "uncovered",
+          "llm_cause": "No volunteer"
+        },
+        {
+          "robot": "R4",
+          "goal": 1,
+          "text": "blue blinds closed",
+          "status": "uncovered",
+          "cause": [
+            "No volunteer"
+          ],
+          "evidence": [],
+          "note": "",
+          "llm_status": "uncovered",
+          "llm_cause": "No volunteer"
+        }
+      ],
+      "unresolved_requests": [],
+      "rejected_edits": [],
+      "dropped": [
+        {
+          "node": "r3_s2",
+          "agent": "R3",
+          "type": "PASS",
+          "text": "pass black cellphone (bed, image 1) to R1",
+          "rationale": "R1 declined the offer as it already has the cellphone to break."
+        },
+        {
+          "node": "r4_s4",
+          "agent": "R4",
+          "type": "PASS",
+          "text": "pass black cellphone (bedside table, image 1) to R1",
+          "rationale": "R1 declined the offer as it does not need another cellphone."
+        },
+        {
+          "node": "r4_s1",
+          "agent": "R4",
+          "type": "LOCAL",
+          "text": "pick_up the white newspaper from floor to gripper",
+          "rationale": "R4's action is redundant since R2 and R3 also handle the newspaper."
+        },
+        {
+          "node": "r4_s2",
+          "agent": "R4",
+          "type": "LOCAL",
+          "text": "put_down the white newspaper from gripper to gray garbage can",
+          "rationale": "R4's action is redundant since R2 and R3 also handle the newspaper."
+        },
+        {
+          "node": "r3_s4",
+          "agent": "R3",
+          "type": "LOCAL",
+          "text": "pick_up the blue newspaper from floor to gripper",
+          "rationale": "Duplicate action; R2 handles the newspaper."
+        },
+        {
+          "node": "r3_s5",
+          "agent": "R3",
+          "type": "LOCAL",
+          "text": "put_down the blue newspaper from gripper to gray garbage can",
+          "rationale": "Duplicate action; R2 handles the newspaper."
+        }
+      ],
+      "removed_by_closure": [],
+      "invariant_violations": [],
+      "deadline": {
+        "makespan_min": 5,
+        "deadline_min": 20,
+        "exceeded": false
+      }
+    }
+  },
+  "report": {
+    "goals": [
+      {
+        "robot": "R1",
+        "goal": 0,
+        "text": "break the black cellphone",
+        "status": "covered",
+        "cause": [],
+        "evidence": [
+          "r1_s1",
+          "r1_s2"
+        ],
+        "note": "",
+        "llm_status": "covered",
+        "llm_cause": null
+      },
+      {
+        "robot": "R1",
+        "goal": 1,
+        "text": "close the white blinds",
+        "status": "covered",
+        "cause": [],
+        "evidence": [
+          "r1_s3"
+        ],
+        "note": "",
+        "llm_status": "covered",
+        "llm_cause": null
+      },
+      {
+        "robot": "R1",
+        "goal": 2,
+        "text": "put the newspaper in the garbage can",
+        "status": "covered",
+        "cause": [],
+        "evidence": [
+          "r1_s4",
+          "r1_s5"
+        ],
+        "note": "",
+        "llm_status": "covered",
+        "llm_cause": null
+      },
+      {
+        "robot": "R2",
+        "goal": 0,
+        "text": "break the black cellphone on the nightstand",
+        "status": "covered",
+        "cause": [],
+        "evidence": [
+          "r2_s1"
+        ],
+        "note": "",
+        "llm_status": "covered",
+        "llm_cause": null
+      },
+      {
+        "robot": "R2",
+        "goal": 1,
+        "text": "close the blue blinds on the window",
+        "status": "covered",
+        "cause": [],
+        "evidence": [
+          "r2_s2"
+        ],
+        "note": "",
+        "llm_status": "covered",
+        "llm_cause": null
+      },
+      {
+        "robot": "R2",
+        "goal": 2,
+        "text": "put the white newspaper in the grey garbage can",
+        "status": "covered",
+        "cause": [],
+        "evidence": [
+          "r2_s3",
+          "r2_s4"
+        ],
+        "note": "",
+        "llm_status": "covered",
+        "llm_cause": null
+      },
+      {
+        "robot": "R3",
+        "goal": 0,
+        "text": "break the black cellphone",
+        "status": "uncovered",
+        "cause": [
+          "No volunteer"
+        ],
+        "evidence": [],
+        "note": "",
+        "llm_status": "uncovered",
+        "llm_cause": "No volunteer"
+      },
+      {
+        "robot": "R3",
+        "goal": 1,
+        "text": "close the white blinds",
+        "status": "covered",
+        "cause": [],
+        "evidence": [
+          "r3_s3"
+        ],
+        "note": "",
+        "llm_status": "covered",
+        "llm_cause": null
+      },
+      {
+        "robot": "R3",
+        "goal": 2,
+        "text": "put the blue newspaper in the gray garbage can",
+        "status": "uncovered",
+        "cause": [
+          "No volunteer"
+        ],
+        "evidence": [],
+        "note": "",
+        "llm_status": "uncovered",
+        "llm_cause": "No volunteer"
+      },
+      {
+        "robot": "R4",
+        "goal": 0,
+        "text": "newspaper in the gray garbage can",
+        "status": "uncovered",
+        "cause": [
+          "No volunteer"
+        ],
+        "evidence": [],
+        "note": "",
+        "llm_status": "uncovered",
+        "llm_cause": "No volunteer"
+      },
+      {
+        "robot": "R4",
+        "goal": 1,
+        "text": "blue blinds closed",
+        "status": "uncovered",
+        "cause": [
+          "No volunteer"
+        ],
+        "evidence": [],
+        "note": "",
+        "llm_status": "uncovered",
+        "llm_cause": "No volunteer"
+      }
+    ],
+    "unresolved_requests": [],
+    "rejected_edits": [],
+    "dropped": [
+      {
+        "node": "r3_s2",
+        "agent": "R3",
+        "type": "PASS",
+        "text": "pass black cellphone (bed, image 1) to R1",
+        "rationale": "R1 declined the offer as it already has the cellphone to break."
+      },
+      {
+        "node": "r4_s4",
+        "agent": "R4",
+        "type": "PASS",
+        "text": "pass black cellphone (bedside table, image 1) to R1",
+        "rationale": "R1 declined the offer as it does not need another cellphone."
+      },
+      {
+        "node": "r4_s1",
+        "agent": "R4",
+        "type": "LOCAL",
+        "text": "pick_up the white newspaper from floor to gripper",
+        "rationale": "R4's action is redundant since R2 and R3 also handle the newspaper."
+      },
+      {
+        "node": "r4_s2",
+        "agent": "R4",
+        "type": "LOCAL",
+        "text": "put_down the white newspaper from gripper to gray garbage can",
+        "rationale": "R4's action is redundant since R2 and R3 also handle the newspaper."
+      },
+      {
+        "node": "r3_s4",
+        "agent": "R3",
+        "type": "LOCAL",
+        "text": "pick_up the blue newspaper from floor to gripper",
+        "rationale": "Duplicate action; R2 handles the newspaper."
+      },
+      {
+        "node": "r3_s5",
+        "agent": "R3",
+        "type": "LOCAL",
+        "text": "put_down the blue newspaper from gripper to gray garbage can",
+        "rationale": "Duplicate action; R2 handles the newspaper."
+      }
+    ],
+    "removed_by_closure": [],
+    "invariant_violations": [],
+    "deadline": {
+      "makespan_min": 5,
+      "deadline_min": 20,
+      "exceeded": false
+    }
+  },
+  "metrics": {
+    "task_id": "mat_compound_4",
+    "n_steps_total": 18,
+    "n_steps_active": 12,
+    "n_requests": 0,
+    "n_requests_served": 0,
+    "n_requests_unresolved": 0,
+    "n_candidates_from_stage3": 0,
+    "n_collab_edges_final": 0,
+    "n_help_edges": 0,
+    "n_transfer_edges": 0,
+    "decided_by_select": 0,
+    "decided_by_merge": 0,
+    "decided_by_default": 0,
+    "kappa_final": {
+      "mutual": 0,
+      "provider-only": 0,
+      "merged": 0
+    },
+    "graph_edits_applied": 6,
+    "graph_edits_rejected": 0,
+    "n_dropped_by_graph": 6,
+    "n_removed_by_closure": 0,
+    "n_requests_moved_later": 0,
+    "n_invariant_violations": 0,
+    "goals_total": 11,
+    "goals_covered": 7,
+    "goals_partial": 0,
+    "goals_uncovered": 4,
+    "goal_causes": {
+      "No volunteer": 4,
+      "Capability gap": 0,
+      "Left unresolved": 0,
+      "Infeasible": 0,
+      "Deadline exceeded": 0
+    },
+    "plan_fix_rounds": {
+      "R1": 0,
+      "R2": 0,
+      "R3": 1,
+      "R4": 0
+    },
+    "n_steps_excluded_stage2": 1,
+    "makespan_min": 5,
+    "deadline": 20,
+    "deadline_ok": true,
+    "llm_calls": 11,
+    "prompt_tokens": 22955,
+    "completion_tokens": 3063,
+    "config": {
+      "use_edge_proposal": true,
+      "use_graph_llm": true
+    },
+    "wall_time_sec": 17.9
+  },
+  "config": {
+    "use_edge_proposal": true,
+    "use_graph_llm": true,
+    "max_graph_rounds": 2,
+    "deadline_min": 20
+  }
+}

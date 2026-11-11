@@ -1,0 +1,1441 @@
+{
+  "task_n": "mat_complex_10",
+  "mode": "multi_room",
+  "model": "gpt-4o",
+  "task_text": "Slice lettuce and put in fridge",
+  "joint_plan_text": "```plaintext\n### Joint Plan — mat_complex_10  (about 10 min / deadline 20 min: OK)\n### Robots: R1:Gripper(kitchen), R2:Gripper(kitchen), R3:Mobile_Heavy(kitchen), R4:Mobile_Light(kitchen)\n\n[0-5 min]\n- R1 [LOCAL] pick up the green lettuce from the counter to the gripper  (r1_s1)\n- R2 [LOCAL] pick up the green lettuce from the counter to the gripper  (r2_s1)\n- R4 [ASK_HELP] wait for R1 to: slice the green lettuce from the counter to the counter  (r4_s1)\n- R1 [LOCAL] slice the green lettuce from the gripper to the counter (also serves R4's request)  (r1_s2)\n- R2 [LOCAL] slice the green lettuce from the gripper to the counter  (r2_s2)\n- R1 [PASS] pass green lettuce to R3 (offered) (hands it over; R3 collects it)  (r1_s3)\n- R2 [LOCAL] pick up the sliced lettuce from the counter to the gripper  (r2_s3)\n- R4 [LOCAL] pick up the sliced lettuce from the counter to the gripper  (r4_s2)\n- R2 [LOCAL] put down the sliced lettuce from the gripper to the white fridge  (r2_s4)\n- R3 [RECEIVE] receive green lettuce from R1 (collects it from the kitchen)  (r3_s2)\n- R4 [LOCAL] put down the sliced lettuce from the gripper to the white fridge  (r4_s3)\n\n[5-10 min]\n- R3 [LOCAL] put down the green lettuce from the gripper to the white refrigerator  (r3_s3)",
+  "joint_plan_full": "### Joint Plan — mat_complex_10  (about 10 min / deadline 20 min: OK)\n### Robots: R1:Gripper(kitchen), R2:Gripper(kitchen), R3:Mobile_Heavy(kitchen), R4:Mobile_Light(kitchen)\n\n[0-5 min]\n- R1 [LOCAL] pick_up the green lettuce from counter to gripper  (r1_s1)\n- R2 [LOCAL] pick_up the green lettuce from counter to gripper  (r2_s1)\n- R4 [ASK_HELP] wait for R1 to: slice the green lettuce from counter to counter  (r4_s1)\n- R1 [LOCAL] slice the green lettuce from gripper to counter (also serves R4's request)  (r1_s2)\n- R2 [LOCAL] slice the green lettuce from gripper to counter  (r2_s2)\n- R1 [PASS] pass green lettuce to R3 (offered) (hands it over; R3 collects it)  (r1_s3)\n- R2 [LOCAL] pick_up the sliced lettuce from counter to gripper  (r2_s3)\n- R4 [LOCAL] pick_up the sliced lettuce from counter to gripper  (r4_s2)\n- R2 [LOCAL] put_down the sliced lettuce from gripper to white fridge  (r2_s4)\n- R3 [RECEIVE] receive green lettuce from R1 (collects it from the kitchen)  (r3_s2)\n- R4 [LOCAL] put_down the sliced lettuce from gripper to white fridge  (r4_s3)\n\n[5-10 min]\n- R3 [LOCAL] put_down the green lettuce from gripper to white refrigerator  (r3_s3)\n\n### Provenance (collaboration edges)\n- r3_s2 (R3 RECEIVE) <- r1_s3 (R1 PASS)  κ=mutual, decided by SELECT\n- r4_s1 (R4 ASK_HELP) <- r1_s2 (R1 LOCAL)  κ=mutual, decided by SELECT\n\n### Graph LLM edits (applied)\n- SELECT provider=r1_s3 request=r3_s2 — R1's pass to R3 is mutual and already established.\n- SELECT provider=r1_s2 request=r4_s1 — R1's slicing is mutual and already part of its plan.\n- DROP node=r3_s1 — R3's initial pick up of lettuce is unnecessary since R1 will pass it.\n- DROP node=r3_s5 — R3's step to put down lettuce after receiving is redundant with r3_s3.\n- DROP node=r4_s4 — R4's pass to R3 is not needed as R1 is already passing the lettuce.\n\n### Report: goal coverage\n- R1.g0 sliced lettuce placed in the fridge: partial — No volunteer [r1_s1, r1_s2, r1_s3]\n- R2.g0 sliced lettuce placed in the white fridge: covered [r2_s1, r2_s2, r2_s3, r2_s4]\n- R3.g0 lettuce placed in the refrigerator after slicing: covered [r3_s2, r3_s3]\n- R4.g0 green lettuce placed in the white fridge: partial — No volunteer [r4_s1, r4_s2, r4_s3]\n\n### Dropped by the Graph LLM\n- R3 [LOCAL] pick_up the green lettuce from counter to gripper (r3_s1) — R3's initial pick up of lettuce is unnecessary since R1 will pass it.\n- R3 [LOCAL] put down the green lettuce from gripper to white refrigerator (r3_s5) — R3's step to put down lettuce after receiving is redundant with r3_s3.\n- R4 [PASS] pass green lettuce (counter, image 1) to R3 (r4_s4) — R4's pass to R3 is not needed as R1 is already passing the lettuce.\n\n### Removed by dependency closure\n- R3 [RECEIVE] receive green lettuce (counter, image 1) (r3_s4) — moot: r3_s5 will not happen",
+  "offers": {
+    "R1": {
+      "agent": "R1",
+      "capability": "I am fixed in place but can use my gripper to manipulate light objects and slice them.",
+      "can_do": [
+        "PickupLightObject: lift small items like lettuce",
+        "SliceObject: cut items using a knife",
+        "PassReceiveObject: hand over items to mobile robots"
+      ],
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift heavy items",
+        "PushFurniture: cannot move furniture"
+      ],
+      "has_items": [
+        "green lettuce (counter, image 1)",
+        "silver knife (counter, image 1)",
+        "white fridge (corner, image 2)"
+      ],
+      "need_from_others": [
+        "someone who can move sliced lettuce to the fridge if it's not within reach"
+      ],
+      "intends": [
+        "sliced lettuce placed in the fridge"
+      ],
+      "obs_scope": "I can observe the kitchen only.",
+      "reasoning": "a) The sliced lettuce needs to be placed in the fridge. b) The kitchen provides the location and tools for slicing and storing the lettuce. c) I can slice the lettuce and place it in the fridge. d) Slicing the lettuce is the most important task as it is the primary requirement of the task."
+    },
+    "R2": {
+      "agent": "R2",
+      "capability": "I am fixed in the kitchen and can manipulate objects with a gripper.",
+      "can_do": [
+        "PickupLightObject: lift small items like lettuce",
+        "SliceObject: cut soft foods like lettuce",
+        "PassReceiveObject: exchange items with mobile robots"
+      ],
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift large appliances or furniture",
+        "PushFurniture: cannot move furniture due to being fixed"
+      ],
+      "has_items": [
+        "green lettuce (counter, image 1)",
+        "white fridge (corner, image 2)"
+      ],
+      "need_from_others": [],
+      "intends": [
+        "sliced lettuce placed in the white fridge"
+      ],
+      "obs_scope": "I can observe the kitchen only.",
+      "reasoning": "a) The task requires sliced lettuce to be stored in the fridge. b) The kitchen provides the tools and storage for food preparation. c) I can slice the lettuce and place it in the fridge. d) Slicing the lettuce and placing it in the fridge are both crucial for task completion."
+    },
+    "R3": {
+      "agent": "R3",
+      "capability": "I am mobile and can carry heavy objects up to 20 kg, but cannot slice items.",
+      "can_do": [
+        "PickupLightObject: lift small items like lettuce",
+        "PickupHeavyObject: move heavy items like the refrigerator",
+        "PushFurniture: adjust furniture in the room",
+        "PassReceiveObject: exchange objects with other robots"
+      ],
+      "cannot_do": [
+        "SliceObject: no cutting tool available"
+      ],
+      "has_items": [
+        "green lettuce (counter, image 1)",
+        "white refrigerator (corner, image 2)"
+      ],
+      "need_from_others": [
+        "someone who can slice lettuce"
+      ],
+      "intends": [
+        "lettuce placed in the refrigerator after slicing"
+      ],
+      "obs_scope": "I can observe the kitchen only.",
+      "reasoning": "a) The lettuce must be sliced and stored in the refrigerator. b) Kitchen: where lettuce is prepared and refrigerator is located. c) I can move the lettuce to a location where it can be sliced and then store it in the refrigerator. d) Moving the lettuce to the refrigerator is crucial after it is sliced."
+    },
+    "R4": {
+      "agent": "R4",
+      "capability": "I am mobile and can carry light objects up to 5 kg with one arm.",
+      "can_do": [
+        "PickupLightObject: lift small items like lettuce",
+        "PassReceiveObject: exchange objects with others"
+      ],
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift heavy items",
+        "SliceObject: no cutting tool"
+      ],
+      "has_items": [
+        "green lettuce (counter, image 1)",
+        "white fridge (corner, image 2)"
+      ],
+      "need_from_others": [
+        "someone who can slice the lettuce"
+      ],
+      "intends": [
+        "green lettuce placed in the white fridge"
+      ],
+      "obs_scope": "I can observe the kitchen only.",
+      "reasoning": "a) The goal is to have sliced lettuce stored in the fridge. b) The kitchen provides the lettuce and the fridge for storage. c) I can move the lettuce to the fridge. d) Moving the lettuce to the fridge is most important as slicing is beyond my capability."
+    }
+  },
+  "local_plans": {
+    "R1": [
+      {
+        "id": "r1_s1",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "green lettuce",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "sliced lettuce placed in the fridge",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r1_s2",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "slice",
+          "object": "green lettuce",
+          "from": "gripper",
+          "to": "counter"
+        },
+        "item": null,
+        "target": null,
+        "uses": 1,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "sliced lettuce placed in the fridge",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r1_s3",
+        "agent": "R1",
+        "type": "PASS",
+        "action": "pass green lettuce (counter, image 1) to R3",
+        "item": "green lettuce (counter, image 1)",
+        "target": "R3",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "offer",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "sliced lettuce placed in the fridge",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "R2": [
+      {
+        "id": "r2_s1",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "green lettuce",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "sliced lettuce placed in the white fridge",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s2",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "slice",
+          "object": "green lettuce",
+          "from": "gripper",
+          "to": "counter"
+        },
+        "item": null,
+        "target": null,
+        "uses": 1,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "sliced lettuce placed in the white fridge",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s3",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "sliced lettuce",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "sliced lettuce placed in the white fridge",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s4",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "sliced lettuce",
+          "from": "gripper",
+          "to": "white fridge"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "sliced lettuce placed in the white fridge",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "R3": [
+      {
+        "id": "r3_s1",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "green lettuce",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "lettuce placed in the refrigerator after slicing",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s2",
+        "agent": "R3",
+        "type": "RECEIVE",
+        "action": "receive green lettuce (counter, image 1)",
+        "item": "green lettuce (counter, image 1)",
+        "target": "R1",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": "r3_s3",
+        "serves": 0,
+        "serves_text": "lettuce placed in the refrigerator after slicing",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s3",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "green lettuce",
+          "from": "gripper",
+          "to": "white refrigerator"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "lettuce placed in the refrigerator after slicing",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "R4": [
+      {
+        "id": "r4_s1",
+        "agent": "R4",
+        "type": "ASK_HELP",
+        "action": {
+          "verb": "slice",
+          "object": "green lettuce",
+          "from": "counter",
+          "to": "counter"
+        },
+        "item": null,
+        "target": "R1",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": "r4_s2",
+        "serves": 0,
+        "serves_text": "green lettuce placed in the white fridge",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s2",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "sliced lettuce",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "green lettuce placed in the white fridge",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s3",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "sliced lettuce",
+          "from": "gripper",
+          "to": "white fridge"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "green lettuce placed in the white fridge",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ]
+  },
+  "answers": [
+    {
+      "agent": "R1",
+      "id": "r3_s2",
+      "answer": "YES",
+      "reason": "I already plan to pass the sliced lettuce to R3.",
+      "result": "CANDIDATE",
+      "kappa": "mutual",
+      "provider": "r1_s3",
+      "existing": true
+    },
+    {
+      "agent": "R1",
+      "id": "r4_s1",
+      "answer": "YES",
+      "reason": "I am already slicing the lettuce as part of my plan.",
+      "result": "CANDIDATE",
+      "kappa": "mutual",
+      "provider": "r1_s2",
+      "existing": true
+    },
+    {
+      "agent": "R2",
+      "id": "r3_s2",
+      "answer": "NO",
+      "reason": "The lettuce is needed for my task to slice and store in the fridge.",
+      "result": "no edge"
+    },
+    {
+      "agent": "R2",
+      "id": "r4_s1",
+      "answer": "YES",
+      "reason": "I already have a step to slice the lettuce.",
+      "result": "CANDIDATE",
+      "kappa": "provider-only",
+      "provider": "r2_s2",
+      "existing": true
+    },
+    {
+      "agent": "R3",
+      "id": "r4_s1",
+      "answer": "NO",
+      "reason": "I cannot slice items as I lack cutting tools.",
+      "result": "no edge"
+    },
+    {
+      "agent": "R3",
+      "id": "r1_s3",
+      "answer": "YES",
+      "reason": "I need the lettuce to store it in the refrigerator after it is sliced.",
+      "result": "CANDIDATE",
+      "kappa": "mutual",
+      "receive": "r3_s4",
+      "use": "r3_s5"
+    },
+    {
+      "agent": "R4",
+      "id": "r3_s2",
+      "answer": "YES",
+      "reason": "R3 can slice the lettuce, which I cannot do.",
+      "result": "CANDIDATE",
+      "kappa": "provider-only",
+      "provider": "r4_s4"
+    }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "r1_s1",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "green lettuce",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "sliced lettuce placed in the fridge",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 1
+      },
+      {
+        "id": "r1_s2",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "slice",
+          "object": "green lettuce",
+          "from": "gripper",
+          "to": "counter"
+        },
+        "item": null,
+        "target": null,
+        "uses": 1,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "sliced lettuce placed in the fridge",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 1,
+        "t_end": 2
+      },
+      {
+        "id": "r1_s3",
+        "agent": "R1",
+        "type": "PASS",
+        "action": "pass green lettuce (counter, image 1) to R3",
+        "item": "green lettuce (counter, image 1)",
+        "target": "R3",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "offer",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "sliced lettuce placed in the fridge",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 2,
+        "t_end": 3
+      },
+      {
+        "id": "r2_s1",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "green lettuce",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "sliced lettuce placed in the white fridge",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 1
+      },
+      {
+        "id": "r2_s2",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "slice",
+          "object": "green lettuce",
+          "from": "gripper",
+          "to": "counter"
+        },
+        "item": null,
+        "target": null,
+        "uses": 1,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "sliced lettuce placed in the white fridge",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 1,
+        "t_end": 2
+      },
+      {
+        "id": "r2_s3",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "sliced lettuce",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "sliced lettuce placed in the white fridge",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 2,
+        "t_end": 3
+      },
+      {
+        "id": "r2_s4",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "sliced lettuce",
+          "from": "gripper",
+          "to": "white fridge"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "sliced lettuce placed in the white fridge",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 3,
+        "t_end": 4
+      },
+      {
+        "id": "r3_s1",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "green lettuce",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "lettuce placed in the refrigerator after slicing",
+        "replies": [],
+        "status": "dropped",
+        "status_reason": "4.2 DROP: R3's initial pick up of lettuce is unnecessary since R1 will pass it.",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s4",
+        "agent": "R3",
+        "type": "RECEIVE",
+        "action": "receive green lettuce (counter, image 1)",
+        "item": "green lettuce (counter, image 1)",
+        "target": "R1",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "receive",
+        "answers": null,
+        "enables": "r3_s5",
+        "serves": null,
+        "serves_text": "offered green lettuce (counter, image 1)",
+        "replies": [],
+        "status": "removed",
+        "status_reason": "moot: r3_s5 will not happen",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s5",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": "put down the green lettuce from gripper to white refrigerator",
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "receive",
+        "answers": null,
+        "enables": null,
+        "serves": null,
+        "serves_text": "offered green lettuce (counter, image 1)",
+        "replies": [],
+        "status": "dropped",
+        "status_reason": "4.2 DROP: R3's step to put down lettuce after receiving is redundant with r3_s3.",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s2",
+        "agent": "R3",
+        "type": "RECEIVE",
+        "action": "receive green lettuce (counter, image 1)",
+        "item": "green lettuce (counter, image 1)",
+        "target": "R1",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": "r3_s3",
+        "serves": 0,
+        "serves_text": "lettuce placed in the refrigerator after slicing",
+        "replies": [
+          {
+            "agent": "R2",
+            "answer": "NO",
+            "reason": "The lettuce is needed for my task to slice and store in the fridge."
+          }
+        ],
+        "status": "active",
+        "status_reason": "",
+        "size": "medium",
+        "phase": 1,
+        "t_start": 3,
+        "t_end": 5
+      },
+      {
+        "id": "r3_s3",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "green lettuce",
+          "from": "gripper",
+          "to": "white refrigerator"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "lettuce placed in the refrigerator after slicing",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 2,
+        "t_start": 5,
+        "t_end": 6
+      },
+      {
+        "id": "r4_s4",
+        "agent": "R4",
+        "type": "PASS",
+        "action": "pass green lettuce (counter, image 1) to R3",
+        "item": "green lettuce (counter, image 1)",
+        "target": "R3",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "volunteer",
+        "answers": "r3_s2",
+        "enables": null,
+        "serves": null,
+        "serves_text": "",
+        "replies": [],
+        "status": "dropped",
+        "status_reason": "4.2 DROP: R4's pass to R3 is not needed as R1 is already passing the lettuce.",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s1",
+        "agent": "R4",
+        "type": "ASK_HELP",
+        "action": {
+          "verb": "slice",
+          "object": "green lettuce",
+          "from": "counter",
+          "to": "counter"
+        },
+        "item": null,
+        "target": "R1",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": "r4_s2",
+        "serves": 0,
+        "serves_text": "green lettuce placed in the white fridge",
+        "replies": [
+          {
+            "agent": "R3",
+            "answer": "NO",
+            "reason": "I cannot slice items as I lack cutting tools."
+          }
+        ],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 2
+      },
+      {
+        "id": "r4_s2",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "sliced lettuce",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "green lettuce placed in the white fridge",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 2,
+        "t_end": 3
+      },
+      {
+        "id": "r4_s3",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "sliced lettuce",
+          "from": "gripper",
+          "to": "white fridge"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "green lettuce placed in the white fridge",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 3,
+        "t_end": 4
+      }
+    ],
+    "order": {
+      "R1": [
+        "r1_s1",
+        "r1_s2",
+        "r1_s3"
+      ],
+      "R2": [
+        "r2_s1",
+        "r2_s2",
+        "r2_s3",
+        "r2_s4"
+      ],
+      "R3": [
+        "r3_s1",
+        "r3_s4",
+        "r3_s5",
+        "r3_s2",
+        "r3_s3"
+      ],
+      "R4": [
+        "r4_s4",
+        "r4_s1",
+        "r4_s2",
+        "r4_s3"
+      ]
+    },
+    "edges": [
+      {
+        "src": "r1_s1",
+        "dst": "r1_s2",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r1_s2",
+        "dst": "r1_s3",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r2_s1",
+        "dst": "r2_s2",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r2_s2",
+        "dst": "r2_s3",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r2_s3",
+        "dst": "r2_s4",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r3_s2",
+        "dst": "r3_s3",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r4_s1",
+        "dst": "r4_s2",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r4_s2",
+        "dst": "r4_s3",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r1_s3",
+        "dst": "r3_s2",
+        "kind": "TRANSFER",
+        "kappa": "mutual",
+        "status": "CONFIRMED",
+        "source": "stage3",
+        "existing": true,
+        "decided_by": "SELECT"
+      },
+      {
+        "src": "r1_s2",
+        "dst": "r4_s1",
+        "kind": "HELP",
+        "kappa": "mutual",
+        "status": "CONFIRMED",
+        "source": "stage3",
+        "existing": true,
+        "decided_by": "SELECT"
+      },
+      {
+        "src": "r2_s2",
+        "dst": "r4_s1",
+        "kind": "HELP",
+        "kappa": "provider-only",
+        "status": "PROPOSED",
+        "source": "stage3",
+        "existing": true,
+        "decided_by": ""
+      },
+      {
+        "src": "r1_s3",
+        "dst": "r3_s4",
+        "kind": "TRANSFER",
+        "kappa": "mutual",
+        "status": "CONFIRMED",
+        "source": "stage3",
+        "existing": false,
+        "decided_by": "default"
+      },
+      {
+        "src": "r4_s4",
+        "dst": "r3_s2",
+        "kind": "TRANSFER",
+        "kappa": "provider-only",
+        "status": "PROPOSED",
+        "source": "stage3",
+        "existing": false,
+        "decided_by": ""
+      }
+    ],
+    "edit_log": [
+      {
+        "k": 0,
+        "edit": {
+          "op": "SELECT",
+          "provider": "r1_s3",
+          "request": "r3_s2",
+          "rationale": "R1's pass to R3 is mutual and already established."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "R1's pass to R3 is mutual and already established."
+      },
+      {
+        "k": 1,
+        "edit": {
+          "op": "SELECT",
+          "provider": "r1_s2",
+          "request": "r4_s1",
+          "rationale": "R1's slicing is mutual and already part of its plan."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "R1's slicing is mutual and already part of its plan."
+      },
+      {
+        "k": 2,
+        "edit": {
+          "op": "DROP",
+          "node": "r3_s1",
+          "rationale": "R3's initial pick up of lettuce is unnecessary since R1 will pass it."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "R3's initial pick up of lettuce is unnecessary since R1 will pass it."
+      },
+      {
+        "k": 3,
+        "edit": {
+          "op": "DROP",
+          "node": "r3_s5",
+          "rationale": "R3's step to put down lettuce after receiving is redundant with r3_s3."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "R3's step to put down lettuce after receiving is redundant with r3_s3."
+      },
+      {
+        "k": 4,
+        "edit": {
+          "op": "DROP",
+          "node": "r4_s4",
+          "rationale": "R4's pass to R3 is not needed as R1 is already passing the lettuce."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "R4's pass to R3 is not needed as R1 is already passing the lettuce."
+      }
+    ],
+    "report": {
+      "goals": [
+        {
+          "robot": "R1",
+          "goal": 0,
+          "text": "sliced lettuce placed in the fridge",
+          "status": "partial",
+          "cause": [
+            "No volunteer"
+          ],
+          "evidence": [
+            "r1_s1",
+            "r1_s2",
+            "r1_s3"
+          ],
+          "note": "",
+          "llm_status": "partial",
+          "llm_cause": "No volunteer"
+        },
+        {
+          "robot": "R2",
+          "goal": 0,
+          "text": "sliced lettuce placed in the white fridge",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r2_s1",
+            "r2_s2",
+            "r2_s3",
+            "r2_s4"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R3",
+          "goal": 0,
+          "text": "lettuce placed in the refrigerator after slicing",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r3_s2",
+            "r3_s3"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R4",
+          "goal": 0,
+          "text": "green lettuce placed in the white fridge",
+          "status": "partial",
+          "cause": [
+            "No volunteer"
+          ],
+          "evidence": [
+            "r4_s1",
+            "r4_s2",
+            "r4_s3"
+          ],
+          "note": "",
+          "llm_status": "partial",
+          "llm_cause": "No volunteer"
+        }
+      ],
+      "unresolved_requests": [],
+      "rejected_edits": [],
+      "dropped": [
+        {
+          "node": "r3_s1",
+          "agent": "R3",
+          "type": "LOCAL",
+          "text": "pick_up the green lettuce from counter to gripper",
+          "rationale": "R3's initial pick up of lettuce is unnecessary since R1 will pass it."
+        },
+        {
+          "node": "r3_s5",
+          "agent": "R3",
+          "type": "LOCAL",
+          "text": "put down the green lettuce from gripper to white refrigerator",
+          "rationale": "R3's step to put down lettuce after receiving is redundant with r3_s3."
+        },
+        {
+          "node": "r4_s4",
+          "agent": "R4",
+          "type": "PASS",
+          "text": "pass green lettuce (counter, image 1) to R3",
+          "rationale": "R4's pass to R3 is not needed as R1 is already passing the lettuce."
+        }
+      ],
+      "removed_by_closure": [
+        {
+          "node": "r3_s4",
+          "agent": "R3",
+          "type": "RECEIVE",
+          "text": "receive green lettuce (counter, image 1)",
+          "reason": "moot: r3_s5 will not happen"
+        }
+      ],
+      "invariant_violations": [],
+      "deadline": {
+        "makespan_min": 10,
+        "deadline_min": 20,
+        "exceeded": false
+      }
+    }
+  },
+  "report": {
+    "goals": [
+      {
+        "robot": "R1",
+        "goal": 0,
+        "text": "sliced lettuce placed in the fridge",
+        "status": "partial",
+        "cause": [
+          "No volunteer"
+        ],
+        "evidence": [
+          "r1_s1",
+          "r1_s2",
+          "r1_s3"
+        ],
+        "note": "",
+        "llm_status": "partial",
+        "llm_cause": "No volunteer"
+      },
+      {
+        "robot": "R2",
+        "goal": 0,
+        "text": "sliced lettuce placed in the white fridge",
+        "status": "covered",
+        "cause": [],
+        "evidence": [
+          "r2_s1",
+          "r2_s2",
+          "r2_s3",
+          "r2_s4"
+        ],
+        "note": "",
+        "llm_status": "covered",
+        "llm_cause": null
+      },
+      {
+        "robot": "R3",
+        "goal": 0,
+        "text": "lettuce placed in the refrigerator after slicing",
+        "status": "covered",
+        "cause": [],
+        "evidence": [
+          "r3_s2",
+          "r3_s3"
+        ],
+        "note": "",
+        "llm_status": "covered",
+        "llm_cause": null
+      },
+      {
+        "robot": "R4",
+        "goal": 0,
+        "text": "green lettuce placed in the white fridge",
+        "status": "partial",
+        "cause": [
+          "No volunteer"
+        ],
+        "evidence": [
+          "r4_s1",
+          "r4_s2",
+          "r4_s3"
+        ],
+        "note": "",
+        "llm_status": "partial",
+        "llm_cause": "No volunteer"
+      }
+    ],
+    "unresolved_requests": [],
+    "rejected_edits": [],
+    "dropped": [
+      {
+        "node": "r3_s1",
+        "agent": "R3",
+        "type": "LOCAL",
+        "text": "pick_up the green lettuce from counter to gripper",
+        "rationale": "R3's initial pick up of lettuce is unnecessary since R1 will pass it."
+      },
+      {
+        "node": "r3_s5",
+        "agent": "R3",
+        "type": "LOCAL",
+        "text": "put down the green lettuce from gripper to white refrigerator",
+        "rationale": "R3's step to put down lettuce after receiving is redundant with r3_s3."
+      },
+      {
+        "node": "r4_s4",
+        "agent": "R4",
+        "type": "PASS",
+        "text": "pass green lettuce (counter, image 1) to R3",
+        "rationale": "R4's pass to R3 is not needed as R1 is already passing the lettuce."
+      }
+    ],
+    "removed_by_closure": [
+      {
+        "node": "r3_s4",
+        "agent": "R3",
+        "type": "RECEIVE",
+        "text": "receive green lettuce (counter, image 1)",
+        "reason": "moot: r3_s5 will not happen"
+      }
+    ],
+    "invariant_violations": [],
+    "deadline": {
+      "makespan_min": 10,
+      "deadline_min": 20,
+      "exceeded": false
+    }
+  },
+  "metrics": {
+    "task_id": "mat_complex_10",
+    "n_steps_total": 16,
+    "n_steps_active": 12,
+    "n_requests": 3,
+    "n_requests_served": 2,
+    "n_requests_unresolved": 0,
+    "n_candidates_from_stage3": 5,
+    "n_collab_edges_final": 2,
+    "n_help_edges": 1,
+    "n_transfer_edges": 1,
+    "decided_by_select": 2,
+    "decided_by_merge": 0,
+    "decided_by_default": 0,
+    "kappa_final": {
+      "mutual": 2,
+      "provider-only": 0,
+      "merged": 0
+    },
+    "graph_edits_applied": 5,
+    "graph_edits_rejected": 0,
+    "n_dropped_by_graph": 3,
+    "n_removed_by_closure": 1,
+    "n_requests_moved_later": 0,
+    "n_invariant_violations": 0,
+    "goals_total": 4,
+    "goals_covered": 2,
+    "goals_partial": 2,
+    "goals_uncovered": 0,
+    "goal_causes": {
+      "No volunteer": 2,
+      "Capability gap": 0,
+      "Left unresolved": 0,
+      "Infeasible": 0,
+      "Deadline exceeded": 0
+    },
+    "plan_fix_rounds": {
+      "R1": 1,
+      "R2": 0,
+      "R3": 1,
+      "R4": 0
+    },
+    "n_steps_excluded_stage2": 1,
+    "makespan_min": 10,
+    "deadline": 20,
+    "deadline_ok": true,
+    "llm_calls": 15,
+    "prompt_tokens": 27868,
+    "completion_tokens": 2732,
+    "config": {
+      "use_edge_proposal": true,
+      "use_graph_llm": true
+    },
+    "wall_time_sec": 13.8
+  },
+  "config": {
+    "use_edge_proposal": true,
+    "use_graph_llm": true,
+    "max_graph_rounds": 2,
+    "deadline_min": 20
+  }
+}

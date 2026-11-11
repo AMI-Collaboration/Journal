@@ -1,0 +1,241 @@
+{
+  "task_n": "task2_abstract",
+  "variants": {
+    "full": {
+      "raw_result": {
+        "variant": "full",
+        "joint_plan_text": "### Joint Plan — task2_abstract  (about 5 min / deadline 20 min: OK)\n### Robots: R1:Gripper(bedroom), R2:Mobile_Light(bedroom), R3:Gripper(bathroom), R4:Mobile_Heavy(bathroom)\n\n[0-5 min]\n- R2 [LOCAL] pick_up the blue towel from desk to gripper  (r2_s1)\n- R3 [LOCAL] pour the water from sink to bathtub (also serves R4's request)  (r3_s1)\n- R4 [LOCAL] pick_up the white towels from towel rack to gripper  (r4_s2)\n- R3 [LOCAL] pick_up the brown towel from towel rack to gripper  (r3_s2)\n- R4 [ASK_HELP] wait for R3 to: pour the bathtub from sink to bathtub  (r4_s1)\n- R4 [LOCAL] put_down the white towels from gripper to bathtub [after r3_s1]  (r4_s3)\n- R3 [LOCAL] put_down the brown towel from gripper to bathtub edge  (r3_s3)\n\n### Provenance (collaboration edges)\n- r4_s1 (R4 ASK_HELP) <- r3_s1 (R3 LOCAL)  κ=mutual, decided by SELECT\n\n### Graph LLM edits (applied)\n- SELECT provider=r3_s1 request=r4_s1 — R3 is the only robot capable of filling the bathtub with water, and it has already agreed to do so.\n- DROP node=r2_s2 — R3 already has towels in the bathroom, so R2's attempt to pass a towel to R3 is unnecessary.\n- ORDER before=r3_s1 after=r4_s3 — R4 should place the towel near the bathtub only after it is filled with water by R3.\n\n### Report: goal coverage\n- R1.g0 provide a towel if available: uncovered — Infeasible [r1_s1] (evidence gone: r1_s1)\n- R2.g0 towel available in the bathroom for drying off: partial — Left unresolved [r2_s1]\n- R3.g0 bathtub filled with warm water: covered [r3_s1]\n- R3.g1 towel placed near the bathtub: covered [r3_s2, r3_s3]\n- R4.g0 bathtub ready with warm water: covered [r4_s1]\n- R4.g1 towel nearby for drying off: covered [r4_s2, r4_s3]\n\n### Unresolved requests\n- R1 r1_s1 receive blue towel (desk, image 2) — no candidate (nobody said YES) | R4: NO I can only operate in the bathroom and cannot access the bedroom.\n\n### Rejected edits\n- ORDER before=r3_s1 after=r3_s3 — ORDER is only between different robots (a robot's own order is fixed)\n\n### Dropped by the Graph LLM\n- R2 [PASS] pass blue towel (desk, image 2) to R3 (r2_s2) — R3 already has towels in the bathroom, so R2's attempt to pass a towel to R3 is unnecessary.\n\n### Removed by dependency closure\n- R1 [RECEIVE] receive blue towel (desk, image 2) (r1_s1) — unresolved: no candidate (nobody said YES)",
+        "metrics": {
+          "task_id": "task2_abstract",
+          "n_steps_total": 9,
+          "n_steps_active": 7,
+          "n_requests": 2,
+          "n_requests_served": 1,
+          "n_requests_unresolved": 1,
+          "n_candidates_from_stage3": 2,
+          "n_collab_edges_final": 1,
+          "n_help_edges": 1,
+          "n_transfer_edges": 0,
+          "decided_by_select": 1,
+          "decided_by_merge": 0,
+          "decided_by_default": 0,
+          "kappa_final": {
+            "mutual": 1,
+            "provider-only": 0,
+            "merged": 0
+          },
+          "graph_edits_applied": 3,
+          "graph_edits_rejected": 1,
+          "n_dropped_by_graph": 1,
+          "n_removed_by_closure": 1,
+          "n_requests_moved_later": 1,
+          "n_invariant_violations": 0,
+          "goals_total": 6,
+          "goals_covered": 4,
+          "goals_partial": 1,
+          "goals_uncovered": 1,
+          "goal_causes": {
+            "No volunteer": 0,
+            "Capability gap": 0,
+            "Left unresolved": 1,
+            "Infeasible": 1,
+            "Deadline exceeded": 0
+          },
+          "plan_fix_rounds": {
+            "R1": 1,
+            "R2": 0,
+            "R3": 0,
+            "R4": 0
+          },
+          "n_steps_excluded_stage2": 1,
+          "makespan_min": 5,
+          "deadline": 20,
+          "deadline_ok": true,
+          "llm_calls": 14,
+          "prompt_tokens": 26525,
+          "completion_tokens": 2319,
+          "variant": "full",
+          "wall_time_sec": 16.028395891189575
+        }
+      },
+      "llm_judge": null
+    },
+    "no_offer": {
+      "raw_result": {
+        "variant": "no_offer",
+        "joint_plan_text": "### Joint Plan — task2_abstract  (about 5 min / deadline 20 min: OK)\n### Robots: R1:Gripper(bedroom), R2:Mobile_Light(bedroom), R3:Gripper(bathroom), R4:Mobile_Heavy(bathroom)\n\n[0-5 min]\n- R2 [LOCAL] pick_up the towel from bedroom to gripper (also serves R3's request)  (r2_s1)\n- R3 [LOCAL] pour the water from faucet to bathtub (also serves R4's request)  (r3_s1)\n- R4 [ASK_HELP] wait for R3 to: pour the water from tap to bathtub  (r4_s1)\n- R3 [ASK_HELP] wait for R2 to: pass the towel from R2 to R3 [after r2_s1]  (r3_s2)\n- R3 [LOCAL] put_down the towel from gripper to rack  (r3_s3)\n- R4 [LOCAL] put_down the towel from gripper to bathtub edge  (r4_s2)\n\n### Provenance (collaboration edges)\n- r3_s2 (R3 ASK_HELP) <- r2_s1 (R2 LOCAL)  κ=mutual, decided by SELECT\n- r4_s1 (R4 ASK_HELP) <- r3_s1 (R3 LOCAL)  κ=mutual, decided by default\n\n### Graph LLM edits (applied)\n- SELECT provider=r2_s1 request=r3_s2 — R2 has a mutual agreement with R3 to pass the towel, and R2 already has the towel. This is the most efficient option.\n- DROP node=r4_s3 — R4's step to pass the towel is unnecessary because R2 is already selected to perform this action.\n- ORDER before=r2_s1 after=r3_s2 — R2 must pick up the towel before it can pass it to R3.\n\n### Report: goal coverage\n- R2.g0 towel available in the bathroom: partial — Left unresolved [r2_s1]\n- R3.g0 bathtub filled with warm water: covered [r3_s1]\n- R3.g1 towel available nearby for drying off: covered [r3_s2, r3_s3]\n- R4.g0 bathtub filled with warm water: covered [r4_s1]\n- R4.g1 towel placed near the bathtub: uncovered — Left unresolved\n\n### Dropped by the Graph LLM\n- R4 [HELP] pass the towel from R2 to R3 (r4_s3) — R4's step to pass the towel is unnecessary because R2 is already selected to perform this action.",
+        "metrics": {
+          "task_id": "task2_abstract",
+          "n_steps_total": 7,
+          "n_steps_active": 6,
+          "n_requests": 2,
+          "n_requests_served": 2,
+          "n_requests_unresolved": 0,
+          "n_candidates_from_stage3": 3,
+          "n_collab_edges_final": 2,
+          "n_help_edges": 2,
+          "n_transfer_edges": 0,
+          "decided_by_select": 1,
+          "decided_by_merge": 0,
+          "decided_by_default": 1,
+          "kappa_final": {
+            "mutual": 2,
+            "provider-only": 0,
+            "merged": 0
+          },
+          "graph_edits_applied": 3,
+          "graph_edits_rejected": 0,
+          "n_dropped_by_graph": 1,
+          "n_removed_by_closure": 0,
+          "n_requests_moved_later": 0,
+          "n_invariant_violations": 0,
+          "goals_total": 5,
+          "goals_covered": 3,
+          "goals_partial": 1,
+          "goals_uncovered": 1,
+          "goal_causes": {
+            "No volunteer": 0,
+            "Capability gap": 0,
+            "Left unresolved": 2,
+            "Infeasible": 0,
+            "Deadline exceeded": 0
+          },
+          "plan_fix_rounds": {
+            "R1": 1,
+            "R2": 1,
+            "R3": 1,
+            "R4": 1
+          },
+          "n_steps_excluded_stage2": 5,
+          "makespan_min": 5,
+          "deadline": 20,
+          "deadline_ok": true,
+          "llm_calls": 17,
+          "prompt_tokens": 32445,
+          "completion_tokens": 3040,
+          "variant": "no_offer",
+          "wall_time_sec": 17.223894596099854
+        }
+      },
+      "llm_judge": null
+    },
+    "no_edge": {
+      "raw_result": {
+        "variant": "no_edge",
+        "joint_plan_text": "### Joint Plan — task2_abstract  (about 5 min / deadline 20 min: OK)\n### Robots: R1:Gripper(bedroom), R2:Mobile_Light(bedroom), R3:Gripper(bathroom), R4:Mobile_Heavy(bathroom)\n\n[0-5 min]\n- R2 [LOCAL] pick_up the white towel from chair to gripper  (r2_s1)\n- R3 [LOCAL] pour the water from sink to bathtub  (r3_s1)\n- R3 [LOCAL] pick_up the beige towel from towel rack to gripper  (r3_s2)\n- R3 [LOCAL] put_down the beige towel from gripper to bathtub edge  (r3_s3)\n\n### Provenance (collaboration edges)\n\n### Graph LLM edits (applied)\n- DROP node=r2_s2 — R3 already has a towel (beige towel) and can place it near the bathtub. The offer from R2 is unnecessary.\n- DROP node=r4_s1 — R3's plan already includes placing a towel near the bathtub, making R4's action redundant.\n- DROP node=r4_s2 — R3's plan already includes placing a towel near the bathtub, making R4's action redundant.\n\n### Report: goal coverage\n- R2.g0 towel available in the bathroom for drying off: partial — No volunteer [r2_s1]\n- R3.g0 bathtub filled with warm water: covered [r3_s1]\n- R3.g1 beige towel accessible for drying: covered [r3_s2, r3_s3]\n- R4.g0 towel placed near the bathtub: uncovered — No volunteer\n\n### Dropped by the Graph LLM\n- R2 [PASS] pass white towel (on chair, image 2) to R3 (r2_s2) — R3 already has a towel (beige towel) and can place it near the bathtub. The offer from R2 is unnecessary.\n- R4 [LOCAL] pick_up the white towel from towel rack to gripper (r4_s1) — R3's plan already includes placing a towel near the bathtub, making R4's action redundant.\n- R4 [LOCAL] put_down the white towel from gripper to bathtub (r4_s2) — R3's plan already includes placing a towel near the bathtub, making R4's action redundant.",
+        "metrics": {
+          "task_id": "task2_abstract",
+          "n_steps_total": 7,
+          "n_steps_active": 4,
+          "n_requests": 0,
+          "n_requests_served": 0,
+          "n_requests_unresolved": 0,
+          "n_candidates_from_stage3": 0,
+          "n_collab_edges_final": 0,
+          "n_help_edges": 0,
+          "n_transfer_edges": 0,
+          "decided_by_select": 0,
+          "decided_by_merge": 0,
+          "decided_by_default": 0,
+          "kappa_final": {
+            "mutual": 0,
+            "provider-only": 0,
+            "merged": 0
+          },
+          "graph_edits_applied": 3,
+          "graph_edits_rejected": 0,
+          "n_dropped_by_graph": 3,
+          "n_removed_by_closure": 0,
+          "n_requests_moved_later": 0,
+          "n_invariant_violations": 0,
+          "goals_total": 4,
+          "goals_covered": 2,
+          "goals_partial": 1,
+          "goals_uncovered": 1,
+          "goal_causes": {
+            "No volunteer": 2,
+            "Capability gap": 0,
+            "Left unresolved": 0,
+            "Infeasible": 0,
+            "Deadline exceeded": 0
+          },
+          "plan_fix_rounds": {
+            "R1": 1,
+            "R2": 1,
+            "R3": 0,
+            "R4": 1
+          },
+          "n_steps_excluded_stage2": 3,
+          "makespan_min": 5,
+          "deadline": 20,
+          "deadline_ok": true,
+          "llm_calls": 12,
+          "prompt_tokens": 28397,
+          "completion_tokens": 2636,
+          "variant": "no_edge",
+          "wall_time_sec": 15.671791315078735
+        }
+      },
+      "llm_judge": null
+    },
+    "no_graph": {
+      "raw_result": {
+        "variant": "no_graph",
+        "joint_plan_text": "### Joint Plan — task2_abstract  (about 5 min / deadline 20 min: OK)\n### Robots: R1:Gripper(bedroom), R2:Mobile_Light(bedroom), R3:Gripper(bathroom), R4:Mobile_Heavy(bathroom)\n\n[0-5 min]\n- R2 [LOCAL] pick_up the blue towel from desk chair to gripper  (r2_s1)\n- R3 [LOCAL] pour the water from faucet to bathtub (also serves R4's request)  (r3_s1)\n- R4 [ASK_HELP] wait for R3 to: pour the bathtub from water source to bathtub  (r4_s1)\n- R4 [LOCAL] move the white towel from towel rack to bathtub area  (r4_s2)\n\n### Provenance (collaboration edges)\n- r4_s1 (R4 ASK_HELP) <- r3_s1 (R3 LOCAL)  κ=mutual, decided by default\n\n### Report: goal coverage\n- R1.g0 provide a towel for drying off after the bath: uncovered — Left unresolved (not judged by the Graph LLM)\n- R2.g0 towel available in the bathroom for drying off: uncovered — Left unresolved (not judged by the Graph LLM)\n- R3.g0 bathtub filled with warm water: uncovered — Left unresolved (not judged by the Graph LLM)\n- R3.g1 towel accessible for drying off: uncovered — Left unresolved (not judged by the Graph LLM)\n- R4.g0 towel ready near the bathtub: uncovered — Left unresolved (not judged by the Graph LLM)\n\n### Removed by dependency closure\n- R1 [PASS] pass white mug (desk, image 2) to R2 (r1_s1) — offer not taken\n- R2 [PASS] pass blue towel (desk chair, image 2) to R3 (r2_s2) — offer not taken",
+        "metrics": {
+          "task_id": "task2_abstract",
+          "n_steps_total": 6,
+          "n_steps_active": 4,
+          "n_requests": 1,
+          "n_requests_served": 1,
+          "n_requests_unresolved": 0,
+          "n_candidates_from_stage3": 1,
+          "n_collab_edges_final": 1,
+          "n_help_edges": 1,
+          "n_transfer_edges": 0,
+          "decided_by_select": 0,
+          "decided_by_merge": 0,
+          "decided_by_default": 1,
+          "kappa_final": {
+            "mutual": 1,
+            "provider-only": 0,
+            "merged": 0
+          },
+          "graph_edits_applied": 0,
+          "graph_edits_rejected": 0,
+          "n_dropped_by_graph": 0,
+          "n_removed_by_closure": 2,
+          "n_requests_moved_later": 0,
+          "n_invariant_violations": 0,
+          "goals_total": 5,
+          "goals_covered": 0,
+          "goals_partial": 0,
+          "goals_uncovered": 5,
+          "goal_causes": {
+            "No volunteer": 0,
+            "Capability gap": 0,
+            "Left unresolved": 5,
+            "Infeasible": 0,
+            "Deadline exceeded": 0
+          },
+          "plan_fix_rounds": {
+            "R1": 1,
+            "R2": 0,
+            "R3": 1,
+            "R4": 0
+          },
+          "n_steps_excluded_stage2": 2,
+          "makespan_min": 5,
+          "deadline": 20,
+          "deadline_ok": true,
+          "llm_calls": 13,
+          "prompt_tokens": 26054,
+          "completion_tokens": 2243,
+          "variant": "no_graph",
+          "wall_time_sec": 17.443110942840576
+        }
+      },
+      "llm_judge": null
+    }
+  }
+}

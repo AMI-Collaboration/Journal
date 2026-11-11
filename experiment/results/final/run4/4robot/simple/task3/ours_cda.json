@@ -1,0 +1,818 @@
+{
+  "method": "cda",
+  "task_n": "task3_simple",
+  "raw_result": {
+    "task_n": "task3_simple",
+    "mode": "multi_room",
+    "model": "gpt-4o",
+    "task_text": "Take cabbage out of the fridge and put it in the bowl, open laptop",
+    "joint_plan_text": "```plaintext\n### Joint Plan — task3_simple  (about 5 min / deadline 10 min: OK)\n### Robots: R1:Mobile_Light(kitchen), R2:Mobile_Light(bedroom), R3:Mobile_Light(kitchen), R4:Mobile_Light(bedroom)\n\n[0-5 min]\n- R1 [LOCAL] open the silver laptop from island to island  (r1_s1)\n- R2 [LOCAL] open the black laptop from desk to desk  (r2_s1)\n- R3 [LOCAL] pick up the cabbage from the fridge\n- R3 [LOCAL] put down the cabbage into the bowl\n- R3 [LOCAL] open the laptop on the table",
+    "joint_plan_full": "### Joint Plan — task3_simple  (about 5 min / deadline 10 min: OK)\n### Robots: R1:Mobile_Light(kitchen), R2:Mobile_Light(bedroom), R3:Mobile_Light(kitchen), R4:Mobile_Light(bedroom)\n\n[0-5 min]\n- R1 [LOCAL] open the silver laptop from island to island  (r1_s1)\n- R2 [LOCAL] open the black laptop from desk to desk  (r2_s1)\n- R3 [LOCAL] pick_up the cabbage from fridge to gripper  (r3_s1)\n- R3 [LOCAL] put_down the cabbage from gripper to bowl  (r3_s2)\n- R3 [LOCAL] open the laptop from table to open  (r3_s3)\n\n### Provenance (collaboration edges)\n\n### Graph LLM edits (applied)\n- DROP node=r4_s1 — R3 already has a bowl in the kitchen and does not need the brown bowl from R4.\n\n### Report: goal coverage\n- R1.g0 cabbage placed in the glass bowl: uncovered — No volunteer\n- R1.g1 silver laptop opened: covered [r1_s1]\n- R2.g0 black laptop open on the desk: covered [r2_s1]\n- R3.g0 cabbage placed in the bowl: covered [r3_s1, r3_s2]\n- R3.g1 laptop open and ready for use: covered [r3_s3]\n- R4.g0 open the black laptop: uncovered — Capability gap\n- R4.g1 provide the brown bowl for the cabbage: uncovered — No volunteer\n\n### Dropped by the Graph LLM\n- R4 [PASS] pass brown bowl (desk, image 1) to R3 (r4_s1) — R3 already has a bowl in the kitchen and does not need the brown bowl from R4.",
+    "offers": {
+      "R1": {
+        "agent": "R1",
+        "capability": "I am mobile and can carry light objects up to 5 kg with one arm.",
+        "can_do": [
+          "PickupLightObject: lift small items",
+          "PassReceiveObject: exchange objects with others"
+        ],
+        "cannot_do": [
+          "PickupHeavyObject: cannot lift furniture",
+          "PushFurniture: cannot move heavy items"
+        ],
+        "has_items": [
+          "black fridge (corner, image 1)",
+          "brown bread (island, image 1)",
+          "red apple (island, image 1)",
+          "black pot (counter, image 1)",
+          "glass bowl (island, image 2)",
+          "silver laptop (island, image 2)"
+        ],
+        "need_from_others": [],
+        "intends": [
+          "cabbage placed in the glass bowl",
+          "silver laptop opened"
+        ],
+        "obs_scope": "I can observe the kitchen only.",
+        "reasoning": "a) The cabbage must be in the bowl, and the laptop should be open. b) The kitchen stores and prepares food and contains the laptop. c) I can move the cabbage to the bowl and open the laptop. d) The priority is to move the cabbage first as it involves more steps."
+      },
+      "R2": {
+        "agent": "R2",
+        "capability": "I am mobile and can carry light objects up to 5 kg with one arm.",
+        "can_do": [
+          "PickupLightObject: lift small items",
+          "PassReceiveObject: exchange items with others"
+        ],
+        "cannot_do": [
+          "PickupHeavyObject: cannot lift furniture",
+          "PushFurniture: cannot move large items",
+          "SliceObject: no cutting tool",
+          "PourObject: cannot pour liquids"
+        ],
+        "has_items": [
+          "black laptop (desk, image 1)",
+          "blue pen (desk, image 1)",
+          "black phone (desk, image 1)",
+          "black laptop (desk, image 2)",
+          "blue pen (desk, image 2)",
+          "black phone (desk, image 2)",
+          "orange chair (desk, image 2)"
+        ],
+        "need_from_others": [
+          "someone to move cabbage to the bowl"
+        ],
+        "intends": [
+          "black laptop open on the desk"
+        ],
+        "obs_scope": "I can observe the bedroom only.",
+        "reasoning": "a) Cabbage needs to be in a bowl, and the laptop should be open. b) Kitchen: cabbage and bowl; bedroom: laptop. c) I can open the laptop. d) Opening the laptop is my priority."
+      },
+      "R3": {
+        "agent": "R3",
+        "capability": "I am mobile and can carry light objects up to 5 kg with one arm.",
+        "can_do": [
+          "PickupLightObject: lift small items like the cabbage and laptop",
+          "PassReceiveObject: hand over or receive objects"
+        ],
+        "cannot_do": [
+          "PickupHeavyObject: cannot lift heavy furniture",
+          "PushFurniture: cannot move large furniture",
+          "SliceObject: no cutting tool",
+          "PourObject: cannot pour liquids"
+        ],
+        "has_items": [
+          "cabbage (fridge, image 1)",
+          "bowl (counter, image 1)",
+          "laptop (table, image 2)"
+        ],
+        "need_from_others": [],
+        "intends": [
+          "cabbage placed in the bowl",
+          "laptop open and ready for use"
+        ],
+        "obs_scope": "I can observe the kitchen and the table with the laptop.",
+        "reasoning": "a) The cabbage needs to be in the bowl, and the laptop should be open. b) Kitchen provides the cabbage and bowl; another room might have the laptop. c) I can move the cabbage to the bowl and open the laptop. d) The deadline is short, so moving the cabbage to the bowl and opening the laptop are top priorities."
+      },
+      "R4": {
+        "agent": "R4",
+        "capability": "I am mobile and can carry light objects up to 5 kg with one arm.",
+        "can_do": [
+          "PickupLightObject: lift laptops, bowls, small items",
+          "PassReceiveObject: exchange objects with other robots"
+        ],
+        "cannot_do": [
+          "PickupHeavyObject: cannot lift furniture",
+          "ToggleObject: cannot open the laptop"
+        ],
+        "has_items": [
+          "blue bed (floor, image 1)",
+          "black laptop (desk, image 1)",
+          "brown bowl (desk, image 1)",
+          "white lamp (nightstand, image 2)"
+        ],
+        "need_from_others": [
+          "someone to take cabbage from the fridge and bring it to the bedroom"
+        ],
+        "intends": [
+          "open the black laptop",
+          "provide the brown bowl for the cabbage"
+        ],
+        "obs_scope": "I can observe the bedroom only.",
+        "reasoning": "a) The cabbage should be in the bowl, and the laptop should be open. b) The kitchen provides the cabbage, while the bedroom offers the bowl and laptop. c) I can open the laptop and provide the bowl for the cabbage. d) Opening the laptop is crucial since it is located in my room."
+      }
+    },
+    "local_plans": {
+      "R1": [
+        {
+          "id": "r1_s1",
+          "agent": "R1",
+          "type": "LOCAL",
+          "action": {
+            "verb": "open",
+            "object": "silver laptop",
+            "from": "island",
+            "to": "island"
+          },
+          "item": null,
+          "target": null,
+          "uses": 0,
+          "location": "kitchen",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "silver laptop opened",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        }
+      ],
+      "R2": [
+        {
+          "id": "r2_s1",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "open",
+            "object": "black laptop",
+            "from": "desk",
+            "to": "desk"
+          },
+          "item": null,
+          "target": null,
+          "uses": 0,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "black laptop open on the desk",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        }
+      ],
+      "R3": [
+        {
+          "id": "r3_s1",
+          "agent": "R3",
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "cabbage",
+            "from": "fridge",
+            "to": "gripper"
+          },
+          "item": null,
+          "target": null,
+          "uses": 0,
+          "location": "kitchen",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "cabbage placed in the bowl",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r3_s2",
+          "agent": "R3",
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "cabbage",
+            "from": "gripper",
+            "to": "bowl"
+          },
+          "item": null,
+          "target": null,
+          "uses": 0,
+          "location": "kitchen",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "cabbage placed in the bowl",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r3_s3",
+          "agent": "R3",
+          "type": "LOCAL",
+          "action": {
+            "verb": "open",
+            "object": "laptop",
+            "from": "table",
+            "to": "open"
+          },
+          "item": null,
+          "target": null,
+          "uses": 0,
+          "location": "kitchen",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "laptop open and ready for use",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        }
+      ],
+      "R4": [
+        {
+          "id": "r4_s1",
+          "agent": "R4",
+          "type": "PASS",
+          "action": "pass brown bowl (desk, image 1) to R3",
+          "item": "brown bowl (desk, image 1)",
+          "target": "R3",
+          "uses": null,
+          "location": "bedroom",
+          "origin": "offer",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "provide the brown bowl for the cabbage",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        }
+      ]
+    },
+    "answers": [
+      {
+        "agent": "R3",
+        "id": "r4_s1",
+        "answer": "NO",
+        "reason": "I already have a bowl in the kitchen for the cabbage",
+        "result": "no edge"
+      }
+    ],
+    "graph": {
+      "nodes": [
+        {
+          "id": "r1_s1",
+          "agent": "R1",
+          "type": "LOCAL",
+          "action": {
+            "verb": "open",
+            "object": "silver laptop",
+            "from": "island",
+            "to": "island"
+          },
+          "item": null,
+          "target": null,
+          "uses": 0,
+          "location": "kitchen",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "silver laptop opened",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 0,
+          "t_end": 1
+        },
+        {
+          "id": "r2_s1",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "open",
+            "object": "black laptop",
+            "from": "desk",
+            "to": "desk"
+          },
+          "item": null,
+          "target": null,
+          "uses": 0,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "black laptop open on the desk",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 0,
+          "t_end": 1
+        },
+        {
+          "id": "r3_s1",
+          "agent": "R3",
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "cabbage",
+            "from": "fridge",
+            "to": "gripper"
+          },
+          "item": null,
+          "target": null,
+          "uses": 0,
+          "location": "kitchen",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "cabbage placed in the bowl",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 0,
+          "t_end": 1
+        },
+        {
+          "id": "r3_s2",
+          "agent": "R3",
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "cabbage",
+            "from": "gripper",
+            "to": "bowl"
+          },
+          "item": null,
+          "target": null,
+          "uses": 0,
+          "location": "kitchen",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "cabbage placed in the bowl",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 1,
+          "t_end": 2
+        },
+        {
+          "id": "r3_s3",
+          "agent": "R3",
+          "type": "LOCAL",
+          "action": {
+            "verb": "open",
+            "object": "laptop",
+            "from": "table",
+            "to": "open"
+          },
+          "item": null,
+          "target": null,
+          "uses": 0,
+          "location": "kitchen",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "laptop open and ready for use",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 2,
+          "t_end": 3
+        },
+        {
+          "id": "r4_s1",
+          "agent": "R4",
+          "type": "PASS",
+          "action": "pass brown bowl (desk, image 1) to R3",
+          "item": "brown bowl (desk, image 1)",
+          "target": "R3",
+          "uses": null,
+          "location": "bedroom",
+          "origin": "offer",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "provide the brown bowl for the cabbage",
+          "replies": [
+            {
+              "agent": "R3",
+              "answer": "NO",
+              "reason": "I already have a bowl in the kitchen for the cabbage"
+            }
+          ],
+          "status": "dropped",
+          "status_reason": "4.2 DROP: R3 already has a bowl in the kitchen and does not need the brown bowl from R4.",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        }
+      ],
+      "order": {
+        "R1": [
+          "r1_s1"
+        ],
+        "R2": [
+          "r2_s1"
+        ],
+        "R3": [
+          "r3_s1",
+          "r3_s2",
+          "r3_s3"
+        ],
+        "R4": [
+          "r4_s1"
+        ]
+      },
+      "edges": [
+        {
+          "src": "r3_s1",
+          "dst": "r3_s2",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r3_s2",
+          "dst": "r3_s3",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        }
+      ],
+      "edit_log": [
+        {
+          "k": 0,
+          "edit": {
+            "op": "DROP",
+            "node": "r4_s1",
+            "rationale": "R3 already has a bowl in the kitchen and does not need the brown bowl from R4."
+          },
+          "applied": true,
+          "error": null,
+          "rationale": "R3 already has a bowl in the kitchen and does not need the brown bowl from R4."
+        }
+      ],
+      "report": {
+        "goals": [
+          {
+            "robot": "R1",
+            "goal": 0,
+            "text": "cabbage placed in the glass bowl",
+            "status": "uncovered",
+            "cause": [
+              "No volunteer"
+            ],
+            "evidence": [],
+            "note": "",
+            "llm_status": "uncovered",
+            "llm_cause": "No volunteer"
+          },
+          {
+            "robot": "R1",
+            "goal": 1,
+            "text": "silver laptop opened",
+            "status": "covered",
+            "cause": [],
+            "evidence": [
+              "r1_s1"
+            ],
+            "note": "",
+            "llm_status": "covered",
+            "llm_cause": null
+          },
+          {
+            "robot": "R2",
+            "goal": 0,
+            "text": "black laptop open on the desk",
+            "status": "covered",
+            "cause": [],
+            "evidence": [
+              "r2_s1"
+            ],
+            "note": "",
+            "llm_status": "covered",
+            "llm_cause": null
+          },
+          {
+            "robot": "R3",
+            "goal": 0,
+            "text": "cabbage placed in the bowl",
+            "status": "covered",
+            "cause": [],
+            "evidence": [
+              "r3_s1",
+              "r3_s2"
+            ],
+            "note": "",
+            "llm_status": "covered",
+            "llm_cause": null
+          },
+          {
+            "robot": "R3",
+            "goal": 1,
+            "text": "laptop open and ready for use",
+            "status": "covered",
+            "cause": [],
+            "evidence": [
+              "r3_s3"
+            ],
+            "note": "",
+            "llm_status": "covered",
+            "llm_cause": null
+          },
+          {
+            "robot": "R4",
+            "goal": 0,
+            "text": "open the black laptop",
+            "status": "uncovered",
+            "cause": [
+              "Capability gap"
+            ],
+            "evidence": [],
+            "note": "",
+            "llm_status": "uncovered",
+            "llm_cause": "Capability gap"
+          },
+          {
+            "robot": "R4",
+            "goal": 1,
+            "text": "provide the brown bowl for the cabbage",
+            "status": "uncovered",
+            "cause": [
+              "No volunteer"
+            ],
+            "evidence": [],
+            "note": "",
+            "llm_status": "uncovered",
+            "llm_cause": "No volunteer"
+          }
+        ],
+        "unresolved_requests": [],
+        "rejected_edits": [],
+        "dropped": [
+          {
+            "node": "r4_s1",
+            "agent": "R4",
+            "type": "PASS",
+            "text": "pass brown bowl (desk, image 1) to R3",
+            "rationale": "R3 already has a bowl in the kitchen and does not need the brown bowl from R4."
+          }
+        ],
+        "removed_by_closure": [],
+        "invariant_violations": [],
+        "deadline": {
+          "makespan_min": 5,
+          "deadline_min": 10,
+          "exceeded": false
+        }
+      }
+    },
+    "report": {
+      "goals": [
+        {
+          "robot": "R1",
+          "goal": 0,
+          "text": "cabbage placed in the glass bowl",
+          "status": "uncovered",
+          "cause": [
+            "No volunteer"
+          ],
+          "evidence": [],
+          "note": "",
+          "llm_status": "uncovered",
+          "llm_cause": "No volunteer"
+        },
+        {
+          "robot": "R1",
+          "goal": 1,
+          "text": "silver laptop opened",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r1_s1"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R2",
+          "goal": 0,
+          "text": "black laptop open on the desk",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r2_s1"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R3",
+          "goal": 0,
+          "text": "cabbage placed in the bowl",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r3_s1",
+            "r3_s2"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R3",
+          "goal": 1,
+          "text": "laptop open and ready for use",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r3_s3"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R4",
+          "goal": 0,
+          "text": "open the black laptop",
+          "status": "uncovered",
+          "cause": [
+            "Capability gap"
+          ],
+          "evidence": [],
+          "note": "",
+          "llm_status": "uncovered",
+          "llm_cause": "Capability gap"
+        },
+        {
+          "robot": "R4",
+          "goal": 1,
+          "text": "provide the brown bowl for the cabbage",
+          "status": "uncovered",
+          "cause": [
+            "No volunteer"
+          ],
+          "evidence": [],
+          "note": "",
+          "llm_status": "uncovered",
+          "llm_cause": "No volunteer"
+        }
+      ],
+      "unresolved_requests": [],
+      "rejected_edits": [],
+      "dropped": [
+        {
+          "node": "r4_s1",
+          "agent": "R4",
+          "type": "PASS",
+          "text": "pass brown bowl (desk, image 1) to R3",
+          "rationale": "R3 already has a bowl in the kitchen and does not need the brown bowl from R4."
+        }
+      ],
+      "removed_by_closure": [],
+      "invariant_violations": [],
+      "deadline": {
+        "makespan_min": 5,
+        "deadline_min": 10,
+        "exceeded": false
+      }
+    },
+    "metrics": {
+      "task_id": "task3_simple",
+      "n_steps_total": 6,
+      "n_steps_active": 5,
+      "n_requests": 0,
+      "n_requests_served": 0,
+      "n_requests_unresolved": 0,
+      "n_candidates_from_stage3": 0,
+      "n_collab_edges_final": 0,
+      "n_help_edges": 0,
+      "n_transfer_edges": 0,
+      "decided_by_select": 0,
+      "decided_by_merge": 0,
+      "decided_by_default": 0,
+      "kappa_final": {
+        "mutual": 0,
+        "provider-only": 0,
+        "merged": 0
+      },
+      "graph_edits_applied": 1,
+      "graph_edits_rejected": 0,
+      "n_dropped_by_graph": 1,
+      "n_removed_by_closure": 0,
+      "n_requests_moved_later": 0,
+      "n_invariant_violations": 0,
+      "goals_total": 7,
+      "goals_covered": 4,
+      "goals_partial": 0,
+      "goals_uncovered": 3,
+      "goal_causes": {
+        "No volunteer": 2,
+        "Capability gap": 1,
+        "Left unresolved": 0,
+        "Infeasible": 0,
+        "Deadline exceeded": 0
+      },
+      "plan_fix_rounds": {
+        "R1": 0,
+        "R2": 0,
+        "R3": 0,
+        "R4": 1
+      },
+      "n_steps_excluded_stage2": 1,
+      "makespan_min": 5,
+      "deadline": 10,
+      "deadline_ok": true,
+      "llm_calls": 11,
+      "prompt_tokens": 21132,
+      "completion_tokens": 1981,
+      "config": {
+        "use_edge_proposal": true,
+        "use_graph_llm": true
+      },
+      "wall_time_sec": 11.9
+    },
+    "config": {
+      "use_edge_proposal": true,
+      "use_graph_llm": true,
+      "max_graph_rounds": 2,
+      "deadline_min": 20
+    }
+  },
+  "llm_judge": {
+    "TF": 3,
+    "TF_reason": "The core goals (moving the cabbage/lettuce to the bowl and opening a laptop) are achieved. However, R1 and R3 attempt to open hallucinated laptops in the kitchen, which detracts from the overall success.",
+    "GF": 2,
+    "GF_reason": "There are significant grounding violations. R1 and R3 interact with hallucinated laptops in the kitchen (there is no laptop in FP2). R1 also hallucinates an 'island' and R3 hallucinates a 'table'. R3's interaction with 'cabbage' is acceptable as a synonym for 'Lettuce'.",
+    "SC": 4,
+    "SC_reason": "The sequence of actions is mostly logical. R3 picks up the cabbage before putting it down. However, R3 picks up the cabbage from the fridge without explicitly opening the fridge first, which is a minor omission.",
+    "CQ": 5,
+    "CQ_reason": "The task goals are distributed across different rooms and do not require cross-room collaboration. The agents correctly work independently without forcing unnecessary interactions."
+  }
+}

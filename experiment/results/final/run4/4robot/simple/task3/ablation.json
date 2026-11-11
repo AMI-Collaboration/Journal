@@ -1,0 +1,241 @@
+{
+  "task_n": "task3_simple",
+  "variants": {
+    "full": {
+      "raw_result": {
+        "variant": "full",
+        "joint_plan_text": "### Joint Plan — task3_simple  (about 5 min / deadline 20 min: OK)\n### Robots: R1:Mobile_Light(kitchen), R2:Mobile_Light(bedroom), R3:Mobile_Light(kitchen), R4:Mobile_Light(bedroom)\n\n[0-5 min]\n- R1 [ASK_HELP] wait for R3 to: pick_up the green cabbage from white fridge to brown bowl  (r1_s1)\n- R2 [LOCAL] open the gray laptop from desk to desk  (r2_s1)\n- R3 [LOCAL] open the white fridge from corner to open  (r3_s1)\n- R3 [LOCAL] pick_up the green cabbage from fridge to gripper (also serves R1's request)  (r3_s2)\n- R1 [LOCAL] open the silver laptop from island to island  (r1_s2)\n- R3 [LOCAL] put_down the green cabbage from gripper to brown bowl  (r3_s3)\n- R3 [LOCAL] close the white fridge from open to corner  (r3_s4)\n- R3 [LOCAL] open the silver laptop from table to open  (r3_s5)\n\n### Provenance (collaboration edges)\n- r1_s1 (R1 ASK_HELP) <- r3_s2 (R3 LOCAL)  κ=mutual, decided by SELECT\n\n### Graph LLM edits (applied)\n- SELECT provider=r3_s2 request=r1_s1 — R3 is the only robot capable and willing to handle the cabbage as it has access to the white fridge and can pick up the cabbage.\n- DROP node=r4_s1 — R4's steps related to the silver laptop are unnecessary as R1 and R3 have already planned to open their respective silver laptops.\n- DROP node=r4_s2 — R4's steps related to the silver laptop are unnecessary as R1 and R3 have already planned to open their respective silver laptops.\n- DROP node=r4_s3 — R4's steps related to the silver laptop are unnecessary as R1 and R3 have already planned to open their respective silver laptops.\n\n### Report: goal coverage\n- R1.g0 cabbage in the brown bowl: covered [r1_s1, r3_s2, r3_s3]\n- R1.g1 silver laptop open: covered [r1_s2]\n- R2.g0 open the gray laptop on the desk: covered [r2_s1]\n- R3.g0 cabbage placed in the brown bowl: covered [r3_s1, r3_s2, r3_s3, r3_s4]\n- R3.g1 silver laptop opened on the table: covered [r3_s5]\n- R4.g0 silver laptop open on the brown desk: uncovered — No volunteer\n\n### Dropped by the Graph LLM\n- R4 [LOCAL] pick_up the silver laptop from desk to gripper (r4_s1) — R4's steps related to the silver laptop are unnecessary as R1 and R3 have already planned to open their respective silver laptops.\n- R4 [LOCAL] put_down the silver laptop from gripper to brown desk (r4_s2) — R4's steps related to the silver laptop are unnecessary as R1 and R3 have already planned to open their respective silver laptops.\n- R4 [LOCAL] open the silver laptop from closed to open (r4_s3) — R4's steps related to the silver laptop are unnecessary as R1 and R3 have already planned to open their respective silver laptops.",
+        "metrics": {
+          "task_id": "task3_simple",
+          "n_steps_total": 11,
+          "n_steps_active": 8,
+          "n_requests": 1,
+          "n_requests_served": 1,
+          "n_requests_unresolved": 0,
+          "n_candidates_from_stage3": 1,
+          "n_collab_edges_final": 1,
+          "n_help_edges": 1,
+          "n_transfer_edges": 0,
+          "decided_by_select": 1,
+          "decided_by_merge": 0,
+          "decided_by_default": 0,
+          "kappa_final": {
+            "mutual": 1,
+            "provider-only": 0,
+            "merged": 0
+          },
+          "graph_edits_applied": 4,
+          "graph_edits_rejected": 0,
+          "n_dropped_by_graph": 3,
+          "n_removed_by_closure": 0,
+          "n_requests_moved_later": 0,
+          "n_invariant_violations": 0,
+          "goals_total": 6,
+          "goals_covered": 5,
+          "goals_partial": 0,
+          "goals_uncovered": 1,
+          "goal_causes": {
+            "No volunteer": 1,
+            "Capability gap": 0,
+            "Left unresolved": 0,
+            "Infeasible": 0,
+            "Deadline exceeded": 0
+          },
+          "plan_fix_rounds": {
+            "R1": 1,
+            "R2": 0,
+            "R3": 0,
+            "R4": 0
+          },
+          "n_steps_excluded_stage2": 0,
+          "makespan_min": 5,
+          "deadline": 20,
+          "deadline_ok": true,
+          "llm_calls": 13,
+          "prompt_tokens": 23773,
+          "completion_tokens": 2315,
+          "variant": "full",
+          "wall_time_sec": 13.029784440994263
+        }
+      },
+      "llm_judge": null
+    },
+    "no_offer": {
+      "raw_result": {
+        "variant": "no_offer",
+        "joint_plan_text": "### Joint Plan — task3_simple  (about 5 min / deadline 20 min: OK)\n### Robots: R1:Mobile_Light(kitchen), R2:Mobile_Light(bedroom), R3:Mobile_Light(kitchen), R4:Mobile_Light(bedroom)\n\n[0-5 min]\n- R1 [LOCAL] pick_up the cabbage from fridge to gripper  (r1_s1)\n- R2 [LOCAL] pick_up the laptop from desk to hands  (r2_s1)\n- R4 [LOCAL] pick_up the laptop from desk to hands  (r4_s1)\n- R1 [LOCAL] put_down the cabbage from gripper to bowl  (r1_s2)\n\n### Provenance (collaboration edges)\n\n### Graph LLM edits (applied)\n- DROP node=r3_s1 — R3's task of picking up the cabbage is duplicate work since R1 is already performing the same task.\n- DROP node=r3_s2 — R3's task of putting down the cabbage is duplicate work since R1 is already performing the same task.\n- DROP node=r2_s2 — R2's task of putting down the laptop is unnecessary since it does not contribute to opening the laptop.\n- DROP node=r4_s2 — R4's task of putting down the laptop is unnecessary since it does not contribute to opening the laptop.\n\n### Report: goal coverage\n- R1.g0 cabbage placed in the bowl: covered [r1_s1, r1_s2]\n- R2.g0 open the laptop in the bedroom: uncovered — Capability gap\n- R3.g0 cabbage placed in the bowl: uncovered — Capability gap\n- R4.g0 open laptop in the bedroom: uncovered — Capability gap\n\n### Dropped by the Graph LLM\n- R3 [LOCAL] pick_up the cabbage from fridge to gripper (r3_s1) — R3's task of picking up the cabbage is duplicate work since R1 is already performing the same task.\n- R3 [LOCAL] put_down the cabbage from gripper to bowl (r3_s2) — R3's task of putting down the cabbage is duplicate work since R1 is already performing the same task.\n- R2 [LOCAL] put_down the laptop from hands to desk (r2_s2) — R2's task of putting down the laptop is unnecessary since it does not contribute to opening the laptop.\n- R4 [LOCAL] put_down the laptop from hands to desk (r4_s2) — R4's task of putting down the laptop is unnecessary since it does not contribute to opening the laptop.",
+        "metrics": {
+          "task_id": "task3_simple",
+          "n_steps_total": 8,
+          "n_steps_active": 4,
+          "n_requests": 0,
+          "n_requests_served": 0,
+          "n_requests_unresolved": 0,
+          "n_candidates_from_stage3": 0,
+          "n_collab_edges_final": 0,
+          "n_help_edges": 0,
+          "n_transfer_edges": 0,
+          "decided_by_select": 0,
+          "decided_by_merge": 0,
+          "decided_by_default": 0,
+          "kappa_final": {
+            "mutual": 0,
+            "provider-only": 0,
+            "merged": 0
+          },
+          "graph_edits_applied": 4,
+          "graph_edits_rejected": 0,
+          "n_dropped_by_graph": 4,
+          "n_removed_by_closure": 0,
+          "n_requests_moved_later": 0,
+          "n_invariant_violations": 0,
+          "goals_total": 4,
+          "goals_covered": 1,
+          "goals_partial": 0,
+          "goals_uncovered": 3,
+          "goal_causes": {
+            "No volunteer": 0,
+            "Capability gap": 3,
+            "Left unresolved": 0,
+            "Infeasible": 0,
+            "Deadline exceeded": 0
+          },
+          "plan_fix_rounds": {
+            "R1": 0,
+            "R2": 0,
+            "R3": 0,
+            "R4": 0
+          },
+          "n_steps_excluded_stage2": 0,
+          "makespan_min": 5,
+          "deadline": 20,
+          "deadline_ok": true,
+          "llm_calls": 9,
+          "prompt_tokens": 15326,
+          "completion_tokens": 1726,
+          "variant": "no_offer",
+          "wall_time_sec": 7.338707447052002
+        }
+      },
+      "llm_judge": null
+    },
+    "no_edge": {
+      "raw_result": {
+        "variant": "no_edge",
+        "joint_plan_text": "### Joint Plan — task3_simple  (about 5 min / deadline 20 min: OK)\n### Robots: R1:Mobile_Light(kitchen), R2:Mobile_Light(bedroom), R3:Mobile_Light(kitchen), R4:Mobile_Light(bedroom)\n\n[0-5 min]\n- R1 [LOCAL] open the black fridge from corner  (r1_s1)\n- R2 [LOCAL] turn_on the gray laptop from desk to desk  (r2_s1)\n- R3 [LOCAL] open the laptop from table to open  (r3_s3)\n- R1 [LOCAL] pick_up the cabbage from black fridge to gripper  (r1_s2)\n- R1 [LOCAL] put_down the cabbage from gripper to brown bowl  (r1_s3)\n- R1 [LOCAL] open the silver laptop from counter  (r1_s4)\n\n### Provenance (collaboration edges)\n\n### Graph LLM edits (applied)\n- DROP node=r3_s1 — R1 already picks up the cabbage from the fridge, making R3's action redundant.\n- DROP node=r3_s2 — R1 already places the cabbage in the bowl, making R3's action redundant.\n- DROP node=r4_s1 — R1 already opens the silver laptop on the counter, making R4's action redundant.\n- DROP node=r4_s2 — R1 already opens the silver laptop on the counter, making R4's action redundant.\n\n### Report: goal coverage\n- R1.g0 cabbage placed in the brown bowl: covered [r1_s1, r1_s2, r1_s3]\n- R1.g1 silver laptop opened: covered [r1_s4]\n- R2.g0 laptop open on the desk: covered [r2_s1]\n- R3.g0 cabbage placed in the bowl: covered [r1_s1, r1_s2, r1_s3]\n- R3.g1 laptop opened: covered [r3_s3]\n- R4.g0 silver laptop opened on the wooden nightstand: covered [r1_s4]\n\n### Dropped by the Graph LLM\n- R3 [LOCAL] pick_up the cabbage from fridge to gripper (r3_s1) — R1 already picks up the cabbage from the fridge, making R3's action redundant.\n- R3 [LOCAL] put_down the cabbage from gripper to bowl (r3_s2) — R1 already places the cabbage in the bowl, making R3's action redundant.\n- R4 [LOCAL] pick_up the silver laptop from nightstand to gripper (r4_s1) — R1 already opens the silver laptop on the counter, making R4's action redundant.\n- R4 [LOCAL] put_down the silver laptop from gripper to nightstand (r4_s2) — R1 already opens the silver laptop on the counter, making R4's action redundant.",
+        "metrics": {
+          "task_id": "task3_simple",
+          "n_steps_total": 10,
+          "n_steps_active": 6,
+          "n_requests": 0,
+          "n_requests_served": 0,
+          "n_requests_unresolved": 0,
+          "n_candidates_from_stage3": 0,
+          "n_collab_edges_final": 0,
+          "n_help_edges": 0,
+          "n_transfer_edges": 0,
+          "decided_by_select": 0,
+          "decided_by_merge": 0,
+          "decided_by_default": 0,
+          "kappa_final": {
+            "mutual": 0,
+            "provider-only": 0,
+            "merged": 0
+          },
+          "graph_edits_applied": 4,
+          "graph_edits_rejected": 0,
+          "n_dropped_by_graph": 4,
+          "n_removed_by_closure": 0,
+          "n_requests_moved_later": 0,
+          "n_invariant_violations": 0,
+          "goals_total": 6,
+          "goals_covered": 6,
+          "goals_partial": 0,
+          "goals_uncovered": 0,
+          "goal_causes": {
+            "No volunteer": 0,
+            "Capability gap": 0,
+            "Left unresolved": 0,
+            "Infeasible": 0,
+            "Deadline exceeded": 0
+          },
+          "plan_fix_rounds": {
+            "R1": 0,
+            "R2": 0,
+            "R3": 0,
+            "R4": 0
+          },
+          "n_steps_excluded_stage2": 0,
+          "makespan_min": 5,
+          "deadline": 20,
+          "deadline_ok": true,
+          "llm_calls": 9,
+          "prompt_tokens": 17069,
+          "completion_tokens": 1996,
+          "variant": "no_edge",
+          "wall_time_sec": 9.266549587249756
+        }
+      },
+      "llm_judge": null
+    },
+    "no_graph": {
+      "raw_result": {
+        "variant": "no_graph",
+        "joint_plan_text": "### Joint Plan — task3_simple  (about 5 min / deadline 20 min: OK)\n### Robots: R1:Mobile_Light(kitchen), R2:Mobile_Light(bedroom), R3:Mobile_Light(kitchen), R4:Mobile_Light(bedroom)\n\n[0-5 min]\n- R1 [LOCAL] open the black fridge from corner  (r1_s1)\n- R2 [LOCAL] open the gray laptop from desk  (r2_s1)\n- R3 [LOCAL] pick_up the cabbage from fridge to gripper  (r3_s1)\n- R4 [LOCAL] open the silver laptop from desk to desk  (r4_s1)\n- R1 [LOCAL] pick_up the cabbage from fridge to gripper  (r1_s2)\n- R3 [LOCAL] put_down the cabbage from gripper to bowl  (r3_s2)\n- R4 [LOCAL] put_down the cabbage from gripper to blue bowl  (r4_s2)\n- R1 [LOCAL] put_down the cabbage from gripper to clear bowl  (r1_s3)\n- R3 [LOCAL] open the laptop from table to table  (r3_s3)\n- R1 [LOCAL] close the black fridge from corner  (r1_s4)\n- R1 [LOCAL] open the silver laptop from island  (r1_s5)\n\n### Provenance (collaboration edges)\n\n### Report: goal coverage\n- R1.g0 cabbage placed in the clear bowl: uncovered — Left unresolved (not judged by the Graph LLM)\n- R1.g1 silver laptop opened: uncovered — Left unresolved (not judged by the Graph LLM)\n- R2.g0 open the gray laptop on the desk: uncovered — Left unresolved (not judged by the Graph LLM)\n- R3.g0 cabbage placed in the bowl: uncovered — Left unresolved (not judged by the Graph LLM)\n- R3.g1 laptop opened: uncovered — Left unresolved (not judged by the Graph LLM)\n- R4.g0 open the silver laptop on the wooden desk: uncovered — Left unresolved (not judged by the Graph LLM)",
+        "metrics": {
+          "task_id": "task3_simple",
+          "n_steps_total": 11,
+          "n_steps_active": 11,
+          "n_requests": 0,
+          "n_requests_served": 0,
+          "n_requests_unresolved": 0,
+          "n_candidates_from_stage3": 0,
+          "n_collab_edges_final": 0,
+          "n_help_edges": 0,
+          "n_transfer_edges": 0,
+          "decided_by_select": 0,
+          "decided_by_merge": 0,
+          "decided_by_default": 0,
+          "kappa_final": {
+            "mutual": 0,
+            "provider-only": 0,
+            "merged": 0
+          },
+          "graph_edits_applied": 0,
+          "graph_edits_rejected": 0,
+          "n_dropped_by_graph": 0,
+          "n_removed_by_closure": 0,
+          "n_requests_moved_later": 0,
+          "n_invariant_violations": 0,
+          "goals_total": 6,
+          "goals_covered": 0,
+          "goals_partial": 0,
+          "goals_uncovered": 6,
+          "goal_causes": {
+            "No volunteer": 0,
+            "Capability gap": 0,
+            "Left unresolved": 6,
+            "Infeasible": 0,
+            "Deadline exceeded": 0
+          },
+          "plan_fix_rounds": {
+            "R1": 0,
+            "R2": 0,
+            "R3": 0,
+            "R4": 1
+          },
+          "n_steps_excluded_stage2": 2,
+          "makespan_min": 5,
+          "deadline": 20,
+          "deadline_ok": true,
+          "llm_calls": 9,
+          "prompt_tokens": 17911,
+          "completion_tokens": 2016,
+          "variant": "no_graph",
+          "wall_time_sec": 8.459503173828125
+        }
+      },
+      "llm_judge": null
+    }
+  }
+}

@@ -1,0 +1,933 @@
+{
+  "method": "cda",
+  "task_n": "task2_abstract",
+  "raw_result": {
+    "task_n": "task2_abstract",
+    "mode": "multi_room",
+    "model": "gpt-4o",
+    "task_text": "I want to take a bath in 5 minutes. The bathroom should be ready — bathtub filled with warm water, and I'll need something to dry off with nearby.",
+    "joint_plan_text": "```plaintext\n### Joint Plan — task2_abstract  (about 5 min / deadline 5 min: OK)\n### Robots: R1:Gripper(bedroom), R2:Mobile_Light(bedroom), R3:Gripper(bathroom), R4:Mobile_Heavy(bathroom)\n\n[0-5 min]\n- R2 [LOCAL] pick up the blue towel from the desk chair to the gripper  (r2_s1)\n- R3 [LOCAL] pour the water from the faucet to the bathtub  (r3_s1)\n- R4 [LOCAL] pick up the white towel from the towel rack to the gripper  (r4_s1)\n- R2 [LOCAL] move the blue towel from the desk chair to the bathroom  (r2_s2)\n- R3 [LOCAL] pick up the brown towel from the towel rack to the gripper  (r3_s2)\n- R4 [LOCAL] put down the white towel from the gripper to the bathtub  (r4_s2)\n- R2 [LOCAL] put down the blue towel from the gripper to the sink  (r2_s3)\n- R3 [LOCAL] put down the brown towel from the gripper to the bathtub edge  (r3_s3)",
+    "joint_plan_full": "### Joint Plan — task2_abstract  (about 5 min / deadline 5 min: OK)\n### Robots: R1:Gripper(bedroom), R2:Mobile_Light(bedroom), R3:Gripper(bathroom), R4:Mobile_Heavy(bathroom)\n\n[0-5 min]\n- R2 [LOCAL] pick_up the blue towel from desk chair to gripper  (r2_s1)\n- R3 [LOCAL] pour the water from faucet to bathtub  (r3_s1)\n- R4 [LOCAL] pick_up the white towel from towel rack to gripper  (r4_s1)\n- R2 [LOCAL] move the blue towel from desk chair to bathroom  (r2_s2)\n- R3 [LOCAL] pick_up the brown towel from towel rack to gripper  (r3_s2)\n- R4 [LOCAL] put_down the white towel from gripper to bathtub  (r4_s2)\n- R2 [LOCAL] put_down the blue towel from gripper to sink  (r2_s3)\n- R3 [LOCAL] put_down the brown towel from gripper to bathtub edge  (r3_s3)\n\n### Provenance (collaboration edges)\n\n### Report: goal coverage\n- R2.g0 blue towel available in the bathroom: covered [r2_s1, r2_s2, r2_s3]\n- R3.g0 bathtub filled with warm water: covered [r3_s1]\n- R3.g1 brown towel accessible for drying off: covered [r3_s2, r3_s3]\n- R4.g0 white towel placed near the bathtub for drying: covered [r4_s1, r4_s2]\n\n### Rejected edits\n- SELECT provider=r3_s1 request=r1_s1 — request 'r1_s1' does not exist\n- SELECT provider=r2_s3 request=r1_s2 — request 'r1_s2' does not exist",
+    "offers": {
+      "R1": {
+        "agent": "R1",
+        "capability": "I am fixed in place with a gripper for handling small objects.",
+        "can_do": [
+          "PickupLightObject: lift mugs, small items",
+          "SliceObject: cut small items",
+          "PourObject: pour from a container",
+          "PassReceiveObject: hand over objects to mobile robots"
+        ],
+        "cannot_do": [
+          "PickupHeavyObject: cannot lift furniture",
+          "PushFurniture: cannot move large items",
+          "Move: cannot leave the bedroom"
+        ],
+        "has_items": [
+          "gray robot (corner, image 1)",
+          "wooden desk (wall, image 1)",
+          "white mug (desk, image 2)",
+          "brown bowl (desk, image 2)",
+          "lamp (desk, image 2)",
+          "clock (desk, image 2)",
+          "statue (desk, image 2)",
+          "laptop (desk, image 2)",
+          "book (desk, image 2)",
+          "smartphone (desk, image 2)",
+          "pencil (desk, image 2)"
+        ],
+        "need_from_others": [
+          "someone to fill the bathtub with warm water",
+          "someone to bring and place a towel in the bathroom"
+        ],
+        "intends": [],
+        "obs_scope": "I can observe the bedroom only.",
+        "reasoning": "a) The bathroom must have a filled bathtub with warm water and a towel nearby. b) The bathroom is for bathing; my room can provide a towel if available. c) I can pass a towel if I have one, but I don't see one here. d) I cannot contribute directly to the bath setup without a towel to pass."
+      },
+      "R2": {
+        "agent": "R2",
+        "capability": "I am mobile and can carry light objects up to 5 kg with one arm.",
+        "can_do": [
+          "PickupLightObject: lift towels, small items",
+          "PassReceiveObject: exchange objects with others"
+        ],
+        "cannot_do": [
+          "PourObject: cannot fill the bathtub",
+          "PickupHeavyObject: cannot lift large items"
+        ],
+        "has_items": [
+          "blue towel (desk chair, image 2)"
+        ],
+        "need_from_others": [
+          "someone who can fill the bathtub with warm water"
+        ],
+        "intends": [
+          "blue towel available in the bathroom"
+        ],
+        "obs_scope": "I can observe the bedroom only.",
+        "reasoning": "a) The bathroom should have a filled bathtub with warm water and a towel nearby. b) The bedroom can provide the towel. c) I can bring the towel to the bathroom. d) Bringing the towel is crucial for drying off after the bath."
+      },
+      "R3": {
+        "agent": "R3",
+        "capability": "I am fixed in place with a gripper for light tasks.",
+        "can_do": [
+          "PickupLightObject: lift towels",
+          "PourObject: fill the bathtub with water"
+        ],
+        "cannot_do": [
+          "PickupHeavyObject: cannot lift heavy items",
+          "PushFurniture: cannot move furniture"
+        ],
+        "has_items": [
+          "bathtub (left side, image 1)",
+          "brown towel (towel rack, image 1)",
+          "sink (right side, image 1)",
+          "toilet (right side, image 2)",
+          "plunger (floor, image 1)",
+          "trash bin (next to toilet, image 2)",
+          "robot (right side, image 2)"
+        ],
+        "need_from_others": [],
+        "intends": [
+          "bathtub filled with warm water",
+          "brown towel accessible for drying off"
+        ],
+        "obs_scope": "I can observe the bathroom only.",
+        "reasoning": "a) The bathtub must be filled with warm water, and a towel should be nearby for drying off. b) The bathroom provides the bathtub and a towel. c) I can fill the bathtub with warm water and ensure a towel is accessible. d) Filling the bathtub is the priority, as it takes time."
+      },
+      "R4": {
+        "agent": "R4",
+        "capability": "I am mobile and can carry heavy objects up to 20 kg.",
+        "can_do": [
+          "PickupLightObject: lift small items like towels",
+          "PickupHeavyObject: lift heavier items if needed",
+          "PushFurniture: move furniture like bins or mats",
+          "PassReceiveObject: exchange objects with others"
+        ],
+        "cannot_do": [
+          "PourObject: cannot fill the bathtub"
+        ],
+        "has_items": [
+          "bathtub (back wall, image 1)",
+          "white towel (towel rack, image 2)",
+          "green striped mat (floor, image 1)",
+          "shelf with toiletries (left wall, image 1)",
+          "sink (right wall, image 2)",
+          "toilet (right wall, image 2)",
+          "trash bin (corner, image 2)",
+          "shower curtain (bathtub, image 1)"
+        ],
+        "need_from_others": [
+          "someone who can fill the bathtub with warm water"
+        ],
+        "intends": [
+          "white towel placed near the bathtub for drying"
+        ],
+        "obs_scope": "I can observe the bathroom only.",
+        "reasoning": "a) The bathroom must have a filled bathtub with warm water and a towel nearby. b) The bathroom provides the bathtub for bathing and a towel for drying. c) I can ensure the towel is accessible and assist with the bathtub preparation. d) Towel placement is crucial given the time limit."
+      }
+    },
+    "local_plans": {
+      "R1": [],
+      "R2": [
+        {
+          "id": "r2_s1",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "blue towel",
+            "from": "desk chair",
+            "to": "gripper"
+          },
+          "item": null,
+          "target": null,
+          "uses": 0,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "blue towel available in the bathroom",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r2_s2",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "blue towel",
+            "from": "desk chair",
+            "to": "bathroom"
+          },
+          "item": null,
+          "target": null,
+          "uses": 1,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "blue towel available in the bathroom",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r2_s3",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "blue towel",
+            "from": "gripper",
+            "to": "sink"
+          },
+          "item": null,
+          "target": null,
+          "uses": 0,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "blue towel available in the bathroom",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        }
+      ],
+      "R3": [
+        {
+          "id": "r3_s1",
+          "agent": "R3",
+          "type": "LOCAL",
+          "action": {
+            "verb": "pour",
+            "object": "water",
+            "from": "faucet",
+            "to": "bathtub"
+          },
+          "item": null,
+          "target": null,
+          "uses": 1,
+          "location": "bathroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "bathtub filled with warm water",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r3_s2",
+          "agent": "R3",
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "brown towel",
+            "from": "towel rack",
+            "to": "gripper"
+          },
+          "item": null,
+          "target": null,
+          "uses": 0,
+          "location": "bathroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "brown towel accessible for drying off",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r3_s3",
+          "agent": "R3",
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "brown towel",
+            "from": "gripper",
+            "to": "bathtub edge"
+          },
+          "item": null,
+          "target": null,
+          "uses": 0,
+          "location": "bathroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "brown towel accessible for drying off",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        }
+      ],
+      "R4": [
+        {
+          "id": "r4_s1",
+          "agent": "R4",
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "white towel",
+            "from": "towel rack",
+            "to": "gripper"
+          },
+          "item": null,
+          "target": null,
+          "uses": 0,
+          "location": "bathroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "white towel placed near the bathtub for drying",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r4_s2",
+          "agent": "R4",
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "white towel",
+            "from": "gripper",
+            "to": "bathtub"
+          },
+          "item": null,
+          "target": null,
+          "uses": 0,
+          "location": "bathroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "white towel placed near the bathtub for drying",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        }
+      ]
+    },
+    "answers": [],
+    "graph": {
+      "nodes": [
+        {
+          "id": "r2_s1",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "blue towel",
+            "from": "desk chair",
+            "to": "gripper"
+          },
+          "item": null,
+          "target": null,
+          "uses": 0,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "blue towel available in the bathroom",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 0,
+          "t_end": 1
+        },
+        {
+          "id": "r2_s2",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "blue towel",
+            "from": "desk chair",
+            "to": "bathroom"
+          },
+          "item": null,
+          "target": null,
+          "uses": 1,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "blue towel available in the bathroom",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 1,
+          "t_end": 2
+        },
+        {
+          "id": "r2_s3",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "blue towel",
+            "from": "gripper",
+            "to": "sink"
+          },
+          "item": null,
+          "target": null,
+          "uses": 0,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "blue towel available in the bathroom",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 2,
+          "t_end": 3
+        },
+        {
+          "id": "r3_s1",
+          "agent": "R3",
+          "type": "LOCAL",
+          "action": {
+            "verb": "pour",
+            "object": "water",
+            "from": "faucet",
+            "to": "bathtub"
+          },
+          "item": null,
+          "target": null,
+          "uses": 1,
+          "location": "bathroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "bathtub filled with warm water",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 0,
+          "t_end": 1
+        },
+        {
+          "id": "r3_s2",
+          "agent": "R3",
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "brown towel",
+            "from": "towel rack",
+            "to": "gripper"
+          },
+          "item": null,
+          "target": null,
+          "uses": 0,
+          "location": "bathroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "brown towel accessible for drying off",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 1,
+          "t_end": 2
+        },
+        {
+          "id": "r3_s3",
+          "agent": "R3",
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "brown towel",
+            "from": "gripper",
+            "to": "bathtub edge"
+          },
+          "item": null,
+          "target": null,
+          "uses": 0,
+          "location": "bathroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "brown towel accessible for drying off",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 2,
+          "t_end": 3
+        },
+        {
+          "id": "r4_s1",
+          "agent": "R4",
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "white towel",
+            "from": "towel rack",
+            "to": "gripper"
+          },
+          "item": null,
+          "target": null,
+          "uses": 0,
+          "location": "bathroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "white towel placed near the bathtub for drying",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 0,
+          "t_end": 1
+        },
+        {
+          "id": "r4_s2",
+          "agent": "R4",
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "white towel",
+            "from": "gripper",
+            "to": "bathtub"
+          },
+          "item": null,
+          "target": null,
+          "uses": 0,
+          "location": "bathroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "white towel placed near the bathtub for drying",
+          "replies": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 1,
+          "t_end": 2
+        }
+      ],
+      "order": {
+        "R1": [],
+        "R2": [
+          "r2_s1",
+          "r2_s2",
+          "r2_s3"
+        ],
+        "R3": [
+          "r3_s1",
+          "r3_s2",
+          "r3_s3"
+        ],
+        "R4": [
+          "r4_s1",
+          "r4_s2"
+        ]
+      },
+      "edges": [
+        {
+          "src": "r2_s1",
+          "dst": "r2_s2",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r2_s2",
+          "dst": "r2_s3",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r3_s1",
+          "dst": "r3_s2",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r3_s2",
+          "dst": "r3_s3",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r4_s1",
+          "dst": "r4_s2",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        }
+      ],
+      "edit_log": [
+        {
+          "k": 0,
+          "edit": {
+            "op": "SELECT",
+            "provider": "r3_s1",
+            "request": "r1_s1",
+            "rationale": "R3 can fill the bathtub with warm water as it is within its capabilities and intentions."
+          },
+          "applied": false,
+          "error": "request 'r1_s1' does not exist",
+          "rationale": "R3 can fill the bathtub with warm water as it is within its capabilities and intentions."
+        },
+        {
+          "k": 1,
+          "edit": {
+            "op": "SELECT",
+            "provider": "r2_s3",
+            "request": "r1_s2",
+            "rationale": "R2 can move the blue towel to the bathroom, satisfying R1's need for a towel nearby."
+          },
+          "applied": false,
+          "error": "request 'r1_s2' does not exist",
+          "rationale": "R2 can move the blue towel to the bathroom, satisfying R1's need for a towel nearby."
+        }
+      ],
+      "report": {
+        "goals": [
+          {
+            "robot": "R2",
+            "goal": 0,
+            "text": "blue towel available in the bathroom",
+            "status": "covered",
+            "cause": [],
+            "evidence": [
+              "r2_s1",
+              "r2_s2",
+              "r2_s3"
+            ],
+            "note": "",
+            "llm_status": "covered",
+            "llm_cause": null
+          },
+          {
+            "robot": "R3",
+            "goal": 0,
+            "text": "bathtub filled with warm water",
+            "status": "covered",
+            "cause": [],
+            "evidence": [
+              "r3_s1"
+            ],
+            "note": "",
+            "llm_status": "covered",
+            "llm_cause": null
+          },
+          {
+            "robot": "R3",
+            "goal": 1,
+            "text": "brown towel accessible for drying off",
+            "status": "covered",
+            "cause": [],
+            "evidence": [
+              "r3_s2",
+              "r3_s3"
+            ],
+            "note": "",
+            "llm_status": "covered",
+            "llm_cause": null
+          },
+          {
+            "robot": "R4",
+            "goal": 0,
+            "text": "white towel placed near the bathtub for drying",
+            "status": "covered",
+            "cause": [],
+            "evidence": [
+              "r4_s1",
+              "r4_s2"
+            ],
+            "note": "",
+            "llm_status": "covered",
+            "llm_cause": null
+          }
+        ],
+        "unresolved_requests": [],
+        "rejected_edits": [
+          {
+            "k": 0,
+            "edit": {
+              "op": "SELECT",
+              "provider": "r3_s1",
+              "request": "r1_s1",
+              "rationale": "R3 can fill the bathtub with warm water as it is within its capabilities and intentions."
+            },
+            "applied": false,
+            "error": "request 'r1_s1' does not exist",
+            "rationale": "R3 can fill the bathtub with warm water as it is within its capabilities and intentions."
+          },
+          {
+            "k": 1,
+            "edit": {
+              "op": "SELECT",
+              "provider": "r2_s3",
+              "request": "r1_s2",
+              "rationale": "R2 can move the blue towel to the bathroom, satisfying R1's need for a towel nearby."
+            },
+            "applied": false,
+            "error": "request 'r1_s2' does not exist",
+            "rationale": "R2 can move the blue towel to the bathroom, satisfying R1's need for a towel nearby."
+          }
+        ],
+        "dropped": [],
+        "removed_by_closure": [],
+        "invariant_violations": [],
+        "deadline": {
+          "makespan_min": 5,
+          "deadline_min": 5,
+          "exceeded": false
+        }
+      }
+    },
+    "report": {
+      "goals": [
+        {
+          "robot": "R2",
+          "goal": 0,
+          "text": "blue towel available in the bathroom",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r2_s1",
+            "r2_s2",
+            "r2_s3"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R3",
+          "goal": 0,
+          "text": "bathtub filled with warm water",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r3_s1"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R3",
+          "goal": 1,
+          "text": "brown towel accessible for drying off",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r3_s2",
+            "r3_s3"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R4",
+          "goal": 0,
+          "text": "white towel placed near the bathtub for drying",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r4_s1",
+            "r4_s2"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        }
+      ],
+      "unresolved_requests": [],
+      "rejected_edits": [
+        {
+          "k": 0,
+          "edit": {
+            "op": "SELECT",
+            "provider": "r3_s1",
+            "request": "r1_s1",
+            "rationale": "R3 can fill the bathtub with warm water as it is within its capabilities and intentions."
+          },
+          "applied": false,
+          "error": "request 'r1_s1' does not exist",
+          "rationale": "R3 can fill the bathtub with warm water as it is within its capabilities and intentions."
+        },
+        {
+          "k": 1,
+          "edit": {
+            "op": "SELECT",
+            "provider": "r2_s3",
+            "request": "r1_s2",
+            "rationale": "R2 can move the blue towel to the bathroom, satisfying R1's need for a towel nearby."
+          },
+          "applied": false,
+          "error": "request 'r1_s2' does not exist",
+          "rationale": "R2 can move the blue towel to the bathroom, satisfying R1's need for a towel nearby."
+        }
+      ],
+      "dropped": [],
+      "removed_by_closure": [],
+      "invariant_violations": [],
+      "deadline": {
+        "makespan_min": 5,
+        "deadline_min": 5,
+        "exceeded": false
+      }
+    },
+    "metrics": {
+      "task_id": "task2_abstract",
+      "n_steps_total": 8,
+      "n_steps_active": 8,
+      "n_requests": 0,
+      "n_requests_served": 0,
+      "n_requests_unresolved": 0,
+      "n_candidates_from_stage3": 0,
+      "n_collab_edges_final": 0,
+      "n_help_edges": 0,
+      "n_transfer_edges": 0,
+      "decided_by_select": 0,
+      "decided_by_merge": 0,
+      "decided_by_default": 0,
+      "kappa_final": {
+        "mutual": 0,
+        "provider-only": 0,
+        "merged": 0
+      },
+      "graph_edits_applied": 0,
+      "graph_edits_rejected": 2,
+      "n_dropped_by_graph": 0,
+      "n_removed_by_closure": 0,
+      "n_requests_moved_later": 0,
+      "n_invariant_violations": 0,
+      "goals_total": 4,
+      "goals_covered": 4,
+      "goals_partial": 0,
+      "goals_uncovered": 0,
+      "goal_causes": {
+        "No volunteer": 0,
+        "Capability gap": 0,
+        "Left unresolved": 0,
+        "Infeasible": 0,
+        "Deadline exceeded": 0
+      },
+      "plan_fix_rounds": {
+        "R1": 1,
+        "R2": 0,
+        "R3": 0,
+        "R4": 0
+      },
+      "n_steps_excluded_stage2": 1,
+      "makespan_min": 5,
+      "deadline": 5,
+      "deadline_ok": true,
+      "llm_calls": 10,
+      "prompt_tokens": 21192,
+      "completion_tokens": 2083,
+      "config": {
+        "use_edge_proposal": true,
+        "use_graph_llm": true
+      },
+      "wall_time_sec": 13.0
+    },
+    "config": {
+      "use_edge_proposal": true,
+      "use_graph_llm": true,
+      "max_graph_rounds": 2,
+      "deadline_min": 20
+    }
+  },
+  "llm_judge": {
+    "TF": 3,
+    "TF_reason": "The plan attempts to fulfill the goals by pouring water into the bathtub and bringing towels. However, R4 puts a towel directly into the bathtub (which would get it wet), and R2 brings a hallucinated towel from the bedroom, making the execution flawed despite achieving the core intent.",
+    "GF": 2,
+    "GF_reason": "There are notable hallucinations: R2 interacts with a 'blue towel' in the bedroom, but there are no towels in the bedroom's object list. Additionally, 'towel rack' is hallucinated as a receptacle in the bathroom.",
+    "SC": 5,
+    "SC_reason": "The sequence of actions is logical for each robot. Objects are picked up before being moved or put down, and there are no prerequisite violations.",
+    "CQ": 2,
+    "CQ_reason": "Collaboration is highly inefficient and redundant. Three different robots (R2, R3, R4) all fetch towels independently. R2's cross-room movement to bring a towel from the bedroom is completely unnecessary since there are already towels in the bathroom."
+  }
+}

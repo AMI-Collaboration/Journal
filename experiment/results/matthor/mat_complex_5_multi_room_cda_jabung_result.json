@@ -1,0 +1,2107 @@
+{
+  "task_n": "mat_complex_5",
+  "mode": "multi_room",
+  "model": "gpt-4o",
+  "task_text": "Slice the potato, clean the plate, and put potato on the plate",
+  "joint_plan_text": "```plaintext\n### Joint Plan — mat_complex_5  (about 10 min / deadline 20 min: OK)\n### Robots: R1:Gripper(kitchen), R2:Mobile_Light(kitchen), R3:Mobile_Heavy(kitchen), R4:Gripper(kitchen)\n\n[0-5 min]\n- R1 [LOCAL] pick up the brown potato from the counter to the gripper  (r1_s1)\n- R3 [LOCAL] pick up the brown potato from the counter to the gripper  (r3_s1)\n- R4 [LOCAL] pick up the brown potato from the counter to the gripper  (r4_s1)\n- R1 [LOCAL] slice the brown potato from the gripper to the gripper  (r1_s2)\n- R3 [LOCAL] pick up the white plate from the sink to the gripper  (r3_s3)\n- R4 [LOCAL] slice the brown potato from the gripper to the sliced potato  (r4_s2)\n- R1 [PASS] pass brown potato to R2 (offered) (hands it over; R2 collects it)  (r1_s3)\n- R4 [LOCAL] pick up the white plate from the counter to the gripper  (r4_s3)\n- R2 [RECEIVE] receive brown potato from R1 (collects it from the kitchen)  (r2_s7)\n- R4 [LOCAL] pour the white plate from the gripper to the sink (also serves R2's request)  (r4_s4)\n- R4 [LOCAL] pick up the sliced potato from the counter to the gripper  (r4_s5)\n\n[5-10 min]\n- R2 [LOCAL] move the brown potato from the counter to the gripper  (r2_s8)\n- R4 [LOCAL] put down the sliced potato from the gripper to the white plate  (r4_s6)\n- R2 [ASK_HELP] wait for R4 to: pour the white plate from the sink to the sink  (r2_s1)\n- R2 [LOCAL] pick up the brown potato from the counter to the gripper  (r2_s3)",
+  "joint_plan_full": "### Joint Plan — mat_complex_5  (about 10 min / deadline 20 min: OK)\n### Robots: R1:Gripper(kitchen), R2:Mobile_Light(kitchen), R3:Mobile_Heavy(kitchen), R4:Gripper(kitchen)\n\n[0-5 min]\n- R1 [LOCAL] pick_up the brown potato from counter to gripper  (r1_s1)\n- R3 [LOCAL] pick_up the brown potato from counter to gripper  (r3_s1)\n- R4 [LOCAL] pick_up the brown potato from counter to gripper  (r4_s1)\n- R1 [LOCAL] slice the brown potato from gripper to gripper  (r1_s2)\n- R3 [LOCAL] pick_up the white plate from sink to gripper  (r3_s3)\n- R4 [LOCAL] slice the brown potato from gripper to sliced potato  (r4_s2)\n- R1 [PASS] pass brown potato to R2 (offered) (hands it over; R2 collects it)  (r1_s3)\n- R4 [LOCAL] pick_up the white plate from counter to gripper  (r4_s3)\n- R2 [RECEIVE] receive brown potato from R1 (collects it from the kitchen)  (r2_s7)\n- R4 [LOCAL] pour the white plate from gripper to sink (also serves R2's request)  (r4_s4)\n- R4 [LOCAL] pick_up the sliced potato from counter to gripper  (r4_s5)\n\n[5-10 min]\n- R2 [LOCAL] move brown potato from counter to gripper  (r2_s8)\n- R4 [LOCAL] put_down the sliced potato from gripper to white plate  (r4_s6)\n- R2 [ASK_HELP] wait for R4 to: pour the white plate from sink to sink  (r2_s1)\n- R2 [LOCAL] pick_up the brown potato from counter to gripper  (r2_s3)\n\n### Provenance (collaboration edges)\n- r2_s1 (R2 ASK_HELP) <- r4_s4 (R4 LOCAL)  κ=mutual, decided by SELECT\n- r2_s7 (R2 RECEIVE) <- r1_s3 (R1 PASS)  κ=mutual, decided by default\n\n### Graph LLM edits (applied)\n- SELECT provider=r4_s2 request=r2_s4 — R4 has a mutual agreement to slice the brown potato, which aligns with its capability and intention.\n- SELECT provider=r4_s4 request=r2_s1 — R4 has a mutual agreement to clean the plate, which aligns with its capability and intention.\n- DROP node=r3_s2 — R3's attempt to pass the potato to R1 is unnecessary because R1 already has the potato.\n- DROP node=r3_s4 — R3's attempt to pass the plate to R4 is unnecessary because R4 already has the plate.\n\n### Report: goal coverage\n- R1.g0 sliced potato ready: covered [r1_s1, r1_s2]\n- R1.g1 clean plate ready: uncovered — No volunteer\n- R1.g2 potato placed on the plate: partial — No volunteer [r1_s3]\n- R2.g0 clean plate ready for the potato: covered [r2_s1]\n- R2.g1 move potato onto the clean plate: partial — Infeasible [r2_s3, r2_s4] (evidence gone: r2_s4)\n- R3.g0 deliver potato for slicing: uncovered — No volunteer\n- R3.g1 deliver plate for cleaning: uncovered — No volunteer\n- R4.g0 sliced potato ready: covered [r4_s1, r4_s2]\n- R4.g1 clean white plate available: covered [r4_s3, r4_s4]\n- R4.g2 potato placed on white plate: covered [r4_s5, r4_s6]\n\n### Unresolved requests\n- R2 r2_s2 receive white plate (counter, image 2) — no candidate (nobody said YES) | R1: NO I am fixed and cannot pass the white plate to R2.; R3: NO I do not have the white plate (counter, image 2).; R4: NO I need the white plate to complete my tasks.\n- R2 r2_s5 receive brown potato (counter, image 1) — single provider-only candidate, not selected | R4: NO I need the brown potato to complete my tasks.\n\n### Dropped by the Graph LLM\n- R3 [PASS] pass brown potato (counter, image 1) to R1 (r3_s2) — R3's attempt to pass the potato to R1 is unnecessary because R1 already has the potato.\n- R3 [PASS] pass white plate (sink, image 2) to R4 (r3_s4) — R3's attempt to pass the plate to R4 is unnecessary because R4 already has the plate.\n\n### Removed by dependency closure\n- R2 [RECEIVE] receive white plate (counter, image 2) (r2_s2) — unresolved: no candidate (nobody said YES)\n- R2 [RECEIVE] receive brown potato (counter, image 1) (r2_s5) — unresolved: single provider-only candidate, not selected\n- R2 [LOCAL] put_down the sliced brown potato from gripper to white plate (r2_s6) — needs r2_s5, which will not happen\n- R2 [ASK_HELP] slice the brown potato from gripper to counter (r2_s4) — moot: r2_s6 will not happen",
+  "offers": {
+    "R1": {
+      "agent": "R1",
+      "capability": "I am fixed in place with a gripper that can manipulate light objects and perform slicing.",
+      "can_do": [
+        "PickupLightObject: lift small items like a potato or plate",
+        "SliceObject: slice items like a potato",
+        "PourObject: pour liquids",
+        "PassReceiveObject: hand over items to other robots"
+      ],
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift heavy items",
+        "PushFurniture: cannot move furniture due to being fixed"
+      ],
+      "has_items": [
+        "brown potato (counter, image 1)",
+        "white plate (sink, image 2)"
+      ],
+      "need_from_others": [],
+      "intends": [
+        "sliced potato ready",
+        "clean plate ready",
+        "potato placed on the plate"
+      ],
+      "obs_scope": "I can observe the kitchen only.",
+      "reasoning": "a) The potato needs to be sliced and placed on a clean plate. b) The kitchen provides the necessary tools and surfaces for slicing and plating food. c) I can slice the potato and clean the plate. d) Slicing the potato is the priority since it is the main task and takes time."
+    },
+    "R2": {
+      "agent": "R2",
+      "capability": "I am mobile and can carry light objects up to 5 kg with one arm.",
+      "can_do": [
+        "PickupLightObject: lift small items like a potato or a plate",
+        "ToggleObject: turn on/off lights, appliances"
+      ],
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift furniture",
+        "SliceObject: no cutting tool",
+        "PourObject: cannot pour water for cleaning"
+      ],
+      "has_items": [
+        "brown potato (counter, image 1)",
+        "white plate (sink, image 2)"
+      ],
+      "need_from_others": [
+        "someone who can slice the potato"
+      ],
+      "intends": [
+        "clean plate ready for the potato",
+        "move potato onto the clean plate"
+      ],
+      "obs_scope": "I can observe the kitchen only.",
+      "reasoning": "a) The potato must be sliced and placed on a clean plate. b) The kitchen is where the potato is and where I can clean the plate. c) I can clean the plate and move the potato onto it. d) Cleaning the plate is crucial because the potato cannot be placed on a dirty plate."
+    },
+    "R3": {
+      "agent": "R3",
+      "capability": "I am mobile and can carry objects up to 20 kg, but cannot slice or pour.",
+      "can_do": [
+        "PickupLightObject: lift small items like the potato and plate",
+        "PickupHeavyObject: lift heavier kitchen items if needed",
+        "PushFurniture: adjust furniture if necessary",
+        "PassReceiveObject: hand over or receive objects from others"
+      ],
+      "cannot_do": [
+        "SliceObject: cannot slice the potato",
+        "PourObject: cannot pour liquids"
+      ],
+      "has_items": [
+        "brown potato (counter, image 1)",
+        "white plate (sink, image 2)"
+      ],
+      "need_from_others": [
+        "someone who can slice the potato",
+        "someone who can clean the plate"
+      ],
+      "intends": [
+        "deliver potato for slicing",
+        "deliver plate for cleaning"
+      ],
+      "obs_scope": "I can observe the kitchen only.",
+      "reasoning": "a) The potato must be sliced and placed on a clean plate. b) The kitchen provides the potato and plate, and is where the slicing and cleaning occur. c) I can move the potato and plate, and transport them for slicing and cleaning. d) Transporting the potato and plate quickly is crucial to meet the deadline."
+    },
+    "R4": {
+      "agent": "R4",
+      "capability": "I am fixed in place with a gripper that can manipulate light objects.",
+      "can_do": [
+        "PickupLightObject: lift small items like a potato or plate",
+        "SliceObject: use a knife to slice objects",
+        "PourObject: rinse or clean items under water",
+        "PassReceiveObject: hand over items to another robot"
+      ],
+      "cannot_do": [
+        "PickupHeavyObject: cannot lift furniture or large appliances",
+        "PushFurniture: cannot move furniture"
+      ],
+      "has_items": [
+        "brown potato (counter, image 1)",
+        "white plate (counter, image 2)",
+        "silver knife (counter, image 1)"
+      ],
+      "need_from_others": [],
+      "intends": [
+        "sliced potato ready",
+        "clean white plate available",
+        "potato placed on white plate"
+      ],
+      "obs_scope": "I can observe the kitchen only.",
+      "reasoning": "a) The potato must be sliced and placed on a clean plate. b) The kitchen provides the tools and surfaces for slicing and cleaning. c) I can slice the potato and clean the plate. d) Slicing and cleaning should be prioritized to meet the deadline."
+    }
+  },
+  "local_plans": {
+    "R1": [
+      {
+        "id": "r1_s1",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "brown potato",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "sliced potato ready",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r1_s2",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "slice",
+          "object": "brown potato",
+          "from": "gripper",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 1,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "sliced potato ready",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r1_s3",
+        "agent": "R1",
+        "type": "PASS",
+        "action": "pass brown potato (counter, image 1) to R2",
+        "item": "brown potato (counter, image 1)",
+        "target": "R2",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "offer",
+        "answers": null,
+        "enables": null,
+        "serves": 2,
+        "serves_text": "potato placed on the plate",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "R2": [
+      {
+        "id": "r2_s1",
+        "agent": "R2",
+        "type": "ASK_HELP",
+        "action": {
+          "verb": "pour",
+          "object": "white plate",
+          "from": "sink",
+          "to": "sink"
+        },
+        "item": null,
+        "target": "R4",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": "r2_s3",
+        "serves": 0,
+        "serves_text": "clean plate ready for the potato",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s2",
+        "agent": "R2",
+        "type": "RECEIVE",
+        "action": "receive white plate (counter, image 2)",
+        "item": "white plate (counter, image 2)",
+        "target": "R4",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "clean plate ready for the potato",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s3",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "brown potato",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "move potato onto the clean plate",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s4",
+        "agent": "R2",
+        "type": "ASK_HELP",
+        "action": {
+          "verb": "slice",
+          "object": "brown potato",
+          "from": "gripper",
+          "to": "counter"
+        },
+        "item": null,
+        "target": "R4",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": "r2_s6",
+        "serves": 1,
+        "serves_text": "move potato onto the clean plate",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s5",
+        "agent": "R2",
+        "type": "RECEIVE",
+        "action": "receive brown potato (counter, image 1)",
+        "item": "brown potato (counter, image 1)",
+        "target": "R4",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": "r2_s6",
+        "serves": 1,
+        "serves_text": "move potato onto the clean plate",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s6",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "sliced brown potato",
+          "from": "gripper",
+          "to": "white plate"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "move potato onto the clean plate",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "R3": [
+      {
+        "id": "r3_s1",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "brown potato",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "deliver potato for slicing",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s2",
+        "agent": "R3",
+        "type": "PASS",
+        "action": "pass brown potato (counter, image 1) to R1",
+        "item": "brown potato (counter, image 1)",
+        "target": "R1",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "offer",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "deliver potato for slicing",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s3",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "white plate",
+          "from": "sink",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "deliver plate for cleaning",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s4",
+        "agent": "R3",
+        "type": "PASS",
+        "action": "pass white plate (sink, image 2) to R4",
+        "item": "white plate (sink, image 2)",
+        "target": "R4",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "offer",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "deliver plate for cleaning",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ],
+    "R4": [
+      {
+        "id": "r4_s1",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "brown potato",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "sliced potato ready",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s2",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "slice",
+          "object": "brown potato",
+          "from": "gripper",
+          "to": "sliced potato"
+        },
+        "item": null,
+        "target": null,
+        "uses": 1,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "sliced potato ready",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s3",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "white plate",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "clean white plate available",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s4",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pour",
+          "object": "white plate",
+          "from": "gripper",
+          "to": "sink"
+        },
+        "item": null,
+        "target": null,
+        "uses": 2,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "clean white plate available",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s5",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "sliced potato",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 2,
+        "serves_text": "potato placed on white plate",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s6",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "sliced potato",
+          "from": "gripper",
+          "to": "white plate"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 2,
+        "serves_text": "potato placed on white plate",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      }
+    ]
+  },
+  "answers": [
+    {
+      "agent": "R1",
+      "id": "r2_s1",
+      "answer": "NO",
+      "reason": "My capability is to manipulate light objects and perform slicing, not pouring.",
+      "result": "no edge"
+    },
+    {
+      "agent": "R1",
+      "id": "r2_s2",
+      "answer": "NO",
+      "reason": "I am fixed and cannot pass the white plate to R2.",
+      "result": "no edge"
+    },
+    {
+      "agent": "R1",
+      "id": "r2_s4",
+      "answer": "YES",
+      "reason": "I already have a step to slice the brown potato.",
+      "result": "CANDIDATE",
+      "kappa": "provider-only",
+      "provider": "r1_s2",
+      "existing": true
+    },
+    {
+      "agent": "R1",
+      "id": "r2_s5",
+      "answer": "YES",
+      "reason": "I already plan to pass the brown potato to R2.",
+      "result": "CANDIDATE",
+      "kappa": "provider-only",
+      "provider": "r1_s3",
+      "existing": true
+    },
+    {
+      "agent": "R1",
+      "id": "r3_s2",
+      "answer": "NO",
+      "reason": "I already have the brown potato for slicing.",
+      "result": "no edge"
+    },
+    {
+      "agent": "R2",
+      "id": "r1_s3",
+      "answer": "YES",
+      "reason": "I need the potato to place it on the plate after it is sliced.",
+      "result": "CANDIDATE",
+      "kappa": "mutual",
+      "receive": "r2_s7",
+      "use": "r2_s8"
+    },
+    {
+      "agent": "R3",
+      "id": "r2_s1",
+      "answer": "NO",
+      "reason": "I cannot pour or clean the plate.",
+      "result": "no edge"
+    },
+    {
+      "agent": "R3",
+      "id": "r2_s2",
+      "answer": "NO",
+      "reason": "I do not have the white plate (counter, image 2).",
+      "result": "no edge"
+    },
+    {
+      "agent": "R3",
+      "id": "r2_s4",
+      "answer": "NO",
+      "reason": "I cannot slice the potato.",
+      "result": "no edge"
+    },
+    {
+      "agent": "R3",
+      "id": "r2_s5",
+      "answer": "YES",
+      "reason": "I already plan to pass the brown potato.",
+      "result": "CANDIDATE",
+      "kappa": "provider-only",
+      "provider": "r3_s2",
+      "existing": true
+    },
+    {
+      "agent": "R4",
+      "id": "r2_s1",
+      "answer": "YES",
+      "reason": "I already plan to clean the white plate.",
+      "result": "CANDIDATE",
+      "kappa": "mutual",
+      "provider": "r4_s4",
+      "existing": true
+    },
+    {
+      "agent": "R4",
+      "id": "r2_s2",
+      "answer": "NO",
+      "reason": "I need the white plate to complete my tasks.",
+      "result": "no edge"
+    },
+    {
+      "agent": "R4",
+      "id": "r2_s4",
+      "answer": "YES",
+      "reason": "I already plan to slice the brown potato.",
+      "result": "CANDIDATE",
+      "kappa": "mutual",
+      "provider": "r4_s2",
+      "existing": true
+    },
+    {
+      "agent": "R4",
+      "id": "r2_s5",
+      "answer": "NO",
+      "reason": "I need the brown potato to complete my tasks.",
+      "result": "no edge"
+    },
+    {
+      "agent": "R4",
+      "id": "r3_s4",
+      "answer": "NO",
+      "reason": "I already have the white plate and plan to clean it myself.",
+      "result": "no edge"
+    }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "r1_s1",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "brown potato",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "sliced potato ready",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 1
+      },
+      {
+        "id": "r1_s2",
+        "agent": "R1",
+        "type": "LOCAL",
+        "action": {
+          "verb": "slice",
+          "object": "brown potato",
+          "from": "gripper",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 1,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "sliced potato ready",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 1,
+        "t_end": 2
+      },
+      {
+        "id": "r1_s3",
+        "agent": "R1",
+        "type": "PASS",
+        "action": "pass brown potato (counter, image 1) to R2",
+        "item": "brown potato (counter, image 1)",
+        "target": "R2",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "offer",
+        "answers": null,
+        "enables": null,
+        "serves": 2,
+        "serves_text": "potato placed on the plate",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 2,
+        "t_end": 3
+      },
+      {
+        "id": "r2_s7",
+        "agent": "R2",
+        "type": "RECEIVE",
+        "action": "receive brown potato (counter, image 1)",
+        "item": "brown potato (counter, image 1)",
+        "target": "R1",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "receive",
+        "answers": null,
+        "enables": "r2_s8",
+        "serves": null,
+        "serves_text": "offered brown potato (counter, image 1)",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "medium",
+        "phase": 1,
+        "t_start": 3,
+        "t_end": 5
+      },
+      {
+        "id": "r2_s8",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": "move brown potato from counter to gripper",
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "receive",
+        "answers": null,
+        "enables": null,
+        "serves": null,
+        "serves_text": "offered brown potato (counter, image 1)",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 2,
+        "t_start": 5,
+        "t_end": 6
+      },
+      {
+        "id": "r2_s1",
+        "agent": "R2",
+        "type": "ASK_HELP",
+        "action": {
+          "verb": "pour",
+          "object": "white plate",
+          "from": "sink",
+          "to": "sink"
+        },
+        "item": null,
+        "target": "R4",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": "r2_s3",
+        "serves": 0,
+        "serves_text": "clean plate ready for the potato",
+        "replies": [
+          {
+            "agent": "R1",
+            "answer": "NO",
+            "reason": "My capability is to manipulate light objects and perform slicing, not pouring."
+          },
+          {
+            "agent": "R3",
+            "answer": "NO",
+            "reason": "I cannot pour or clean the plate."
+          }
+        ],
+        "status": "active",
+        "status_reason": "",
+        "size": null,
+        "phase": 2,
+        "t_start": 6,
+        "t_end": 6
+      },
+      {
+        "id": "r2_s2",
+        "agent": "R2",
+        "type": "RECEIVE",
+        "action": "receive white plate (counter, image 2)",
+        "item": "white plate (counter, image 2)",
+        "target": "R4",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "clean plate ready for the potato",
+        "replies": [
+          {
+            "agent": "R1",
+            "answer": "NO",
+            "reason": "I am fixed and cannot pass the white plate to R2."
+          },
+          {
+            "agent": "R3",
+            "answer": "NO",
+            "reason": "I do not have the white plate (counter, image 2)."
+          },
+          {
+            "agent": "R4",
+            "answer": "NO",
+            "reason": "I need the white plate to complete my tasks."
+          }
+        ],
+        "status": "removed",
+        "status_reason": "unresolved: no candidate (nobody said YES)",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s3",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "brown potato",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "move potato onto the clean plate",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 2,
+        "t_start": 6,
+        "t_end": 7
+      },
+      {
+        "id": "r2_s4",
+        "agent": "R2",
+        "type": "ASK_HELP",
+        "action": {
+          "verb": "slice",
+          "object": "brown potato",
+          "from": "gripper",
+          "to": "counter"
+        },
+        "item": null,
+        "target": "R4",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": "r2_s6",
+        "serves": 1,
+        "serves_text": "move potato onto the clean plate",
+        "replies": [
+          {
+            "agent": "R3",
+            "answer": "NO",
+            "reason": "I cannot slice the potato."
+          }
+        ],
+        "status": "removed",
+        "status_reason": "moot: r2_s6 will not happen",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s5",
+        "agent": "R2",
+        "type": "RECEIVE",
+        "action": "receive brown potato (counter, image 1)",
+        "item": "brown potato (counter, image 1)",
+        "target": "R4",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": "r2_s6",
+        "serves": 1,
+        "serves_text": "move potato onto the clean plate",
+        "replies": [
+          {
+            "agent": "R4",
+            "answer": "NO",
+            "reason": "I need the brown potato to complete my tasks."
+          }
+        ],
+        "status": "removed",
+        "status_reason": "unresolved: single provider-only candidate, not selected",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r2_s6",
+        "agent": "R2",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "sliced brown potato",
+          "from": "gripper",
+          "to": "white plate"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "move potato onto the clean plate",
+        "replies": [],
+        "status": "removed",
+        "status_reason": "needs r2_s5, which will not happen",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s1",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "brown potato",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "deliver potato for slicing",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 1
+      },
+      {
+        "id": "r3_s2",
+        "agent": "R3",
+        "type": "PASS",
+        "action": "pass brown potato (counter, image 1) to R1",
+        "item": "brown potato (counter, image 1)",
+        "target": "R1",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "offer",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "deliver potato for slicing",
+        "replies": [
+          {
+            "agent": "R1",
+            "answer": "NO",
+            "reason": "I already have the brown potato for slicing."
+          }
+        ],
+        "status": "dropped",
+        "status_reason": "4.2 DROP: R3's attempt to pass the potato to R1 is unnecessary because R1 already has the potato.",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r3_s3",
+        "agent": "R3",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "white plate",
+          "from": "sink",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "deliver plate for cleaning",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 1,
+        "t_end": 2
+      },
+      {
+        "id": "r3_s4",
+        "agent": "R3",
+        "type": "PASS",
+        "action": "pass white plate (sink, image 2) to R4",
+        "item": "white plate (sink, image 2)",
+        "target": "R4",
+        "uses": null,
+        "location": "kitchen",
+        "origin": "offer",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "deliver plate for cleaning",
+        "replies": [
+          {
+            "agent": "R4",
+            "answer": "NO",
+            "reason": "I already have the white plate and plan to clean it myself."
+          }
+        ],
+        "status": "dropped",
+        "status_reason": "4.2 DROP: R3's attempt to pass the plate to R4 is unnecessary because R4 already has the plate.",
+        "size": null,
+        "phase": null,
+        "t_start": null,
+        "t_end": null
+      },
+      {
+        "id": "r4_s1",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "brown potato",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "sliced potato ready",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 0,
+        "t_end": 1
+      },
+      {
+        "id": "r4_s2",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "slice",
+          "object": "brown potato",
+          "from": "gripper",
+          "to": "sliced potato"
+        },
+        "item": null,
+        "target": null,
+        "uses": 1,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 0,
+        "serves_text": "sliced potato ready",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 1,
+        "t_end": 2
+      },
+      {
+        "id": "r4_s3",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "white plate",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "clean white plate available",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 2,
+        "t_end": 3
+      },
+      {
+        "id": "r4_s4",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pour",
+          "object": "white plate",
+          "from": "gripper",
+          "to": "sink"
+        },
+        "item": null,
+        "target": null,
+        "uses": 2,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 1,
+        "serves_text": "clean white plate available",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 3,
+        "t_end": 4
+      },
+      {
+        "id": "r4_s5",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "pick_up",
+          "object": "sliced potato",
+          "from": "counter",
+          "to": "gripper"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 2,
+        "serves_text": "potato placed on white plate",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 1,
+        "t_start": 4,
+        "t_end": 5
+      },
+      {
+        "id": "r4_s6",
+        "agent": "R4",
+        "type": "LOCAL",
+        "action": {
+          "verb": "put_down",
+          "object": "sliced potato",
+          "from": "gripper",
+          "to": "white plate"
+        },
+        "item": null,
+        "target": null,
+        "uses": 0,
+        "location": "kitchen",
+        "origin": "local",
+        "answers": null,
+        "enables": null,
+        "serves": 2,
+        "serves_text": "potato placed on white plate",
+        "replies": [],
+        "status": "active",
+        "status_reason": "",
+        "size": "short",
+        "phase": 2,
+        "t_start": 5,
+        "t_end": 6
+      }
+    ],
+    "order": {
+      "R1": [
+        "r1_s1",
+        "r1_s2",
+        "r1_s3"
+      ],
+      "R2": [
+        "r2_s7",
+        "r2_s8",
+        "r2_s1",
+        "r2_s2",
+        "r2_s3",
+        "r2_s4",
+        "r2_s5",
+        "r2_s6"
+      ],
+      "R3": [
+        "r3_s1",
+        "r3_s2",
+        "r3_s3",
+        "r3_s4"
+      ],
+      "R4": [
+        "r4_s1",
+        "r4_s2",
+        "r4_s3",
+        "r4_s4",
+        "r4_s5",
+        "r4_s6"
+      ]
+    },
+    "edges": [
+      {
+        "src": "r1_s1",
+        "dst": "r1_s2",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r1_s2",
+        "dst": "r1_s3",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r2_s7",
+        "dst": "r2_s8",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r2_s8",
+        "dst": "r2_s1",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r2_s1",
+        "dst": "r2_s3",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r3_s1",
+        "dst": "r3_s3",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r4_s1",
+        "dst": "r4_s2",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r4_s2",
+        "dst": "r4_s3",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r4_s3",
+        "dst": "r4_s4",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r4_s4",
+        "dst": "r4_s5",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r4_s5",
+        "dst": "r4_s6",
+        "kind": "SEQ",
+        "kappa": null,
+        "status": "CONFIRMED",
+        "source": "local",
+        "existing": false,
+        "decided_by": ""
+      },
+      {
+        "src": "r1_s2",
+        "dst": "r2_s4",
+        "kind": "HELP",
+        "kappa": "provider-only",
+        "status": "PROPOSED",
+        "source": "stage3",
+        "existing": true,
+        "decided_by": ""
+      },
+      {
+        "src": "r1_s3",
+        "dst": "r2_s5",
+        "kind": "TRANSFER",
+        "kappa": "provider-only",
+        "status": "PROPOSED",
+        "source": "stage3",
+        "existing": true,
+        "decided_by": ""
+      },
+      {
+        "src": "r1_s3",
+        "dst": "r2_s7",
+        "kind": "TRANSFER",
+        "kappa": "mutual",
+        "status": "CONFIRMED",
+        "source": "stage3",
+        "existing": false,
+        "decided_by": "default"
+      },
+      {
+        "src": "r3_s2",
+        "dst": "r2_s5",
+        "kind": "TRANSFER",
+        "kappa": "provider-only",
+        "status": "PROPOSED",
+        "source": "stage3",
+        "existing": true,
+        "decided_by": ""
+      },
+      {
+        "src": "r4_s4",
+        "dst": "r2_s1",
+        "kind": "HELP",
+        "kappa": "mutual",
+        "status": "CONFIRMED",
+        "source": "stage3",
+        "existing": true,
+        "decided_by": "SELECT"
+      },
+      {
+        "src": "r4_s2",
+        "dst": "r2_s4",
+        "kind": "HELP",
+        "kappa": "mutual",
+        "status": "CONFIRMED",
+        "source": "stage3",
+        "existing": true,
+        "decided_by": "SELECT"
+      }
+    ],
+    "edit_log": [
+      {
+        "k": 0,
+        "edit": {
+          "op": "SELECT",
+          "provider": "r4_s2",
+          "request": "r2_s4",
+          "rationale": "R4 has a mutual agreement to slice the brown potato, which aligns with its capability and intention."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "R4 has a mutual agreement to slice the brown potato, which aligns with its capability and intention."
+      },
+      {
+        "k": 1,
+        "edit": {
+          "op": "SELECT",
+          "provider": "r4_s4",
+          "request": "r2_s1",
+          "rationale": "R4 has a mutual agreement to clean the plate, which aligns with its capability and intention."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "R4 has a mutual agreement to clean the plate, which aligns with its capability and intention."
+      },
+      {
+        "k": 2,
+        "edit": {
+          "op": "DROP",
+          "node": "r3_s2",
+          "rationale": "R3's attempt to pass the potato to R1 is unnecessary because R1 already has the potato."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "R3's attempt to pass the potato to R1 is unnecessary because R1 already has the potato."
+      },
+      {
+        "k": 3,
+        "edit": {
+          "op": "DROP",
+          "node": "r3_s4",
+          "rationale": "R3's attempt to pass the plate to R4 is unnecessary because R4 already has the plate."
+        },
+        "applied": true,
+        "error": null,
+        "rationale": "R3's attempt to pass the plate to R4 is unnecessary because R4 already has the plate."
+      }
+    ],
+    "report": {
+      "goals": [
+        {
+          "robot": "R1",
+          "goal": 0,
+          "text": "sliced potato ready",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r1_s1",
+            "r1_s2"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R1",
+          "goal": 1,
+          "text": "clean plate ready",
+          "status": "uncovered",
+          "cause": [
+            "No volunteer"
+          ],
+          "evidence": [],
+          "note": "",
+          "llm_status": "uncovered",
+          "llm_cause": "No volunteer"
+        },
+        {
+          "robot": "R1",
+          "goal": 2,
+          "text": "potato placed on the plate",
+          "status": "partial",
+          "cause": [
+            "No volunteer"
+          ],
+          "evidence": [
+            "r1_s3"
+          ],
+          "note": "",
+          "llm_status": "partial",
+          "llm_cause": "No volunteer"
+        },
+        {
+          "robot": "R2",
+          "goal": 0,
+          "text": "clean plate ready for the potato",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r2_s1"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R2",
+          "goal": 1,
+          "text": "move potato onto the clean plate",
+          "status": "partial",
+          "cause": [
+            "Infeasible"
+          ],
+          "evidence": [
+            "r2_s3",
+            "r2_s4"
+          ],
+          "note": "evidence gone: r2_s4",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R3",
+          "goal": 0,
+          "text": "deliver potato for slicing",
+          "status": "uncovered",
+          "cause": [
+            "No volunteer"
+          ],
+          "evidence": [],
+          "note": "",
+          "llm_status": "uncovered",
+          "llm_cause": "No volunteer"
+        },
+        {
+          "robot": "R3",
+          "goal": 1,
+          "text": "deliver plate for cleaning",
+          "status": "uncovered",
+          "cause": [
+            "No volunteer"
+          ],
+          "evidence": [],
+          "note": "",
+          "llm_status": "uncovered",
+          "llm_cause": "No volunteer"
+        },
+        {
+          "robot": "R4",
+          "goal": 0,
+          "text": "sliced potato ready",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r4_s1",
+            "r4_s2"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R4",
+          "goal": 1,
+          "text": "clean white plate available",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r4_s3",
+            "r4_s4"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R4",
+          "goal": 2,
+          "text": "potato placed on white plate",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r4_s5",
+            "r4_s6"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        }
+      ],
+      "unresolved_requests": [
+        {
+          "request": "r2_s2",
+          "agent": "R2",
+          "text": "receive white plate (counter, image 2)",
+          "why": "no candidate (nobody said YES)",
+          "replies": [
+            {
+              "agent": "R1",
+              "answer": "NO",
+              "reason": "I am fixed and cannot pass the white plate to R2."
+            },
+            {
+              "agent": "R3",
+              "answer": "NO",
+              "reason": "I do not have the white plate (counter, image 2)."
+            },
+            {
+              "agent": "R4",
+              "answer": "NO",
+              "reason": "I need the white plate to complete my tasks."
+            }
+          ]
+        },
+        {
+          "request": "r2_s5",
+          "agent": "R2",
+          "text": "receive brown potato (counter, image 1)",
+          "why": "single provider-only candidate, not selected",
+          "replies": [
+            {
+              "agent": "R4",
+              "answer": "NO",
+              "reason": "I need the brown potato to complete my tasks."
+            }
+          ]
+        }
+      ],
+      "rejected_edits": [],
+      "dropped": [
+        {
+          "node": "r3_s2",
+          "agent": "R3",
+          "type": "PASS",
+          "text": "pass brown potato (counter, image 1) to R1",
+          "rationale": "R3's attempt to pass the potato to R1 is unnecessary because R1 already has the potato."
+        },
+        {
+          "node": "r3_s4",
+          "agent": "R3",
+          "type": "PASS",
+          "text": "pass white plate (sink, image 2) to R4",
+          "rationale": "R3's attempt to pass the plate to R4 is unnecessary because R4 already has the plate."
+        }
+      ],
+      "removed_by_closure": [
+        {
+          "node": "r2_s2",
+          "agent": "R2",
+          "type": "RECEIVE",
+          "text": "receive white plate (counter, image 2)",
+          "reason": "unresolved: no candidate (nobody said YES)"
+        },
+        {
+          "node": "r2_s5",
+          "agent": "R2",
+          "type": "RECEIVE",
+          "text": "receive brown potato (counter, image 1)",
+          "reason": "unresolved: single provider-only candidate, not selected"
+        },
+        {
+          "node": "r2_s6",
+          "agent": "R2",
+          "type": "LOCAL",
+          "text": "put_down the sliced brown potato from gripper to white plate",
+          "reason": "needs r2_s5, which will not happen"
+        },
+        {
+          "node": "r2_s4",
+          "agent": "R2",
+          "type": "ASK_HELP",
+          "text": "slice the brown potato from gripper to counter",
+          "reason": "moot: r2_s6 will not happen"
+        }
+      ],
+      "invariant_violations": [],
+      "deadline": {
+        "makespan_min": 10,
+        "deadline_min": 20,
+        "exceeded": false
+      }
+    }
+  },
+  "report": {
+    "goals": [
+      {
+        "robot": "R1",
+        "goal": 0,
+        "text": "sliced potato ready",
+        "status": "covered",
+        "cause": [],
+        "evidence": [
+          "r1_s1",
+          "r1_s2"
+        ],
+        "note": "",
+        "llm_status": "covered",
+        "llm_cause": null
+      },
+      {
+        "robot": "R1",
+        "goal": 1,
+        "text": "clean plate ready",
+        "status": "uncovered",
+        "cause": [
+          "No volunteer"
+        ],
+        "evidence": [],
+        "note": "",
+        "llm_status": "uncovered",
+        "llm_cause": "No volunteer"
+      },
+      {
+        "robot": "R1",
+        "goal": 2,
+        "text": "potato placed on the plate",
+        "status": "partial",
+        "cause": [
+          "No volunteer"
+        ],
+        "evidence": [
+          "r1_s3"
+        ],
+        "note": "",
+        "llm_status": "partial",
+        "llm_cause": "No volunteer"
+      },
+      {
+        "robot": "R2",
+        "goal": 0,
+        "text": "clean plate ready for the potato",
+        "status": "covered",
+        "cause": [],
+        "evidence": [
+          "r2_s1"
+        ],
+        "note": "",
+        "llm_status": "covered",
+        "llm_cause": null
+      },
+      {
+        "robot": "R2",
+        "goal": 1,
+        "text": "move potato onto the clean plate",
+        "status": "partial",
+        "cause": [
+          "Infeasible"
+        ],
+        "evidence": [
+          "r2_s3",
+          "r2_s4"
+        ],
+        "note": "evidence gone: r2_s4",
+        "llm_status": "covered",
+        "llm_cause": null
+      },
+      {
+        "robot": "R3",
+        "goal": 0,
+        "text": "deliver potato for slicing",
+        "status": "uncovered",
+        "cause": [
+          "No volunteer"
+        ],
+        "evidence": [],
+        "note": "",
+        "llm_status": "uncovered",
+        "llm_cause": "No volunteer"
+      },
+      {
+        "robot": "R3",
+        "goal": 1,
+        "text": "deliver plate for cleaning",
+        "status": "uncovered",
+        "cause": [
+          "No volunteer"
+        ],
+        "evidence": [],
+        "note": "",
+        "llm_status": "uncovered",
+        "llm_cause": "No volunteer"
+      },
+      {
+        "robot": "R4",
+        "goal": 0,
+        "text": "sliced potato ready",
+        "status": "covered",
+        "cause": [],
+        "evidence": [
+          "r4_s1",
+          "r4_s2"
+        ],
+        "note": "",
+        "llm_status": "covered",
+        "llm_cause": null
+      },
+      {
+        "robot": "R4",
+        "goal": 1,
+        "text": "clean white plate available",
+        "status": "covered",
+        "cause": [],
+        "evidence": [
+          "r4_s3",
+          "r4_s4"
+        ],
+        "note": "",
+        "llm_status": "covered",
+        "llm_cause": null
+      },
+      {
+        "robot": "R4",
+        "goal": 2,
+        "text": "potato placed on white plate",
+        "status": "covered",
+        "cause": [],
+        "evidence": [
+          "r4_s5",
+          "r4_s6"
+        ],
+        "note": "",
+        "llm_status": "covered",
+        "llm_cause": null
+      }
+    ],
+    "unresolved_requests": [
+      {
+        "request": "r2_s2",
+        "agent": "R2",
+        "text": "receive white plate (counter, image 2)",
+        "why": "no candidate (nobody said YES)",
+        "replies": [
+          {
+            "agent": "R1",
+            "answer": "NO",
+            "reason": "I am fixed and cannot pass the white plate to R2."
+          },
+          {
+            "agent": "R3",
+            "answer": "NO",
+            "reason": "I do not have the white plate (counter, image 2)."
+          },
+          {
+            "agent": "R4",
+            "answer": "NO",
+            "reason": "I need the white plate to complete my tasks."
+          }
+        ]
+      },
+      {
+        "request": "r2_s5",
+        "agent": "R2",
+        "text": "receive brown potato (counter, image 1)",
+        "why": "single provider-only candidate, not selected",
+        "replies": [
+          {
+            "agent": "R4",
+            "answer": "NO",
+            "reason": "I need the brown potato to complete my tasks."
+          }
+        ]
+      }
+    ],
+    "rejected_edits": [],
+    "dropped": [
+      {
+        "node": "r3_s2",
+        "agent": "R3",
+        "type": "PASS",
+        "text": "pass brown potato (counter, image 1) to R1",
+        "rationale": "R3's attempt to pass the potato to R1 is unnecessary because R1 already has the potato."
+      },
+      {
+        "node": "r3_s4",
+        "agent": "R3",
+        "type": "PASS",
+        "text": "pass white plate (sink, image 2) to R4",
+        "rationale": "R3's attempt to pass the plate to R4 is unnecessary because R4 already has the plate."
+      }
+    ],
+    "removed_by_closure": [
+      {
+        "node": "r2_s2",
+        "agent": "R2",
+        "type": "RECEIVE",
+        "text": "receive white plate (counter, image 2)",
+        "reason": "unresolved: no candidate (nobody said YES)"
+      },
+      {
+        "node": "r2_s5",
+        "agent": "R2",
+        "type": "RECEIVE",
+        "text": "receive brown potato (counter, image 1)",
+        "reason": "unresolved: single provider-only candidate, not selected"
+      },
+      {
+        "node": "r2_s6",
+        "agent": "R2",
+        "type": "LOCAL",
+        "text": "put_down the sliced brown potato from gripper to white plate",
+        "reason": "needs r2_s5, which will not happen"
+      },
+      {
+        "node": "r2_s4",
+        "agent": "R2",
+        "type": "ASK_HELP",
+        "text": "slice the brown potato from gripper to counter",
+        "reason": "moot: r2_s6 will not happen"
+      }
+    ],
+    "invariant_violations": [],
+    "deadline": {
+      "makespan_min": 10,
+      "deadline_min": 20,
+      "exceeded": false
+    }
+  },
+  "metrics": {
+    "task_id": "mat_complex_5",
+    "n_steps_total": 21,
+    "n_steps_active": 15,
+    "n_requests": 5,
+    "n_requests_served": 2,
+    "n_requests_unresolved": 2,
+    "n_candidates_from_stage3": 6,
+    "n_collab_edges_final": 2,
+    "n_help_edges": 1,
+    "n_transfer_edges": 1,
+    "decided_by_select": 1,
+    "decided_by_merge": 0,
+    "decided_by_default": 1,
+    "kappa_final": {
+      "mutual": 2,
+      "provider-only": 0,
+      "merged": 0
+    },
+    "graph_edits_applied": 4,
+    "graph_edits_rejected": 0,
+    "n_dropped_by_graph": 2,
+    "n_removed_by_closure": 4,
+    "n_requests_moved_later": 0,
+    "n_invariant_violations": 0,
+    "goals_total": 10,
+    "goals_covered": 5,
+    "goals_partial": 2,
+    "goals_uncovered": 3,
+    "goal_causes": {
+      "No volunteer": 4,
+      "Capability gap": 0,
+      "Left unresolved": 0,
+      "Infeasible": 1,
+      "Deadline exceeded": 0
+    },
+    "plan_fix_rounds": {
+      "R1": 1,
+      "R2": 1,
+      "R3": 0,
+      "R4": 0
+    },
+    "n_steps_excluded_stage2": 2,
+    "makespan_min": 10,
+    "deadline": 20,
+    "deadline_ok": true,
+    "llm_calls": 15,
+    "prompt_tokens": 30725,
+    "completion_tokens": 3611,
+    "config": {
+      "use_edge_proposal": true,
+      "use_graph_llm": true
+    },
+    "wall_time_sec": 27.8
+  },
+  "config": {
+    "use_edge_proposal": true,
+    "use_graph_llm": true,
+    "max_graph_rounds": 2,
+    "deadline_min": 20
+  }
+}
