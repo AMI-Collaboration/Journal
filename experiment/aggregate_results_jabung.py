@@ -171,6 +171,11 @@ Rules:
   A plan that correctly identifies goals and attempts relevant actions scores higher than
   one with no relevant actions, even if some object names are wrong.
 - Cross-room collaboration moving objects toward the right destination deserves partial TF credit.
+- A goal explicitly left undone because no robot present actually has the capability for it (a genuine
+  capability gap, stated as such rather than silently ignored) is honest incompleteness, not a failure --
+  score that single goal as merely unattempted. A plan that instead fabricates a workaround or a
+  hallucinated action to paper over the same capability gap should score LOWER on that goal, not higher,
+  since it falsely appears complete.
 
 ---
 
