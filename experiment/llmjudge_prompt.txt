@@ -1,4 +1,4 @@
-# FINAL PROMPT v19 — TF / PF / OC / SC (reference-aligned)
+# FINAL PROMPT v24 — TF / PF / CQ / SC (reference-aligned)
 
 ## MANDATORY POSSESSION OVERRIDE — HIGHEST PRIORITY (SC ONLY)
 
@@ -19,7 +19,7 @@ These rules apply equally to all supplied methods.
 {AGENT_CONFIG}
 
 ## Ground-Truth Object Inventory
-The following inventory is loaded from the task scene database. Use it only to verify whether a named object exists in the task rooms. Room presence does not automatically mean an individual robot observed it; apply OC separately. Hidden objects are explicitly marked.
+The following inventory is loaded from the task scene database. Use it only to verify whether a named object exists in the task rooms. Room presence does not automatically mean an individual robot observed it; apply CQ separately. Hidden objects are explicitly marked.
 {ROOM_OBJECTS_TEXT}
 
 ## Natural Language Plans
@@ -37,7 +37,7 @@ For each plan and each criterion, assign the highest 0-to-5 score whose anchor i
 
 Reasons must identify the evidence that supports the selected score and the material issue(s) that prevent the next higher score. Do not manufacture a list of hypothetical faults merely to justify lower scores. If evidence is missing or ambiguous, state exactly what cannot be established and distinguish uncertainty from a confirmed violation.
 
-Evaluate TF, PF, OC, and SC independently. A single underlying issue may affect more than one criterion only when it has a distinct consequence under each criterion. Do not double-penalize one issue merely by renaming it. Do not add or subtract points to achieve a preferred ranking.
+Evaluate TF, PF, CQ, and SC independently. A single underlying issue may affect more than one criterion only when it has a distinct consequence under each criterion. Do not double-penalize one issue merely by renaming it. Do not add or subtract points to achieve a preferred ranking.
 
 ### TF: Task Fulfillment
 
@@ -74,7 +74,7 @@ For every required goal, assign one status:
 - For a specific-object goal, verify the named object against the inventory and accept unambiguous synonyms.
 - A generic category phrase alone does not prove completion. It may support partial progress only when the plan documents meaningful actions toward the outcome.
 - If the inventory is unavailable or not known to be exhaustive, state that grounding is uncertain. Do not invent an object match or automatically declare an object nonexistent.
-- Scene existence does not establish what a particular robot observed; assess information access under OC.
+- Scene existence does not establish what a particular robot observed; assess information access under CQ.
 
 #### 5. Evaluate deadlines per required goal
 - Determine the earliest time at which the complete essential action path for EACH required goal is supported.
@@ -84,7 +84,7 @@ For every required goal, assign one status:
 - If an essential action for a required goal occurs after the deadline, that goal is not fully achieved within the deadline.
 - Use explicit plan times and scheduling metadata as evidence, cross-checking metadata against the actions. Do not invent durations or use API/runtime wall-clock time.
 
-#### 6. Keep TF separate from PF, OC, and SC
+#### 6. Keep TF separate from PF, CQ, and SC
 - Reduce TF for a capability, information, ordering, or dependency issue only when it actually prevents or undermines a required outcome.
 - Redundant work, inefficient allocation, repeated actions, or an invalid optional branch do not automatically reduce or cap TF when a complete valid path still achieves the required outcome.
 - A duplicate or conflicting action affects TF only when it invalidates the successful path, blocks the outcome, or pushes an essential action beyond the deadline. Explain that consequence.
@@ -131,101 +131,128 @@ Penalize any of the following vague expressions, as they indicate the plan does 
 
 In PF_reason, cite concrete actions and specified capabilities, identify any vague references and capability conflicts, and explain the descending 5-to-0 check. Do not deduct for a valid synonym or a location that is clear from the task context.
 
-### OC: Observability Consistency
+### CQ: Collaboration Quality
 
-Evaluate whether the plan respects a TRUE DISTRIBUTED setting.
+Evaluate whether inter-agent collaboration is necessary, appropriate, efficient, and successfully completed given the current task and agent configuration.
 
-Each agent initially knows its own room and cannot see or automatically know the contents of other rooms unless the relevant information is explicitly provided through task instructions or communicated by another agent. Information available to the overall planner or evaluator must not automatically be treated as information available to every individual agent.
-
-OC evaluates INFORMATION ACCESS, not plan organization, object existence, physical capability, or action ordering.
-
-1. Establish each agent's information boundary.
-
-For each agent, determine what it could know before performing each relevant action.
-
-- The agent may use information explicitly provided to it by the current task instructions or its configuration.
-- The agent may use information obtained from its own room and observations.
-- The agent may use information explicitly communicated to it by another agent, provided the message was received before the dependent action.
-- An agent must not automatically know the objects, locations, or hidden states of another room merely because those facts appear in the combined plan or scene inventory.
-- A centralized or combined plan does not itself prove that every agent has received the information contained in it.
-
-2. Check cross-room information.
-
-For every action involving information about another room, ask:
-
-- Was the relevant fact explicitly provided to the acting agent?
-- Did the agent obtain the information through its own observation or presence in the relevant room?
-- Did another agent communicate the information before the action?
-- Does the communication actually contain the specific information being used?
-
-If none of these sources supports the information, treat the action as an unsupported cross-room information assumption.
-
-Do not assume that an agent knows another room's objects or their locations simply because another agent can access that room.
-
-3. Check hidden and invisible objects.
-
-- Do not assume an agent knows the location or state of an explicitly hidden or invisible object without a valid discovery or communication event.
-- A general statement that an object exists does not establish its room or exact position.
-- Knowing an object's room does not establish its exact position or hidden state.
-- A discovery or observation action can establish information only to the extent supported by the task input and action description.
-- Do not invent a hidden-object restriction when the task input does not establish that the object is hidden or invisible.
-
-4. Check communication evidence.
-
-Explicit ASK_HELP / HELP / PASS / RECEIVE-style interaction is positive evidence of distributed coordination only when the information or transfer is actually established.
-
-- A request alone does not mean that a response was received.
-- A response counts only for the agent that receives it.
-- Use only the information actually conveyed by the message.
-- The message must be available before the action that relies on it.
-- A message to one agent does not automatically inform other agents.
-- Do not award a high OC score merely because communication keywords appear in the plan.
-
-5. Distinguish OC from other criteria.
-
-- An object missing from the environment inventory is not, by itself, an OC violation. Evaluate object grounding under the relevant criterion.
-- An action exceeding an agent's physical capabilities is primarily a PF issue.
-- An incorrect possession assumption or action dependency is primarily an SC issue.
-- Penalize OC when an agent relies on information that it could not have obtained under the distributed information constraints.
-- A plan written centrally is not automatically a violation. A material violation occurs when the plan assigns actions based on global or cross-room knowledge that was never made available to the acting agent.
-
-6. Evaluate the scope and severity.
-
-Consider:
-- How many independent cross-room or hidden-information assumptions occur.
-- Whether the assumptions affect essential actions or only minor details.
-- Whether the information was actually communicated or observed.
-- Whether the violation is isolated or repeated across agents and task paths.
-
-Count the same underlying unsupported information assumption once. Do not repeatedly penalize every later action that depends on the same root cause. Count separate violations when they involve independent unsupported facts or separate information-boundary failures.
-
-7. Score OC from 1 to 10.
-
-- 1-2: Severe violation of distributed information constraints. Agents repeatedly act on unjustified global, cross-room, or hidden-object information. Essential actions depend on information never made available to the acting agents.
-- 3-4: Significant information-boundary violations. Multiple material actions rely on unsupported cross-room knowledge, hidden information, or unjustified assumptions. Some valid local information use may still remain.
-- 5-6: Mixed compliance. The plan includes valid local observations or communication, but meaningful information-transfer gaps or unsupported assumptions remain.
-- 7-8: Mostly compliant. Agents generally act on their own room information or information actually received from others. Only limited unsupported assumptions remain.
-- 9-10: Strong compliance. Each agent consistently acts on its own available information or information explicitly communicated before use. No material cross-room or hidden-information violation remains.
-
-Do not assign OC=1 or OC=2 for one isolated unclear detail. These scores require severe and repeated violations that materially undermine the distributed information constraint.
-
-8. Explain OC.
-
-In OC_reason, identify the relevant agent, action, information being relied upon, and whether that information was available through local knowledge, task instructions, or communication. Explain the number and impact of independent violations. Do not describe an object-existence, capability, possession, or sequencing issue as an OC violation unless it separately demonstrates an information-boundary failure.
+CQ evaluates collaboration quality. It does not measure task completion by itself, physical capability by itself, information grounding by itself, or action ordering by itself.
 
 
+#### 1. Determine whether collaboration is required
 
-### OC clarification — Direct possession and handling evidence
+First determine whether the current task requires inter-agent collaboration.
 
-Apply this clarification when evaluating whether an agent has information about an object it physically handles.
+Collaboration is REQUIRED when:
+- Required objects or outcomes must move between rooms or agents.
+- Capability or movement restrictions prevent an agent from completing a required action alone and another agent must assist.
+- The task explicitly requires multi-room coordination, assistance, or cooperation.
+- A required outcome depends on another agent's action, object, or support.
 
-- If an action explicitly states that an agent is holding, carrying, grasping, or putting an object down from its gripper, this is direct evidence that the agent has physical access to that same object and knows the identity of the object being handled.
-- Do NOT classify the agent's action of handling, carrying, or placing that explicitly possessed object as unsupported cross-room knowledge merely because a separate observation action or message is not listed.
-- A stated pickup, collection, PASS/RECEIVE, or equivalent explicit handoff may also establish the relevant object's availability or transfer to the participating agent. Use only what the action actually establishes.
-- This evidence is limited to the specific object being handled. It does NOT automatically establish knowledge of the object's original room, exact previous location, hidden state, or other objects.
-- If the plan separately relies on an unsupported fact about the object's previous location or another hidden object, evaluate that distinct information assumption on its own evidence.
-- Do not count the same physical-possession evidence as both a valid SC possession override and an OC information violation.
-- In OC_reason, distinguish direct evidence that an agent possesses or handles an object from unsupported assumptions about information the agent never received.
+Collaboration is NOT REQUIRED when:
+- Each room's required goals are self-contained.
+- An agent can complete its assigned goals within its own capabilities and movement range.
+- No required outcome depends on another agent's action, object, or assistance.
+
+Do not force collaboration into a task that can be completed independently. When collaboration is not required, a plan that correctly avoids unnecessary collaboration can receive 5.
+
+#### 2. Evaluate necessity
+
+- Check whether collaboration is used when it is genuinely needed.
+- When an object or required outcome must be transferred between agents or rooms, check whether an appropriate collaborative action is provided.
+- When an agent cannot perform a required action because of capability or movement restrictions, check whether a suitable agent provides assistance.
+- When a task can be completed independently, check whether the plan introduces unnecessary requests, handoffs, or transfers.
+- Do not reward extra participation or coordination language unless it contributes to a required outcome.
+
+#### 3. Evaluate appropriateness
+
+For each collaboration action, check:
+- Whether the correct sending and receiving agents are selected.
+- Whether the target agent can perform the requested action or provide the required assistance.
+- Whether the correct object, task, or assistance is specified.
+- Whether PASS and RECEIVE actions refer to a compatible object and intended recipient.
+- Whether HELP or ASK_HELP requests are directed to an appropriate agent.
+- Whether the collaboration supports a required task outcome.
+
+Penalize:
+- Self-pass, where an agent passes an object to itself without a meaningful reason.
+- Circular requests or repeated request loops that do not resolve the required task.
+- Requests sent to an unsuitable or incorrect agent.
+- Transfers involving the wrong object or an incompatible recipient.
+- Repeated or conflicting collaboration actions that undermine execution.
+
+Do not classify a valid handoff as incorrect merely because the agents started in different rooms.
+
+#### 4. Evaluate efficiency
+
+- Avoid unnecessary intermediate transfers.
+- Avoid duplicate requests for the same unresolved need when no new information or purpose is provided.
+- Avoid repeated PASS/RECEIVE cycles that do not contribute to a required outcome.
+- Do not penalize repetition when a new purpose or changed task state justifies it.
+- Do not reward more collaboration steps simply because the plan is longer.
+- Evaluate inefficiency only when it creates unnecessary redundancy, confusion, or a material obstacle to completing the task.
+
+#### 5. Evaluate completion
+
+- A request alone does not establish that assistance was provided.
+- Check whether the intended agent responds or performs the requested action.
+- Check whether the required object or information reaches the intended recipient when the task depends on that transfer.
+- Check whether the core collaboration goal is achieved, not merely whether a communication action is mentioned.
+
+IMPORTANT — CDA BLOCKED ACTIONS:
+- For CDA plans, "Blocked" steps that are automatically detected and skipped by the system are a SAFETY FEATURE, not automatically a collaboration failure.
+- Do not deduct points solely because an incidental step is marked "Blocked" and safely skipped.
+- Do not treat every blocked step as an unfulfilled collaboration request.
+- Penalize only when the blocked step makes the CORE required collaboration goal unachievable or leaves an essential collaborative dependency unresolved.
+- If the core collaboration goal is completed through another valid action or path, do not impose an additional penalty for an incidental blocked step.
+
+#### 6. Evaluate fit to task type
+
+- Multi-room abstract tasks should show meaningful collaboration when required outcomes depend on cross-room coordination or object transfers.
+- Simple single-room tasks should not be forced to show unnecessary collaboration.
+- A task with independent room-level goals can be completed independently when the assigned agents have the required capabilities.
+- Judge collaboration according to the current task's actual goals, agent configuration, and constraints. Do not assume a fixed collaboration requirement across tasks.
+
+#### 7. Distinguish CQ from other criteria
+
+- TF evaluates whether required task outcomes are achieved.
+- PF evaluates whether agents can execute actions within their explicitly specified capabilities.
+- SC evaluates whether actions and dependencies occur in a valid order.
+- CQ evaluates whether inter-agent collaboration is necessary, appropriately assigned, efficient, and completed.
+
+A collaboration failure may also affect TF or SC only when it has a distinct consequence for goal achievement or action dependencies. Do not double-penalize the same issue without explaining its separate consequence.
+
+Do not evaluate information observability or cross-room knowledge as a standalone CQ issue. Evaluate communication under CQ when it concerns an actual collaboration request, handoff, recipient, response, or required coordination. Information availability itself is not scored as a separate criterion in this four-criterion evaluation.
+
+#### 8. CQ score anchors (0-5)
+
+- 5: Collaboration perfectly matches the task's needs. Required collaboration is performed with appropriate agents and objects and completed successfully. Unnecessary collaboration is avoided. If collaboration is not required, independent execution without unnecessary coordination also receives 5.
+- 4: Collaboration is mostly appropriate and effective. Only minor redundancy, inefficiency, or limited target issues remain. Required collaborative outcomes remain achievable.
+- 3: Collaboration has noticeable issues, such as some missing cooperation, an incorrect target, redundant transfers, or partially completed requests. The core task may still be achievable through remaining valid paths.
+- 2: Significant collaboration failures affect important outcomes. Required assistance or transfers are incomplete, incorrectly assigned, or inefficient enough to materially undermine the collaborative task.
+- 1: Collaboration is largely ineffective. Required collaboration is mostly absent, or serious self-pass, circular requests, or wrong-target interactions prevent most essential collaborative outcomes.
+- 0: No meaningful collaborative path exists when the task clearly requires collaboration, and essential collaborative outcomes cannot be achieved.
+
+Calibration:
+- Do not assign 0 or 1 merely because collaboration is absent when the task does not require it.
+- Do not penalize incidental CDA "Blocked" steps when the system safely skips them and the core collaboration goal remains achievable.
+- Do not assign 5 when required collaboration is missing or materially incomplete.
+- Do not assign 0 when meaningful and partially successful collaboration exists.
+- Evaluate the complete collaboration process, not isolated communication keywords or raw action counts.
+
+#### 9. Required CQ reasoning
+
+In CQ_reason:
+- State whether collaboration is REQUIRED or NOT REQUIRED, and explain why using the current task and agent configuration.
+- Identify the required collaborative goals, if any.
+- For each important request, HELP, ASK_HELP, PASS, or RECEIVE action, identify the sender, intended recipient, object or assistance, and completion status.
+- Identify any self-pass, circular request, wrong target, redundant transfer, or unfulfilled request.
+- Explain whether each issue affects the core collaboration goal or is only incidental.
+- For CDA plans, distinguish harmless automatically skipped "Blocked" steps from failures that make the core collaboration goal unachievable.
+- Explain why the selected score is supported by the evidence and why a higher score is not justified.
+
+Apply exactly the same criteria to every evaluated method. Do not adjust scores to obtain a preferred ranking.
+
+The CQ output value MUST be an integer from 0 through 5.
 
 ### SC: Sequential Coherence
 
@@ -257,6 +284,7 @@ These rules override any conflicting interpretation in the SC evaluation.
 
 5. PROHIBITED REASONING:
    Do not claim that an agent "never picked up", "never acquired", or "never possessed" an object when the plan explicitly establishes possession through these rules.
+
 
 ## 1. Track each agent's own sequence
 
@@ -412,7 +440,7 @@ Apply the same criteria to every evaluated method.
 
 - Evaluate the actual plan rather than the method name or presumed strengths of the approach.
 - Do not award points solely for fluent narration, detailed formatting, or coordination keywords.
-- Avoid double-penalizing the same problem without considering its distinct consequences for each criterion. For example, an unsupported object claim may affect OC, while its effect on task achievement or execution may separately affect TF or PF.
+- Avoid double-penalizing the same problem without considering its distinct consequences for each criterion. For example, an incomplete collaboration handoff may affect CQ. If it also leaves an action prerequisite unresolved, its distinct sequencing consequence may separately affect SC.
 - When evidence is insufficient, explain what cannot be verified rather than assuming successful execution.
 - Provide concise, plan-specific reasons for every score.
 - Apply the score anchors consistently. Comparable evidence should receive comparable scores across methods.
@@ -420,7 +448,7 @@ Apply the same criteria to every evaluated method.
 
 Output JSON only. Return one entry for every supplied plan label, using this exact structure:
 {{
-  "PLAN_A": {{"TF": 0, "TF_reason": "...", "PF": 0, "PF_reason": "...", "OC": 0, "OC_reason": "...", "SC": 0, "SC_reason": "..."}},
-  "PLAN_B": {{"TF": 0, "TF_reason": "...", "PF": 0, "PF_reason": "...", "OC": 0, "OC_reason": "...", "SC": 0, "SC_reason": "..."}}
+  "PLAN_A": {{"TF": 0, "TF_reason": "...", "PF": 0, "PF_reason": "...", "CQ": 0, "CQ_reason": "...", "SC": 0, "SC_reason": "..."}},
+  "PLAN_B": {{"TF": 0, "TF_reason": "...", "PF": 0, "PF_reason": "...", "CQ": 0, "CQ_reason": "...", "SC": 0, "SC_reason": "..."}}
 }}
 Only include labels that were supplied. Scores must be integers from 0 to 5, with 5 as the maximum. Reasons must identify the evidence supporting the selected score and the material issue that prevents the next higher score.
