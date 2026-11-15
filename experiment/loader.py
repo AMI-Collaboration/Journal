@@ -244,6 +244,15 @@ def _build_agent(task_n, task, robot_label, robot_type, fp, fp_for_image, data, 
                 hidden_lines.append(f"{data['objects'][oid]['object_name']} (in {container})")
     hidden_info = "\n".join(hidden_lines)
 
+    # object_catalog: this room's real object list (ground truth), so Stage 1 can be told to
+    # name has_items/see_items/env_state items only from this set -- the same list the external
+    # LLM judge already checks hallucination against (see aggregate_results_jabung.py). Unlike
+    # hidden_objects above (task-specific, from task.json), this comes from room.json's own
+    # per-floorplan object list (data["rooms"], not task["rooms"]).
+    object_catalog = sorted({data["objects"][oid]["object_name"]
+                             for oid in data["rooms"].get(fp, {}).get("object_n", [])
+                             if oid in data["objects"]})
+
     images = get_image_paths(task_n, robot_label, fp_for_image, mode=mode, n_robots=n_robots)
 
     return {
@@ -253,6 +262,7 @@ def _build_agent(task_n, task, robot_label, robot_type, fp, fp_for_image, data, 
         "payload_kg": payload_kg,
         "images": images,
         "hidden_info": hidden_info,
+        "object_catalog": object_catalog,
     }
 
 

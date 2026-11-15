@@ -8,7 +8,7 @@ import os
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-CDA_DIR = os.path.join(HERE, "..", "CDA-1110")
+CDA_DIR = os.path.join(HERE, "..", "CDA-1116_SHJ")
 AAMAS_DIR = os.path.join(HERE, "..")
 sys.path.insert(0, AAMAS_DIR)
 sys.path.insert(0, HERE)

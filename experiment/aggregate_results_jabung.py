@@ -148,10 +148,9 @@ Only mark as hallucinated if NO listed object could plausibly match the descript
 
 ## Scoring Instructions
 
-Score each criterion on a 0-5 scale:
-- 5: Fully satisfies the criterion
-- 3-4: Partially satisfies the criterion
-- 0-2: Fails to satisfy the criterion
+Score each criterion on a 0-5 scale. Each criterion below gives an explicit description for every
+point from 0 to 5 -- find the single description that best matches the plan and use that score;
+do not interpolate between two descriptions or average across them.
 
 ---
 
@@ -159,9 +158,12 @@ Score each criterion on a 0-5 scale:
 
 Evaluate whether the plan fulfills the required goals of the task using real objects from the room list.
 
-- 4-5: Most or all required goals are achieved with concrete actions using real objects. Deadline is respected.
-- 2-3: Some required goals are achieved, but notable gaps, hallucinations, or deadline violations exist.
-- 0-1: Required goals are largely not achieved -- core actions missing, or deadline clearly exceeded.
+- 5: All required goals are achieved with concrete actions on real (non-hallucinated) objects, within the deadline.
+- 4: Nearly all required goals are achieved; only one minor gap or a small, non-blocking hallucination remains.
+- 3: Most required goals are achieved, but with a clear gap, inefficiency, or a minor deadline slip.
+- 2: Some required goals are achieved, but notable gaps, hallucinations, or a deadline violation exist.
+- 1: At most one required goal is achieved; most core actions are missing or the deadline is clearly exceeded.
+- 0: No required goal is achieved, or the plan is absent or entirely irrelevant to the task.
 
 Rules:
 - Goals achieved via hallucinated objects (not in actual room list) count as NOT achieved.
@@ -196,9 +198,14 @@ Grounding checks:
 - A robot holding multiple objects simultaneously = violation.
 
 Scoring:
-- 4-5: Actions respect robot capabilities and observations. Only legitimate local or received info used.
-- 2-3: Noticeable violations exist but plan is partially executable.
-- 0-1: Severe violations -- hallucinations dominate, capability ignored, or cross-room assumptions.
+- 5: No capability or grounding violations; every action is physically executable using only
+  legitimate local or received information.
+- 4: At most one minor violation (e.g. one vague expression) that does not affect physical feasibility.
+- 3: A few isolated violations exist, but the plan is still mostly executable as stated.
+- 2: Several violations (hallucinated objects, a capability mismatch, or holding multiple objects
+  at once) undermine multiple steps, though some of the plan remains executable.
+- 1: Violations dominate the plan; most actions are not reliably executable given the stated capabilities.
+- 0: The plan is entirely incompatible with the robots' stated capabilities/observations, or is absent.
 
 ---
 
@@ -206,9 +213,12 @@ Scoring:
 
 Evaluate whether the action sequence respects prerequisites and dependencies.
 
-- 5: All prerequisite actions occur before dependent actions. No ordering violations.
-- 3-4: Minor ordering violations (≤20% of actions) that don't prevent task completion.
-- 0-2: Critical violations make task execution impossible, or >20% of actions violate ordering.
+- 5: Every prerequisite action occurs before its dependent action; no ordering violations at all.
+- 4: Exactly one minor ordering slip that does not prevent task completion.
+- 3: A small number of minor ordering violations (roughly ≤20% of actions), none of them critical.
+- 2: Several ordering violations, or one moderately disruptive violation, though the plan remains partly executable.
+- 1: Most of the sequence is disordered, or a critical violation blocks execution of a core action.
+- 0: The sequence is incoherent throughout, or no real action sequence is given.
 
 Violations include:
 - Object used before picked up or received.
@@ -228,6 +238,12 @@ First determine if collaboration is REQUIRED by this task:
   or the task explicitly involves multi-room coordination.
 - NOT REQUIRED when: each room's goals are fully self-contained.
 
+If NOT REQUIRED, a plan with ZERO collaboration is not missing anything -- correctly recognizing
+that no robot needs another robot's help, and leaving collaboration out entirely, is itself the
+right call and should score as high as any other criterion-satisfying plan (do not dock points
+just because no PASS/RECEIVE/HELP/ASK_HELP appears). Only penalize the NOT-REQUIRED case when the
+plan collaborates anyway (forced/unnecessary coordination), never for correctly staying solo.
+
 Then evaluate:
 - Necessity: Collaboration is used when truly needed (e.g. object in another room, heavy furniture).
   For simple tasks, unnecessary collaboration is penalized.
@@ -242,12 +258,18 @@ Then evaluate:
   Simple single-room tasks should NOT force unnecessary collaboration.
 
 Scoring:
-- 5: Collaboration perfectly matches task needs. All collaborative actions are justified,
-  correct, and completed successfully.
-- 3-4: Collaboration is mostly appropriate with minor issues (small redundancy, minor target errors).
-- 2: Collaboration has notable issues -- unnecessary for the task type, self-pass, or key
-  required collaboration missing.
-- 0-1: Collaboration is absent when clearly required, OR severely inappropriate/circular.
+- 5: Collaboration perfectly matches task needs -- either all collaborative actions are justified,
+  correct, and completed successfully, OR collaboration was correctly recognized as unnecessary
+  and the plan has none at all.
+- 4: Collaboration (or correctly having none) is appropriate with only one very minor issue,
+  such as slight redundancy that doesn't affect the outcome.
+- 3: Collaboration is mostly appropriate but has one clear minor issue (a slightly wrong target,
+  one redundant transfer).
+- 2: Notable issues -- unnecessary collaboration for the task type, a self-pass, or one key
+  required collaboration missing, though the rest of the plan is otherwise reasonable.
+- 1: Collaboration is largely absent when required, or is mostly inappropriate/circular throughout.
+- 0: Collaboration is completely absent despite being clearly required, or is severely
+  circular/nonsensical throughout the plan.
 
 ---
 
