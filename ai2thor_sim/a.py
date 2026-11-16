@@ -186,7 +186,36 @@ def interactive_capture(scene, agent_count, out_dir, prefix, robot_labels, robot
 
 ROBOT_NAME_BY_N = {0: "Gripper", 1: "Mobile_Light", 2: "Mobile_Heavy"}
 
-EXPERIMENT_DIR = "/mnt/c/Users/shin/Desktop/AAMAS/experiment"
+EXPERIMENT_DIR = os.environ.get(
+    "EXPERIMENT_DIR", os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "experiment"))
+
+
+def load_room_config(task_n, n, room):
+    """abstract / simple task: one scene per room. Only the robots of `room` are spawned; their labels
+    (R1, R2, ...) keep the index they have in task.json configs[n], so the file names match the loader."""
+    with open(os.path.join(EXPERIMENT_DIR, "task", "task.json"), encoding="utf-8-sig") as f:
+        t = {x["task_n"]: x for x in json.load(f)["tasks"]}[task_n]
+    if str(n) not in t["configs"]:
+        raise SystemExit(f"{task_n}: no config n={n}. available: {list(t['configs'])}")
+    if room not in t["rooms"]:
+        raise SystemExit(f"{task_n}: no room {room}. rooms: {list(t['rooms'])}")
+    num, kind = task_n.split("_")[0].replace("task", ""), task_n.split("_")[1]
+    mine = [(i, r) for i, r in enumerate(t["configs"][str(n)]) if r["room"] == room]
+    if not mine:
+        raise SystemExit(f"{task_n} n={n}: no robot in {room}. "
+                         f"robots per room: { {r['room'] for r in t['configs'][str(n)]} }")
+    out = os.path.join(EXPERIMENT_DIR, "image", kind, f"task{num}")
+    if kind == "abstract":                      # abstract images live in one folder per robot count
+        out = os.path.join(out, f"n_{n}")
+    return {
+        "scene": f"FloorPlan{room[2:]}",
+        "agent_count": len(mine),
+        "out_dir": out,
+        "prefix": f"{task_n}_{room}",
+        "robot_labels": [f"R{i + 1}" for i, _ in mine],
+        "robot_types": [ROBOT_NAME_BY_N[r["robot_n"]] for _, r in mine],
+        "task_text": t["task"],
+    }
 
 
 def load_task_config(task_n):
@@ -214,28 +243,6 @@ def load_task_config(task_n):
         "robot_types": robot_types,
         "task_text": t["task"],
     }
-
-
-if __name__ == "__main__":
-    import argparse
-
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--task", required=True, help="task.json 안의 task_n (예: mat_compound_5)")
-    args = ap.parse_args()
-
-    cfg = load_task_config(args.task)
-    print(f"=== {args.task}: {cfg['task_text']}  (scene={cfg['scene']}) ===")
-    print(f"robot_types: {cfg['robot_types']}")
-
-    interactive_capture(
-        scene=cfg["scene"],
-        agent_count=cfg["agent_count"],
-        out_dir=cfg["out_dir"],
-        prefix=cfg["prefix"],
-        robot_labels=cfg["robot_labels"],
-        robot_types=cfg["robot_types"],
-    )
-
 
 
 def teleport_to_can(controller, current_agent):
@@ -273,3 +280,30 @@ def teleport_to_can(controller, current_agent):
         forceAction=True
     )
     print(f"이동: {target['objectId']} → GarbageCan ({new_pos}) -> 성공={r.metadata['lastActionSuccess']}")
+
+
+if __name__ == "__main__":
+    import argparse
+
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--task", required=True, help="task.json 안의 task_n (예: mat_compound_5, task2_abstract)")
+    ap.add_argument("--n", type=int, help="abstract/simple: 로봇 수 구성 (예: 2)")
+    ap.add_argument("--room", help="abstract/simple: 찍을 방 (예: FP304)")
+    args = ap.parse_args()
+
+    if args.room:
+        cfg = load_room_config(args.task, args.n, args.room)
+    else:
+        cfg = load_task_config(args.task)
+    print(f"out_dir: {cfg['out_dir']}  labels: {cfg['robot_labels']}  prefix: {cfg['prefix']}")
+    print(f"=== {args.task}: {cfg['task_text']}  (scene={cfg['scene']}) ===")
+    print(f"robot_types: {cfg['robot_types']}")
+
+    interactive_capture(
+        scene=cfg["scene"],
+        agent_count=cfg["agent_count"],
+        out_dir=cfg["out_dir"],
+        prefix=cfg["prefix"],
+        robot_labels=cfg["robot_labels"],
+        robot_types=cfg["robot_types"],
+    )
