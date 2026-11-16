@@ -33,7 +33,7 @@ if args.task not in data["tasks"]:
     raise SystemExit(f"알 수 없는 task: {args.task}")
 
 task_text = data["tasks"][args.task]["task"]
-agents = build_agent_inputs(args.task, data, mode=args.mode)
+agents = build_agent_inputs(args.task, data, mode=args.mode, n_robots=args.n_robots)
 
 api_key_path = os.path.join(HERE, "..", "LaMMA-P", "api_key.txt")
 client = OpenAI(api_key=open(api_key_path).read().strip())

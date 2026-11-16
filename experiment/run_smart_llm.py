@@ -28,7 +28,7 @@ data = load_all()
 if args.task not in data["tasks"]:
     raise SystemExit(f"알 수 없는 task: {args.task}")
 
-smart_input = build_lamma_p_input(args.task, data)
+smart_input = build_lamma_p_input(args.task, data, args.n_robots)
 main_fp = smart_input.pop("_main_room_fp")
 main_room_num = main_fp.replace("FP", "")
 
