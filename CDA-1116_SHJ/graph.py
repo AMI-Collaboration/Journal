@@ -411,6 +411,43 @@ class PlanGraph:
         pos = self.order[n.agent].index(n.id) if n.id in self.order.get(n.agent, []) else len(self.order[n.agent])
         self.order[n.agent].insert(pos + 1, nid)
 
+    @staticmethod
+    def _held_key(s) -> str:
+        return norm(str(s or "").split("(")[0])
+
+    def _remove_dangling(self, queue: list) -> int:
+        """A put_down / PASS of an object the robot does not hold at that point (its pick_up or RECEIVE was
+        dropped or never existed) cannot happen: remove it. Walks each robot's own steps in plan order."""
+        n_removed = 0
+        for agent, ids in self.order.items():
+            held: list[str] = []
+            for nid in ids:
+                n = self.nodes.get(nid)
+                if n is None or not self.active(nid):
+                    continue
+                if n.type == LOCAL and isinstance(n.action, dict):
+                    verb, obj = str(n.action.get("verb", "")).lower(), self._held_key(n.action.get("object"))
+                    if verb == "pick_up":
+                        held.append(obj)
+                    elif verb in ("put_down", "place", "drop"):
+                        hit = next((h for h in held if obj and h and (h in obj or obj in h)), None)
+                        if hit is None:
+                            self._remove(nid, f"dangling: {agent} holds no '{obj}' at this point", queue)
+                            n_removed += 1
+                        else:
+                            held.remove(hit)
+                elif n.type == RECEIVE:
+                    held.append(self._held_key(n.item))
+                elif n.type == PASS:
+                    obj = self._held_key(n.item)
+                    hit = next((h for h in held if obj and h and (h in obj or obj in h)), None)
+                    if hit is None:
+                        self._remove(nid, f"dangling: {agent} holds no '{obj}' to pass", queue)
+                        n_removed += 1
+                    else:
+                        held.remove(hit)
+        return n_removed
+
     def closure(self) -> None:
         queue: list[str] = []
         for rid, why in self.unresolved.items():                     # unserved requests
@@ -427,6 +464,8 @@ class PlanGraph:
                 if self.active(n.id):
                     self._remove(n.id, "offer not taken" if n.origin == "offer" else "answer not selected", queue)
         queue += [d["node"] for d in self.drops]                     # dependents of 4.2 DROPs
+        self._propagate(queue)
+        self._remove_dangling(queue)                                 # put_down / PASS whose pick_up is gone
         self._propagate(queue)
         while True:                                                  # cycles still left
             g = self.nx()
