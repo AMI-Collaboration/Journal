@@ -1,0 +1,1854 @@
+{
+  "method": "cda",
+  "task_n": "task10_simple",
+  "raw_result": {
+    "task_n": "task10_simple",
+    "mode": "multi_room",
+    "model": "gpt-4o",
+    "task_text": "Empty the trash cans",
+    "joint_plan_text": "```plaintext\n### Joint Plan — task10_simple  (about 5 min / deadline 20 min: OK)\n### Robots: R1:Mobile_Light(kitchen), R2:Mobile_Light(living_room), R3:Mobile_Light(bedroom), R4:Mobile_Light(bathroom)\n\n[0-5 min]\n- R1 [LOCAL] move from the kitchen door to the kitchen floor  (r1_s1)\n- R2 [LOCAL] move from the living room corner to the living room corner  (r2_s1)\n- R3 [LOCAL] move from the bedroom door to the bedroom floor  (r3_s1)\n- R4 [LOCAL] move from R4 to the bathroom floor  (r4_s1)\n- R1 [LOCAL] pick up the garbage can from the kitchen floor  (r1_s2)\n- R2 [LOCAL] pick up the garbage can (corner, image 1) from the living room corner  (r2_s2)\n- R3 [LOCAL] pick up the black garbage bag from the bedroom floor  (r3_s2)\n- R4 [LOCAL] pick up the green garbage can from the bathroom floor  (r4_s2)\n- R1 [LOCAL] move from the kitchen floor to the disposal area  (r1_s3)\n- R2 [LOCAL] move from the living room corner to the living room garbage disposal area  (r2_s3)\n- R3 [LOCAL] put down the black garbage bag on the bedroom floor  (r3_s4)\n- R4 [LOCAL] put down the green garbage can on the bathroom floor  (r4_s4)\n- R1 [LOCAL] put down the garbage can in the disposal area [after r1_s2]  (r1_s4)\n- R2 [LOCAL] put down the garbage can (corner, image 1) in the living room garbage disposal area [after r2_s2]  (r2_s4)\n- R2 [LOCAL] move from the living room garbage disposal area to the living room corner  (r2_s5)",
+    "joint_plan_full": "### Joint Plan — task10_simple  (about 5 min / deadline 20 min: OK)\n### Robots: R1:Mobile_Light(kitchen), R2:Mobile_Light(living_room), R3:Mobile_Light(bedroom), R4:Mobile_Light(bathroom)\n\n[0-5 min]\n- R1 [LOCAL] move_to from kitchen_door to kitchen_floor  (r1_s1)\n- R2 [LOCAL] move_to from living_room_corner to living_room_corner  (r2_s1)\n- R3 [LOCAL] move_to from bedroom_door to bedroom_floor  (r3_s1)\n- R4 [LOCAL] move_to from R4 to bathroom_floor  (r4_s1)\n- R1 [LOCAL] pick_up the garbage can from kitchen_floor to R1  (r1_s2)\n- R2 [LOCAL] pick_up the garbage can (corner, image 1) from living_room_corner to R2  (r2_s2)\n- R3 [LOCAL] pick_up the black garbage bag from bedroom_floor to R3  (r3_s2)\n- R4 [LOCAL] pick_up the green garbage can from bathroom_floor to R4  (r4_s2)\n- R1 [LOCAL] move_to from kitchen_floor to disposal_area  (r1_s3)\n- R2 [LOCAL] move_to from living_room_corner to living_room_garbage_disposal_area  (r2_s3)\n- R3 [LOCAL] put_down the black garbage bag from R3 to bedroom_floor  (r3_s4)\n- R4 [LOCAL] put_down the green garbage can from R4 to bathroom_floor  (r4_s4)\n- R1 [LOCAL] put_down the garbage can from R1 to disposal_area [after r1_s2]  (r1_s4)\n- R2 [LOCAL] put_down the garbage can (corner, image 1) from R2 to living_room_garbage_disposal_area [after r2_s2]  (r2_s4)\n- R2 [LOCAL] move_to from living_room_garbage_disposal_area to living_room_corner  (r2_s5)\n\n### Provenance (collaboration edges)\n\n### Graph LLM edits (applied)\n- DROP node=r3_s3 — R1 declined the offer for the black garbage bag from R3, making this step unnecessary.\n- DROP node=r4_s3 — R1 declined the offer for the green garbage can from R4, making this step unnecessary.\n\n### Report: goal coverage\n- R1.g0 empty the kitchen garbage can: covered [r1_s1, r1_s2, r1_s3, r1_s4]\n- R2.g0 empty the garbage can in the living room: partial — Infeasible [r2_s1, r2_s2, r2_s3, r2_s4, r2_s5, r2_s6] (evidence gone: r2_s6)\n- R3.g0 garbage bag removed from the bedroom: partial — No volunteer [r3_s1, r3_s2]\n- R4.g0 empty the bathroom garbage can: partial — No volunteer [r4_s1, r4_s2]\n\n### Dropped by the Graph LLM\n- R3 [PASS] pass black garbage bag (floor, image 1) to R1 (r3_s3) — R1 declined the offer for the black garbage bag from R3, making this step unnecessary.\n- R4 [PASS] pass green garbage can (floor, image 1) to R1 (r4_s3) — R1 declined the offer for the green garbage can from R4, making this step unnecessary.\n\n### Removed by dependency closure\n- R2 [LOCAL] place the garbage can (corner, image 1) from living_room_garbage_disposal_area to living_room_corner (r2_s6) — dangling: R2 holds no 'garbage can' at this point",
+    "offers": {
+      "R1": {
+        "agent": "R1",
+        "capability": "I am mobile and can carry light objects up to 5 kg with one arm.",
+        "can_do": [
+          "PickupLightObject: lift mugs, fruit, small items",
+          "PassReceiveObject: hand over items to another robot"
+        ],
+        "cannot_do": [
+          "PickupHeavyObject: cannot lift furniture",
+          "PushFurniture: cannot move heavy furniture",
+          "SliceObject: no cutting tool",
+          "PourObject: cannot pour liquids"
+        ],
+        "has_items": [
+          "garbage can (floor, image 1)"
+        ],
+        "need_from_others": [
+          "someone to open and close doors if needed"
+        ],
+        "intends": [
+          "empty the kitchen garbage can"
+        ],
+        "see_items": [],
+        "other_robots_in_room": [],
+        "env_state": [
+          {
+            "object_id": "GarbageCan_1",
+            "object_type": "GarbageCan",
+            "location": "kitchen_floor",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          }
+        ],
+        "obs_scope": "I can observe the kitchen only.",
+        "reasoning": "a) The trash cans must be emptied. b) The kitchen contains the trash can that needs to be addressed. c) I can pick up the trash can and move it to a disposal area. d) Emptying the trash can is the primary task. e) The task explicitly requires emptying the trash can, which I can do by moving it."
+      },
+      "R2": {
+        "agent": "R2",
+        "capability": "I am mobile and can carry light objects up to 5 kg.",
+        "can_do": [
+          "PickupLightObject: lift small items",
+          "PassReceiveObject: exchange objects with others"
+        ],
+        "cannot_do": [
+          "PickupHeavyObject: cannot lift heavy furniture or large trash bags",
+          "PushFurniture: cannot move large furniture",
+          "SliceObject: no cutting tool",
+          "PourObject: cannot pour liquids"
+        ],
+        "has_items": [
+          "garbage can (corner, image 1)"
+        ],
+        "need_from_others": [],
+        "intends": [
+          "empty the garbage can in the living room"
+        ],
+        "see_items": [],
+        "other_robots_in_room": [],
+        "env_state": [
+          {
+            "object_id": "GarbageCan_1",
+            "object_type": "GarbageCan",
+            "location": "living_room_corner",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          }
+        ],
+        "obs_scope": "I can observe the living room only.",
+        "reasoning": "a) Trash cans must be emptied. b) Living room: contains the garbage can to be emptied. c) I can pick up the garbage can and empty it. d) Emptying the garbage can is the priority. e) Ensure the trash can is emptied within the deadline."
+      },
+      "R3": {
+        "agent": "R3",
+        "capability": "I am mobile and can carry light objects up to 5 kg with one arm.",
+        "can_do": [
+          "PickupLightObject: lift small items like garbage bags",
+          "PassReceiveObject: hand over objects to other robots"
+        ],
+        "cannot_do": [
+          "PickupHeavyObject: cannot lift heavy furniture or objects",
+          "PushFurniture: cannot move furniture",
+          "SliceObject: no cutting tool",
+          "PourObject: cannot pour liquids"
+        ],
+        "has_items": [
+          "black garbage bag (floor, image 1)",
+          "gray garbage can (floor, image 2)"
+        ],
+        "need_from_others": [
+          "someone to dispose of the garbage bag outside the bedroom"
+        ],
+        "intends": [
+          "garbage bag removed from the bedroom"
+        ],
+        "see_items": [],
+        "other_robots_in_room": [],
+        "env_state": [
+          {
+            "object_id": "GarbageBag_1",
+            "object_type": "GarbageBag",
+            "location": "bedroom_floor",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "GarbageCan_1",
+            "object_type": "GarbageCan",
+            "location": "bedroom_floor",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          }
+        ],
+        "obs_scope": "I can observe the bedroom only.",
+        "reasoning": "a) Trash cans need to be emptied. b) Bedroom: collect trash. c) I can pick up the garbage bag and move it. d) Removing the garbage bag is the priority. e) I will pick up the garbage bag and pass it to another robot if needed."
+      },
+      "R4": {
+        "agent": "R4",
+        "capability": "I am mobile and can carry light objects up to 5 kg with one arm.",
+        "can_do": [
+          "PickupLightObject: lift small items like garbage cans",
+          "PassReceiveObject: hand over objects to other robots"
+        ],
+        "cannot_do": [
+          "PickupHeavyObject: cannot lift heavy furniture",
+          "PushFurniture: cannot move furniture",
+          "SliceObject: no cutting tool",
+          "PourObject: cannot pour liquids"
+        ],
+        "has_items": [
+          "green garbage can (floor, image 1)",
+          "plunger (floor, image 1)"
+        ],
+        "need_from_others": [
+          "a robot to dispose of trash outside the bathroom"
+        ],
+        "intends": [
+          "empty the bathroom garbage can"
+        ],
+        "see_items": [],
+        "other_robots_in_room": [],
+        "env_state": [
+          {
+            "object_id": "GarbageCan_1",
+            "object_type": "GarbageCan",
+            "location": "bathroom_floor",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Plunger_1",
+            "object_type": "Plunger",
+            "location": "bathroom_floor",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          }
+        ],
+        "obs_scope": "I can observe the bathroom only.",
+        "reasoning": "a) Trash cans need to be emptied. b) The bathroom contains a garbage can that I can empty. c) I can pick up the garbage can and move it. d) Emptying the garbage can is the priority. e) The task explicitly requires emptying trash cans, which I can do by moving the garbage can."
+      }
+    },
+    "local_plans": {
+      "R1": [
+        {
+          "id": "r1_s1",
+          "agent": "R1",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "kitchen_door",
+            "to": "kitchen_floor",
+            "room": "kitchen"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "kitchen",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "empty the kitchen garbage can",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r1_s2",
+          "agent": "R1",
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "garbage can",
+            "from": "kitchen_floor",
+            "to": "R1"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "kitchen",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "empty the kitchen garbage can",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "GarbageCan_1",
+              "field": "location",
+              "value": "kitchen_floor"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "GarbageCan_1",
+              "field": "location",
+              "value": "robot_R1"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r1_s3",
+          "agent": "R1",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "kitchen_floor",
+            "to": "disposal_area",
+            "room": "kitchen"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "kitchen",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "empty the kitchen garbage can",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r1_s4",
+          "agent": "R1",
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "garbage can",
+            "from": "R1",
+            "to": "disposal_area"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "kitchen",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "empty the kitchen garbage can",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "GarbageCan_1",
+              "field": "location",
+              "value": "robot_R1"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "GarbageCan_1",
+              "field": "location",
+              "value": "disposal_area"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        }
+      ],
+      "R2": [
+        {
+          "id": "r2_s1",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "living_room_corner",
+            "to": "living_room_corner",
+            "room": "living_room"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "empty the garbage can in the living room",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r2_s2",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "garbage can (corner, image 1)",
+            "from": "living_room_corner",
+            "to": "R2"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "empty the garbage can in the living room",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "GarbageCan_1",
+              "field": "location",
+              "value": "living_room_corner"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "GarbageCan_1",
+              "field": "location",
+              "value": "R2"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r2_s3",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "living_room_corner",
+            "to": "living_room_garbage_disposal_area",
+            "room": "living_room"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "empty the garbage can in the living room",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r2_s4",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "garbage can (corner, image 1)",
+            "from": "R2",
+            "to": "living_room_garbage_disposal_area"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "empty the garbage can in the living room",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "GarbageCan_1",
+              "field": "location",
+              "value": "R2"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "GarbageCan_1",
+              "field": "location",
+              "value": "living_room_garbage_disposal_area"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r2_s5",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "living_room_garbage_disposal_area",
+            "to": "living_room_corner",
+            "room": "living_room"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "empty the garbage can in the living room",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r2_s6",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "place",
+            "object": "garbage can (corner, image 1)",
+            "from": "living_room_garbage_disposal_area",
+            "to": "living_room_corner"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "empty the garbage can in the living room",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "GarbageCan_1",
+              "field": "location",
+              "value": "living_room_garbage_disposal_area"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "GarbageCan_1",
+              "field": "location",
+              "value": "living_room_corner"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        }
+      ],
+      "R3": [
+        {
+          "id": "r3_s1",
+          "agent": "R3",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "bedroom_door",
+            "to": "bedroom_floor",
+            "room": "bedroom"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "garbage bag removed from the bedroom",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r3_s2",
+          "agent": "R3",
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "black garbage bag",
+            "from": "bedroom_floor",
+            "to": "R3"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "garbage bag removed from the bedroom",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "GarbageBag_1",
+              "field": "location",
+              "value": "bedroom_floor"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "GarbageBag_1",
+              "field": "location",
+              "value": "robot_R3"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r3_s3",
+          "agent": "R3",
+          "type": "PASS",
+          "action": "pass black garbage bag (floor, image 1) to R1",
+          "item": "black garbage bag (floor, image 1)",
+          "target": "R1",
+          "condition": null,
+          "uses": null,
+          "location": "bedroom",
+          "origin": "offer",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "garbage bag removed from the bedroom",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        }
+      ],
+      "R4": [
+        {
+          "id": "r4_s1",
+          "agent": "R4",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "R4",
+            "to": "bathroom_floor",
+            "room": "bathroom"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "bathroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "empty the bathroom garbage can",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r4_s2",
+          "agent": "R4",
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "green garbage can",
+            "from": "bathroom_floor",
+            "to": "R4"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "bathroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "empty the bathroom garbage can",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "GarbageCan_1",
+              "field": "location",
+              "value": "bathroom_floor"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "GarbageCan_1",
+              "field": "location",
+              "value": "robot_R4"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r4_s3",
+          "agent": "R4",
+          "type": "PASS",
+          "action": "pass green garbage can (floor, image 1) to R1",
+          "item": "green garbage can (floor, image 1)",
+          "target": "R1",
+          "condition": null,
+          "uses": null,
+          "location": "bathroom",
+          "origin": "offer",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "empty the bathroom garbage can",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        }
+      ]
+    },
+    "answers": [
+      {
+        "agent": "R1",
+        "id": "r3_s3",
+        "answer": "NO",
+        "reason": "I am focused on emptying the kitchen garbage can and do not need the black garbage bag.",
+        "result": "no edge"
+      },
+      {
+        "agent": "R1",
+        "id": "r4_s3",
+        "answer": "NO",
+        "reason": "I am focused on emptying the kitchen garbage can and do not need the green garbage can.",
+        "result": "no edge"
+      }
+    ],
+    "graph": {
+      "nodes": [
+        {
+          "id": "r1_s1",
+          "agent": "R1",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "kitchen_door",
+            "to": "kitchen_floor",
+            "room": "kitchen"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "kitchen",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "empty the kitchen garbage can",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 0,
+          "t_end": 1
+        },
+        {
+          "id": "r1_s2",
+          "agent": "R1",
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "garbage can",
+            "from": "kitchen_floor",
+            "to": "R1"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "kitchen",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "empty the kitchen garbage can",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "GarbageCan_1",
+              "field": "location",
+              "value": "kitchen_floor"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "GarbageCan_1",
+              "field": "location",
+              "value": "robot_R1"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 1,
+          "t_end": 2
+        },
+        {
+          "id": "r1_s3",
+          "agent": "R1",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "kitchen_floor",
+            "to": "disposal_area",
+            "room": "kitchen"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "kitchen",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "empty the kitchen garbage can",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 2,
+          "t_end": 3
+        },
+        {
+          "id": "r1_s4",
+          "agent": "R1",
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "garbage can",
+            "from": "R1",
+            "to": "disposal_area"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "kitchen",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "empty the kitchen garbage can",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "GarbageCan_1",
+              "field": "location",
+              "value": "robot_R1"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "GarbageCan_1",
+              "field": "location",
+              "value": "disposal_area"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 3,
+          "t_end": 4
+        },
+        {
+          "id": "r2_s1",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "living_room_corner",
+            "to": "living_room_corner",
+            "room": "living_room"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "empty the garbage can in the living room",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 0,
+          "t_end": 1
+        },
+        {
+          "id": "r2_s2",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "garbage can (corner, image 1)",
+            "from": "living_room_corner",
+            "to": "R2"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "empty the garbage can in the living room",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "GarbageCan_1",
+              "field": "location",
+              "value": "living_room_corner"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "GarbageCan_1",
+              "field": "location",
+              "value": "R2"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 1,
+          "t_end": 2
+        },
+        {
+          "id": "r2_s3",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "living_room_corner",
+            "to": "living_room_garbage_disposal_area",
+            "room": "living_room"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "empty the garbage can in the living room",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 2,
+          "t_end": 3
+        },
+        {
+          "id": "r2_s4",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "garbage can (corner, image 1)",
+            "from": "R2",
+            "to": "living_room_garbage_disposal_area"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "empty the garbage can in the living room",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "GarbageCan_1",
+              "field": "location",
+              "value": "R2"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "GarbageCan_1",
+              "field": "location",
+              "value": "living_room_garbage_disposal_area"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 3,
+          "t_end": 4
+        },
+        {
+          "id": "r2_s5",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "living_room_garbage_disposal_area",
+            "to": "living_room_corner",
+            "room": "living_room"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "empty the garbage can in the living room",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 4,
+          "t_end": 5
+        },
+        {
+          "id": "r2_s6",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "place",
+            "object": "garbage can (corner, image 1)",
+            "from": "living_room_garbage_disposal_area",
+            "to": "living_room_corner"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "empty the garbage can in the living room",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "GarbageCan_1",
+              "field": "location",
+              "value": "living_room_garbage_disposal_area"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "GarbageCan_1",
+              "field": "location",
+              "value": "living_room_corner"
+            }
+          ],
+          "status": "removed",
+          "status_reason": "dangling: R2 holds no 'garbage can' at this point",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r3_s1",
+          "agent": "R3",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "bedroom_door",
+            "to": "bedroom_floor",
+            "room": "bedroom"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "garbage bag removed from the bedroom",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 0,
+          "t_end": 1
+        },
+        {
+          "id": "r3_s2",
+          "agent": "R3",
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "black garbage bag",
+            "from": "bedroom_floor",
+            "to": "R3"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "garbage bag removed from the bedroom",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "GarbageBag_1",
+              "field": "location",
+              "value": "bedroom_floor"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "GarbageBag_1",
+              "field": "location",
+              "value": "robot_R3"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 1,
+          "t_end": 2
+        },
+        {
+          "id": "r3_s3",
+          "agent": "R3",
+          "type": "PASS",
+          "action": "pass black garbage bag (floor, image 1) to R1",
+          "item": "black garbage bag (floor, image 1)",
+          "target": "R1",
+          "condition": null,
+          "uses": null,
+          "location": "bedroom",
+          "origin": "offer",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "garbage bag removed from the bedroom",
+          "replies": [
+            {
+              "agent": "R1",
+              "answer": "NO",
+              "reason": "I am focused on emptying the kitchen garbage can and do not need the black garbage bag."
+            }
+          ],
+          "preconditions": [],
+          "effects": [],
+          "status": "dropped",
+          "status_reason": "4.2 DROP: R1 declined the offer for the black garbage bag from R3, making this step unnecessary.",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r4_s1",
+          "agent": "R4",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "R4",
+            "to": "bathroom_floor",
+            "room": "bathroom"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "bathroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "empty the bathroom garbage can",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 0,
+          "t_end": 1
+        },
+        {
+          "id": "r4_s2",
+          "agent": "R4",
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "green garbage can",
+            "from": "bathroom_floor",
+            "to": "R4"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "bathroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "empty the bathroom garbage can",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "GarbageCan_1",
+              "field": "location",
+              "value": "bathroom_floor"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "GarbageCan_1",
+              "field": "location",
+              "value": "robot_R4"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 1,
+          "t_end": 2
+        },
+        {
+          "id": "r4_s3",
+          "agent": "R4",
+          "type": "PASS",
+          "action": "pass green garbage can (floor, image 1) to R1",
+          "item": "green garbage can (floor, image 1)",
+          "target": "R1",
+          "condition": null,
+          "uses": null,
+          "location": "bathroom",
+          "origin": "offer",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "empty the bathroom garbage can",
+          "replies": [
+            {
+              "agent": "R1",
+              "answer": "NO",
+              "reason": "I am focused on emptying the kitchen garbage can and do not need the green garbage can."
+            }
+          ],
+          "preconditions": [],
+          "effects": [],
+          "status": "dropped",
+          "status_reason": "4.2 DROP: R1 declined the offer for the green garbage can from R4, making this step unnecessary.",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r3_s4",
+          "agent": "R3",
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "black garbage bag",
+            "from": "R3",
+            "to": "bedroom_floor"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "bedroom",
+          "origin": "fallback_release",
+          "answers": null,
+          "enables": null,
+          "serves": null,
+          "serves_text": "",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 2,
+          "t_end": 3
+        },
+        {
+          "id": "r4_s4",
+          "agent": "R4",
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "green garbage can",
+            "from": "R4",
+            "to": "bathroom_floor"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "bathroom",
+          "origin": "fallback_release",
+          "answers": null,
+          "enables": null,
+          "serves": null,
+          "serves_text": "",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 2,
+          "t_end": 3
+        }
+      ],
+      "order": {
+        "R1": [
+          "r1_s1",
+          "r1_s2",
+          "r1_s3",
+          "r1_s4"
+        ],
+        "R2": [
+          "r2_s1",
+          "r2_s2",
+          "r2_s3",
+          "r2_s4",
+          "r2_s5",
+          "r2_s6"
+        ],
+        "R3": [
+          "r3_s1",
+          "r3_s2",
+          "r3_s3",
+          "r3_s4"
+        ],
+        "R4": [
+          "r4_s1",
+          "r4_s2",
+          "r4_s3",
+          "r4_s4"
+        ]
+      },
+      "edges": [
+        {
+          "src": "r1_s1",
+          "dst": "r1_s2",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r1_s2",
+          "dst": "r1_s3",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r1_s3",
+          "dst": "r1_s4",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r2_s1",
+          "dst": "r2_s2",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r2_s2",
+          "dst": "r2_s3",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r2_s3",
+          "dst": "r2_s4",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r2_s4",
+          "dst": "r2_s5",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r3_s1",
+          "dst": "r3_s2",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r3_s2",
+          "dst": "r3_s4",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r4_s1",
+          "dst": "r4_s2",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r4_s2",
+          "dst": "r4_s4",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r1_s2",
+          "dst": "r1_s4",
+          "kind": "ORDER",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "graph",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r2_s2",
+          "dst": "r2_s4",
+          "kind": "ORDER",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "graph",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r2_s4",
+          "dst": "r2_s6",
+          "kind": "ORDER",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "graph",
+          "existing": false,
+          "decided_by": ""
+        }
+      ],
+      "edit_log": [
+        {
+          "k": 0,
+          "edit": {
+            "op": "DROP",
+            "node": "r3_s3",
+            "rationale": "R1 declined the offer for the black garbage bag from R3, making this step unnecessary."
+          },
+          "applied": true,
+          "error": null,
+          "rationale": "R1 declined the offer for the black garbage bag from R3, making this step unnecessary."
+        },
+        {
+          "k": 1,
+          "edit": {
+            "op": "DROP",
+            "node": "r4_s3",
+            "rationale": "R1 declined the offer for the green garbage can from R4, making this step unnecessary."
+          },
+          "applied": true,
+          "error": null,
+          "rationale": "R1 declined the offer for the green garbage can from R4, making this step unnecessary."
+        }
+      ],
+      "report": {
+        "goals": [
+          {
+            "robot": "R1",
+            "goal": 0,
+            "text": "empty the kitchen garbage can",
+            "status": "covered",
+            "cause": [],
+            "evidence": [
+              "r1_s1",
+              "r1_s2",
+              "r1_s3",
+              "r1_s4"
+            ],
+            "note": "",
+            "llm_status": "covered",
+            "llm_cause": null
+          },
+          {
+            "robot": "R2",
+            "goal": 0,
+            "text": "empty the garbage can in the living room",
+            "status": "partial",
+            "cause": [
+              "Infeasible"
+            ],
+            "evidence": [
+              "r2_s1",
+              "r2_s2",
+              "r2_s3",
+              "r2_s4",
+              "r2_s5",
+              "r2_s6"
+            ],
+            "note": "evidence gone: r2_s6",
+            "llm_status": "covered",
+            "llm_cause": null
+          },
+          {
+            "robot": "R3",
+            "goal": 0,
+            "text": "garbage bag removed from the bedroom",
+            "status": "partial",
+            "cause": [
+              "No volunteer"
+            ],
+            "evidence": [
+              "r3_s1",
+              "r3_s2"
+            ],
+            "note": "",
+            "llm_status": "partial",
+            "llm_cause": "No volunteer"
+          },
+          {
+            "robot": "R4",
+            "goal": 0,
+            "text": "empty the bathroom garbage can",
+            "status": "partial",
+            "cause": [
+              "No volunteer"
+            ],
+            "evidence": [
+              "r4_s1",
+              "r4_s2"
+            ],
+            "note": "",
+            "llm_status": "partial",
+            "llm_cause": "No volunteer"
+          }
+        ],
+        "unresolved_requests": [],
+        "rejected_edits": [],
+        "dropped": [
+          {
+            "node": "r3_s3",
+            "agent": "R3",
+            "type": "PASS",
+            "text": "pass black garbage bag (floor, image 1) to R1",
+            "rationale": "R1 declined the offer for the black garbage bag from R3, making this step unnecessary."
+          },
+          {
+            "node": "r4_s3",
+            "agent": "R4",
+            "type": "PASS",
+            "text": "pass green garbage can (floor, image 1) to R1",
+            "rationale": "R1 declined the offer for the green garbage can from R4, making this step unnecessary."
+          }
+        ],
+        "removed_by_closure": [
+          {
+            "node": "r2_s6",
+            "agent": "R2",
+            "type": "LOCAL",
+            "text": "place the garbage can (corner, image 1) from living_room_garbage_disposal_area to living_room_corner",
+            "reason": "dangling: R2 holds no 'garbage can' at this point"
+          }
+        ],
+        "invariant_violations": [],
+        "deadline": {
+          "makespan_min": 5,
+          "deadline_min": 20,
+          "exceeded": false
+        }
+      }
+    },
+    "report": {
+      "goals": [
+        {
+          "robot": "R1",
+          "goal": 0,
+          "text": "empty the kitchen garbage can",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r1_s1",
+            "r1_s2",
+            "r1_s3",
+            "r1_s4"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R2",
+          "goal": 0,
+          "text": "empty the garbage can in the living room",
+          "status": "partial",
+          "cause": [
+            "Infeasible"
+          ],
+          "evidence": [
+            "r2_s1",
+            "r2_s2",
+            "r2_s3",
+            "r2_s4",
+            "r2_s5",
+            "r2_s6"
+          ],
+          "note": "evidence gone: r2_s6",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R3",
+          "goal": 0,
+          "text": "garbage bag removed from the bedroom",
+          "status": "partial",
+          "cause": [
+            "No volunteer"
+          ],
+          "evidence": [
+            "r3_s1",
+            "r3_s2"
+          ],
+          "note": "",
+          "llm_status": "partial",
+          "llm_cause": "No volunteer"
+        },
+        {
+          "robot": "R4",
+          "goal": 0,
+          "text": "empty the bathroom garbage can",
+          "status": "partial",
+          "cause": [
+            "No volunteer"
+          ],
+          "evidence": [
+            "r4_s1",
+            "r4_s2"
+          ],
+          "note": "",
+          "llm_status": "partial",
+          "llm_cause": "No volunteer"
+        }
+      ],
+      "unresolved_requests": [],
+      "rejected_edits": [],
+      "dropped": [
+        {
+          "node": "r3_s3",
+          "agent": "R3",
+          "type": "PASS",
+          "text": "pass black garbage bag (floor, image 1) to R1",
+          "rationale": "R1 declined the offer for the black garbage bag from R3, making this step unnecessary."
+        },
+        {
+          "node": "r4_s3",
+          "agent": "R4",
+          "type": "PASS",
+          "text": "pass green garbage can (floor, image 1) to R1",
+          "rationale": "R1 declined the offer for the green garbage can from R4, making this step unnecessary."
+        }
+      ],
+      "removed_by_closure": [
+        {
+          "node": "r2_s6",
+          "agent": "R2",
+          "type": "LOCAL",
+          "text": "place the garbage can (corner, image 1) from living_room_garbage_disposal_area to living_room_corner",
+          "reason": "dangling: R2 holds no 'garbage can' at this point"
+        }
+      ],
+      "invariant_violations": [],
+      "deadline": {
+        "makespan_min": 5,
+        "deadline_min": 20,
+        "exceeded": false
+      }
+    },
+    "metrics": {
+      "task_id": "task10_simple",
+      "n_steps_total": 18,
+      "n_steps_active": 15,
+      "n_requests": 0,
+      "n_requests_served": 0,
+      "n_requests_unresolved": 0,
+      "n_candidates_from_stage3": 0,
+      "n_collab_edges_final": 0,
+      "n_help_edges": 0,
+      "n_transfer_edges": 0,
+      "decided_by_select": 0,
+      "decided_by_merge": 0,
+      "decided_by_default": 0,
+      "kappa_final": {
+        "mutual": 0,
+        "provider-only": 0,
+        "merged": 0
+      },
+      "graph_edits_applied": 2,
+      "graph_edits_rejected": 0,
+      "n_dropped_by_graph": 2,
+      "n_removed_by_closure": 1,
+      "n_requests_moved_later": 0,
+      "n_invariant_violations": 0,
+      "goals_total": 4,
+      "goals_covered": 1,
+      "goals_partial": 3,
+      "goals_uncovered": 0,
+      "goal_causes": {
+        "No volunteer": 2,
+        "Capability gap": 0,
+        "Left unresolved": 0,
+        "Infeasible": 1,
+        "Deadline exceeded": 0
+      },
+      "plan_fix_rounds": {
+        "R1": 1,
+        "R2": 1,
+        "R3": 2,
+        "R4": 2
+      },
+      "n_steps_excluded_stage2": 2,
+      "makespan_min": 5,
+      "deadline": 20,
+      "deadline_ok": true,
+      "llm_calls": 16,
+      "prompt_tokens": 64956,
+      "completion_tokens": 5003,
+      "config": {
+        "use_edge_proposal": true,
+        "use_graph_llm": true
+      },
+      "wall_time_sec": 15.3
+    },
+    "config": {
+      "use_edge_proposal": true,
+      "use_graph_llm": true,
+      "max_graph_rounds": 2,
+      "deadline_min": 20
+    }
+  },
+  "llm_judge": null
+}

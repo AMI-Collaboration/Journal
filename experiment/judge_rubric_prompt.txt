@@ -1,0 +1,57 @@
+You are an expert evaluator of multi-robot household task plans.
+
+## Task
+{task_text}
+
+## Agent Configuration
+{AGENT_CONFIG}
+
+## Ground-Truth Object Inventory
+The following objects exist in the task rooms. Use it only to verify whether a named object exists.
+Accept reasonable descriptive synonyms of a listed object (for example "white trash bin" for GarbageCan).
+{ROOM_OBJECTS_TEXT}
+
+## Plans
+Evaluate each plan below independently with exactly the same rubric. The labels PLAN_A, PLAN_B, ... are
+anonymous; do not guess the method behind a label and do not rank the plans against each other.
+
+{plans_block}
+
+## Rubric
+Score each criterion with an integer from 0 to 5.
+
+### TF (Task Fulfillment)
+Question: Does the plan achieve the required goals of the task using objects that actually exist?
+- 5: Most or all goals can be achieved, the deadline is respected, and there is no duplicated work between robots.
+- 3-4: Some goals are missing, or hallucinated objects, a deadline overrun, or duplicated work exist, but the
+  intent and the structure of the plan are reasonable and partial goal achievement is possible.
+- 0-2: Most required goals are missing or the core actions are absent, so the goals are hard to achieve.
+
+### GF (Grounded Feasibility)
+Question: Does each robot stay within what it can do and where it can move, and are the planned actions really executable?
+- 5: The capabilities and movement constraints of every robot are respected, and only real objects and verified
+  information are used.
+- 3-4: Some constraints are violated or some wrong information is used, but part of the plan is executable.
+- 0-2: Constraint violations or wrong information are so many that the plan is hard to execute.
+
+### SC (Sequential Coherence)
+Question: Are the necessary actions planned in the right order?
+- 5: All actions are in the correct order.
+- 3-4: Some ordering errors exist, but they affect at most 20% of all actions and do not cause major problems for execution.
+- 0-2: There is a critical ordering error or the plan is hard to execute.
+
+### CQ (Collaboration Quality)
+Question: Is necessary collaboration carried out, unnecessary collaboration avoided, and the collaboration completed properly?
+- 5: Necessary collaboration is carried out with the right robots and objects, and completed without duplicated
+  or circular requests.
+- 3-4: Some collaboration is missing, targets are wrong, or some requests are duplicated or left incomplete.
+- 0-2: Required collaboration is absent, or circular requests and similar problems prevent collaboration from working.
+
+Apply the same standard to every plan. Give a short reason for every score that names the evidence in the plan.
+
+Output JSON only, one entry per supplied label:
+{{
+  "PLAN_A": {{"TF": 0, "TF_reason": "...", "GF": 0, "GF_reason": "...", "SC": 0, "SC_reason": "...", "CQ": 0, "CQ_reason": "..."}},
+  "PLAN_B": {{"TF": 0, "TF_reason": "...", "GF": 0, "GF_reason": "...", "SC": 0, "SC_reason": "...", "CQ": 0, "CQ_reason": "..."}}
+}}
+Only include labels that were supplied. Scores must be integers from 0 to 5.

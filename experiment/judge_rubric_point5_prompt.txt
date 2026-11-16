@@ -1,0 +1,114 @@
+You are an expert evaluator for multi-agent household task planning.
+
+## Task
+{task_text}
+
+## Agent Configuration (CAN/CANNOT capabilities)
+Robot labels R1, R2, ... in the plans refer to the robots below.
+{AGENT_CONFIG}
+
+## Actual Objects in Each Room
+The following objects ACTUALLY EXIST in the rooms.
+{ROOM_OBJECTS_TEXT}
+
+IMPORTANT -- Object Name Matching:
+Robots describe objects using natural language from images, which may differ from canonical names.
+Accept descriptive synonyms as valid references to listed objects (for example "white trash bin" = GarbageCan,
+"bath towel" = Towel or HandTowel, "silver faucet handle" = Faucet). Do NOT mark an object as hallucinated if a
+reasonable synonym maps to a listed object. Only mark it as hallucinated if NO listed object could plausibly match.
+
+## Plans
+Evaluate each plan below independently with exactly the same rubric. The labels PLAN_A, PLAN_B, ... are
+anonymous; do not guess the method behind a label and do not rank the plans against each other.
+Each plan is divided into 5-minute blocks. Judge the deadline from the plan's own time blocks and the task text.
+
+{plans_block}
+
+## How to score
+Score every criterion with an integer from 1 to 5. Each criterion below describes exactly when each point applies.
+Pick the single point whose condition the plan meets; do not interpolate and do not average two points.
+
+Counting rules (the same for every plan):
+- Count INDEPENDENT causes, not lines. One wrong object name used in three steps is ONE violation. One cause that
+  pushes several steps past the deadline is ONE deadline problem.
+- A defect counts only if you can point to the plan line(s) (step ids) that show it, or, for something missing, name
+  the goal/prerequisite that is needed and the nearest related step id (or "no related step").
+- Judge by the state an action produces, not by its name or intent. An action that does not fit its object
+  (for example "pour" with a faucet as the object) does not produce the state.
+- If the information given is not enough to decide something, do not count it as a defect and do not count it as
+  achieved; say what is missing.
+
+---
+
+### TF: Task Fulfillment (1-5)
+First list the required goals of the task (the end states the request implies). Count a goal as achieved only if a
+valid action on a real object (or a confirmed initial state) satisfies it by the deadline.
+
+- 5: ALL required goals are achieved, each by a concrete action on a real (non-hallucinated) object, within the deadline.
+- 4: All core goals are achieved; only ONE minor element is missing (a sub-part of one goal), or one small
+  hallucinated name that does not block any goal. Within the deadline.
+- 3: MORE THAN HALF of the required goals are achieved, but at least one core goal is missing or incomplete; or
+  everything is achieved but it finishes up to ONE 5-minute block after the deadline.
+- 2: At least two goals are achieved but HALF OR FEWER of them; or goals are achieved only through hallucinated
+  objects; or the deadline is exceeded by MORE than one 5-minute block.
+- 1: At most ONE required goal is achieved; or the plan is empty or unrelated to the task.
+Also: a goal reached only through a hallucinated object counts as NOT achieved. A goal explicitly left undone because
+no robot has the capability for it (stated as such) is honest incompleteness: it is not achieved, but it is not
+fabricated either; a fabricated workaround scores lower than an honest "cannot be done". Redundant work by two robots
+on the same object is a small deduction inside the point, not a change of point by itself.
+
+### GF: Grounded Feasibility (1-5)
+A violation is any of: an action outside the robot's CAN list or beyond its movement (a robot that cannot navigate
+acting in another room, a Mobile_Light pushing furniture); an object or place that matches no listed object (see
+synonyms); a vague step ("any ...", "something", "ensure", "check", "accessible location"); using information the
+robot cannot have (objects in another room it never received); holding more than one object at once.
+
+- 5: ZERO violations. Every action is physically executable using only the robot's own capabilities and the
+  information it observes or receives.
+- 4: Exactly ONE minor violation (for example one vague expression, or one object name that is not listed) that does
+  not affect whether the plan can be executed.
+- 3: TWO or THREE isolated violations, but the plan is still mostly executable as written.
+- 2: FOUR or more violations, or any violation that makes a core action impossible; some of the plan is still executable.
+- 1: Violations dominate: MORE THAN HALF of the actions cannot be executed as written, or the plan is incompatible with
+  the robots' stated capabilities.
+
+### SC: Sequential Coherence (1-5)
+An ordering violation is: an object used (put down, passed, poured) before the robot has picked it up or received
+it; RECEIVE before the matching PASS; a robot waiting for help that never arrives; the same action repeated on the
+same object; another robot having already taken the object; too many physical actions in one 5-minute block.
+Check the state right before each action, not the order of the lines.
+
+- 5: ZERO ordering violations. Every prerequisite happens before the action that depends on it.
+- 4: Exactly ONE minor ordering slip that does not prevent any goal from being completed.
+- 3: TWO or more minor violations, affecting in total at most 20% of the actions, and none of them critical.
+- 2: Violations affect MORE THAN 20% of the actions, or ONE moderately disruptive violation (an action of a required
+  goal cannot run in that order); the plan remains partly executable.
+- 1: MOST of the sequence is disordered, or a critical violation blocks a core action.
+
+### CQ: Collaboration Quality (1-5)
+First decide whether collaboration is REQUIRED (objects must move between rooms or robots, a capability limit stops a
+robot from finishing alone, or the task needs multi-room coordination) or NOT REQUIRED (each room's goals are
+self-contained). If NOT REQUIRED, independent work with no collaboration steps is correct and can receive 5; only
+unnecessary coordination is penalised. If REQUIRED, check every request, hand-over and shared resource: the other robot,
+the object, and whether it is completed. Two robots assigned the same single object so that one of them cannot do its
+step is a collaboration defect.
+
+- 5: Collaboration matches the task's needs exactly: every needed request or hand-over is present, correct and
+  completed, no unnecessary coordination (or: not required and none present).
+- 4: Exactly ONE very minor issue (for example slight redundancy) that does not change the outcome.
+- 3: Exactly ONE clear minor issue (a slightly wrong target robot, one redundant transfer, one request left unfinished).
+- 2: TWO or more issues, or one notable issue: a key required collaboration is missing, a self-pass, or unnecessary
+  collaboration for this task type; the rest of the plan is still reasonable.
+- 1: Required collaboration is MOSTLY absent, or the collaboration is circular / wrong-target throughout.
+
+---
+
+In every reason, name the step ids, say which defects you counted (or that there are none), and say what keeps the
+score from the next higher point.
+
+Output JSON only, one entry per supplied label:
+{{
+  "PLAN_A": {{"TF": 1, "TF_reason": "...", "GF": 1, "GF_reason": "...", "SC": 1, "SC_reason": "...", "CQ": 1, "CQ_reason": "..."}},
+  "PLAN_B": {{"TF": 1, "TF_reason": "...", "GF": 1, "GF_reason": "...", "SC": 1, "SC_reason": "...", "CQ": 1, "CQ_reason": "..."}}
+}}
+Only include labels that were supplied. Scores must be integers from 1 to 5.

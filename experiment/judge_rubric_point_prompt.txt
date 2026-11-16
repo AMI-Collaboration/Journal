@@ -1,0 +1,160 @@
+You are an expert evaluator for multi-agent household task planning.
+
+## Task
+{task_text}
+
+## Agent Configuration (CAN/CANNOT capabilities)
+Robot labels R1, R2, ... in the plans refer to the robots below.
+{AGENT_CONFIG}
+
+## Actual Objects in Each Room
+The following objects ACTUALLY EXIST in the rooms.
+{ROOM_OBJECTS_TEXT}
+
+IMPORTANT -- Object Name Matching:
+Robots describe objects using natural language from images, which may differ from canonical names.
+Accept descriptive synonyms as valid references to listed objects. Examples:
+- "silver faucet handle", "shower knob", "water tap" -> Faucet
+- "white trash bin", "garbage bin", "rubbish can" -> GarbageCan
+- "toilet paper roll", "white toilet paper" -> ToiletPaper
+- "bath towel", "beige towel" -> Towel or HandTowel
+- "white bathtub" -> Bathtub
+Do NOT mark an object as hallucinated if a reasonable synonym maps to a listed object.
+Only mark as hallucinated if NO listed object could plausibly match the description.
+
+## Plans
+Evaluate each plan below independently with exactly the same rubric. The labels PLAN_A, PLAN_B, ... are
+anonymous; do not guess the method behind a label and do not rank the plans against each other.
+Each plan is divided into 5-minute blocks. Judge the deadline from the plan's own time blocks and the task text.
+
+{plans_block}
+
+## Scoring Instructions
+Score each criterion on a 0-5 scale. Each criterion below gives an explicit description for every point from 0 to 5 --
+find the single description that best matches the plan and use that score; do not interpolate between two
+descriptions or average across them. Support every score with evidence quoted or cited from the plan lines.
+
+---
+
+### TF: Task Fulfillment -- 0~5
+
+Evaluate whether the plan fulfills the required goals of the task using real objects from the room list.
+
+- 5: All required goals are achieved with concrete actions on real (non-hallucinated) objects, within the deadline.
+- 4: Nearly all required goals are achieved; only one minor gap or a small, non-blocking hallucination remains.
+- 3: Most required goals are achieved, but with a clear gap, inefficiency, or a minor deadline slip.
+- 2: Some required goals are achieved, but notable gaps, hallucinations, or a deadline violation exist.
+- 1: At most one required goal is achieved; most core actions are missing or the deadline is clearly exceeded.
+- 0: No required goal is achieved, or the plan is absent or entirely irrelevant to the task.
+
+Rules:
+- Goals achieved via hallucinated objects (not in actual room list) count as NOT achieved.
+- If the plan's total time clearly exceeds the task deadline, apply deduction.
+- If two robots handle the same object redundantly, apply small deduction.
+- Partial credit: correct intent and structure deserve credit even with minor hallucinations.
+  A plan that correctly identifies goals and attempts relevant actions scores higher than
+  one with no relevant actions, even if some object names are wrong.
+- Cross-room collaboration moving objects toward the right destination deserves partial TF credit.
+- A goal explicitly left undone because no robot present actually has the capability for it (a genuine
+  capability gap, stated as such rather than silently ignored) is honest incompleteness, not a failure --
+  score that single goal as merely unattempted. A plan that instead fabricates a workaround or a
+  hallucinated action to paper over the same capability gap should score LOWER on that goal, not higher,
+  since it falsely appears complete.
+
+---
+
+### GF: Grounded Feasibility -- 0~5
+
+Evaluate whether the plan is physically executable given each robot's capabilities AND whether
+each robot acts only on information it can legitimately observe or receive.
+
+Capability checks (from Agent Configuration):
+- A Mobile_Light robot performing heavy furniture pushing = violation.
+- A Gripper robot leaving its room without HELP/PASS context = violation.
+- Any robot performing actions beyond its stated CAN list = violation.
+
+Grounding checks:
+- Hallucinated objects (not in actual room list) = violation.
+- Vague expressions: "any ...", "something", "ensure", "check", "accessible location" = violation.
+- Robot using information it cannot observe (objects in other rooms it never received) = violation.
+- A robot holding multiple objects simultaneously = violation.
+
+Scoring:
+- 5: No capability or grounding violations; every action is physically executable using only
+  legitimate local or received information.
+- 4: At most one minor violation (e.g. one vague expression) that does not affect physical feasibility.
+- 3: A few isolated violations exist, but the plan is still mostly executable as stated.
+- 2: Several violations (hallucinated objects, a capability mismatch, or holding multiple objects
+  at once) undermine multiple steps, though some of the plan remains executable.
+- 1: Violations dominate the plan; most actions are not reliably executable given the stated capabilities.
+- 0: The plan is entirely incompatible with the robots' stated capabilities/observations, or is absent.
+
+---
+
+### SC: Sequential Coherence -- 0~5
+
+Evaluate whether the action sequence respects prerequisites and dependencies.
+
+- 5: Every prerequisite action occurs before its dependent action; no ordering violations at all.
+- 4: Exactly one minor ordering slip that does not prevent task completion.
+- 3: A small number of minor ordering violations (roughly <=20% of actions), none of them critical.
+- 2: Several ordering violations, or one moderately disruptive violation, though the plan remains partly executable.
+- 1: Most of the sequence is disordered, or a critical violation blocks execution of a core action.
+- 0: The sequence is incoherent throughout, or no real action sequence is given.
+
+Violations include:
+- Object used before picked up or received.
+- RECEIVE before corresponding PASS.
+- Robot waits for help that never arrives.
+- Repeated identical actions on the same object.
+- Too many physical actions in one 5-minute block (physically unrealistic).
+
+---
+
+### CQ: Collaboration Quality -- 0~5
+
+Evaluate whether inter-robot collaboration is necessary, appropriate, and effective given the task type.
+
+First determine if collaboration is REQUIRED by this task:
+- REQUIRED when: objects must move between rooms, capability constraints prevent solo completion,
+  or the task explicitly involves multi-room coordination.
+- NOT REQUIRED when: each room's goals are fully self-contained.
+
+If NOT REQUIRED, a plan with ZERO collaboration is not missing anything -- correctly recognizing
+that no robot needs another robot's help, and leaving collaboration out entirely, is itself the
+right call and should score as high as any other criterion-satisfying plan (do not dock points
+just because no PASS/RECEIVE/HELP/ASK_HELP appears). Only penalize the NOT-REQUIRED case when the
+plan collaborates anyway (forced/unnecessary coordination), never for correctly staying solo.
+
+Then evaluate:
+- Necessity: Collaboration is used when truly needed (e.g. object in another room, heavy furniture).
+  For simple tasks, unnecessary collaboration is penalized.
+- Appropriateness: PASS/RECEIVE/HELP/ASK_HELP targets correct robots with correct objects.
+  No "self-pass" (robot passing to itself), no circular requests, no wrong targets.
+- Efficiency: No redundant collaboration steps, no unnecessary intermediate transfers.
+- Completeness: Requested collaborations are actually fulfilled.
+- Task-type fit: Multi-room abstract tasks should show meaningful cross-room collaboration.
+  Simple single-room tasks should NOT force unnecessary collaboration.
+
+Scoring:
+- 5: Collaboration perfectly matches task needs -- either all collaborative actions are justified,
+  correct, and completed successfully, OR collaboration was correctly recognized as unnecessary
+  and the plan has none at all.
+- 4: Collaboration (or correctly having none) is appropriate with only one very minor issue,
+  such as slight redundancy that doesn't affect the outcome.
+- 3: Collaboration is mostly appropriate but has one clear minor issue (a slightly wrong target,
+  one redundant transfer).
+- 2: Notable issues -- unnecessary collaboration for the task type, a self-pass, or one key
+  required collaboration missing, though the rest of the plan is otherwise reasonable.
+- 1: Collaboration is largely absent when required, or is mostly inappropriate/circular throughout.
+- 0: Collaboration is completely absent despite being clearly required, or is severely
+  circular/nonsensical throughout the plan.
+
+---
+
+Output JSON only, one entry per supplied label:
+{{
+  "PLAN_A": {{"TF": 0, "TF_reason": "...", "GF": 0, "GF_reason": "...", "SC": 0, "SC_reason": "...", "CQ": 0, "CQ_reason": "..."}},
+  "PLAN_B": {{"TF": 0, "TF_reason": "...", "GF": 0, "GF_reason": "...", "SC": 0, "SC_reason": "...", "CQ": 0, "CQ_reason": "..."}}
+}}
+Only include labels that were supplied. Scores must be integers from 0 to 5.

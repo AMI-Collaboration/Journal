@@ -1,0 +1,1575 @@
+{
+  "method": "cda",
+  "task_n": "task3_abstract",
+  "raw_result": {
+    "task_n": "task3_abstract",
+    "mode": "multi_room",
+    "model": "gpt-4o",
+    "task_text": "I have a video call starting in 5 minutes. My desk area needs to look presentable and I should be able to see and hear clearly. The bedroom light is off.",
+    "joint_plan_text": "```plaintext\n### Joint Plan — task3_abstract  (about 10 min / deadline 10 min: OK)\n### Robots: R1:Gripper(living_room), R2:Mobile_Light(living_room), R3:Gripper(bedroom), R4:Mobile_Heavy(bedroom)\n\n[0-5 min]\n- R1 [LOCAL] turn on the floor lamp from the living room corner  (r1_s1)\n- R2 [LOCAL] move from the living room start to the living room floor  (r2_s1)\n- R3 [LOCAL] turn on the desk lamp from the bedroom desk  (r3_s1)\n- R4 [LOCAL] move from the bedroom floor to the bedroom desk  (r4_s1)\n- R2 [LOCAL] move from the living room floor to the living room sofa  (r2_s2)\n- R4 [LOCAL] move from the bedroom desk to the bedroom floor  (r4_s2)\n- R2 [LOCAL] pick up the Laptop_1 from the living room sofa to R2  (r2_s3)\n- R4 [LOCAL] move from the bedroom floor to the bedroom desk  (r4_s3)\n- R2 [LOCAL] move from the living room sofa to the living room side table  (r2_s4)\n- R2 [LOCAL] put down the Laptop_1 from R2 to the living room side table [after r2_s3]  (r2_s5)\n\n[5-10 min]\n- R2 [LOCAL] move from the living room side table to the living room sofa  (r2_s6)\n- R2 [LOCAL] move from the living room sofa to the living room side table  (r2_s7)",
+    "joint_plan_full": "### Joint Plan — task3_abstract  (about 10 min / deadline 10 min: OK)\n### Robots: R1:Gripper(living_room), R2:Mobile_Light(living_room), R3:Gripper(bedroom), R4:Mobile_Heavy(bedroom)\n\n[0-5 min]\n- R1 [LOCAL] turn_on the floor lamp from living_room_corner  (r1_s1)\n- R2 [LOCAL] move_to from living_room_start to living_room_floor  (r2_s1)\n- R3 [LOCAL] turn_on the desk lamp from bedroom_desk  (r3_s1)\n- R4 [LOCAL] move_to from bedroom_floor to bedroom_desk  (r4_s1)\n- R2 [LOCAL] move_to from living_room_floor to living_room_sofa  (r2_s2)\n- R4 [LOCAL] move_to from bedroom_desk to bedroom_floor  (r4_s2)\n- R2 [LOCAL] pick_up the Laptop_1 from living_room_sofa to R2  (r2_s3)\n- R4 [LOCAL] move_to from bedroom_floor to bedroom_desk  (r4_s3)\n- R2 [LOCAL] move_to from living_room_sofa to living_room_side_table  (r2_s4)\n- R2 [LOCAL] put_down the Laptop_1 from R2 to living_room_side_table [after r2_s3]  (r2_s5)\n\n[5-10 min]\n- R2 [LOCAL] move_to from living_room_side_table to living_room_sofa  (r2_s6)\n- R2 [LOCAL] move_to from living_room_sofa to living_room_side_table  (r2_s7)\n\n### Provenance (collaboration edges)\n\n### Report: goal coverage\n- R1.g0 turn on floor lamp for better lighting: covered [r1_s1]\n- R2.g0 turn on the floor lamp for better lighting: covered [r2_s1]\n- R2.g1 ensure the sofa area is tidy for the video call: covered [r2_s2, r2_s3, r2_s4, r2_s5, r2_s6, r2_s7]\n- R3.g0 desk lamp turned on for better visibility: covered [r3_s1]\n- R3.g1 laptop ready for the video call: uncovered — Left unresolved (not judged by the Graph LLM)\n- R4.g0 desk area is tidy and organized: covered [r4_s1, r4_s2]\n- R4.g1 sufficient lighting for video call: partial — No volunteer [r4_s3]",
+    "offers": {
+      "R1": {
+        "agent": "R1",
+        "capability": "I am fixed in place and can manipulate objects within my reach.",
+        "can_do": [
+          "PickupLightObject: lift small items",
+          "ToggleObject: turn on/off lamps"
+        ],
+        "cannot_do": [
+          "PickupHeavyObject: cannot lift furniture",
+          "PushFurniture: cannot move furniture"
+        ],
+        "has_items": [
+          "box (table, image 1)",
+          "floor lamp (corner, image 1)",
+          "pillow (sofa, image 2)",
+          "sofa (living_room, image 2)"
+        ],
+        "need_from_others": [
+          "someone to adjust bedroom light"
+        ],
+        "intends": [
+          "turn on floor lamp for better lighting"
+        ],
+        "see_items": [],
+        "other_robots_in_room": [
+          {
+            "id": "unknown_1",
+            "distance": "far"
+          }
+        ],
+        "env_state": [
+          {
+            "object_id": "Box_1",
+            "object_type": "Box",
+            "location": "living_room_table",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "FloorLamp_1",
+            "object_type": "FloorLamp",
+            "location": "living_room_corner",
+            "accessible": true,
+            "toggle": "off",
+            "clean": null
+          },
+          {
+            "object_id": "Pillow_1",
+            "object_type": "Pillow",
+            "location": "living_room_sofa",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Sofa_1",
+            "object_type": "Sofa",
+            "location": "living_room",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          }
+        ],
+        "obs_scope": "I can observe the living room only.",
+        "reasoning": "a) The desk area must look presentable, and lighting should be sufficient for a video call. b) The living room can provide lighting and a tidy appearance. c) I can turn on the floor lamp to improve lighting. d) Turning on the lamp is most urgent given the time constraint. e) The task explicitly mentions the need for lighting, which I can address by toggling the floor lamp."
+      },
+      "R2": {
+        "agent": "R2",
+        "capability": "I am mobile and can carry light objects up to 5 kg with one arm.",
+        "can_do": [
+          "PickupLightObject: lift small items like remotes and laptops",
+          "PassReceiveObject: hand over items to others",
+          "ToggleObject: turn on/off lights, TV, appliances"
+        ],
+        "cannot_do": [
+          "PickupHeavyObject: cannot lift furniture",
+          "PushFurniture: cannot move large items",
+          "SliceObject: no cutting tool",
+          "PourObject: cannot pour liquids"
+        ],
+        "has_items": [
+          "laptop (sofa, image 1)",
+          "remote control (sofa, image 1)",
+          "floor lamp (living room floor, image 1)",
+          "house plant (side table, image 2)",
+          "statue (side table, image 2)"
+        ],
+        "need_from_others": [
+          "someone to turn on the bedroom light"
+        ],
+        "intends": [
+          "turn on the floor lamp for better lighting",
+          "ensure the sofa area is tidy for the video call"
+        ],
+        "see_items": [],
+        "other_robots_in_room": [],
+        "env_state": [
+          {
+            "object_id": "Laptop_1",
+            "object_type": "Laptop",
+            "location": "living_room_sofa",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "RemoteControl_1",
+            "object_type": "RemoteControl",
+            "location": "living_room_sofa",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "FloorLamp_1",
+            "object_type": "FloorLamp",
+            "location": "living_room_floor",
+            "accessible": true,
+            "toggle": "off",
+            "clean": null
+          },
+          {
+            "object_id": "HousePlant_1",
+            "object_type": "HousePlant",
+            "location": "living_room_side_table",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Statue_1",
+            "object_type": "Statue",
+            "location": "living_room_side_table",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          }
+        ],
+        "obs_scope": "I can observe the living room only.",
+        "reasoning": "a) The desk area must look presentable, and the user should see and hear clearly. b) Living room: lighting and tidiness for video call. c) I can turn on the floor lamp and ensure the area is tidy. d) Turning on the light and tidying the area are priorities. e) The task requires lighting adjustment, which I can do by toggling the floor lamp."
+      },
+      "R3": {
+        "agent": "R3",
+        "capability": "I am fixed and can manipulate objects within my reach on the desk.",
+        "can_do": [
+          "PickupLightObject: lift small items like keys",
+          "ToggleObject: turn on/off desk lamp"
+        ],
+        "cannot_do": [
+          "PickupHeavyObject: cannot lift large items or furniture",
+          "PushFurniture: cannot move furniture or objects out of reach"
+        ],
+        "has_items": [
+          "desk lamp (desk, image 1)",
+          "laptop (desk, image 2)",
+          "keychain (desk, image 2)"
+        ],
+        "need_from_others": [
+          "someone to arrange objects out of my reach"
+        ],
+        "intends": [
+          "desk lamp turned on for better visibility",
+          "laptop ready for the video call"
+        ],
+        "see_items": [
+          "plant (desk, image 1)",
+          "phone (desk, image 1)",
+          "book (desk, image 1)",
+          "remote control (desk, image 1)",
+          "television (desk, image 2)"
+        ],
+        "other_robots_in_room": [],
+        "env_state": [
+          {
+            "object_id": "DeskLamp_1",
+            "object_type": "DeskLamp",
+            "location": "bedroom_desk",
+            "accessible": true,
+            "toggle": "off",
+            "clean": null
+          },
+          {
+            "object_id": "Laptop_1",
+            "object_type": "Laptop",
+            "location": "bedroom_desk",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "KeyChain_1",
+            "object_type": "KeyChain",
+            "location": "bedroom_desk",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Plant_1",
+            "object_type": "HousePlant",
+            "location": "bedroom_desk",
+            "accessible": false,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Phone_1",
+            "object_type": "Phone",
+            "location": "bedroom_desk",
+            "accessible": false,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Book_1",
+            "object_type": "Book",
+            "location": "bedroom_desk",
+            "accessible": false,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "RemoteControl_1",
+            "object_type": "RemoteControl",
+            "location": "bedroom_desk",
+            "accessible": false,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Television_1",
+            "object_type": "Television",
+            "location": "bedroom_desk",
+            "accessible": false,
+            "toggle": "off",
+            "clean": null
+          }
+        ],
+        "obs_scope": "I can observe the bedroom desk area.",
+        "reasoning": "a) The desk area must look presentable, and the user should see and hear clearly. b) The bedroom provides lighting and the workspace setup. c) I can toggle the desk lamp to improve lighting and ensure the laptop is ready. d) Turn on the desk lamp for better visibility, as it's essential for the call. e) Ensure the laptop is ready for use."
+      },
+      "R4": {
+        "agent": "R4",
+        "capability": "I am mobile and can carry objects up to 20 kg and adjust furniture.",
+        "can_do": [
+          "PickupLightObject: lift small items",
+          "PickupHeavyObject: move larger items",
+          "PushFurniture: adjust furniture",
+          "PassReceiveObject: exchange items with others",
+          "ToggleObject: turn on/off lights, appliances"
+        ],
+        "cannot_do": [
+          "SliceObject: no cutting tool",
+          "PourObject: cannot handle liquids"
+        ],
+        "has_items": [
+          "laptop (desk, image 1)",
+          "desk lamp (desk, image 2)",
+          "floor lamp (floor, image 1)",
+          "garbage can (floor, image 1)",
+          "house plant (desk, image 2)",
+          "pillow (bed, image 2)",
+          "box (floor, image 1)"
+        ],
+        "need_from_others": [],
+        "intends": [
+          "desk area is tidy and organized",
+          "sufficient lighting for video call"
+        ],
+        "see_items": [],
+        "other_robots_in_room": [],
+        "env_state": [
+          {
+            "object_id": "Laptop_1",
+            "object_type": "Laptop",
+            "location": "bedroom_desk",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "DeskLamp_1",
+            "object_type": "DeskLamp",
+            "location": "bedroom_desk",
+            "accessible": true,
+            "toggle": "off",
+            "clean": null
+          },
+          {
+            "object_id": "FloorLamp_1",
+            "object_type": "FloorLamp",
+            "location": "bedroom_floor",
+            "accessible": true,
+            "toggle": "off",
+            "clean": null
+          },
+          {
+            "object_id": "GarbageCan_1",
+            "object_type": "GarbageCan",
+            "location": "bedroom_floor",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "HousePlant_1",
+            "object_type": "HousePlant",
+            "location": "bedroom_desk",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Pillow_1",
+            "object_type": "Pillow",
+            "location": "bedroom_bed",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Box_1",
+            "object_type": "Box",
+            "location": "bedroom_floor",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          }
+        ],
+        "obs_scope": "I can observe the bedroom only.",
+        "reasoning": "a) The desk area needs to be tidy, and lighting should be sufficient for a video call. b) The bedroom provides the setting for the call and lighting. c) I can organize the desk area and turn on the lights. d) Turning on the lights and arranging the desk area are immediate priorities. e) The task explicitly mentions making the desk presentable and ensuring clear visibility and audibility, which matches my capabilities to organize and manage lighting."
+      }
+    },
+    "local_plans": {
+      "R1": [
+        {
+          "id": "r1_s1",
+          "agent": "R1",
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "floor lamp",
+            "from": "living_room_corner",
+            "to": null
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 1,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "turn on floor lamp for better lighting",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "FloorLamp_1",
+              "field": "toggle",
+              "value": "off"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "FloorLamp_1",
+              "field": "toggle",
+              "value": "on"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        }
+      ],
+      "R2": [
+        {
+          "id": "r2_s1",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "living_room_start",
+            "to": "living_room_floor",
+            "room": "living_room"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "turn on the floor lamp for better lighting",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r2_s2",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "living_room_floor",
+            "to": "living_room_sofa",
+            "room": "living_room"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "ensure the sofa area is tidy for the video call",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r2_s3",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "Laptop_1",
+            "from": "living_room_sofa",
+            "to": "R2"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "ensure the sofa area is tidy for the video call",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "Laptop_1",
+              "field": "location",
+              "value": "living_room_sofa"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "Laptop_1",
+              "field": "location",
+              "value": "R2"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r2_s4",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "living_room_sofa",
+            "to": "living_room_side_table",
+            "room": "living_room"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "ensure the sofa area is tidy for the video call",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r2_s5",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "Laptop_1",
+            "from": "R2",
+            "to": "living_room_side_table"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "ensure the sofa area is tidy for the video call",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "Laptop_1",
+              "field": "location",
+              "value": "R2"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "Laptop_1",
+              "field": "location",
+              "value": "living_room_side_table"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r2_s6",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "living_room_side_table",
+            "to": "living_room_sofa",
+            "room": "living_room"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "ensure the sofa area is tidy for the video call",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r2_s7",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "living_room_sofa",
+            "to": "living_room_side_table",
+            "room": "living_room"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "ensure the sofa area is tidy for the video call",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        }
+      ],
+      "R3": [
+        {
+          "id": "r3_s1",
+          "agent": "R3",
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "desk lamp",
+            "from": "bedroom_desk"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 1,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "desk lamp turned on for better visibility",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "DeskLamp_1",
+              "field": "toggle",
+              "value": "off"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "DeskLamp_1",
+              "field": "toggle",
+              "value": "on"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        }
+      ],
+      "R4": [
+        {
+          "id": "r4_s1",
+          "agent": "R4",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "bedroom_floor",
+            "to": "bedroom_desk",
+            "room": "bedroom"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "desk area is tidy and organized",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r4_s2",
+          "agent": "R4",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "bedroom_desk",
+            "to": "bedroom_floor",
+            "room": "bedroom"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "desk area is tidy and organized",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r4_s3",
+          "agent": "R4",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "bedroom_floor",
+            "to": "bedroom_desk",
+            "room": "bedroom"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "sufficient lighting for video call",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        }
+      ]
+    },
+    "answers": [],
+    "graph": {
+      "nodes": [
+        {
+          "id": "r1_s1",
+          "agent": "R1",
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "floor lamp",
+            "from": "living_room_corner",
+            "to": null
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 1,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "turn on floor lamp for better lighting",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "FloorLamp_1",
+              "field": "toggle",
+              "value": "off"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "FloorLamp_1",
+              "field": "toggle",
+              "value": "on"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 0,
+          "t_end": 1
+        },
+        {
+          "id": "r2_s1",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "living_room_start",
+            "to": "living_room_floor",
+            "room": "living_room"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "turn on the floor lamp for better lighting",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 0,
+          "t_end": 1
+        },
+        {
+          "id": "r2_s2",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "living_room_floor",
+            "to": "living_room_sofa",
+            "room": "living_room"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "ensure the sofa area is tidy for the video call",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 1,
+          "t_end": 2
+        },
+        {
+          "id": "r2_s3",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "Laptop_1",
+            "from": "living_room_sofa",
+            "to": "R2"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "ensure the sofa area is tidy for the video call",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "Laptop_1",
+              "field": "location",
+              "value": "living_room_sofa"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "Laptop_1",
+              "field": "location",
+              "value": "R2"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 2,
+          "t_end": 3
+        },
+        {
+          "id": "r2_s4",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "living_room_sofa",
+            "to": "living_room_side_table",
+            "room": "living_room"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "ensure the sofa area is tidy for the video call",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 3,
+          "t_end": 4
+        },
+        {
+          "id": "r2_s5",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "Laptop_1",
+            "from": "R2",
+            "to": "living_room_side_table"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "ensure the sofa area is tidy for the video call",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "Laptop_1",
+              "field": "location",
+              "value": "R2"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "Laptop_1",
+              "field": "location",
+              "value": "living_room_side_table"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 4,
+          "t_end": 5
+        },
+        {
+          "id": "r2_s6",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "living_room_side_table",
+            "to": "living_room_sofa",
+            "room": "living_room"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "ensure the sofa area is tidy for the video call",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 2,
+          "t_start": 5,
+          "t_end": 6
+        },
+        {
+          "id": "r2_s7",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "living_room_sofa",
+            "to": "living_room_side_table",
+            "room": "living_room"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "ensure the sofa area is tidy for the video call",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 2,
+          "t_start": 6,
+          "t_end": 7
+        },
+        {
+          "id": "r3_s1",
+          "agent": "R3",
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "desk lamp",
+            "from": "bedroom_desk"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 1,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "desk lamp turned on for better visibility",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "DeskLamp_1",
+              "field": "toggle",
+              "value": "off"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "DeskLamp_1",
+              "field": "toggle",
+              "value": "on"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 0,
+          "t_end": 1
+        },
+        {
+          "id": "r4_s1",
+          "agent": "R4",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "bedroom_floor",
+            "to": "bedroom_desk",
+            "room": "bedroom"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "desk area is tidy and organized",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 0,
+          "t_end": 1
+        },
+        {
+          "id": "r4_s2",
+          "agent": "R4",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "bedroom_desk",
+            "to": "bedroom_floor",
+            "room": "bedroom"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "desk area is tidy and organized",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 1,
+          "t_end": 2
+        },
+        {
+          "id": "r4_s3",
+          "agent": "R4",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "bedroom_floor",
+            "to": "bedroom_desk",
+            "room": "bedroom"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "sufficient lighting for video call",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 2,
+          "t_end": 3
+        }
+      ],
+      "order": {
+        "R1": [
+          "r1_s1"
+        ],
+        "R2": [
+          "r2_s1",
+          "r2_s2",
+          "r2_s3",
+          "r2_s4",
+          "r2_s5",
+          "r2_s6",
+          "r2_s7"
+        ],
+        "R3": [
+          "r3_s1"
+        ],
+        "R4": [
+          "r4_s1",
+          "r4_s2",
+          "r4_s3"
+        ]
+      },
+      "edges": [
+        {
+          "src": "r2_s1",
+          "dst": "r2_s2",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r2_s2",
+          "dst": "r2_s3",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r2_s3",
+          "dst": "r2_s4",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r2_s4",
+          "dst": "r2_s5",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r2_s5",
+          "dst": "r2_s6",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r2_s6",
+          "dst": "r2_s7",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r4_s1",
+          "dst": "r4_s2",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r4_s2",
+          "dst": "r4_s3",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r2_s3",
+          "dst": "r2_s5",
+          "kind": "ORDER",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "graph",
+          "existing": false,
+          "decided_by": ""
+        }
+      ],
+      "edit_log": [],
+      "report": {
+        "goals": [
+          {
+            "robot": "R1",
+            "goal": 0,
+            "text": "turn on floor lamp for better lighting",
+            "status": "covered",
+            "cause": [],
+            "evidence": [
+              "r1_s1"
+            ],
+            "note": "",
+            "llm_status": "covered",
+            "llm_cause": null
+          },
+          {
+            "robot": "R2",
+            "goal": 0,
+            "text": "turn on the floor lamp for better lighting",
+            "status": "covered",
+            "cause": [],
+            "evidence": [
+              "r2_s1"
+            ],
+            "note": "",
+            "llm_status": "covered",
+            "llm_cause": null
+          },
+          {
+            "robot": "R2",
+            "goal": 1,
+            "text": "ensure the sofa area is tidy for the video call",
+            "status": "covered",
+            "cause": [],
+            "evidence": [
+              "r2_s2",
+              "r2_s3",
+              "r2_s4",
+              "r2_s5",
+              "r2_s6",
+              "r2_s7"
+            ],
+            "note": "",
+            "llm_status": "covered",
+            "llm_cause": null
+          },
+          {
+            "robot": "R3",
+            "goal": 0,
+            "text": "desk lamp turned on for better visibility",
+            "status": "covered",
+            "cause": [],
+            "evidence": [
+              "r3_s1"
+            ],
+            "note": "",
+            "llm_status": "covered",
+            "llm_cause": null
+          },
+          {
+            "robot": "R3",
+            "goal": 1,
+            "text": "laptop ready for the video call",
+            "status": "uncovered",
+            "cause": [
+              "Left unresolved"
+            ],
+            "evidence": [],
+            "note": "not judged by the Graph LLM"
+          },
+          {
+            "robot": "R4",
+            "goal": 0,
+            "text": "desk area is tidy and organized",
+            "status": "covered",
+            "cause": [],
+            "evidence": [
+              "r4_s1",
+              "r4_s2"
+            ],
+            "note": "",
+            "llm_status": "covered",
+            "llm_cause": null
+          },
+          {
+            "robot": "R4",
+            "goal": 1,
+            "text": "sufficient lighting for video call",
+            "status": "partial",
+            "cause": [
+              "No volunteer"
+            ],
+            "evidence": [
+              "r4_s3"
+            ],
+            "note": "",
+            "llm_status": "partial",
+            "llm_cause": "No volunteer"
+          }
+        ],
+        "unresolved_requests": [],
+        "rejected_edits": [],
+        "dropped": [],
+        "removed_by_closure": [],
+        "invariant_violations": [],
+        "deadline": {
+          "makespan_min": 10,
+          "deadline_min": 10,
+          "exceeded": false
+        }
+      }
+    },
+    "report": {
+      "goals": [
+        {
+          "robot": "R1",
+          "goal": 0,
+          "text": "turn on floor lamp for better lighting",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r1_s1"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R2",
+          "goal": 0,
+          "text": "turn on the floor lamp for better lighting",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r2_s1"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R2",
+          "goal": 1,
+          "text": "ensure the sofa area is tidy for the video call",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r2_s2",
+            "r2_s3",
+            "r2_s4",
+            "r2_s5",
+            "r2_s6",
+            "r2_s7"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R3",
+          "goal": 0,
+          "text": "desk lamp turned on for better visibility",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r3_s1"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R3",
+          "goal": 1,
+          "text": "laptop ready for the video call",
+          "status": "uncovered",
+          "cause": [
+            "Left unresolved"
+          ],
+          "evidence": [],
+          "note": "not judged by the Graph LLM"
+        },
+        {
+          "robot": "R4",
+          "goal": 0,
+          "text": "desk area is tidy and organized",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r4_s1",
+            "r4_s2"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R4",
+          "goal": 1,
+          "text": "sufficient lighting for video call",
+          "status": "partial",
+          "cause": [
+            "No volunteer"
+          ],
+          "evidence": [
+            "r4_s3"
+          ],
+          "note": "",
+          "llm_status": "partial",
+          "llm_cause": "No volunteer"
+        }
+      ],
+      "unresolved_requests": [],
+      "rejected_edits": [],
+      "dropped": [],
+      "removed_by_closure": [],
+      "invariant_violations": [],
+      "deadline": {
+        "makespan_min": 10,
+        "deadline_min": 10,
+        "exceeded": false
+      }
+    },
+    "metrics": {
+      "task_id": "task3_abstract",
+      "n_steps_total": 12,
+      "n_steps_active": 12,
+      "n_requests": 0,
+      "n_requests_served": 0,
+      "n_requests_unresolved": 0,
+      "n_candidates_from_stage3": 0,
+      "n_collab_edges_final": 0,
+      "n_help_edges": 0,
+      "n_transfer_edges": 0,
+      "decided_by_select": 0,
+      "decided_by_merge": 0,
+      "decided_by_default": 0,
+      "kappa_final": {
+        "mutual": 0,
+        "provider-only": 0,
+        "merged": 0
+      },
+      "graph_edits_applied": 0,
+      "graph_edits_rejected": 0,
+      "n_dropped_by_graph": 0,
+      "n_removed_by_closure": 0,
+      "n_requests_moved_later": 0,
+      "n_invariant_violations": 0,
+      "goals_total": 7,
+      "goals_covered": 5,
+      "goals_partial": 1,
+      "goals_uncovered": 1,
+      "goal_causes": {
+        "No volunteer": 1,
+        "Capability gap": 0,
+        "Left unresolved": 1,
+        "Infeasible": 0,
+        "Deadline exceeded": 0
+      },
+      "plan_fix_rounds": {
+        "R1": 1,
+        "R2": 2,
+        "R3": 2,
+        "R4": 2
+      },
+      "n_steps_excluded_stage2": 7,
+      "makespan_min": 10,
+      "deadline": 10,
+      "deadline_ok": true,
+      "llm_calls": 16,
+      "prompt_tokens": 91280,
+      "completion_tokens": 7093,
+      "config": {
+        "use_edge_proposal": true,
+        "use_graph_llm": true
+      },
+      "wall_time_sec": 21.3
+    },
+    "config": {
+      "use_edge_proposal": true,
+      "use_graph_llm": true,
+      "max_graph_rounds": 2,
+      "deadline_min": 20
+    }
+  },
+  "llm_judge": null
+}

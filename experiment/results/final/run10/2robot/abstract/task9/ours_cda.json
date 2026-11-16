@@ -1,0 +1,1314 @@
+{
+  "method": "cda",
+  "task_n": "task9_abstract",
+  "raw_result": {
+    "task_n": "task9_abstract",
+    "mode": "multi_room",
+    "model": "gpt-4o",
+    "task_text": "I'm heading to bed in 15 minutes. The house should be quiet and settled — lights down, things put away, and the bedroom ready to sleep in.",
+    "joint_plan_text": "```plaintext\n### Joint Plan — task9_abstract  (about 5 min / deadline 15 min: OK)\n### Robots: R1:Mobile_Light(living_room), R2:Mobile_Heavy(bedroom)\n\n[0-5 min]\n- R2 [LOCAL] turn off the desk lamp from the desk  (r2_s1)\n- R2 [LOCAL] pick up the laptop from the desk to R2  (r2_s2)\n- R2 [LOCAL] put down the laptop from R2 to the drawer  (r2_s3)\n- R2 [LOCAL] pick up the mug from the desk to R2  (r2_s4)\n- R2 [LOCAL] put down the mug from R2 to the drawer  (r2_s5)",
+    "joint_plan_full": "### Joint Plan — task9_abstract  (about 5 min / deadline 15 min: OK)\n### Robots: R1:Mobile_Light(living_room), R2:Mobile_Heavy(bedroom)\n\n[0-5 min]\n- R2 [LOCAL] turn_off the desk lamp from desk  (r2_s1)\n- R2 [LOCAL] pick_up the laptop from desk to R2  (r2_s2)\n- R2 [LOCAL] put_down the laptop from R2 to drawer  (r2_s3)\n- R2 [LOCAL] pick_up the mug from desk to R2  (r2_s4)\n- R2 [LOCAL] put_down the mug from R2 to drawer  (r2_s5)\n\n### Provenance (collaboration edges)\n\n### Graph LLM edits (applied)\n- DROP node=r1_s1 — No robot is capable of turning off the floor lamp, and R2 explicitly declined the request.\n\n### Report: goal coverage\n- R1.g0 ensure living room lights are off: uncovered — Capability gap\n- R1.g1 living room is tidy: uncovered — Infeasible [r1_s2] (evidence gone: r1_s2)\n- R1.g2 All unnecessary lights in the house are turned off or dimmed.: uncovered — Capability gap\n- R2.g0 turn off the desk lamp: covered [r2_s1]\n- R2.g1 put the laptop away in the drawer: covered [r2_s2, r2_s3]\n- R2.g2 put the mug away in the drawer: covered [r2_s4, r2_s5]\n- R2.g3 All unnecessary lights in the house are turned off or dimmed.: uncovered — Left unresolved (not judged by the Graph LLM)\n\n### Dropped by the Graph LLM\n- R1 [ASK_HELP] turn_off the floor lamp from living_room (r1_s1) — No robot is capable of turning off the floor lamp, and R2 explicitly declined the request.\n\n### Removed by dependency closure\n- R1 [LOCAL] move the garbage can from living_room to corner (r1_s2) — needs r1_s1, which will not happen",
+    "offers": {
+      "R1": {
+        "agent": "R1",
+        "capability": "I am mobile and can carry light objects up to 5 kg.",
+        "can_do": [
+          "PickupLightObject: lift small items",
+          "PassReceiveObject: exchange items with others"
+        ],
+        "cannot_do": [
+          "PickupHeavyObject: cannot lift furniture",
+          "ToggleObject: cannot turn off lights, TV, appliances"
+        ],
+        "has_items": [
+          "sofa (living_room, image 1)",
+          "dining table (living_room, image 1)",
+          "side table (living_room, image 1)",
+          "floor lamp (living_room, image 2)",
+          "television (living_room, image 2)",
+          "garbage can (living_room, image 2)",
+          "armchair (living_room, image 2)"
+        ],
+        "need_from_others": [
+          "someone who can toggle lights and appliances"
+        ],
+        "intends": [
+          "ensure living room lights are off",
+          "living room is tidy",
+          "All unnecessary lights in the house are turned off or dimmed."
+        ],
+        "see_items": [],
+        "other_robots_in_room": [],
+        "env_state": [
+          {
+            "object_id": "Sofa_1",
+            "object_type": "Sofa",
+            "location": "living_room",
+            "accessible": false,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "DiningTable_1",
+            "object_type": "DiningTable",
+            "location": "living_room",
+            "accessible": false,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "SideTable_1",
+            "object_type": "SideTable",
+            "location": "living_room",
+            "accessible": false,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "FloorLamp_1",
+            "object_type": "FloorLamp",
+            "location": "living_room",
+            "accessible": true,
+            "toggle": "on",
+            "clean": null
+          },
+          {
+            "object_id": "Television_1",
+            "object_type": "Television",
+            "location": "living_room",
+            "accessible": true,
+            "toggle": "off",
+            "clean": null
+          },
+          {
+            "object_id": "GarbageCan_1",
+            "object_type": "GarbageCan",
+            "location": "living_room",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "ArmChair_1",
+            "object_type": "ArmChair",
+            "location": "living_room",
+            "accessible": false,
+            "toggle": null,
+            "clean": null
+          }
+        ],
+        "obs_scope": "I can observe the living room only.",
+        "reasoning": "a) The house needs to be quiet and settled for bedtime. b) Living room: lights off, tidy up; bedroom: ready for sleep. c) I can turn off the floor lamp and ensure the living room is tidy. d) Turning off lights is crucial for settling the house. e) I will turn off the floor lamp and ensure the living room is tidy."
+      },
+      "R2": {
+        "agent": "R2",
+        "capability": "I am mobile and can carry heavy objects up to 20 kg.",
+        "can_do": [
+          "PickupLightObject: lift small items",
+          "PickupHeavyObject: move furniture",
+          "PushFurniture: adjust large items",
+          "PassReceiveObject: exchange items with others"
+        ],
+        "cannot_do": [
+          "SliceObject: no cutting tool",
+          "PourObject: no pouring capability"
+        ],
+        "has_items": [
+          "bed (floor, image 1)",
+          "pillow (bed, image 1)",
+          "desk (floor, image 1)",
+          "desk lamp (desk, image 1)",
+          "mug (desk, image 1)",
+          "alarm clock (desk, image 1)",
+          "laptop (desk, image 1)",
+          "laundry hamper (floor, image 2)"
+        ],
+        "need_from_others": [],
+        "intends": [
+          "turn off the desk lamp",
+          "put the laptop away in the drawer",
+          "put the mug away in the drawer",
+          "All unnecessary lights in the house are turned off or dimmed."
+        ],
+        "see_items": [],
+        "other_robots_in_room": [],
+        "env_state": [
+          {
+            "object_id": "Bed_1",
+            "object_type": "Bed",
+            "location": "bedroom_floor",
+            "accessible": false,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Pillow_1",
+            "object_type": "Pillow",
+            "location": "bedroom_bed",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Desk_1",
+            "object_type": "Desk",
+            "location": "bedroom_floor",
+            "accessible": false,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "DeskLamp_1",
+            "object_type": "DeskLamp",
+            "location": "bedroom_desk",
+            "accessible": true,
+            "toggle": "on",
+            "clean": null
+          },
+          {
+            "object_id": "Mug_1",
+            "object_type": "Mug",
+            "location": "bedroom_desk",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "AlarmClock_1",
+            "object_type": "AlarmClock",
+            "location": "bedroom_desk",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Laptop_1",
+            "object_type": "Laptop",
+            "location": "bedroom_desk",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "LaundryHamper_1",
+            "object_type": "LaundryHamper",
+            "location": "bedroom_floor",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          }
+        ],
+        "obs_scope": "I can observe the bedroom only.",
+        "reasoning": "a) The house should be quiet and settled for sleep. b) Bedroom: lights down and items put away. c) I can turn off the desk lamp and put away items on the desk. d) Turning off the lamp is crucial for a quiet environment. e) I will turn off the desk lamp and put away the laptop and mug."
+      }
+    },
+    "local_plans": {
+      "R1": [
+        {
+          "id": "r1_s1",
+          "agent": "R1",
+          "type": "ASK_HELP",
+          "action": {
+            "verb": "turn_off",
+            "object": "floor lamp",
+            "from": "living_room",
+            "to": null
+          },
+          "item": null,
+          "target": null,
+          "condition": {
+            "mobile": true,
+            "can_do_keyword": "ToggleObject"
+          },
+          "uses": null,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": "r1_s2",
+          "serves": 0,
+          "serves_text": "ensure living room lights are off",
+          "replies": [
+            {
+              "agent": "R2",
+              "answer": "NO",
+              "reason": "I cannot toggle objects, and I am restricted to the bedroom."
+            }
+          ],
+          "preconditions": [
+            {
+              "object_id": "FloorLamp_1",
+              "field": "toggle",
+              "value": "on"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "FloorLamp_1",
+              "field": "toggle",
+              "value": "off"
+            }
+          ],
+          "status": "dropped",
+          "status_reason": "4.2 DROP: No robot is capable of turning off the floor lamp, and R2 explicitly declined the request.",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r1_s2",
+          "agent": "R1",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "garbage can",
+            "from": "living_room",
+            "to": "corner"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "living room is tidy",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "GarbageCan_1",
+              "field": "location",
+              "value": "living_room"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "GarbageCan_1",
+              "field": "location",
+              "value": "living_room_corner"
+            }
+          ],
+          "status": "removed",
+          "status_reason": "needs r1_s1, which will not happen",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        }
+      ],
+      "R2": [
+        {
+          "id": "r2_s1",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_off",
+            "object": "desk lamp",
+            "from": "desk",
+            "to": null
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "turn off the desk lamp",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "DeskLamp_1",
+              "field": "toggle",
+              "value": "on"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "DeskLamp_1",
+              "field": "toggle",
+              "value": "off"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 0,
+          "t_end": 1
+        },
+        {
+          "id": "r2_s2",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "laptop",
+            "from": "desk",
+            "to": "R2"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "put the laptop away in the drawer",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "Laptop_1",
+              "field": "location",
+              "value": "bedroom_desk"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "Laptop_1",
+              "field": "location",
+              "value": "robot_R2"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 1,
+          "t_end": 2
+        },
+        {
+          "id": "r2_s3",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "laptop",
+            "from": "R2",
+            "to": "drawer"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "put the laptop away in the drawer",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "Laptop_1",
+              "field": "location",
+              "value": "robot_R2"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "Laptop_1",
+              "field": "location",
+              "value": "bedroom_drawer"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 2,
+          "t_end": 3
+        },
+        {
+          "id": "r2_s4",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "mug",
+            "from": "desk",
+            "to": "R2"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 2,
+          "serves_text": "put the mug away in the drawer",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "Mug_1",
+              "field": "location",
+              "value": "bedroom_desk"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "Mug_1",
+              "field": "location",
+              "value": "robot_R2"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 3,
+          "t_end": 4
+        },
+        {
+          "id": "r2_s5",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "mug",
+            "from": "R2",
+            "to": "drawer"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 2,
+          "serves_text": "put the mug away in the drawer",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "Mug_1",
+              "field": "location",
+              "value": "robot_R2"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "Mug_1",
+              "field": "location",
+              "value": "bedroom_drawer"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 4,
+          "t_end": 5
+        }
+      ]
+    },
+    "answers": [
+      {
+        "agent": "R2",
+        "id": "r1_s1",
+        "answer": "NO",
+        "reason": "I cannot toggle objects, and I am restricted to the bedroom.",
+        "result": "no edge"
+      }
+    ],
+    "graph": {
+      "nodes": [
+        {
+          "id": "r1_s1",
+          "agent": "R1",
+          "type": "ASK_HELP",
+          "action": {
+            "verb": "turn_off",
+            "object": "floor lamp",
+            "from": "living_room",
+            "to": null
+          },
+          "item": null,
+          "target": null,
+          "condition": {
+            "mobile": true,
+            "can_do_keyword": "ToggleObject"
+          },
+          "uses": null,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": "r1_s2",
+          "serves": 0,
+          "serves_text": "ensure living room lights are off",
+          "replies": [
+            {
+              "agent": "R2",
+              "answer": "NO",
+              "reason": "I cannot toggle objects, and I am restricted to the bedroom."
+            }
+          ],
+          "preconditions": [
+            {
+              "object_id": "FloorLamp_1",
+              "field": "toggle",
+              "value": "on"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "FloorLamp_1",
+              "field": "toggle",
+              "value": "off"
+            }
+          ],
+          "status": "dropped",
+          "status_reason": "4.2 DROP: No robot is capable of turning off the floor lamp, and R2 explicitly declined the request.",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r1_s2",
+          "agent": "R1",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move",
+            "object": "garbage can",
+            "from": "living_room",
+            "to": "corner"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "living room is tidy",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "GarbageCan_1",
+              "field": "location",
+              "value": "living_room"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "GarbageCan_1",
+              "field": "location",
+              "value": "living_room_corner"
+            }
+          ],
+          "status": "removed",
+          "status_reason": "needs r1_s1, which will not happen",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r2_s1",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_off",
+            "object": "desk lamp",
+            "from": "desk",
+            "to": null
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "turn off the desk lamp",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "DeskLamp_1",
+              "field": "toggle",
+              "value": "on"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "DeskLamp_1",
+              "field": "toggle",
+              "value": "off"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 0,
+          "t_end": 1
+        },
+        {
+          "id": "r2_s2",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "laptop",
+            "from": "desk",
+            "to": "R2"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "put the laptop away in the drawer",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "Laptop_1",
+              "field": "location",
+              "value": "bedroom_desk"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "Laptop_1",
+              "field": "location",
+              "value": "robot_R2"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 1,
+          "t_end": 2
+        },
+        {
+          "id": "r2_s3",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "laptop",
+            "from": "R2",
+            "to": "drawer"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "put the laptop away in the drawer",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "Laptop_1",
+              "field": "location",
+              "value": "robot_R2"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "Laptop_1",
+              "field": "location",
+              "value": "bedroom_drawer"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 2,
+          "t_end": 3
+        },
+        {
+          "id": "r2_s4",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "mug",
+            "from": "desk",
+            "to": "R2"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 2,
+          "serves_text": "put the mug away in the drawer",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "Mug_1",
+              "field": "location",
+              "value": "bedroom_desk"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "Mug_1",
+              "field": "location",
+              "value": "robot_R2"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 3,
+          "t_end": 4
+        },
+        {
+          "id": "r2_s5",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "mug",
+            "from": "R2",
+            "to": "drawer"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 2,
+          "serves_text": "put the mug away in the drawer",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "Mug_1",
+              "field": "location",
+              "value": "robot_R2"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "Mug_1",
+              "field": "location",
+              "value": "bedroom_drawer"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 4,
+          "t_end": 5
+        }
+      ],
+      "order": {
+        "R1": [
+          "r1_s1",
+          "r1_s2"
+        ],
+        "R2": [
+          "r2_s1",
+          "r2_s2",
+          "r2_s3",
+          "r2_s4",
+          "r2_s5"
+        ]
+      },
+      "edges": [
+        {
+          "src": "r2_s1",
+          "dst": "r2_s2",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r2_s2",
+          "dst": "r2_s3",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r2_s3",
+          "dst": "r2_s4",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r2_s4",
+          "dst": "r2_s5",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        }
+      ],
+      "edit_log": [
+        {
+          "k": 0,
+          "edit": {
+            "op": "DROP",
+            "node": "r1_s1",
+            "rationale": "No robot is capable of turning off the floor lamp, and R2 explicitly declined the request."
+          },
+          "applied": true,
+          "error": null,
+          "rationale": "No robot is capable of turning off the floor lamp, and R2 explicitly declined the request."
+        }
+      ],
+      "report": {
+        "goals": [
+          {
+            "robot": "R1",
+            "goal": 0,
+            "text": "ensure living room lights are off",
+            "status": "uncovered",
+            "cause": [
+              "Capability gap"
+            ],
+            "evidence": [],
+            "note": "",
+            "llm_status": "uncovered",
+            "llm_cause": "Capability gap"
+          },
+          {
+            "robot": "R1",
+            "goal": 1,
+            "text": "living room is tidy",
+            "status": "uncovered",
+            "cause": [
+              "Infeasible"
+            ],
+            "evidence": [
+              "r1_s2"
+            ],
+            "note": "evidence gone: r1_s2",
+            "llm_status": "covered",
+            "llm_cause": null
+          },
+          {
+            "robot": "R1",
+            "goal": 2,
+            "text": "All unnecessary lights in the house are turned off or dimmed.",
+            "status": "uncovered",
+            "cause": [
+              "Capability gap"
+            ],
+            "evidence": [],
+            "note": "",
+            "llm_status": "uncovered",
+            "llm_cause": "Capability gap"
+          },
+          {
+            "robot": "R2",
+            "goal": 0,
+            "text": "turn off the desk lamp",
+            "status": "covered",
+            "cause": [],
+            "evidence": [
+              "r2_s1"
+            ],
+            "note": "",
+            "llm_status": "covered",
+            "llm_cause": null
+          },
+          {
+            "robot": "R2",
+            "goal": 1,
+            "text": "put the laptop away in the drawer",
+            "status": "covered",
+            "cause": [],
+            "evidence": [
+              "r2_s2",
+              "r2_s3"
+            ],
+            "note": "",
+            "llm_status": "covered",
+            "llm_cause": null
+          },
+          {
+            "robot": "R2",
+            "goal": 2,
+            "text": "put the mug away in the drawer",
+            "status": "covered",
+            "cause": [],
+            "evidence": [
+              "r2_s4",
+              "r2_s5"
+            ],
+            "note": "",
+            "llm_status": "covered",
+            "llm_cause": null
+          },
+          {
+            "robot": "R2",
+            "goal": 3,
+            "text": "All unnecessary lights in the house are turned off or dimmed.",
+            "status": "uncovered",
+            "cause": [
+              "Left unresolved"
+            ],
+            "evidence": [],
+            "note": "not judged by the Graph LLM"
+          }
+        ],
+        "unresolved_requests": [],
+        "rejected_edits": [],
+        "dropped": [
+          {
+            "node": "r1_s1",
+            "agent": "R1",
+            "type": "ASK_HELP",
+            "text": "turn_off the floor lamp from living_room",
+            "rationale": "No robot is capable of turning off the floor lamp, and R2 explicitly declined the request."
+          }
+        ],
+        "removed_by_closure": [
+          {
+            "node": "r1_s2",
+            "agent": "R1",
+            "type": "LOCAL",
+            "text": "move the garbage can from living_room to corner",
+            "reason": "needs r1_s1, which will not happen"
+          }
+        ],
+        "invariant_violations": [],
+        "deadline": {
+          "makespan_min": 5,
+          "deadline_min": 15,
+          "exceeded": false
+        }
+      }
+    },
+    "report": {
+      "goals": [
+        {
+          "robot": "R1",
+          "goal": 0,
+          "text": "ensure living room lights are off",
+          "status": "uncovered",
+          "cause": [
+            "Capability gap"
+          ],
+          "evidence": [],
+          "note": "",
+          "llm_status": "uncovered",
+          "llm_cause": "Capability gap"
+        },
+        {
+          "robot": "R1",
+          "goal": 1,
+          "text": "living room is tidy",
+          "status": "uncovered",
+          "cause": [
+            "Infeasible"
+          ],
+          "evidence": [
+            "r1_s2"
+          ],
+          "note": "evidence gone: r1_s2",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R1",
+          "goal": 2,
+          "text": "All unnecessary lights in the house are turned off or dimmed.",
+          "status": "uncovered",
+          "cause": [
+            "Capability gap"
+          ],
+          "evidence": [],
+          "note": "",
+          "llm_status": "uncovered",
+          "llm_cause": "Capability gap"
+        },
+        {
+          "robot": "R2",
+          "goal": 0,
+          "text": "turn off the desk lamp",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r2_s1"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R2",
+          "goal": 1,
+          "text": "put the laptop away in the drawer",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r2_s2",
+            "r2_s3"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R2",
+          "goal": 2,
+          "text": "put the mug away in the drawer",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r2_s4",
+            "r2_s5"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R2",
+          "goal": 3,
+          "text": "All unnecessary lights in the house are turned off or dimmed.",
+          "status": "uncovered",
+          "cause": [
+            "Left unresolved"
+          ],
+          "evidence": [],
+          "note": "not judged by the Graph LLM"
+        }
+      ],
+      "unresolved_requests": [],
+      "rejected_edits": [],
+      "dropped": [
+        {
+          "node": "r1_s1",
+          "agent": "R1",
+          "type": "ASK_HELP",
+          "text": "turn_off the floor lamp from living_room",
+          "rationale": "No robot is capable of turning off the floor lamp, and R2 explicitly declined the request."
+        }
+      ],
+      "removed_by_closure": [
+        {
+          "node": "r1_s2",
+          "agent": "R1",
+          "type": "LOCAL",
+          "text": "move the garbage can from living_room to corner",
+          "reason": "needs r1_s1, which will not happen"
+        }
+      ],
+      "invariant_violations": [],
+      "deadline": {
+        "makespan_min": 5,
+        "deadline_min": 15,
+        "exceeded": false
+      }
+    },
+    "metrics": {
+      "task_id": "task9_abstract",
+      "n_steps_total": 7,
+      "n_steps_active": 5,
+      "n_requests": 1,
+      "n_requests_served": 0,
+      "n_requests_unresolved": 0,
+      "n_candidates_from_stage3": 0,
+      "n_collab_edges_final": 0,
+      "n_help_edges": 0,
+      "n_transfer_edges": 0,
+      "decided_by_select": 0,
+      "decided_by_merge": 0,
+      "decided_by_default": 0,
+      "kappa_final": {
+        "mutual": 0,
+        "provider-only": 0,
+        "merged": 0
+      },
+      "graph_edits_applied": 1,
+      "graph_edits_rejected": 0,
+      "n_dropped_by_graph": 1,
+      "n_removed_by_closure": 1,
+      "n_requests_moved_later": 0,
+      "n_invariant_violations": 0,
+      "goals_total": 7,
+      "goals_covered": 3,
+      "goals_partial": 0,
+      "goals_uncovered": 4,
+      "goal_causes": {
+        "No volunteer": 0,
+        "Capability gap": 2,
+        "Left unresolved": 1,
+        "Infeasible": 1,
+        "Deadline exceeded": 0
+      },
+      "plan_fix_rounds": {
+        "R1": 0,
+        "R2": 0
+      },
+      "n_steps_excluded_stage2": 0,
+      "makespan_min": 5,
+      "deadline": 15,
+      "deadline_ok": true,
+      "llm_calls": 13,
+      "prompt_tokens": 38938,
+      "completion_tokens": 3356,
+      "config": {
+        "use_edge_proposal": true,
+        "use_graph_llm": true,
+        "goal_check": true,
+        "goal_rounds": 1
+      },
+      "goal_check": {
+        "goals": [
+          {
+            "id": "G1",
+            "state": "All unnecessary lights in the house are turned off or dimmed.",
+            "not_enough": "Only turning off some lights."
+          },
+          {
+            "id": "G2",
+            "state": "No noise-producing devices are active in the house.",
+            "not_enough": "Lowering the volume without turning off the device."
+          },
+          {
+            "id": "G3",
+            "state": "Items in common areas are organized and put away in their designated places.",
+            "not_enough": "Moving items to a different part of the room without putting them away."
+          },
+          {
+            "id": "G4",
+            "state": "The bedroom is clean and organized with the bed ready for sleeping.",
+            "not_enough": "Only tidying up a small part of the room."
+          }
+        ],
+        "trace": [
+          {
+            "round": 0,
+            "verdicts": [
+              {
+                "id": "G1",
+                "state": "All unnecessary lights in the house are turned off or dimmed.",
+                "status": "unmet",
+                "evidence": [
+                  "r1_s1"
+                ],
+                "reason": "The plan indicates that the floor lamp in the living room remains on as no robot can fulfill the request to turn it off.",
+                "missing": "All unnecessary lights turned off or dimmed."
+              },
+              {
+                "id": "G2",
+                "state": "No noise-producing devices are active in the house.",
+                "status": "unclear",
+                "evidence": [],
+                "reason": "",
+                "missing": ""
+              },
+              {
+                "id": "G3",
+                "state": "Items in common areas are organized and put away in their designated places.",
+                "status": "unclear",
+                "evidence": [],
+                "reason": "",
+                "missing": ""
+              },
+              {
+                "id": "G4",
+                "state": "The bedroom is clean and organized with the bed ready for sleeping.",
+                "status": "unclear",
+                "evidence": [],
+                "reason": "",
+                "missing": ""
+              }
+            ]
+          },
+          {
+            "round": 1,
+            "verdicts": [
+              {
+                "id": "G1",
+                "state": "All unnecessary lights in the house are turned off or dimmed.",
+                "status": "unmet",
+                "evidence": [
+                  "r1_s2"
+                ],
+                "reason": "The plan does not include turning off or dimming all unnecessary lights in the house. The floor lamp in the living room remains on, and there is no action to turn it off.",
+                "missing": "The state of having all unnecessary lights turned off or dimmed."
+              },
+              {
+                "id": "G2",
+                "state": "No noise-producing devices are active in the house.",
+                "status": "unclear",
+                "evidence": [],
+                "reason": "",
+                "missing": ""
+              },
+              {
+                "id": "G3",
+                "state": "Items in common areas are organized and put away in their designated places.",
+                "status": "unclear",
+                "evidence": [],
+                "reason": "",
+                "missing": ""
+              },
+              {
+                "id": "G4",
+                "state": "The bedroom is clean and organized with the bed ready for sleeping.",
+                "status": "unclear",
+                "evidence": [],
+                "reason": "",
+                "missing": ""
+              }
+            ]
+          }
+        ],
+        "reverted": false
+      },
+      "wall_time_sec": 18.5
+    },
+    "config": {
+      "use_edge_proposal": true,
+      "use_graph_llm": true,
+      "max_graph_rounds": 2,
+      "deadline_min": 15,
+      "goal_check": true,
+      "goal_rounds": 1
+    }
+  },
+  "llm_judge": null
+}

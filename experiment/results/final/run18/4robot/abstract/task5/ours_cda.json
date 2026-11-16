@@ -1,0 +1,2836 @@
+{
+  "method": "cda",
+  "task_n": "task5_abstract",
+  "raw_result": {
+    "task_n": "task5_abstract",
+    "mode": "multi_room",
+    "model": "gpt-4o",
+    "task_text": "I'm planning to watch a movie in 30 minutes. The living room should be comfortable and dim, and I'd like something to snack on.",
+    "joint_plan_text": "```plaintext\n### Joint Plan — task5_abstract  (about 10 min / deadline 30 min: OK)\n### Robots: R1:Gripper(kitchen), R2:Mobile_Heavy(living_room), R3:Mobile_Light(bathroom), R4:Mobile_Light(bedroom)\n\n[0-5 min]\n- R1 [LOCAL] pick up the yellow apple from the kitchen counter to R1  (r1_s1)\n- R2 [LOCAL] move to from your start to the living room floor  (r2_s1)\n- R3 [LOCAL] move to from the bathroom sink to the living room floor  (r3_s1)\n- R4 [LOCAL] move to from the bedroom door to the bedroom shelf  (r4_s1)\n- R1 [LOCAL] slice the yellow apple  (r1_s2)\n- R2 [LOCAL] turn on the floor lamp  (r2_s2)\n- R4 [LOCAL] pick up the bowl from the bedroom shelf to R4  (r4_s2)\n- R1 [LOCAL] put down the yellow apple on the kitchen counter  (r1_s7)\n- R2 [LOCAL] move to from the living room floor to the living room television  (r2_s3)\n- R4 [LOCAL] move to from the bedroom shelf to the living room coffee table  (r4_s3)\n- R1 [LOCAL] pick up the lettuce from the kitchen sink basin to R1  (r1_s4)\n- R2 [LOCAL] turn on the television  (r2_s4)\n- R4 [LOCAL] put down the bowl on the living room coffee table [after r4_s2]  (r4_s4)\n- R1 [LOCAL] slice the lettuce  (r1_s5)\n- R2 [LOCAL] move to from the living room television to the living room sofa  (r2_s5)\n\n[5-10 min]\n- R1 [LOCAL] put down the lettuce in the kitchen sink basin  (r1_s8)\n- R2 [LOCAL] push the sofa to the living room center  (r2_s6)",
+    "joint_plan_full": "### Joint Plan — task5_abstract  (about 10 min / deadline 30 min: OK)\n### Robots: R1:Gripper(kitchen), R2:Mobile_Heavy(living_room), R3:Mobile_Light(bathroom), R4:Mobile_Light(bedroom)\n\n[0-5 min]\n- R1 [LOCAL] pick_up the yellow apple from kitchen_counter to R1  (r1_s1)\n- R2 [LOCAL] move_to from your start to living_room_floor  (r2_s1)\n- R3 [LOCAL] move_to from bathroom_sink to living_room_floor  (r3_s1)\n- R4 [LOCAL] move_to from bedroom_door to bedroom_shelf  (r4_s1)\n- R1 [LOCAL] slice the yellow apple from R1 to R1  (r1_s2)\n- R2 [LOCAL] turn_on the floor lamp from living_room_floor  (r2_s2)\n- R4 [LOCAL] pick_up the bowl from bedroom_shelf to R4  (r4_s2)\n- R1 [LOCAL] put_down the yellow apple from R1 to kitchen_counter  (r1_s7)\n- R2 [LOCAL] move_to from living_room_floor to living_room_television  (r2_s3)\n- R4 [LOCAL] move_to from bedroom_shelf to living_room_coffee_table  (r4_s3)\n- R1 [LOCAL] pick_up the lettuce from kitchen_sink_basin to R1  (r1_s4)\n- R2 [LOCAL] turn_on the television from living_room_television  (r2_s4)\n- R4 [LOCAL] put_down the bowl from R4 to living_room_coffee_table [after r4_s2]  (r4_s4)\n- R1 [LOCAL] slice the lettuce from R1 to R1  (r1_s5)\n- R2 [LOCAL] move_to from living_room_television to living_room_sofa  (r2_s5)\n\n[5-10 min]\n- R1 [LOCAL] put_down the lettuce from R1 to kitchen_sink_basin  (r1_s8)\n- R2 [LOCAL] push the sofa from living_room_sofa to living_room_center  (r2_s6)\n\n### Provenance (collaboration edges)\n\n### Graph LLM edits (applied)\n- SELECT provider=r1_s3 request=r2_s7 — R1's PASS step 'r1_s3' is the mutual candidate to fulfill R2's RECEIVE step 'r2_s7' for the yellow apple.\n- SELECT provider=r1_s6 request=r2_s8 — R1's PASS step 'r1_s6' is the mutual candidate to fulfill R2's RECEIVE step 'r2_s8' for the lettuce.\n- DROP node=r1_s3 — R2 has declined the yellow apple since it cannot slice it, making this step unnecessary.\n- DROP node=r1_s6 — R2 has declined the lettuce since it cannot prepare it, making this step unnecessary.\n\n### Report: goal coverage\n- R1.g0 prepare apple slices for snacking: partial — Left unresolved [r1_s1, r1_s2]\n- R1.g1 prepare lettuce for snacking: partial — Left unresolved [r1_s4, r1_s5]\n- R2.g0 dim lighting for a comfortable ambiance: partial — Left unresolved [r2_s1, r2_s2]\n- R2.g1 TV on for movie watching: covered [r2_s3, r2_s4]\n- R2.g2 sofa arranged for comfortable seating: covered [r2_s5, r2_s6]\n- R3.g0 ensure snacks are available for the movie: uncovered — No volunteer\n- R4.g0 provide a snack for the movie by bringing the bowl to the living room: covered [r4_s1, r4_s2, r4_s3, r4_s4]\n\n### Unresolved requests\n- R2 r2_s7 receive yellow apple (counter, image 1) — no candidate (nobody said YES) | R3: NO I do not have the yellow apple and cannot access the location where it is.; R4: NO I do not have the yellow apple (counter, image 1) in my possession and am not in the living room.\n- R2 r2_s8 receive lettuce (sink basin, image 2) — no candidate (nobody said YES) | R3: NO I do not have the lettuce and cannot access the location where it is.; R4: NO I do not have the lettuce (sink basin, image 2) in my possession and am not in the living room.\n\n### Dropped by the Graph LLM\n- R1 [PASS] pass yellow apple (counter, image 1) to R2 (r1_s3) — R2 has declined the yellow apple since it cannot slice it, making this step unnecessary.\n- R1 [PASS] pass lettuce (sink basin, image 2) to R2 (r1_s6) — R2 has declined the lettuce since it cannot prepare it, making this step unnecessary.\n\n### Removed by dependency closure\n- R2 [RECEIVE] receive yellow apple (counter, image 1) (r2_s7) — unresolved: no candidate (nobody said YES)\n- R2 [RECEIVE] receive lettuce (sink basin, image 2) (r2_s8) — unresolved: no candidate (nobody said YES)",
+    "offers": {
+      "R1": {
+        "agent": "R1",
+        "capability": "I am fixed and can manipulate light objects within reach.",
+        "can_do": [
+          "PickupLightObject: lift small items",
+          "SliceObject: cut food items",
+          "PourObject: pour liquids",
+          "PassReceiveObject: hand over items to other robots"
+        ],
+        "cannot_do": [
+          "PickupHeavyObject: cannot lift heavy items",
+          "PushFurniture: cannot rearrange furniture",
+          "ToggleObject: cannot adjust lighting"
+        ],
+        "has_items": [
+          "silver kettle (counter, image 1)",
+          "yellow apple (counter, image 1)",
+          "butter knife (counter, image 2)",
+          "fork (counter, image 2)",
+          "spoon (counter, image 2)",
+          "coffee machine (counter, image 2)",
+          "lettuce (sink basin, image 2)"
+        ],
+        "need_from_others": [
+          "someone to adjust lighting in the living room"
+        ],
+        "intends": [
+          "prepare apple slices for snacking",
+          "prepare lettuce for snacking"
+        ],
+        "see_items": [
+          "bread (counter, image 1)",
+          "pan (counter, image 1)",
+          "cup (counter, image 1)",
+          "dish sponge (sink basin, image 1)",
+          "house plant (counter, image 2)",
+          "pot (counter, image 2)"
+        ],
+        "other_robots_in_room": [],
+        "env_state": [
+          {
+            "object_id": "Kettle_1",
+            "object_type": "Kettle",
+            "location": "kitchen_counter",
+            "accessible": true,
+            "toggle": "off",
+            "clean": null
+          },
+          {
+            "object_id": "Apple_1",
+            "object_type": "Apple",
+            "location": "kitchen_counter",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "ButterKnife_1",
+            "object_type": "ButterKnife",
+            "location": "kitchen_counter",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Fork_1",
+            "object_type": "Fork",
+            "location": "kitchen_counter",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Spoon_1",
+            "object_type": "Spoon",
+            "location": "kitchen_counter",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "CoffeeMachine_1",
+            "object_type": "CoffeeMachine",
+            "location": "kitchen_counter",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Lettuce_1",
+            "object_type": "Lettuce",
+            "location": "kitchen_sink_basin",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Bread_1",
+            "object_type": "Bread",
+            "location": "kitchen_counter",
+            "accessible": false,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Pan_1",
+            "object_type": "Pan",
+            "location": "kitchen_counter",
+            "accessible": false,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Cup_1",
+            "object_type": "Cup",
+            "location": "kitchen_counter",
+            "accessible": false,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "DishSponge_1",
+            "object_type": "DishSponge",
+            "location": "kitchen_sink_basin",
+            "accessible": false,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "HousePlant_1",
+            "object_type": "HousePlant",
+            "location": "kitchen_counter",
+            "accessible": false,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Pot_1",
+            "object_type": "Pot",
+            "location": "kitchen_counter",
+            "accessible": false,
+            "toggle": null,
+            "clean": null
+          }
+        ],
+        "obs_scope": "I can observe the kitchen only.",
+        "reasoning": "a) The living room should be dim and comfortable with snacks available. b) Kitchen: prepare snacks; living room: adjust lighting and seating. c) I can prepare snacks using available food items. d) Focus on preparing snacks first, as lighting adjustments are not within my capabilities. e) The task mentions snacks, which I can prepare using available items."
+      },
+      "R2": {
+        "agent": "R2",
+        "capability": "I am mobile and can carry heavy objects up to 20 kg.",
+        "can_do": [
+          "PickupLightObject: lift small items",
+          "PickupHeavyObject: move furniture",
+          "PushFurniture: rearrange seating",
+          "PassReceiveObject: exchange items with others",
+          "ToggleObject: turn on/off lights, TV"
+        ],
+        "cannot_do": [
+          "SliceObject: no cutting tool",
+          "PourObject: cannot pour liquids"
+        ],
+        "has_items": [
+          "armchair (living_room, image 1)",
+          "cabinet (living_room, image 1)",
+          "floor lamp (living_room, image 2)",
+          "sofa (living_room, image 1)",
+          "television (living_room, image 1)",
+          "side table (living_room, image 1)",
+          "garbage can (living_room, image 2)"
+        ],
+        "need_from_others": [
+          "snacks for the movie"
+        ],
+        "intends": [
+          "dim lighting for a comfortable ambiance",
+          "TV on for movie watching",
+          "sofa arranged for comfortable seating"
+        ],
+        "see_items": [],
+        "other_robots_in_room": [],
+        "env_state": [
+          {
+            "object_id": "ArmChair_1",
+            "object_type": "ArmChair",
+            "location": "living_room",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Cabinet_1",
+            "object_type": "Cabinet",
+            "location": "living_room",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "FloorLamp_1",
+            "object_type": "FloorLamp",
+            "location": "living_room",
+            "accessible": true,
+            "toggle": "off",
+            "clean": null
+          },
+          {
+            "object_id": "Sofa_1",
+            "object_type": "Sofa",
+            "location": "living_room",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Television_1",
+            "object_type": "Television",
+            "location": "living_room",
+            "accessible": true,
+            "toggle": "off",
+            "clean": null
+          },
+          {
+            "object_id": "SideTable_1",
+            "object_type": "SideTable",
+            "location": "living_room",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "GarbageCan_1",
+            "object_type": "GarbageCan",
+            "location": "living_room",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          }
+        ],
+        "obs_scope": "I can observe the living room only.",
+        "reasoning": "a) Living room should be comfortable and dim for movie watching. b) Living room: seating, lighting, TV setup. c) I can adjust lighting and TV, and arrange seating. d) Turning on the floor lamp and TV is crucial for comfort and entertainment. e) Ensure lighting is dim and TV is on, seating is arranged."
+      },
+      "R3": {
+        "agent": "R3",
+        "capability": "I am mobile and can carry light objects up to 5 kg.",
+        "can_do": [
+          "PickupLightObject: lift small items like towels, bottles",
+          "PassReceiveObject: exchange items with other robots"
+        ],
+        "cannot_do": [
+          "PickupHeavyObject: cannot lift heavy items like furniture",
+          "PushFurniture: cannot move furniture",
+          "SliceObject: no cutting tool",
+          "PourObject: unable to pour liquids"
+        ],
+        "has_items": [
+          "white cabinet (wall, image 1)",
+          "green towel (rack, image 1)",
+          "blue scrub brush (sink, image 1)",
+          "silver faucet (sink, image 1)",
+          "white soap bar (sink, image 1)",
+          "white toilet (floor, image 1)",
+          "white toilet paper (holder, image 1)",
+          "white shower curtain (bathtub, image 1)",
+          "gray plunger (floor, image 2)",
+          "white garbage can (floor, image 2)",
+          "green soap bottle (sink, image 2)",
+          "blue spray bottle (sink, image 2)",
+          "red hand towel (rack, image 2)",
+          "white cloth (sink, image 2)"
+        ],
+        "need_from_others": [
+          "snacks for the movie"
+        ],
+        "intends": [
+          "ensure snacks are available for the movie"
+        ],
+        "see_items": [],
+        "other_robots_in_room": [],
+        "env_state": [
+          {
+            "object_id": "Cabinet_1",
+            "object_type": "Cabinet",
+            "location": "bathroom_wall",
+            "accessible": false,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Towel_1",
+            "object_type": "Towel",
+            "location": "bathroom_rack",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "ScrubBrush_1",
+            "object_type": "ScrubBrush",
+            "location": "bathroom_sink",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Faucet_1",
+            "object_type": "Faucet",
+            "location": "bathroom_sink",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "SoapBar_1",
+            "object_type": "SoapBar",
+            "location": "bathroom_sink",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Toilet_1",
+            "object_type": "Toilet",
+            "location": "bathroom_floor",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "ToiletPaper_1",
+            "object_type": "ToiletPaper",
+            "location": "bathroom_holder",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "ShowerCurtain_1",
+            "object_type": "ShowerCurtain",
+            "location": "bathroom_bathtub",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Plunger_1",
+            "object_type": "Plunger",
+            "location": "bathroom_floor",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "GarbageCan_1",
+            "object_type": "GarbageCan",
+            "location": "bathroom_floor",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "SoapBottle_1",
+            "object_type": "SoapBottle",
+            "location": "bathroom_sink",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "SprayBottle_1",
+            "object_type": "SprayBottle",
+            "location": "bathroom_sink",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "HandTowel_1",
+            "object_type": "HandTowel",
+            "location": "bathroom_rack",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Cloth_1",
+            "object_type": "Cloth",
+            "location": "bathroom_sink",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          }
+        ],
+        "obs_scope": "I can observe the bathroom only.",
+        "reasoning": "a) For a comfortable movie-watching experience, the living room should have dim lighting and snacks available. b) The living room is where the TV and seating are located, and it needs to be arranged for comfort and lighting. c) I can contribute by providing snacks if any are found in my room or by requesting them from other rooms. d) Snacks are a priority since I cannot control lighting or comfort in the living room. e) Ensure snacks are available by coordinating with other robots or rooms."
+      },
+      "R4": {
+        "agent": "R4",
+        "capability": "I am mobile and can carry light objects up to 5 kg with one arm.",
+        "can_do": [
+          "PickupLightObject: lift mugs, fruit, small items",
+          "PassReceiveObject: exchange items with others"
+        ],
+        "cannot_do": [
+          "PickupHeavyObject: cannot lift furniture",
+          "PushFurniture: cannot move or adjust furniture",
+          "SliceObject: no cutting tool",
+          "PourObject: cannot pour liquids"
+        ],
+        "has_items": [
+          "alarm clock (side table, image 1)",
+          "bed (floor, image 1)",
+          "book (shelf, image 1)",
+          "bowl (shelf, image 1)",
+          "CD (shelf, image 1)",
+          "cell phone (desk, image 1)",
+          "chair (floor, image 1)",
+          "cloth (drawer, image 1)",
+          "credit card (desk, image 1)",
+          "desk (floor, image 1)",
+          "desk lamp (desk, image 1)",
+          "drawer (desk, image 1)",
+          "garbage can (floor, image 1)",
+          "key chain (desk, image 1)",
+          "laptop (desk, image 1)",
+          "laundry hamper (floor, image 1)",
+          "painting (wall, image 1)",
+          "pen (desk, image 1)",
+          "pencil (desk, image 1)",
+          "pillow (bed, image 1)",
+          "remote control (shelf, image 1)",
+          "shelf (floor, image 1)",
+          "shelving unit (floor, image 1)",
+          "side table (floor, image 1)",
+          "television (shelving unit, image 1)",
+          "tennis racket (shelf, image 1)"
+        ],
+        "need_from_others": [
+          "someone who can dim the lights in the living room",
+          "someone who can provide additional snacks if needed"
+        ],
+        "intends": [
+          "provide a snack for the movie by bringing the bowl to the living room"
+        ],
+        "see_items": [],
+        "other_robots_in_room": [],
+        "env_state": [
+          {
+            "object_id": "AlarmClock_1",
+            "object_type": "AlarmClock",
+            "location": "bedroom_side table",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Bed_1",
+            "object_type": "Bed",
+            "location": "bedroom_floor",
+            "accessible": false,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Book_1",
+            "object_type": "Book",
+            "location": "bedroom_shelf",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Bowl_1",
+            "object_type": "Bowl",
+            "location": "bedroom_shelf",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "CD_1",
+            "object_type": "CD",
+            "location": "bedroom_shelf",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "CellPhone_1",
+            "object_type": "CellPhone",
+            "location": "bedroom_desk",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Chair_1",
+            "object_type": "Chair",
+            "location": "bedroom_floor",
+            "accessible": false,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Cloth_1",
+            "object_type": "Cloth",
+            "location": "bedroom_drawer",
+            "accessible": false,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "CreditCard_1",
+            "object_type": "CreditCard",
+            "location": "bedroom_desk",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Desk_1",
+            "object_type": "Desk",
+            "location": "bedroom_floor",
+            "accessible": false,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "DeskLamp_1",
+            "object_type": "DeskLamp",
+            "location": "bedroom_desk",
+            "accessible": true,
+            "toggle": "off",
+            "clean": null
+          },
+          {
+            "object_id": "Drawer_1",
+            "object_type": "Drawer",
+            "location": "bedroom_desk",
+            "accessible": false,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "GarbageCan_1",
+            "object_type": "GarbageCan",
+            "location": "bedroom_floor",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "KeyChain_1",
+            "object_type": "KeyChain",
+            "location": "bedroom_desk",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Laptop_1",
+            "object_type": "Laptop",
+            "location": "bedroom_desk",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "LaundryHamper_1",
+            "object_type": "LaundryHamper",
+            "location": "bedroom_floor",
+            "accessible": false,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Painting_1",
+            "object_type": "Painting",
+            "location": "bedroom_wall",
+            "accessible": false,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Pen_1",
+            "object_type": "Pen",
+            "location": "bedroom_desk",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Pencil_1",
+            "object_type": "Pencil",
+            "location": "bedroom_desk",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Pillow_1",
+            "object_type": "Pillow",
+            "location": "bedroom_bed",
+            "accessible": false,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "RemoteControl_1",
+            "object_type": "RemoteControl",
+            "location": "bedroom_shelf",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Shelf_1",
+            "object_type": "Shelf",
+            "location": "bedroom_floor",
+            "accessible": false,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "ShelvingUnit_1",
+            "object_type": "ShelvingUnit",
+            "location": "bedroom_floor",
+            "accessible": false,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "SideTable_1",
+            "object_type": "SideTable",
+            "location": "bedroom_floor",
+            "accessible": false,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Television_1",
+            "object_type": "Television",
+            "location": "bedroom_shelving unit",
+            "accessible": false,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "TennisRacket_1",
+            "object_type": "TennisRacket",
+            "location": "bedroom_shelf",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          }
+        ],
+        "obs_scope": "I can observe the bedroom only.",
+        "reasoning": "a) The living room should be comfortable with dim lighting, and there should be snacks available for the movie. b) The living room contributes by providing a space for watching the movie and relaxing. c) My room can provide a snack by bringing the bowl to the living room. d) Providing a snack is a priority as it is part of the movie-watching experience. e) The task explicitly asks for a snack, which I can contribute by bringing the bowl from my room."
+      }
+    },
+    "local_plans": {
+      "R1": [
+        {
+          "id": "r1_s1",
+          "agent": "R1",
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "yellow apple",
+            "from": "kitchen_counter",
+            "to": "R1"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "kitchen",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "prepare apple slices for snacking",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "Apple_1",
+              "field": "location",
+              "value": "kitchen_counter"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "Apple_1",
+              "field": "location",
+              "value": "R1"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r1_s2",
+          "agent": "R1",
+          "type": "LOCAL",
+          "action": {
+            "verb": "slice",
+            "object": "yellow apple",
+            "from": "R1",
+            "to": "R1"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 1,
+          "location": "kitchen",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "prepare apple slices for snacking",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "Apple_1",
+              "field": "location",
+              "value": "R1"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "Apple_1",
+              "field": "location",
+              "value": "R1"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r1_s3",
+          "agent": "R1",
+          "type": "PASS",
+          "action": "pass yellow apple (counter, image 1) to R2",
+          "item": "yellow apple (counter, image 1)",
+          "target": "R2",
+          "condition": null,
+          "uses": null,
+          "location": "kitchen",
+          "origin": "offer",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "prepare apple slices for snacking",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r1_s4",
+          "agent": "R1",
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "lettuce",
+            "from": "kitchen_sink_basin",
+            "to": "R1"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "kitchen",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "prepare lettuce for snacking",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "Lettuce_1",
+              "field": "location",
+              "value": "kitchen_sink_basin"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "Lettuce_1",
+              "field": "location",
+              "value": "R1"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r1_s5",
+          "agent": "R1",
+          "type": "LOCAL",
+          "action": {
+            "verb": "slice",
+            "object": "lettuce",
+            "from": "R1",
+            "to": "R1"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 1,
+          "location": "kitchen",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "prepare lettuce for snacking",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "Lettuce_1",
+              "field": "location",
+              "value": "R1"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "Lettuce_1",
+              "field": "location",
+              "value": "R1"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r1_s6",
+          "agent": "R1",
+          "type": "PASS",
+          "action": "pass lettuce (sink basin, image 2) to R2",
+          "item": "lettuce (sink basin, image 2)",
+          "target": "R2",
+          "condition": null,
+          "uses": null,
+          "location": "kitchen",
+          "origin": "offer",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "prepare lettuce for snacking",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        }
+      ],
+      "R2": [
+        {
+          "id": "r2_s1",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "your start",
+            "to": "living_room_floor",
+            "room": "living_room"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "dim lighting for a comfortable ambiance",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r2_s2",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "floor lamp",
+            "from": "living_room_floor",
+            "to": null
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 4,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "dim lighting for a comfortable ambiance",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "FloorLamp_1",
+              "field": "toggle",
+              "value": "off"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "FloorLamp_1",
+              "field": "toggle",
+              "value": "on"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r2_s3",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "living_room_floor",
+            "to": "living_room_television",
+            "room": "living_room"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "TV on for movie watching",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r2_s4",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "television",
+            "from": "living_room_television",
+            "to": null
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 4,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "TV on for movie watching",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "Television_1",
+              "field": "toggle",
+              "value": "off"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "Television_1",
+              "field": "toggle",
+              "value": "on"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r2_s5",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "living_room_television",
+            "to": "living_room_sofa",
+            "room": "living_room"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 2,
+          "serves_text": "sofa arranged for comfortable seating",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r2_s6",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "push",
+            "object": "sofa",
+            "from": "living_room_sofa",
+            "to": "living_room_center"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 2,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 2,
+          "serves_text": "sofa arranged for comfortable seating",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "Sofa_1",
+              "field": "location",
+              "value": "living_room"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "Sofa_1",
+              "field": "location",
+              "value": "living_room_center"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r2_s7",
+          "agent": "R2",
+          "type": "RECEIVE",
+          "action": "receive yellow apple (counter, image 1)",
+          "item": "yellow apple (counter, image 1)",
+          "target": "R1",
+          "condition": null,
+          "uses": null,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "dim lighting for a comfortable ambiance",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r2_s8",
+          "agent": "R2",
+          "type": "RECEIVE",
+          "action": "receive lettuce (sink basin, image 2)",
+          "item": "lettuce (sink basin, image 2)",
+          "target": "R1",
+          "condition": null,
+          "uses": null,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "dim lighting for a comfortable ambiance",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        }
+      ],
+      "R3": [
+        {
+          "id": "r3_s1",
+          "agent": "R3",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "bathroom_sink",
+            "to": "living_room_floor",
+            "room": "living_room"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "ensure snacks are available for the movie",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        }
+      ],
+      "R4": [
+        {
+          "id": "r4_s1",
+          "agent": "R4",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "bedroom_door",
+            "to": "bedroom_shelf",
+            "room": "bedroom"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "provide a snack for the movie by bringing the bowl to the living room",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r4_s2",
+          "agent": "R4",
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "bowl",
+            "from": "bedroom_shelf",
+            "to": "R4"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "provide a snack for the movie by bringing the bowl to the living room",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "Bowl_1",
+              "field": "location",
+              "value": "bedroom_shelf"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "Bowl_1",
+              "field": "location",
+              "value": "robot_R4"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r4_s3",
+          "agent": "R4",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "bedroom_shelf",
+            "to": "living_room_coffee_table",
+            "room": "living_room"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "provide a snack for the movie by bringing the bowl to the living room",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r4_s4",
+          "agent": "R4",
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "bowl",
+            "from": "R4",
+            "to": "living_room_coffee_table"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "provide a snack for the movie by bringing the bowl to the living room",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "Bowl_1",
+              "field": "location",
+              "value": "robot_R4"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "Bowl_1",
+              "field": "location",
+              "value": "living_room_coffee_table"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        }
+      ]
+    },
+    "answers": [
+      {
+        "agent": "R1",
+        "id": "r2_s7",
+        "answer": "YES",
+        "reason": "I already plan to pass the yellow apple to R2.",
+        "result": "CANDIDATE",
+        "kappa": "mutual",
+        "provider": "r1_s3",
+        "existing": true
+      },
+      {
+        "agent": "R1",
+        "id": "r2_s8",
+        "answer": "YES",
+        "reason": "I already plan to pass the lettuce to R2.",
+        "result": "CANDIDATE",
+        "kappa": "mutual",
+        "provider": "r1_s6",
+        "existing": true
+      },
+      {
+        "agent": "R2",
+        "id": "r1_s3",
+        "answer": "NO",
+        "reason": "I cannot slice the apple as I have no cutting tool.",
+        "result": "no edge"
+      },
+      {
+        "agent": "R2",
+        "id": "r1_s6",
+        "answer": "NO",
+        "reason": "I cannot prepare the lettuce as I have no cutting tool.",
+        "result": "no edge"
+      },
+      {
+        "agent": "R3",
+        "id": "r2_s7",
+        "answer": "NO",
+        "reason": "I do not have the yellow apple and cannot access the location where it is.",
+        "result": "no edge"
+      },
+      {
+        "agent": "R3",
+        "id": "r2_s8",
+        "answer": "NO",
+        "reason": "I do not have the lettuce and cannot access the location where it is.",
+        "result": "no edge"
+      },
+      {
+        "agent": "R4",
+        "id": "r2_s7",
+        "answer": "NO",
+        "reason": "I do not have the yellow apple (counter, image 1) in my possession and am not in the living room.",
+        "result": "no edge"
+      },
+      {
+        "agent": "R4",
+        "id": "r2_s8",
+        "answer": "NO",
+        "reason": "I do not have the lettuce (sink basin, image 2) in my possession and am not in the living room.",
+        "result": "no edge"
+      }
+    ],
+    "graph": {
+      "nodes": [
+        {
+          "id": "r1_s1",
+          "agent": "R1",
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "yellow apple",
+            "from": "kitchen_counter",
+            "to": "R1"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "kitchen",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "prepare apple slices for snacking",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "Apple_1",
+              "field": "location",
+              "value": "kitchen_counter"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "Apple_1",
+              "field": "location",
+              "value": "R1"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 0,
+          "t_end": 1
+        },
+        {
+          "id": "r1_s2",
+          "agent": "R1",
+          "type": "LOCAL",
+          "action": {
+            "verb": "slice",
+            "object": "yellow apple",
+            "from": "R1",
+            "to": "R1"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 1,
+          "location": "kitchen",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "prepare apple slices for snacking",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "Apple_1",
+              "field": "location",
+              "value": "R1"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "Apple_1",
+              "field": "location",
+              "value": "R1"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 1,
+          "t_end": 2
+        },
+        {
+          "id": "r1_s3",
+          "agent": "R1",
+          "type": "PASS",
+          "action": "pass yellow apple (counter, image 1) to R2",
+          "item": "yellow apple (counter, image 1)",
+          "target": "R2",
+          "condition": null,
+          "uses": null,
+          "location": "kitchen",
+          "origin": "offer",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "prepare apple slices for snacking",
+          "replies": [
+            {
+              "agent": "R2",
+              "answer": "NO",
+              "reason": "I cannot slice the apple as I have no cutting tool."
+            }
+          ],
+          "preconditions": [],
+          "effects": [],
+          "status": "dropped",
+          "status_reason": "4.2 DROP: R2 has declined the yellow apple since it cannot slice it, making this step unnecessary.",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r1_s4",
+          "agent": "R1",
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "lettuce",
+            "from": "kitchen_sink_basin",
+            "to": "R1"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "kitchen",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "prepare lettuce for snacking",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "Lettuce_1",
+              "field": "location",
+              "value": "kitchen_sink_basin"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "Lettuce_1",
+              "field": "location",
+              "value": "R1"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 3,
+          "t_end": 4
+        },
+        {
+          "id": "r1_s5",
+          "agent": "R1",
+          "type": "LOCAL",
+          "action": {
+            "verb": "slice",
+            "object": "lettuce",
+            "from": "R1",
+            "to": "R1"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 1,
+          "location": "kitchen",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "prepare lettuce for snacking",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "Lettuce_1",
+              "field": "location",
+              "value": "R1"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "Lettuce_1",
+              "field": "location",
+              "value": "R1"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 4,
+          "t_end": 5
+        },
+        {
+          "id": "r1_s6",
+          "agent": "R1",
+          "type": "PASS",
+          "action": "pass lettuce (sink basin, image 2) to R2",
+          "item": "lettuce (sink basin, image 2)",
+          "target": "R2",
+          "condition": null,
+          "uses": null,
+          "location": "kitchen",
+          "origin": "offer",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "prepare lettuce for snacking",
+          "replies": [
+            {
+              "agent": "R2",
+              "answer": "NO",
+              "reason": "I cannot prepare the lettuce as I have no cutting tool."
+            }
+          ],
+          "preconditions": [],
+          "effects": [],
+          "status": "dropped",
+          "status_reason": "4.2 DROP: R2 has declined the lettuce since it cannot prepare it, making this step unnecessary.",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r2_s1",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "your start",
+            "to": "living_room_floor",
+            "room": "living_room"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "dim lighting for a comfortable ambiance",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 0,
+          "t_end": 1
+        },
+        {
+          "id": "r2_s2",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "floor lamp",
+            "from": "living_room_floor",
+            "to": null
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 4,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "dim lighting for a comfortable ambiance",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "FloorLamp_1",
+              "field": "toggle",
+              "value": "off"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "FloorLamp_1",
+              "field": "toggle",
+              "value": "on"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 1,
+          "t_end": 2
+        },
+        {
+          "id": "r2_s3",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "living_room_floor",
+            "to": "living_room_television",
+            "room": "living_room"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "TV on for movie watching",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 2,
+          "t_end": 3
+        },
+        {
+          "id": "r2_s4",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "television",
+            "from": "living_room_television",
+            "to": null
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 4,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "TV on for movie watching",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "Television_1",
+              "field": "toggle",
+              "value": "off"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "Television_1",
+              "field": "toggle",
+              "value": "on"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 3,
+          "t_end": 4
+        },
+        {
+          "id": "r2_s5",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "living_room_television",
+            "to": "living_room_sofa",
+            "room": "living_room"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 2,
+          "serves_text": "sofa arranged for comfortable seating",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 4,
+          "t_end": 5
+        },
+        {
+          "id": "r2_s6",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "push",
+            "object": "sofa",
+            "from": "living_room_sofa",
+            "to": "living_room_center"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 2,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 2,
+          "serves_text": "sofa arranged for comfortable seating",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "Sofa_1",
+              "field": "location",
+              "value": "living_room"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "Sofa_1",
+              "field": "location",
+              "value": "living_room_center"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 2,
+          "t_start": 5,
+          "t_end": 6
+        },
+        {
+          "id": "r2_s7",
+          "agent": "R2",
+          "type": "RECEIVE",
+          "action": "receive yellow apple (counter, image 1)",
+          "item": "yellow apple (counter, image 1)",
+          "target": "R1",
+          "condition": null,
+          "uses": null,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "dim lighting for a comfortable ambiance",
+          "replies": [
+            {
+              "agent": "R3",
+              "answer": "NO",
+              "reason": "I do not have the yellow apple and cannot access the location where it is."
+            },
+            {
+              "agent": "R4",
+              "answer": "NO",
+              "reason": "I do not have the yellow apple (counter, image 1) in my possession and am not in the living room."
+            }
+          ],
+          "preconditions": [],
+          "effects": [],
+          "status": "removed",
+          "status_reason": "unresolved: no candidate (nobody said YES)",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r2_s8",
+          "agent": "R2",
+          "type": "RECEIVE",
+          "action": "receive lettuce (sink basin, image 2)",
+          "item": "lettuce (sink basin, image 2)",
+          "target": "R1",
+          "condition": null,
+          "uses": null,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "dim lighting for a comfortable ambiance",
+          "replies": [
+            {
+              "agent": "R3",
+              "answer": "NO",
+              "reason": "I do not have the lettuce and cannot access the location where it is."
+            },
+            {
+              "agent": "R4",
+              "answer": "NO",
+              "reason": "I do not have the lettuce (sink basin, image 2) in my possession and am not in the living room."
+            }
+          ],
+          "preconditions": [],
+          "effects": [],
+          "status": "removed",
+          "status_reason": "unresolved: no candidate (nobody said YES)",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r3_s1",
+          "agent": "R3",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "bathroom_sink",
+            "to": "living_room_floor",
+            "room": "living_room"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "ensure snacks are available for the movie",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 0,
+          "t_end": 1
+        },
+        {
+          "id": "r4_s1",
+          "agent": "R4",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "bedroom_door",
+            "to": "bedroom_shelf",
+            "room": "bedroom"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "provide a snack for the movie by bringing the bowl to the living room",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 0,
+          "t_end": 1
+        },
+        {
+          "id": "r4_s2",
+          "agent": "R4",
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "bowl",
+            "from": "bedroom_shelf",
+            "to": "R4"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "provide a snack for the movie by bringing the bowl to the living room",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "Bowl_1",
+              "field": "location",
+              "value": "bedroom_shelf"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "Bowl_1",
+              "field": "location",
+              "value": "robot_R4"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 1,
+          "t_end": 2
+        },
+        {
+          "id": "r4_s3",
+          "agent": "R4",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "bedroom_shelf",
+            "to": "living_room_coffee_table",
+            "room": "living_room"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "provide a snack for the movie by bringing the bowl to the living room",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 2,
+          "t_end": 3
+        },
+        {
+          "id": "r4_s4",
+          "agent": "R4",
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "bowl",
+            "from": "R4",
+            "to": "living_room_coffee_table"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "living_room",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "provide a snack for the movie by bringing the bowl to the living room",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "Bowl_1",
+              "field": "location",
+              "value": "robot_R4"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "Bowl_1",
+              "field": "location",
+              "value": "living_room_coffee_table"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 3,
+          "t_end": 4
+        },
+        {
+          "id": "r1_s7",
+          "agent": "R1",
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "yellow apple",
+            "from": "R1",
+            "to": "kitchen_counter"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "kitchen",
+          "origin": "fallback_release",
+          "answers": null,
+          "enables": null,
+          "serves": null,
+          "serves_text": "",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 2,
+          "t_end": 3
+        },
+        {
+          "id": "r1_s8",
+          "agent": "R1",
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "lettuce",
+            "from": "R1",
+            "to": "kitchen_sink_basin"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "kitchen",
+          "origin": "fallback_release",
+          "answers": null,
+          "enables": null,
+          "serves": null,
+          "serves_text": "",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 2,
+          "t_start": 5,
+          "t_end": 6
+        }
+      ],
+      "order": {
+        "R1": [
+          "r1_s1",
+          "r1_s2",
+          "r1_s3",
+          "r1_s7",
+          "r1_s4",
+          "r1_s5",
+          "r1_s6",
+          "r1_s8"
+        ],
+        "R2": [
+          "r2_s1",
+          "r2_s2",
+          "r2_s3",
+          "r2_s4",
+          "r2_s5",
+          "r2_s6",
+          "r2_s7",
+          "r2_s8"
+        ],
+        "R3": [
+          "r3_s1"
+        ],
+        "R4": [
+          "r4_s1",
+          "r4_s2",
+          "r4_s3",
+          "r4_s4"
+        ]
+      },
+      "edges": [
+        {
+          "src": "r1_s1",
+          "dst": "r1_s2",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r1_s2",
+          "dst": "r1_s7",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r1_s7",
+          "dst": "r1_s4",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r1_s4",
+          "dst": "r1_s5",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r1_s5",
+          "dst": "r1_s8",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r2_s1",
+          "dst": "r2_s2",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r2_s2",
+          "dst": "r2_s3",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r2_s3",
+          "dst": "r2_s4",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r2_s4",
+          "dst": "r2_s5",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r2_s5",
+          "dst": "r2_s6",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r4_s1",
+          "dst": "r4_s2",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r4_s2",
+          "dst": "r4_s3",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r4_s3",
+          "dst": "r4_s4",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r1_s3",
+          "dst": "r2_s7",
+          "kind": "TRANSFER",
+          "kappa": "mutual",
+          "status": "PROPOSED",
+          "source": "stage3",
+          "existing": true,
+          "decided_by": ""
+        },
+        {
+          "src": "r1_s6",
+          "dst": "r2_s8",
+          "kind": "TRANSFER",
+          "kappa": "mutual",
+          "status": "PROPOSED",
+          "source": "stage3",
+          "existing": true,
+          "decided_by": ""
+        },
+        {
+          "src": "r4_s2",
+          "dst": "r4_s4",
+          "kind": "ORDER",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "graph",
+          "existing": false,
+          "decided_by": ""
+        }
+      ],
+      "edit_log": [
+        {
+          "k": 0,
+          "edit": {
+            "op": "SELECT",
+            "provider": "r1_s3",
+            "request": "r2_s7",
+            "rationale": "R1's PASS step 'r1_s3' is the mutual candidate to fulfill R2's RECEIVE step 'r2_s7' for the yellow apple."
+          },
+          "applied": true,
+          "error": null,
+          "rationale": "R1's PASS step 'r1_s3' is the mutual candidate to fulfill R2's RECEIVE step 'r2_s7' for the yellow apple."
+        },
+        {
+          "k": 1,
+          "edit": {
+            "op": "SELECT",
+            "provider": "r1_s6",
+            "request": "r2_s8",
+            "rationale": "R1's PASS step 'r1_s6' is the mutual candidate to fulfill R2's RECEIVE step 'r2_s8' for the lettuce."
+          },
+          "applied": true,
+          "error": null,
+          "rationale": "R1's PASS step 'r1_s6' is the mutual candidate to fulfill R2's RECEIVE step 'r2_s8' for the lettuce."
+        },
+        {
+          "k": 2,
+          "edit": {
+            "op": "DROP",
+            "node": "r1_s3",
+            "rationale": "R2 has declined the yellow apple since it cannot slice it, making this step unnecessary."
+          },
+          "applied": true,
+          "error": null,
+          "rationale": "R2 has declined the yellow apple since it cannot slice it, making this step unnecessary."
+        },
+        {
+          "k": 3,
+          "edit": {
+            "op": "DROP",
+            "node": "r1_s6",
+            "rationale": "R2 has declined the lettuce since it cannot prepare it, making this step unnecessary."
+          },
+          "applied": true,
+          "error": null,
+          "rationale": "R2 has declined the lettuce since it cannot prepare it, making this step unnecessary."
+        }
+      ],
+      "report": {
+        "goals": [
+          {
+            "robot": "R1",
+            "goal": 0,
+            "text": "prepare apple slices for snacking",
+            "status": "partial",
+            "cause": [
+              "Left unresolved"
+            ],
+            "evidence": [
+              "r1_s1",
+              "r1_s2"
+            ],
+            "note": "",
+            "llm_status": "partial",
+            "llm_cause": "Left unresolved"
+          },
+          {
+            "robot": "R1",
+            "goal": 1,
+            "text": "prepare lettuce for snacking",
+            "status": "partial",
+            "cause": [
+              "Left unresolved"
+            ],
+            "evidence": [
+              "r1_s4",
+              "r1_s5"
+            ],
+            "note": "",
+            "llm_status": "partial",
+            "llm_cause": "Left unresolved"
+          },
+          {
+            "robot": "R2",
+            "goal": 0,
+            "text": "dim lighting for a comfortable ambiance",
+            "status": "partial",
+            "cause": [
+              "Left unresolved"
+            ],
+            "evidence": [
+              "r2_s1",
+              "r2_s2"
+            ],
+            "note": "",
+            "llm_status": "partial",
+            "llm_cause": "Left unresolved"
+          },
+          {
+            "robot": "R2",
+            "goal": 1,
+            "text": "TV on for movie watching",
+            "status": "covered",
+            "cause": [],
+            "evidence": [
+              "r2_s3",
+              "r2_s4"
+            ],
+            "note": "",
+            "llm_status": "covered",
+            "llm_cause": null
+          },
+          {
+            "robot": "R2",
+            "goal": 2,
+            "text": "sofa arranged for comfortable seating",
+            "status": "covered",
+            "cause": [],
+            "evidence": [
+              "r2_s5",
+              "r2_s6"
+            ],
+            "note": "",
+            "llm_status": "covered",
+            "llm_cause": null
+          },
+          {
+            "robot": "R3",
+            "goal": 0,
+            "text": "ensure snacks are available for the movie",
+            "status": "uncovered",
+            "cause": [
+              "No volunteer"
+            ],
+            "evidence": [],
+            "note": "",
+            "llm_status": "uncovered",
+            "llm_cause": "No volunteer"
+          },
+          {
+            "robot": "R4",
+            "goal": 0,
+            "text": "provide a snack for the movie by bringing the bowl to the living room",
+            "status": "covered",
+            "cause": [],
+            "evidence": [
+              "r4_s1",
+              "r4_s2",
+              "r4_s3",
+              "r4_s4"
+            ],
+            "note": "",
+            "llm_status": "covered",
+            "llm_cause": null
+          }
+        ],
+        "unresolved_requests": [
+          {
+            "request": "r2_s7",
+            "agent": "R2",
+            "text": "receive yellow apple (counter, image 1)",
+            "why": "no candidate (nobody said YES)",
+            "replies": [
+              {
+                "agent": "R3",
+                "answer": "NO",
+                "reason": "I do not have the yellow apple and cannot access the location where it is."
+              },
+              {
+                "agent": "R4",
+                "answer": "NO",
+                "reason": "I do not have the yellow apple (counter, image 1) in my possession and am not in the living room."
+              }
+            ]
+          },
+          {
+            "request": "r2_s8",
+            "agent": "R2",
+            "text": "receive lettuce (sink basin, image 2)",
+            "why": "no candidate (nobody said YES)",
+            "replies": [
+              {
+                "agent": "R3",
+                "answer": "NO",
+                "reason": "I do not have the lettuce and cannot access the location where it is."
+              },
+              {
+                "agent": "R4",
+                "answer": "NO",
+                "reason": "I do not have the lettuce (sink basin, image 2) in my possession and am not in the living room."
+              }
+            ]
+          }
+        ],
+        "rejected_edits": [],
+        "dropped": [
+          {
+            "node": "r1_s3",
+            "agent": "R1",
+            "type": "PASS",
+            "text": "pass yellow apple (counter, image 1) to R2",
+            "rationale": "R2 has declined the yellow apple since it cannot slice it, making this step unnecessary."
+          },
+          {
+            "node": "r1_s6",
+            "agent": "R1",
+            "type": "PASS",
+            "text": "pass lettuce (sink basin, image 2) to R2",
+            "rationale": "R2 has declined the lettuce since it cannot prepare it, making this step unnecessary."
+          }
+        ],
+        "removed_by_closure": [
+          {
+            "node": "r2_s7",
+            "agent": "R2",
+            "type": "RECEIVE",
+            "text": "receive yellow apple (counter, image 1)",
+            "reason": "unresolved: no candidate (nobody said YES)"
+          },
+          {
+            "node": "r2_s8",
+            "agent": "R2",
+            "type": "RECEIVE",
+            "text": "receive lettuce (sink basin, image 2)",
+            "reason": "unresolved: no candidate (nobody said YES)"
+          }
+        ],
+        "invariant_violations": [],
+        "deadline": {
+          "makespan_min": 10,
+          "deadline_min": 30,
+          "exceeded": false
+        }
+      }
+    },
+    "report": {
+      "goals": [
+        {
+          "robot": "R1",
+          "goal": 0,
+          "text": "prepare apple slices for snacking",
+          "status": "partial",
+          "cause": [
+            "Left unresolved"
+          ],
+          "evidence": [
+            "r1_s1",
+            "r1_s2"
+          ],
+          "note": "",
+          "llm_status": "partial",
+          "llm_cause": "Left unresolved"
+        },
+        {
+          "robot": "R1",
+          "goal": 1,
+          "text": "prepare lettuce for snacking",
+          "status": "partial",
+          "cause": [
+            "Left unresolved"
+          ],
+          "evidence": [
+            "r1_s4",
+            "r1_s5"
+          ],
+          "note": "",
+          "llm_status": "partial",
+          "llm_cause": "Left unresolved"
+        },
+        {
+          "robot": "R2",
+          "goal": 0,
+          "text": "dim lighting for a comfortable ambiance",
+          "status": "partial",
+          "cause": [
+            "Left unresolved"
+          ],
+          "evidence": [
+            "r2_s1",
+            "r2_s2"
+          ],
+          "note": "",
+          "llm_status": "partial",
+          "llm_cause": "Left unresolved"
+        },
+        {
+          "robot": "R2",
+          "goal": 1,
+          "text": "TV on for movie watching",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r2_s3",
+            "r2_s4"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R2",
+          "goal": 2,
+          "text": "sofa arranged for comfortable seating",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r2_s5",
+            "r2_s6"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R3",
+          "goal": 0,
+          "text": "ensure snacks are available for the movie",
+          "status": "uncovered",
+          "cause": [
+            "No volunteer"
+          ],
+          "evidence": [],
+          "note": "",
+          "llm_status": "uncovered",
+          "llm_cause": "No volunteer"
+        },
+        {
+          "robot": "R4",
+          "goal": 0,
+          "text": "provide a snack for the movie by bringing the bowl to the living room",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r4_s1",
+            "r4_s2",
+            "r4_s3",
+            "r4_s4"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        }
+      ],
+      "unresolved_requests": [
+        {
+          "request": "r2_s7",
+          "agent": "R2",
+          "text": "receive yellow apple (counter, image 1)",
+          "why": "no candidate (nobody said YES)",
+          "replies": [
+            {
+              "agent": "R3",
+              "answer": "NO",
+              "reason": "I do not have the yellow apple and cannot access the location where it is."
+            },
+            {
+              "agent": "R4",
+              "answer": "NO",
+              "reason": "I do not have the yellow apple (counter, image 1) in my possession and am not in the living room."
+            }
+          ]
+        },
+        {
+          "request": "r2_s8",
+          "agent": "R2",
+          "text": "receive lettuce (sink basin, image 2)",
+          "why": "no candidate (nobody said YES)",
+          "replies": [
+            {
+              "agent": "R3",
+              "answer": "NO",
+              "reason": "I do not have the lettuce and cannot access the location where it is."
+            },
+            {
+              "agent": "R4",
+              "answer": "NO",
+              "reason": "I do not have the lettuce (sink basin, image 2) in my possession and am not in the living room."
+            }
+          ]
+        }
+      ],
+      "rejected_edits": [],
+      "dropped": [
+        {
+          "node": "r1_s3",
+          "agent": "R1",
+          "type": "PASS",
+          "text": "pass yellow apple (counter, image 1) to R2",
+          "rationale": "R2 has declined the yellow apple since it cannot slice it, making this step unnecessary."
+        },
+        {
+          "node": "r1_s6",
+          "agent": "R1",
+          "type": "PASS",
+          "text": "pass lettuce (sink basin, image 2) to R2",
+          "rationale": "R2 has declined the lettuce since it cannot prepare it, making this step unnecessary."
+        }
+      ],
+      "removed_by_closure": [
+        {
+          "node": "r2_s7",
+          "agent": "R2",
+          "type": "RECEIVE",
+          "text": "receive yellow apple (counter, image 1)",
+          "reason": "unresolved: no candidate (nobody said YES)"
+        },
+        {
+          "node": "r2_s8",
+          "agent": "R2",
+          "type": "RECEIVE",
+          "text": "receive lettuce (sink basin, image 2)",
+          "reason": "unresolved: no candidate (nobody said YES)"
+        }
+      ],
+      "invariant_violations": [],
+      "deadline": {
+        "makespan_min": 10,
+        "deadline_min": 30,
+        "exceeded": false
+      }
+    },
+    "metrics": {
+      "task_id": "task5_abstract",
+      "n_steps_total": 21,
+      "n_steps_active": 17,
+      "n_requests": 2,
+      "n_requests_served": 0,
+      "n_requests_unresolved": 2,
+      "n_candidates_from_stage3": 2,
+      "n_collab_edges_final": 0,
+      "n_help_edges": 0,
+      "n_transfer_edges": 0,
+      "decided_by_select": 0,
+      "decided_by_merge": 0,
+      "decided_by_default": 0,
+      "kappa_final": {
+        "mutual": 0,
+        "provider-only": 0,
+        "merged": 0
+      },
+      "graph_edits_applied": 4,
+      "graph_edits_rejected": 0,
+      "n_dropped_by_graph": 2,
+      "n_removed_by_closure": 2,
+      "n_requests_moved_later": 0,
+      "n_invariant_violations": 0,
+      "goals_total": 7,
+      "goals_covered": 3,
+      "goals_partial": 3,
+      "goals_uncovered": 1,
+      "goal_causes": {
+        "No volunteer": 1,
+        "Capability gap": 0,
+        "Left unresolved": 3,
+        "Infeasible": 0,
+        "Deadline exceeded": 0
+      },
+      "plan_fix_rounds": {
+        "R1": 1,
+        "R2": 2,
+        "R3": 2,
+        "R4": 0
+      },
+      "n_steps_excluded_stage2": 2,
+      "makespan_min": 10,
+      "deadline": 30,
+      "deadline_ok": true,
+      "llm_calls": 18,
+      "prompt_tokens": 115456,
+      "completion_tokens": 7469,
+      "config": {
+        "use_edge_proposal": true,
+        "use_graph_llm": true
+      },
+      "wall_time_sec": 27.5
+    },
+    "config": {
+      "use_edge_proposal": true,
+      "use_graph_llm": true,
+      "max_graph_rounds": 2,
+      "deadline_min": 20
+    }
+  },
+  "llm_judge": null
+}

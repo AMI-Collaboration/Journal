@@ -1,0 +1,1523 @@
+{
+  "method": "cda",
+  "task_n": "task3_simple",
+  "raw_result": {
+    "task_n": "task3_simple",
+    "mode": "multi_room",
+    "model": "gpt-4o",
+    "task_text": "Take cabbage out of the fridge and put it in the bowl, open laptop",
+    "joint_plan_text": "```plaintext\n### Joint Plan — task3_simple  (about 5 min / deadline 10 min: OK)\n### Robots: R1:Mobile_Light(kitchen), R2:Mobile_Light(bedroom), R3:Mobile_Light(kitchen), R4:Mobile_Light(bedroom)\n\n[0-5 min]\n- R1 [LOCAL] move to the kitchen island from the kitchen bowl  (r1_s1)\n- R2 [LOCAL] move to the bedroom start from the bedroom desk  (r2_s1)\n- R3 [LOCAL] move to the kitchen start from the kitchen fridge  (r3_s1)\n- R4 [LOCAL] move to the bedroom start from the bedroom desk  (r4_s1)\n- R2 [LOCAL] turn on the Laptop_1 from the bedroom desk  (r2_s2)\n- R3 [LOCAL] pick up the green lettuce from the kitchen fridge to R3  (r3_s2)\n- R3 [LOCAL] move to the kitchen fridge from the kitchen counter  (r3_s3)\n- R3 [LOCAL] put down the green lettuce from R3 to the kitchen counter [after r3_s2]  (r3_s4)",
+    "joint_plan_full": "### Joint Plan — task3_simple  (about 5 min / deadline 10 min: OK)\n### Robots: R1:Mobile_Light(kitchen), R2:Mobile_Light(bedroom), R3:Mobile_Light(kitchen), R4:Mobile_Light(bedroom)\n\n[0-5 min]\n- R1 [LOCAL] move_to from kitchen_island to kitchen_bowl  (r1_s1)\n- R2 [LOCAL] move_to from bedroom_start to bedroom_desk  (r2_s1)\n- R3 [LOCAL] move_to from kitchen_start to kitchen_fridge  (r3_s1)\n- R4 [LOCAL] move_to from bedroom_start to bedroom_desk  (r4_s1)\n- R2 [LOCAL] turn_on the Laptop_1 from bedroom_desk  (r2_s2)\n- R3 [LOCAL] pick_up the green lettuce from kitchen_fridge to R3  (r3_s2)\n- R3 [LOCAL] move_to from kitchen_fridge to kitchen_counter  (r3_s3)\n- R3 [LOCAL] put_down the green lettuce from R3 to kitchen_counter [after r3_s2]  (r3_s4)\n\n### Provenance (collaboration edges)\n\n### Graph LLM edits (applied)\n- DROP node=r4_s2 — Duplicate step to R2's step r2_s2, which also turns on the laptop.\n\n### Report: goal coverage\n- R1.g0 cabbage placed in the bowl: uncovered — No volunteer\n- R2.g0 laptop open on the desk: covered [r2_s1, r2_s2]\n- R3.g0 lettuce placed in the bowl: uncovered — No volunteer\n- R4.g0 open laptop on the desk: partial — No volunteer [r4_s1]\n\n### Dropped by the Graph LLM\n- R4 [LOCAL] turn_on the Laptop_1 from bedroom_desk (r4_s2) — Duplicate step to R2's step r2_s2, which also turns on the laptop.\n\n### Removed by dependency closure\n- R1 [LOCAL] put_down the cabbage from R1 to bowl (r1_s2) — dangling: R1 holds no 'cabbage' at this point",
+    "offers": {
+      "R1": {
+        "agent": "R1",
+        "capability": "I am mobile and can carry light objects up to 5 kg with one arm.",
+        "can_do": [
+          "PickupLightObject: lift mugs, fruit, small items",
+          "PassReceiveObject: exchange objects with others"
+        ],
+        "cannot_do": [
+          "PickupHeavyObject: cannot lift furniture",
+          "PushFurniture: cannot move heavy furniture",
+          "SliceObject: no cutting tool",
+          "PourObject: cannot pour liquids"
+        ],
+        "has_items": [
+          "bread (island, image 1)",
+          "tomato (island, image 1)",
+          "pot (counter, image 1)",
+          "bowl (island, image 2)",
+          "cell phone (island, image 2)"
+        ],
+        "need_from_others": [
+          "someone who can open the laptop"
+        ],
+        "intends": [
+          "cabbage placed in the bowl"
+        ],
+        "see_items": [],
+        "other_robots_in_room": [],
+        "env_state": [
+          {
+            "object_id": "Bread_1",
+            "object_type": "Bread",
+            "location": "kitchen_island",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Tomato_1",
+            "object_type": "Tomato",
+            "location": "kitchen_island",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Pot_1",
+            "object_type": "Pot",
+            "location": "kitchen_counter",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Bowl_1",
+            "object_type": "Bowl",
+            "location": "kitchen_island",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "CellPhone_1",
+            "object_type": "CellPhone",
+            "location": "kitchen_island",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          }
+        ],
+        "obs_scope": "I can observe the kitchen only.",
+        "reasoning": "a) Cabbage needs to be placed in the bowl, and the laptop must be opened. b) Kitchen: access to fridge for cabbage, and bowl for placement. c) I can retrieve items from the fridge and place them in the bowl. d) Retrieving and placing the cabbage is the priority. e) No capability to open the laptop, need assistance."
+      },
+      "R2": {
+        "agent": "R2",
+        "capability": "I am mobile and can carry light objects up to 5 kg with one arm.",
+        "can_do": [
+          "PickupLightObject: lift small items",
+          "PassReceiveObject: hand off or collect objects",
+          "ToggleObject: turn on/off lights, TV, appliances"
+        ],
+        "cannot_do": [
+          "PickupHeavyObject: cannot lift heavy items",
+          "PushFurniture: cannot move furniture",
+          "SliceObject: no cutting tool",
+          "PourObject: cannot pour liquids"
+        ],
+        "has_items": [
+          "laptop (desk, image 1)",
+          "pencil (desk, image 1)",
+          "cellphone (desk, image 1)",
+          "book (desk, image 2)",
+          "pen (desk, image 2)"
+        ],
+        "need_from_others": [
+          "someone to take cabbage out of the fridge and put it in the bowl"
+        ],
+        "intends": [
+          "laptop open on the desk"
+        ],
+        "see_items": [],
+        "other_robots_in_room": [],
+        "env_state": [
+          {
+            "object_id": "Laptop_1",
+            "object_type": "Laptop",
+            "location": "bedroom_desk",
+            "accessible": true,
+            "toggle": "off",
+            "clean": null
+          },
+          {
+            "object_id": "Pencil_1",
+            "object_type": "Pencil",
+            "location": "bedroom_desk",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "CellPhone_1",
+            "object_type": "CellPhone",
+            "location": "bedroom_desk",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Book_1",
+            "object_type": "Book",
+            "location": "bedroom_desk",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Pen_1",
+            "object_type": "Pen",
+            "location": "bedroom_desk",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          }
+        ],
+        "obs_scope": "I can observe the bedroom only.",
+        "reasoning": "a) Cabbage needs to be placed in the bowl and the laptop opened. b) Kitchen handles the cabbage; bedroom handles the laptop. c) I can open the laptop. d) Opening the laptop is my priority. e) I cannot handle the cabbage from the fridge as it is not in my room."
+      },
+      "R3": {
+        "agent": "R3",
+        "capability": "I am mobile and can carry light objects up to 5 kg with one arm.",
+        "can_do": [
+          "PickupLightObject: lift small items like lettuce and bowls",
+          "PassReceiveObject: exchange objects with other robots"
+        ],
+        "cannot_do": [
+          "PickupHeavyObject: cannot lift furniture or heavy appliances",
+          "PushFurniture: cannot move large furniture",
+          "SliceObject: no cutting tool",
+          "PourObject: cannot pour liquids"
+        ],
+        "has_items": [
+          "green lettuce (fridge, image 1)",
+          "red apple (fridge, image 1)",
+          "white bowl (counter, image 2)",
+          "silver fridge (kitchen, image 1)"
+        ],
+        "need_from_others": [
+          "someone to open the laptop"
+        ],
+        "intends": [
+          "lettuce placed in the bowl"
+        ],
+        "see_items": [],
+        "other_robots_in_room": [],
+        "env_state": [
+          {
+            "object_id": "Lettuce_1",
+            "object_type": "Lettuce",
+            "location": "kitchen_fridge",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Apple_1",
+            "object_type": "Apple",
+            "location": "kitchen_fridge",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Bowl_1",
+            "object_type": "Bowl",
+            "location": "kitchen_counter",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Fridge_1",
+            "object_type": "Fridge",
+            "location": "kitchen_fridge",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          }
+        ],
+        "obs_scope": "I can observe the kitchen only.",
+        "reasoning": "a) The task requires removing cabbage from the fridge and placing it in a bowl, and opening a laptop. b) The kitchen provides access to the fridge and the bowl. c) I can remove the lettuce (as a substitute for cabbage) from the fridge and place it in the bowl. d) Prioritizing the lettuce task as it requires physical manipulation of objects."
+      },
+      "R4": {
+        "agent": "R4",
+        "capability": "I am mobile and can carry light objects up to 5 kg with one arm.",
+        "can_do": [
+          "PickupLightObject: lift small items like a bowl or laptop",
+          "PassReceiveObject: exchange objects with other robots"
+        ],
+        "cannot_do": [
+          "PickupHeavyObject: cannot lift furniture or heavy items",
+          "PushFurniture: cannot move furniture",
+          "SliceObject: no cutting tool",
+          "PourObject: cannot pour liquids"
+        ],
+        "has_items": [
+          "AlarmClock (side table, image 1)",
+          "Bed (floor, image 1)",
+          "Book (desk, image 2)",
+          "Bowl (desk, image 2)",
+          "CD (desk, image 2)",
+          "CellPhone (side table, image 1)",
+          "Chair (desk, image 2)",
+          "CreditCard (desk, image 2)",
+          "Desk (floor, image 2)",
+          "DeskLamp (desk, image 2)",
+          "Drawer (desk, image 2)",
+          "GarbageCan (floor, image 2)",
+          "HousePlant (floor, image 1)",
+          "KeyChain (desk, image 2)",
+          "Laptop (desk, image 2)",
+          "Pen (desk, image 2)",
+          "Pencil (desk, image 2)",
+          "Pillow (bed, image 1)",
+          "Safe (floor, image 1)",
+          "SideTable (floor, image 1)",
+          "TeddyBear (bed, image 1)",
+          "TennisRacket (desk, image 2)"
+        ],
+        "need_from_others": [
+          "someone to bring cabbage from the fridge"
+        ],
+        "intends": [
+          "open laptop on the desk"
+        ],
+        "see_items": [],
+        "other_robots_in_room": [],
+        "env_state": [
+          {
+            "object_id": "AlarmClock_1",
+            "object_type": "AlarmClock",
+            "location": "bedroom_side table",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Bed_1",
+            "object_type": "Bed",
+            "location": "bedroom_floor",
+            "accessible": false,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Book_1",
+            "object_type": "Book",
+            "location": "bedroom_desk",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Bowl_1",
+            "object_type": "Bowl",
+            "location": "bedroom_desk",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "CD_1",
+            "object_type": "CD",
+            "location": "bedroom_desk",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "CellPhone_1",
+            "object_type": "CellPhone",
+            "location": "bedroom_side table",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Chair_1",
+            "object_type": "Chair",
+            "location": "bedroom_desk",
+            "accessible": false,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "CreditCard_1",
+            "object_type": "CreditCard",
+            "location": "bedroom_desk",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Desk_1",
+            "object_type": "Desk",
+            "location": "bedroom_floor",
+            "accessible": false,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "DeskLamp_1",
+            "object_type": "DeskLamp",
+            "location": "bedroom_desk",
+            "accessible": true,
+            "toggle": "off",
+            "clean": null
+          },
+          {
+            "object_id": "Drawer_1",
+            "object_type": "Drawer",
+            "location": "bedroom_desk",
+            "accessible": false,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "GarbageCan_1",
+            "object_type": "GarbageCan",
+            "location": "bedroom_floor",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "HousePlant_1",
+            "object_type": "HousePlant",
+            "location": "bedroom_floor",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "KeyChain_1",
+            "object_type": "KeyChain",
+            "location": "bedroom_desk",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Laptop_1",
+            "object_type": "Laptop",
+            "location": "bedroom_desk",
+            "accessible": true,
+            "toggle": "off",
+            "clean": null
+          },
+          {
+            "object_id": "Pen_1",
+            "object_type": "Pen",
+            "location": "bedroom_desk",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Pencil_1",
+            "object_type": "Pencil",
+            "location": "bedroom_desk",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Pillow_1",
+            "object_type": "Pillow",
+            "location": "bedroom_bed",
+            "accessible": false,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Safe_1",
+            "object_type": "Safe",
+            "location": "bedroom_floor",
+            "accessible": false,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "SideTable_1",
+            "object_type": "SideTable",
+            "location": "bedroom_floor",
+            "accessible": false,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "TeddyBear_1",
+            "object_type": "TeddyBear",
+            "location": "bedroom_bed",
+            "accessible": false,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "TennisRacket_1",
+            "object_type": "TennisRacket",
+            "location": "bedroom_desk",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          }
+        ],
+        "obs_scope": "I can observe the bedroom only.",
+        "reasoning": "a) The task requires placing a cabbage in a bowl and opening a laptop. b) The kitchen would have a fridge for the cabbage, and the bedroom has the bowl and laptop. c) I can open the laptop in my room and prepare the bowl. d) Opening the laptop is the highest priority since I can do it directly. e) I cannot access the fridge or move the cabbage, so I need assistance."
+      }
+    },
+    "local_plans": {
+      "R1": [
+        {
+          "id": "r1_s1",
+          "agent": "R1",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "kitchen_island",
+            "to": "kitchen_bowl",
+            "room": "kitchen"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "kitchen",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "cabbage placed in the bowl",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r1_s2",
+          "agent": "R1",
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "cabbage",
+            "from": "R1",
+            "to": "bowl"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "kitchen",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "cabbage placed in the bowl",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "Bowl_1",
+              "field": "location",
+              "value": "kitchen_island"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "Cabbage_1",
+              "field": "location",
+              "value": "kitchen_bowl"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        }
+      ],
+      "R2": [
+        {
+          "id": "r2_s1",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "bedroom_start",
+            "to": "bedroom_desk",
+            "room": "bedroom"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "laptop open on the desk",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r2_s2",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "Laptop_1",
+            "from": "bedroom_desk",
+            "to": null
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 2,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "laptop open on the desk",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "Laptop_1",
+              "field": "location",
+              "value": "bedroom_desk"
+            },
+            {
+              "object_id": "Laptop_1",
+              "field": "toggle",
+              "value": "off"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "Laptop_1",
+              "field": "toggle",
+              "value": "on"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        }
+      ],
+      "R3": [
+        {
+          "id": "r3_s1",
+          "agent": "R3",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "kitchen_start",
+            "to": "kitchen_fridge",
+            "room": "kitchen"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "kitchen",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "lettuce placed in the bowl",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r3_s2",
+          "agent": "R3",
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "green lettuce",
+            "from": "kitchen_fridge",
+            "to": "R3"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "kitchen",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "lettuce placed in the bowl",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "Lettuce_1",
+              "field": "location",
+              "value": "kitchen_fridge"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "Lettuce_1",
+              "field": "location",
+              "value": "R3"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r3_s3",
+          "agent": "R3",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "kitchen_fridge",
+            "to": "kitchen_counter",
+            "room": "kitchen"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "kitchen",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "lettuce placed in the bowl",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r3_s4",
+          "agent": "R3",
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "green lettuce",
+            "from": "R3",
+            "to": "kitchen_counter"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "kitchen",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "lettuce placed in the bowl",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "Lettuce_1",
+              "field": "location",
+              "value": "R3"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "Lettuce_1",
+              "field": "location",
+              "value": "kitchen_counter"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        }
+      ],
+      "R4": [
+        {
+          "id": "r4_s1",
+          "agent": "R4",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "bedroom_start",
+            "to": "bedroom_desk",
+            "room": "bedroom"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "open laptop on the desk",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r4_s2",
+          "agent": "R4",
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "Laptop_1",
+            "from": "bedroom_desk",
+            "to": null
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "open laptop on the desk",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "Laptop_1",
+              "field": "location",
+              "value": "bedroom_desk"
+            },
+            {
+              "object_id": "Laptop_1",
+              "field": "toggle",
+              "value": "off"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "Laptop_1",
+              "field": "toggle",
+              "value": "on"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        }
+      ]
+    },
+    "answers": [],
+    "graph": {
+      "nodes": [
+        {
+          "id": "r1_s1",
+          "agent": "R1",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "kitchen_island",
+            "to": "kitchen_bowl",
+            "room": "kitchen"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "kitchen",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "cabbage placed in the bowl",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 0,
+          "t_end": 1
+        },
+        {
+          "id": "r1_s2",
+          "agent": "R1",
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "cabbage",
+            "from": "R1",
+            "to": "bowl"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "kitchen",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "cabbage placed in the bowl",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "Bowl_1",
+              "field": "location",
+              "value": "kitchen_island"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "Cabbage_1",
+              "field": "location",
+              "value": "kitchen_bowl"
+            }
+          ],
+          "status": "removed",
+          "status_reason": "dangling: R1 holds no 'cabbage' at this point",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r2_s1",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "bedroom_start",
+            "to": "bedroom_desk",
+            "room": "bedroom"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "laptop open on the desk",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 0,
+          "t_end": 1
+        },
+        {
+          "id": "r2_s2",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "Laptop_1",
+            "from": "bedroom_desk",
+            "to": null
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 2,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "laptop open on the desk",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "Laptop_1",
+              "field": "location",
+              "value": "bedroom_desk"
+            },
+            {
+              "object_id": "Laptop_1",
+              "field": "toggle",
+              "value": "off"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "Laptop_1",
+              "field": "toggle",
+              "value": "on"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 1,
+          "t_end": 2
+        },
+        {
+          "id": "r3_s1",
+          "agent": "R3",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "kitchen_start",
+            "to": "kitchen_fridge",
+            "room": "kitchen"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "kitchen",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "lettuce placed in the bowl",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 0,
+          "t_end": 1
+        },
+        {
+          "id": "r3_s2",
+          "agent": "R3",
+          "type": "LOCAL",
+          "action": {
+            "verb": "pick_up",
+            "object": "green lettuce",
+            "from": "kitchen_fridge",
+            "to": "R3"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "kitchen",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "lettuce placed in the bowl",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "Lettuce_1",
+              "field": "location",
+              "value": "kitchen_fridge"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "Lettuce_1",
+              "field": "location",
+              "value": "R3"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 1,
+          "t_end": 2
+        },
+        {
+          "id": "r3_s3",
+          "agent": "R3",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "kitchen_fridge",
+            "to": "kitchen_counter",
+            "room": "kitchen"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "kitchen",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "lettuce placed in the bowl",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 2,
+          "t_end": 3
+        },
+        {
+          "id": "r3_s4",
+          "agent": "R3",
+          "type": "LOCAL",
+          "action": {
+            "verb": "put_down",
+            "object": "green lettuce",
+            "from": "R3",
+            "to": "kitchen_counter"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "kitchen",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "lettuce placed in the bowl",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "Lettuce_1",
+              "field": "location",
+              "value": "R3"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "Lettuce_1",
+              "field": "location",
+              "value": "kitchen_counter"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 3,
+          "t_end": 4
+        },
+        {
+          "id": "r4_s1",
+          "agent": "R4",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "bedroom_start",
+            "to": "bedroom_desk",
+            "room": "bedroom"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "open laptop on the desk",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 0,
+          "t_end": 1
+        },
+        {
+          "id": "r4_s2",
+          "agent": "R4",
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "Laptop_1",
+            "from": "bedroom_desk",
+            "to": null
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "open laptop on the desk",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "Laptop_1",
+              "field": "location",
+              "value": "bedroom_desk"
+            },
+            {
+              "object_id": "Laptop_1",
+              "field": "toggle",
+              "value": "off"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "Laptop_1",
+              "field": "toggle",
+              "value": "on"
+            }
+          ],
+          "status": "dropped",
+          "status_reason": "4.2 DROP: Duplicate step to R2's step r2_s2, which also turns on the laptop.",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        }
+      ],
+      "order": {
+        "R1": [
+          "r1_s1",
+          "r1_s2"
+        ],
+        "R2": [
+          "r2_s1",
+          "r2_s2"
+        ],
+        "R3": [
+          "r3_s1",
+          "r3_s2",
+          "r3_s3",
+          "r3_s4"
+        ],
+        "R4": [
+          "r4_s1",
+          "r4_s2"
+        ]
+      },
+      "edges": [
+        {
+          "src": "r2_s1",
+          "dst": "r2_s2",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r3_s1",
+          "dst": "r3_s2",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r3_s2",
+          "dst": "r3_s3",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r3_s3",
+          "dst": "r3_s4",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r3_s2",
+          "dst": "r3_s4",
+          "kind": "ORDER",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "graph",
+          "existing": false,
+          "decided_by": ""
+        }
+      ],
+      "edit_log": [
+        {
+          "k": 0,
+          "edit": {
+            "op": "DROP",
+            "node": "r4_s2",
+            "rationale": "Duplicate step to R2's step r2_s2, which also turns on the laptop."
+          },
+          "applied": true,
+          "error": null,
+          "rationale": "Duplicate step to R2's step r2_s2, which also turns on the laptop."
+        }
+      ],
+      "report": {
+        "goals": [
+          {
+            "robot": "R1",
+            "goal": 0,
+            "text": "cabbage placed in the bowl",
+            "status": "uncovered",
+            "cause": [
+              "No volunteer"
+            ],
+            "evidence": [],
+            "note": "",
+            "llm_status": "uncovered",
+            "llm_cause": "No volunteer"
+          },
+          {
+            "robot": "R2",
+            "goal": 0,
+            "text": "laptop open on the desk",
+            "status": "covered",
+            "cause": [],
+            "evidence": [
+              "r2_s1",
+              "r2_s2"
+            ],
+            "note": "",
+            "llm_status": "covered",
+            "llm_cause": null
+          },
+          {
+            "robot": "R3",
+            "goal": 0,
+            "text": "lettuce placed in the bowl",
+            "status": "uncovered",
+            "cause": [
+              "No volunteer"
+            ],
+            "evidence": [],
+            "note": "",
+            "llm_status": "uncovered",
+            "llm_cause": "No volunteer"
+          },
+          {
+            "robot": "R4",
+            "goal": 0,
+            "text": "open laptop on the desk",
+            "status": "partial",
+            "cause": [
+              "No volunteer"
+            ],
+            "evidence": [
+              "r4_s1"
+            ],
+            "note": "",
+            "llm_status": "partial",
+            "llm_cause": "No volunteer"
+          }
+        ],
+        "unresolved_requests": [],
+        "rejected_edits": [],
+        "dropped": [
+          {
+            "node": "r4_s2",
+            "agent": "R4",
+            "type": "LOCAL",
+            "text": "turn_on the Laptop_1 from bedroom_desk",
+            "rationale": "Duplicate step to R2's step r2_s2, which also turns on the laptop."
+          }
+        ],
+        "removed_by_closure": [
+          {
+            "node": "r1_s2",
+            "agent": "R1",
+            "type": "LOCAL",
+            "text": "put_down the cabbage from R1 to bowl",
+            "reason": "dangling: R1 holds no 'cabbage' at this point"
+          }
+        ],
+        "invariant_violations": [],
+        "deadline": {
+          "makespan_min": 5,
+          "deadline_min": 10,
+          "exceeded": false
+        }
+      }
+    },
+    "report": {
+      "goals": [
+        {
+          "robot": "R1",
+          "goal": 0,
+          "text": "cabbage placed in the bowl",
+          "status": "uncovered",
+          "cause": [
+            "No volunteer"
+          ],
+          "evidence": [],
+          "note": "",
+          "llm_status": "uncovered",
+          "llm_cause": "No volunteer"
+        },
+        {
+          "robot": "R2",
+          "goal": 0,
+          "text": "laptop open on the desk",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r2_s1",
+            "r2_s2"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R3",
+          "goal": 0,
+          "text": "lettuce placed in the bowl",
+          "status": "uncovered",
+          "cause": [
+            "No volunteer"
+          ],
+          "evidence": [],
+          "note": "",
+          "llm_status": "uncovered",
+          "llm_cause": "No volunteer"
+        },
+        {
+          "robot": "R4",
+          "goal": 0,
+          "text": "open laptop on the desk",
+          "status": "partial",
+          "cause": [
+            "No volunteer"
+          ],
+          "evidence": [
+            "r4_s1"
+          ],
+          "note": "",
+          "llm_status": "partial",
+          "llm_cause": "No volunteer"
+        }
+      ],
+      "unresolved_requests": [],
+      "rejected_edits": [],
+      "dropped": [
+        {
+          "node": "r4_s2",
+          "agent": "R4",
+          "type": "LOCAL",
+          "text": "turn_on the Laptop_1 from bedroom_desk",
+          "rationale": "Duplicate step to R2's step r2_s2, which also turns on the laptop."
+        }
+      ],
+      "removed_by_closure": [
+        {
+          "node": "r1_s2",
+          "agent": "R1",
+          "type": "LOCAL",
+          "text": "put_down the cabbage from R1 to bowl",
+          "reason": "dangling: R1 holds no 'cabbage' at this point"
+        }
+      ],
+      "invariant_violations": [],
+      "deadline": {
+        "makespan_min": 5,
+        "deadline_min": 10,
+        "exceeded": false
+      }
+    },
+    "metrics": {
+      "task_id": "task3_simple",
+      "n_steps_total": 10,
+      "n_steps_active": 8,
+      "n_requests": 0,
+      "n_requests_served": 0,
+      "n_requests_unresolved": 0,
+      "n_candidates_from_stage3": 0,
+      "n_collab_edges_final": 0,
+      "n_help_edges": 0,
+      "n_transfer_edges": 0,
+      "decided_by_select": 0,
+      "decided_by_merge": 0,
+      "decided_by_default": 0,
+      "kappa_final": {
+        "mutual": 0,
+        "provider-only": 0,
+        "merged": 0
+      },
+      "graph_edits_applied": 1,
+      "graph_edits_rejected": 0,
+      "n_dropped_by_graph": 1,
+      "n_removed_by_closure": 1,
+      "n_requests_moved_later": 0,
+      "n_invariant_violations": 0,
+      "goals_total": 4,
+      "goals_covered": 1,
+      "goals_partial": 1,
+      "goals_uncovered": 2,
+      "goal_causes": {
+        "No volunteer": 3,
+        "Capability gap": 0,
+        "Left unresolved": 0,
+        "Infeasible": 0,
+        "Deadline exceeded": 0
+      },
+      "plan_fix_rounds": {
+        "R1": 2,
+        "R2": 1,
+        "R3": 2,
+        "R4": 2
+      },
+      "n_steps_excluded_stage2": 5,
+      "makespan_min": 5,
+      "deadline": 10,
+      "deadline_ok": true,
+      "llm_calls": 16,
+      "prompt_tokens": 100444,
+      "completion_tokens": 6440,
+      "config": {
+        "use_edge_proposal": true,
+        "use_graph_llm": true
+      },
+      "wall_time_sec": 23.2
+    },
+    "config": {
+      "use_edge_proposal": true,
+      "use_graph_llm": true,
+      "max_graph_rounds": 2,
+      "deadline_min": 20
+    }
+  },
+  "llm_judge": null
+}
