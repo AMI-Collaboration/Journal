@@ -18,6 +18,7 @@ Rules check structure only (ids, consent label, robot boundary, cycles). They ne
 from __future__ import annotations
 
 import math
+import re
 
 import networkx as nx
 
@@ -27,6 +28,38 @@ from .schemas import (ASK_HELP, CONFIRMED, HELP, HELP_EDGE, LOCAL, MERGED, MUTUA
 
 OPS = ("SELECT", "MERGE", "DROP", "ORDER")
 ANSWER_ORIGINS = ("accept", "volunteer", "offer")   # provider steps that exist only for a collaboration
+
+
+_PLACE_FROM = {"pick_up", "move", "push", "open", "close", "turn_on", "turn_off", "slice", "cook", "fill", "pour"}
+_PLACE_TO = {"put_down", "place", "drop"}
+_TAKE = {"pick_up", "move"}
+
+
+def _words(x) -> set[str]:
+    return {w for w in re.split(r"[^a-z0-9]+", str(x or "").lower()) if w}
+
+
+def _verb(n: Node) -> str:
+    return str(n.action.get("verb", "")).lower() if isinstance(n.action, dict) else ""
+
+
+def _place_of(n: Node):
+    """The place of the object a step acts on (as the robot wrote it), or None."""
+    if not isinstance(n.action, dict):
+        return None
+    v = _verb(n)
+    return n.action.get("from") if v in _PLACE_FROM else n.action.get("to") if v in _PLACE_TO else None
+
+
+def _same_site(a: Node, b: Node) -> bool:
+    """Two steps can act on the same physical object only if they happen in the same room and, when both name the
+    place of the object, the places are the same or one contains the other ('desk' / 'bedroom_desk'; not
+    'bedroom_desk' / 'living_room_desk'). Nothing is looked up: only what the robots wrote."""
+    ra, rb = _words(a.location), _words(b.location)
+    if ra and rb and ra != rb:
+        return False
+    pa, pb = _words(_place_of(a)), _words(_place_of(b))
+    return not (pa and pb) or pa <= pb or pb <= pa
 
 
 class PlanGraph:
@@ -50,6 +83,7 @@ class PlanGraph:
         self.unresolved: dict[str, str] = {}     # request id -> why no edge was confirmed
         self.removals: list[dict] = []           # 4.4 closure
         self.drops: list[dict] = []              # 4.2 DROP
+        self.duplicate_candidates: dict[str, str] = {}   # code-found duplicates {duplicate id: original id}
         self.invariant_violations: list[str] = []
         self.n_reordered = 0
         self.report: dict = {}
@@ -196,7 +230,8 @@ class PlanGraph:
                 if obj_id is None or value is None:
                     continue
                 match = next((s for s in seen if s[0] == obj_id and s[1] == field
-                             and s[3] != node.agent and same_value(s[2], value)), None)
+                             and s[3] != node.agent and same_value(s[2], value)
+                             and _same_site(self.nodes[s[4]], node)), None)
                 if match:
                     duplicates[nid] = match[4]
                 else:
@@ -225,6 +260,27 @@ class PlanGraph:
 
     def _cyclic(self) -> bool:
         return not nx.is_directed_acyclic_graph(self._digraph(self.projected()))
+
+    def _has_equivalent(self, n: Node) -> bool:
+        """True if dropping n loses nothing: n is not an object action, or another active step does the same kind
+        of action on the same object at the same site (room and compatible place)."""
+        v = _verb(n)
+        if n.type != LOCAL or not v or v == "move_to" or not isinstance(n.action, dict):
+            return True
+        obj = self._held_key(n.action.get("object"))
+        if not obj:
+            return True
+        kind = "take" if v in _TAKE else v
+        for m in self.nodes.values():
+            if m.id == n.id or not self.active(m.id) or m.type not in (LOCAL, HELP) or not isinstance(m.action, dict):
+                continue
+            mv = _verb(m)
+            if ("take" if mv in _TAKE else mv) != kind:
+                continue
+            mo = self._held_key(m.action.get("object"))
+            if mo and (mo in obj or obj in mo) and _same_site(n, m):
+                return True
+        return False
 
     def apply_edit(self, op: dict) -> str | None:
         """Apply one Graph LLM edit, or return why it is rejected (structure only, no retry)."""
@@ -298,6 +354,10 @@ class PlanGraph:
             if err:
                 return err
             n = self.nodes[nid]
+            claims_duplicate = re.search(r"duplic|already|redundan|same", str(op.get("rationale", "")).lower())
+            if claims_duplicate and not self._has_equivalent(n):        # check the claim, not the relevance judgement
+                return (f"'{nid}' is dropped as a duplicate, but no other step does '{n.text()}' in "
+                        f"{n.location or 'its room'} (same object, same place): a duplicate claim needs an equivalent step")
             n.status, n.status_reason = "dropped", "4.2 DROP: " + str(op.get("rationale", ""))
             self.drops.append({"node": nid, "agent": n.agent, "type": n.type, "text": n.text(),
                                "rationale": str(op.get("rationale", ""))})
@@ -416,11 +476,14 @@ class PlanGraph:
         return norm(str(s or "").split("(")[0])
 
     def _remove_dangling(self, queue: list) -> int:
-        """A put_down / PASS of an object the robot does not hold at that point (its pick_up or RECEIVE was
-        dropped or never existed) cannot happen: remove it. Walks each robot's own steps in plan order."""
+        """Keep every pick_up and its release (put_down / place / drop / PASS) together, per robot, in plan order.
+        - a put_down / PASS of an object the robot does not hold (its pick_up or RECEIVE was dropped or never
+          existed) cannot happen: remove it;
+        - a pick_up whose release is gone (dropped or removed), so the robot would end up holding the object:
+          remove the pick_up as well. Received objects (RECEIVE) are not removed here: they may be used."""
         n_removed = 0
         for agent, ids in self.order.items():
-            held: list[str] = []
+            held: list[tuple[str, str | None]] = []          # (object key, pick_up node id; None for RECEIVE)
             for nid in ids:
                 n = self.nodes.get(nid)
                 if n is None or not self.active(nid):
@@ -428,24 +491,28 @@ class PlanGraph:
                 if n.type == LOCAL and isinstance(n.action, dict):
                     verb, obj = str(n.action.get("verb", "")).lower(), self._held_key(n.action.get("object"))
                     if verb == "pick_up":
-                        held.append(obj)
+                        held.append((obj, nid))
                     elif verb in ("put_down", "place", "drop"):
-                        hit = next((h for h in held if obj and h and (h in obj or obj in h)), None)
+                        hit = next((h for h in held if obj and h[0] and (h[0] in obj or obj in h[0])), None)
                         if hit is None:
                             self._remove(nid, f"dangling: {agent} holds no '{obj}' at this point", queue)
                             n_removed += 1
                         else:
                             held.remove(hit)
                 elif n.type == RECEIVE:
-                    held.append(self._held_key(n.item))
+                    held.append((self._held_key(n.item), None))
                 elif n.type == PASS:
                     obj = self._held_key(n.item)
-                    hit = next((h for h in held if obj and h and (h in obj or obj in h)), None)
+                    hit = next((h for h in held if obj and h[0] and (h[0] in obj or obj in h[0])), None)
                     if hit is None:
                         self._remove(nid, f"dangling: {agent} holds no '{obj}' to pass", queue)
                         n_removed += 1
                     else:
                         held.remove(hit)
+            for obj, pid in held:                               # still in hand at the end of the robot's plan
+                if pid is not None and self.active(pid):
+                    self._remove(pid, f"dangling: {agent} would end holding '{obj}' (its put_down / PASS is gone)", queue)
+                    n_removed += 1
         return n_removed
 
     def closure(self) -> None:
@@ -463,6 +530,11 @@ class PlanGraph:
                     self._release_unaccepted_offer(n)
                 if self.active(n.id):
                     self._remove(n.id, "offer not taken" if n.origin == "offer" else "answer not selected", queue)
+        for d in self.drops:                                         # need met by the step it duplicates
+            dn = self.nodes[d["node"]]
+            orig = self.duplicate_candidates.get(dn.id)
+            if dn.type in REQUEST_TYPES and dn.enables and orig and self.active(orig):
+                dn.enables = None                                       # keep the own step it enabled
         queue += [d["node"] for d in self.drops]                     # dependents of 4.2 DROPs
         self._propagate(queue)
         self._remove_dangling(queue)                                 # put_down / PASS whose pick_up is gone

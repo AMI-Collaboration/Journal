@@ -161,7 +161,8 @@ THINK FIRST (write it in "reasoning"):
 
 STEP FORMAT (indices are positions in YOUR steps list, starting at 0):
 - LOCAL:    {{"type":"LOCAL", "action":{{"verb":"...","object":"...","from":"...","to":"..."}}, "uses":<index in YOUR can_do>, "serves":<index in YOUR intends>}}
-  Verbs: move, pick_up, put_down, push, slice, cook, turn_on, turn_off, open, close, fill, place, pour
+  Verbs: move_to, move, pick_up, put_down, push, slice, cook, turn_on, turn_off, open, close, fill, place, pour
+  "move" relocates an OBJECT (it needs "object"); "move_to" is YOU travelling (it has no "object", see MOVING).
 - ASK_HELP: {{"type":"ASK_HELP", "action":{{...what the other robot should do...}}, "condition":{{"mobile":true/false,"can_do_keyword":"..."}}, "enables":<index of YOUR later LOCAL step that needs it>, "serves":<intends index>}}
   Do NOT name a specific robot. Instead describe, in "condition", what capability the helper must
   have (mobile, and/or a keyword that must appear in their can_do, e.g. "PickupHeavyObject" for
@@ -177,6 +178,23 @@ STEP FORMAT (indices are positions in YOUR steps list, starting at 0):
   (an offer: the receiver decides later whether to take it)
 - "target" (RECEIVE / PASS only) is a hint ("I hope this robot does it"); another robot may answer instead.
 
+PLACES, MOVING AND PUTTING DOWN (these three rules are required):
+1. WHERE THE OBJECT IS: every action on an object names the exact place of that object, as furniture or a
+   surface together with its room, e.g. "bedroom_desk", "living_room_floor" -- never only the room name.
+   pick_up / move / push / open / close / turn_on / turn_off / slice / cook / fill / pour: put it in "from".
+   put_down / place: put the target place in "to".
+2. MOVING: if you are MOBILE (see ROBOT PROFILES), travel with a step before you act at a different place:
+   {{"type":"LOCAL","action":{{"verb":"move_to","from":"<where you are now>","to":"<place you go to>","room":"<room of that place>"}},"serves":<intends index>,"preconditions":[],"effects":[]}}
+   When the place is in ANOTHER room (for example to bring an object to a robot there before a PASS), "room"
+   must be that room's name: a room change is always written out. A FIXED robot never uses move_to; it acts only
+   from where it is, in its own room.
+3. PICK UP => PUT DOWN: every pick_up must be followed, later in YOUR steps, by a put_down / place of that same
+   object, or by a PASS of it. Never end your plan still holding an object.
+4. TIME BUDGET: every step takes about 1 minute (a PASS in which you travel to the receiver takes 2), and YOUR
+   steps run one after another, move_to included. The sum of your minutes must fit inside the DEADLINE. Plan the
+   essential goals first. If your steps (with the moves) do not fit, drop the lowest-priority goal completely
+   instead of starting something you cannot finish.
+
 PRECONDITIONS AND EFFECTS -- for EVERY step you write, you MUST also include:
 - "preconditions": conditions that must already be true before this step can run.
   Each one: {{"object_id":"...","field":"location"|"toggle"|"clean","value":"..."}}
@@ -191,19 +209,25 @@ object is not yet in your hands / room), insert a RECEIVE or ASK_HELP step first
 EXAMPLE (R4 = mobile light robot in the living room; intends = ["safe walkway for the grandmother", "tea served at the sofa"]):
 {{"reasoning":"1) My goals: walkway (0), tea at the sofa (1). 2) R1 makes tea, R3 pushes furniture. 3) I clear small items from the floor. 4) The armchair is too heavy for me -> ASK_HELP (mobile/heavy-capable helper); I need the mug from R1 -> RECEIVE.",
  "steps":[
+  {{"type":"LOCAL","action":{{"verb":"move_to","from":"living_room_door","to":"living_room_floor","room":"living_room"}},"serves":0,
+   "preconditions":[],"effects":[]}},
   {{"type":"LOCAL","action":{{"verb":"move","object":"black bag","from":"floor","to":"shelf"}},"uses":0,"serves":0,
    "preconditions":[{{"object_id":"Bag_1","field":"location","value":"living_room_floor"}}],
    "effects":[{{"object_id":"Bag_1","field":"location","value":"living_room_shelf"}}]}},
   {{"type":"ASK_HELP","action":{{"verb":"push","object":"brown armchair","from":"walkway","to":"wall"}},
-   "condition":{{"mobile":true,"can_do_keyword":"PushFurniture"}},"enables":2,"serves":0,
+   "condition":{{"mobile":true,"can_do_keyword":"PushFurniture"}},"enables":4,"serves":0,
    "preconditions":[{{"object_id":"Armchair_1","field":"location","value":"living_room_walkway"}}],
    "effects":[{{"object_id":"Armchair_1","field":"location","value":"living_room_wall"}}]}},
+  {{"type":"LOCAL","action":{{"verb":"move_to","from":"living_room_floor","to":"living_room_shelf","room":"living_room"}},"serves":0,
+   "preconditions":[],"effects":[]}},
   {{"type":"LOCAL","action":{{"verb":"place","object":"floor mat","from":"shelf","to":"walkway"}},"uses":0,"serves":0,
    "preconditions":[{{"object_id":"Armchair_1","field":"location","value":"living_room_wall"}}],
    "effects":[{{"object_id":"Mat_1","field":"location","value":"living_room_walkway"}}]}},
-  {{"type":"RECEIVE","item":"white mug","target":"R1","enables":4,"serves":1,
+  {{"type":"RECEIVE","item":"white mug","target":"R1","enables":7,"serves":1,
    "preconditions":[{{"object_id":"Mug_1","field":"toggle","value":null}}],
    "effects":[{{"object_id":"Mug_1","field":"location","value":"robot_R4"}}]}},
+  {{"type":"LOCAL","action":{{"verb":"move_to","from":"living_room_shelf","to":"living_room_coffee_table","room":"living_room"}},"serves":1,
+   "preconditions":[],"effects":[]}},
   {{"type":"LOCAL","action":{{"verb":"put_down","object":"white mug","from":"R4","to":"coffee table"}},"uses":0,"serves":1,
    "preconditions":[{{"object_id":"Mug_1","field":"location","value":"robot_R4"}}],
    "effects":[{{"object_id":"Mug_1","field":"location","value":"living_room_coffee_table"}}]}}

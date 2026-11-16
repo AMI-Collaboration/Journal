@@ -26,6 +26,7 @@ async def graph_alignment(cfg: TaskConfig, plans: dict[str, list[Node]], collab:
     g = PlanGraph(cfg, plans, collab, offers, record)                                   # 4.1
     g.auto_order_from_preconditions()
     duplicate_candidates = g.find_duplicate_steps()
+    g.duplicate_candidates = duplicate_candidates
     log.log("graph", "-", "built", nodes=len(g.nodes), candidates=len(g.collab),
             open_offers=len(g.open_offers()), in_cycle=len(g.cycle_nodes()),
             auto_order=len(g.order_edges), duplicate_candidates=len(duplicate_candidates))

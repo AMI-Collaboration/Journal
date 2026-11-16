@@ -7,8 +7,16 @@ Code checks FORMAT only (numbers and lists, never meaning):
 - two fixed robots do not exchange an object; a LOCAL step is in the robot's own room
 On format errors the robot rewrites its plan ONCE. Steps that still have format errors are excluded
 before broadcast and recorded. Meaning (duplicates, infeasible actions, ...) is judged in Stage 4.2.
+
+Plan-shape rules (SOFT: they trigger the rewrite but never exclude a step, so a main action is not lost):
+- an object action names the exact place of the object (not just the room)
+- a mobile robot writes a move_to step before it acts at a different place; a room change names the room
+- every pick_up is followed by a put_down / place / PASS of the same object. If the plan still ends with
+  the object in hand after the rewrite, the code appends the put_down (back to the place it was picked from).
 """
 from __future__ import annotations
+
+import re
 
 from .llm import BaseLLM
 from .log import EventLog
@@ -30,6 +38,25 @@ def _as_ops(raw) -> list[dict]:
             continue
         out.append({"object_id": str(oid), "field": fld, "value": x.get("value")})
     return out
+
+
+_ROOM_STOP = {"the", "a", "an", "of", "in", "on", "at", "room", "bedroom", "bathroom", "kitchen", "living", "dining"}
+_OBJ_FROM = {"pick_up", "move", "push", "open", "close", "turn_on", "turn_off", "slice", "cook", "fill", "pour"}
+_OBJ_TO = {"put_down", "place", "drop"}
+
+
+def _words(x) -> set[str]:
+    return {w for w in re.split(r"[^a-z0-9]+", str(x or "").lower()) if w}
+
+
+def _specific(place) -> bool:
+    """The place names furniture or a surface, not only the room."""
+    return bool(_words(place) - _ROOM_STOP)
+
+
+def _same_place(a, b) -> bool:
+    wa, wb = _words(a), _words(b)
+    return bool(wa) and bool(wb) and (wa <= wb or wb <= wa)
 
 
 def _int(x):
@@ -61,10 +88,15 @@ def validate(raw_steps: list, agent: str, offers: dict[str, Offer], cfg: TaskCon
                                             if isinstance(s, dict) and str(s.get("type", "")).upper() == RECEIVE
                                             and s.get("item")]
     held: str | None = None     # object currently in this robot's own grasp (LOCAL steps only)
+    held_step: int | None = None          # index of the pick_up that put it there
+    cur_room = me.profile.room            # changes only through a move_to with a room
+    cur_at: str | None = None             # place the robot is at (None: no place yet)
+    rooms = {frozenset(_words(a.profile.room)) for a in cfg.agents}
     for i, s in enumerate(raw_steps):
         s = s if isinstance(s, dict) else {}
         t = types[i]
         e: list[str] = []
+        soft: list[str] = []      # plan-shape feedback: triggers the rewrite, never excludes the step
         st = {"_i": i, "type": t, "action": s.get("action", ""),
               "item": str(s["item"]).strip() if s.get("item") else None,
               "target": str(s["target"]).strip().upper() if s.get("target") else None,
@@ -82,32 +114,59 @@ def validate(raw_steps: list, agent: str, offers: dict[str, Offer], cfg: TaskCon
             if actual != expected:
                 e.append(f"precondition not met for {obj_id}.{field}: expected '{expected}', current '{actual}'")
         if t == LOCAL:
-            if not (st["uses"] is not None and 0 <= st["uses"] < len(own.can_do)):
+            act = st["action"] if isinstance(st["action"], dict) else {}
+            verb = str(act.get("verb", "")).strip().lower()
+            if verb == "move_to":
+                st["uses"] = None                       # travelling needs no can_do entry
+            elif not (st["uses"] is not None and 0 <= st["uses"] < len(own.can_do)):
                 e.append(f"uses={s.get('uses')} is not an index of your can_do (0..{len(own.can_do) - 1})")
             loc = s.get("location")
-            if loc and norm(str(loc)) != norm(me.profile.room):
-                e.append(f"LOCAL is in '{loc}', but you work only in your own room ('{me.profile.room}')")
+            if loc and norm(str(loc)) != norm(cur_room):
+                e.append(f"LOCAL is in '{loc}', but you are in '{cur_room}' (a room change is written as move_to)")
             if not action_str(st["action"]):
                 e.append("LOCAL needs an action")
             st["enables"] = None
-            act = st["action"] if isinstance(st["action"], dict) else {}
-            verb = str(act.get("verb", "")).strip().lower()
             obj = act.get("object")
-            if obj:
-                hit = match_item(obj, grounded_items)
-                if hit is None:
-                    e.append(f"object '{obj}' is not in your has_items {own.has_items} "
-                             "(do not invent objects not on your own list)")
-                else:
-                    obj = hit
-            if verb == "pick_up":
-                if held is not None and obj and norm(obj) != norm(held):
-                    e.append(f"still holding '{held}' -- put it down (or PASS/use it) "
-                             f"before picking up '{obj}'")
-                elif not e:     # don't update held state off a step that's already broken
-                    held = obj
-            elif verb in ("put_down", "place", "drop"):
-                held = None
+            if verb == "move_to":
+                dest, room = str(act.get("to") or "").strip(), str(act.get("room") or "").strip()
+                if not me.profile.mobile:
+                    e.append("you are a FIXED robot: do not use move_to (you act only from where you are)")
+                if not dest:
+                    e.append("move_to needs 'to' (the place you go to)")
+                if not room:
+                    soft.append("move_to needs 'room': the room of the place (a room change must be written out)")
+                elif frozenset(_words(room)) not in rooms:
+                    soft.append(f"move_to room '{room}' is not one of {sorted(a.profile.room for a in cfg.agents)}")
+                elif me.profile.mobile and dest:
+                    cur_room, cur_at = room, dest
+            else:
+                if obj:
+                    hit = match_item(obj, grounded_items)
+                    if hit is None:
+                        e.append(f"object '{obj}' is not in your has_items {own.has_items} "
+                                 "(do not invent objects not on your own list)")
+                    else:
+                        obj = hit
+                where = act.get("from") if verb in _OBJ_FROM else act.get("to") if verb in _OBJ_TO else None
+                if verb in _OBJ_FROM and not _specific(act.get("from")):
+                    soft.append(f"'{verb}': name the exact place of '{obj}' in 'from' (furniture or surface and its room, "
+                                "not only the room)")
+                if verb in _OBJ_TO and not _specific(act.get("to")):
+                    soft.append(f"'{verb}': name the exact target place of '{obj}' in 'to' (furniture or surface and its "
+                                "room, not only the room)")
+                if me.profile.mobile and where and _specific(where):
+                    if cur_at is None or not _same_place(cur_at, where):
+                        soft.append(f"you are at '{cur_at or 'your start'}': add a move_to step to '{where}' before this step")
+                    cur_at = str(where)
+                if verb == "pick_up":
+                    if held is not None and obj and norm(obj) != norm(held):
+                        e.append(f"still holding '{held}' -- put it down (or PASS/use it) "
+                                 f"before picking up '{obj}'")
+                    elif not e:     # don't update held state off a step that's already broken
+                        held, held_step = obj, i
+                elif verb in ("put_down", "place", "drop"):
+                    held, held_step = None, None
+            st["location"] = cur_room
         if t in (RECEIVE, PASS):
             st["uses"] = None
             if st["target"] not in others:
@@ -139,7 +198,7 @@ def validate(raw_steps: list, agent: str, offers: dict[str, Offer], cfg: TaskCon
             st["action"] = action_str(st["action"]) or f"receive {st['item']}"
         if t == PASS:
             st["enables"] = None
-            held = None
+            held, held_step = None, None
             if not st["item"]:
                 e.append("PASS needs an item from YOUR has_items")
             else:
@@ -152,19 +211,31 @@ def validate(raw_steps: list, agent: str, offers: dict[str, Offer], cfg: TaskCon
                 e.append(f"{agent} and {st['target']} are both fixed: nobody can move an object between them")
             st["action"] = action_str(st["action"]) or f"pass {st['item']} to {st['target']}"
         st["errors"] = e
-        errors += [f"step {i}: {x}" for x in e]
+        st["soft"] = soft
+        errors += [f"step {i}: {x}" for x in e + soft]
         if not e:
             for eff in st["effects"]:
                 obj_id, field, value = eff["object_id"], eff["field"], eff["value"]
                 state.setdefault(obj_id, {"location": None, "toggle": None, "clean": None})[field] = value
         steps.append(st)
+    minutes = sum(1 if t in (LOCAL, RECEIVE) else
+                  (2 if t == PASS and s_.get("target") in cfg.ids and cfg.mover(agent, str(s_["target"]).upper()) == agent else 1)
+                  if t == PASS else 0
+                  for t, s_ in zip(types, (x if isinstance(x, dict) else {} for x in raw_steps)))
+    if minutes > cfg.deadline_min:        # SOFT: triggers the rewrite, never excludes a step
+        errors.append(f"your own steps need about {minutes} minutes, but the deadline is {cfg.deadline_min}: "
+                      "keep the essential goals and drop the lowest-priority goal completely")
+    if held is not None and held_step is not None and held_step < len(steps):
+        steps[held_step]["unreleased"] = True
+        errors.append(f"step {held_step}: you pick up '{held}' but never put it down or PASS it: "
+                      "add a put_down / place (or PASS) of it later in your steps")
     if not raw_steps:
         errors.append("plan has no steps")
     return steps, errors
 
 
 async def make_local_plan(cfg: TaskConfig, agent: str, offers: dict[str, Offer], llm: BaseLLM,
-                          log: EventLog, max_fix: int = 1) -> tuple[list[Node], dict]:
+                          log: EventLog, max_fix: int = 2) -> tuple[list[Node], dict]:
     me = cfg.agent(agent)
     own = offers[agent]
     system = plan_system(agent, me.profile.room, env_state=_j([
@@ -208,6 +279,22 @@ async def make_local_plan(cfg: TaskConfig, agent: str, offers: dict[str, Offer],
     for s, node in zip(kept, nodes):
         if s["enables"] is not None:
             node.enables = raw_to_id.get(s["enables"])     # None if the enabled step was excluded
+    for s in kept:                       # still holding an object after the rewrites: put it back where it was
+        if not s.get("unreleased"):
+            continue
+        pick = nodes[kept.index(s)]
+        obj_id = next((p["object_id"] for p in pick.preconditions if p.get("field") == "location"), None)
+        back = next((p["value"] for p in pick.preconditions if p.get("field") == "location"), None)
+        act = pick.action if isinstance(pick.action, dict) else {}
+        place = act.get("from") or back or me.profile.room
+        nid = f"r{n}_s{len(nodes) + 1}"
+        nodes.append(Node(id=nid, agent=agent, type=LOCAL,
+                          action={"verb": "put_down", "object": act.get("object", ""), "from": agent, "to": place},
+                          location=me.profile.room, origin="auto_release", uses=pick.uses, serves=pick.serves,
+                          serves_text=pick.serves_text,
+                          preconditions=([{"object_id": obj_id, "field": "location", "value": f"robot_{agent}"}] if obj_id else []),
+                          effects=([{"object_id": obj_id, "field": "location", "value": back or place}] if obj_id else [])))
+        log.log("plan", agent, "auto_release", item=str(act.get("object", "")), to=str(place))
     for x in excluded:
         log.log("plan", agent, "step_excluded", step=x["step"], errors=len(x["errors"]))
     log.log("plan", agent, "broadcast", steps=len(nodes),
