@@ -1,4 +1,4 @@
-"""Judge with llmjudge_prompt.txt (v19: TF / PF / OC / SC), all methods of one task in ONE call.
+"""Judge with judge_rubric_point_prompt.txt (B rubric: TF / GF / SC / CQ), all methods of one task in ONE call.
 
 Fixes over aggregate_results_jabung.judge_plan (one plan per call):
 - every plan of a task is judged in the same call, under anonymous shuffled labels (PLAN_A, ...), so the
@@ -31,8 +31,8 @@ ap.add_argument("--specs", nargs="+", required=True)
 ap.add_argument("--out", required=True)
 ap.add_argument("--reps", type=int, default=2)
 ap.add_argument("--n-robots", type=int, default=4)
-ap.add_argument("--template", default="llmjudge_prompt.txt", help="prompt file in experiment/")
-ap.add_argument("--crit", nargs="+", default=["TF", "PF", "OC", "SC"], help="criteria the template asks for")
+ap.add_argument("--template", default="judge_rubric_point_prompt.txt", help="prompt file in experiment/")
+ap.add_argument("--crit", nargs="+", default=["TF", "GF", "SC", "CQ"], help="criteria the template asks for")
 ap.add_argument("--lenient", action="store_true", help="prepend a mild calibration note (same text for every plan)")
 ap.add_argument("--strict", action="store_true", help="prepend a strict calibration note (same text for every plan)")
 ap.add_argument("--kinds", nargs="+", default=["abstract", "simple"])
