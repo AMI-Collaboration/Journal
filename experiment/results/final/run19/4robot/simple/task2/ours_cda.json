@@ -1,0 +1,1317 @@
+{
+  "method": "cda",
+  "task_n": "task2_simple",
+  "raw_result": {
+    "task_n": "task2_simple",
+    "mode": "multi_room",
+    "model": "gpt-4o",
+    "task_text": "Turn off the room light, turn on faucet",
+    "joint_plan_text": "```plaintext\n### Joint Plan — task2_simple  (about 5 min / deadline 10 min: OK)\n### Robots: R1:Mobile_Light(bedroom), R2:Mobile_Light(bathroom), R3:Mobile_Light(bedroom), R4:Mobile_Light(bathroom)\n\n[0-5 min]\n- R2 [LOCAL] move to the bathroom sink from the current location  (r2_s1)\n- R3 [ASK_HELP] wait for R4 to: turn on the faucet at the bathroom sink  (r3_s2)\n- R4 [LOCAL] move to the bathroom sink from the bathroom floor  (r4_s1)\n- R4 [LOCAL] turn on the Faucet_1 at the bathroom sink (also serves R3's request)  (r4_s2)\n- R3 [LOCAL] move to the bedroom door from the bedroom desk  (r3_s4)",
+    "joint_plan_full": "### Joint Plan — task2_simple  (about 5 min / deadline 10 min: OK)\n### Robots: R1:Mobile_Light(bedroom), R2:Mobile_Light(bathroom), R3:Mobile_Light(bedroom), R4:Mobile_Light(bathroom)\n\n[0-5 min]\n- R2 [LOCAL] move_to from current_location to bathroom_sink  (r2_s1)\n- R3 [ASK_HELP] wait for R4 to: turn_on the faucet from bathroom_sink  (r3_s2)\n- R4 [LOCAL] move_to from bathroom_floor to bathroom_sink  (r4_s1)\n- R4 [LOCAL] turn_on the Faucet_1 from bathroom_sink (also serves R3's request)  (r4_s2)\n- R3 [LOCAL] move_to from bedroom_desk to bedroom_door  (r3_s4)\n\n### Provenance (collaboration edges)\n- r3_s2 (R3 ASK_HELP) <- r4_s2 (R4 LOCAL)  κ=provider-only, decided by SELECT\n\n### Graph LLM edits (applied)\n- SELECT provider=r4_s2 request=r3_s2 — R4 can turn on the faucet and has a clear intention to do so.\n- DROP node=r3_s1 — No robot can toggle the room light, and R3's request has no candidates.\n\n### Report: goal coverage\n- R2.g0 turn on faucet: partial — No volunteer [r2_s1]\n- R3.g0 ensure the room light is turned off: uncovered — No volunteer\n- R3.g1 ensure the faucet is turned on: covered [r3_s2, r4_s2]\n- R4.g0 faucet turned on in the bathroom: covered [r4_s1, r4_s2]\n\n### Dropped by the Graph LLM\n- R3 [ASK_HELP] toggle the room light from bedroom (r3_s1) — No robot can toggle the room light, and R3's request has no candidates.\n\n### Removed by dependency closure\n- R3 [LOCAL] move_to from bedroom_desk to bedroom_door (r3_s3) — needs r3_s1, which will not happen",
+    "offers": {
+      "R1": {
+        "agent": "R1",
+        "capability": "I am mobile and can carry light objects up to 5 kg with one arm.",
+        "can_do": [
+          "PickupLightObject: lift light objects like books, small electronics",
+          "PassReceiveObject: hand over or receive objects from other robots"
+        ],
+        "cannot_do": [
+          "ToggleObject: cannot turn on/off lights or appliances",
+          "PickupHeavyObject: cannot lift furniture or heavy objects",
+          "PushFurniture: cannot move large furniture",
+          "SliceObject: no cutting tool",
+          "PourObject: cannot pour liquids"
+        ],
+        "has_items": [
+          "desk lamp (desk, image 1)",
+          "laptop (desk, image 1)",
+          "chair (desk, image 1)",
+          "bed (floor, image 2)",
+          "pillow (bed, image 2)",
+          "dresser (floor, image 2)",
+          "basketball (floor, image 2)",
+          "alarm clock (dresser, image 2)",
+          "watch (dresser, image 2)",
+          "cellphone (dresser, image 2)",
+          "boots (floor, image 2)",
+          "garbage can (floor, image 2)"
+        ],
+        "need_from_others": [
+          "someone who can toggle the room light",
+          "someone who can turn on the faucet"
+        ],
+        "intends": [],
+        "see_items": [],
+        "other_robots_in_room": [],
+        "env_state": [
+          {
+            "object_id": "DeskLamp_1",
+            "object_type": "DeskLamp",
+            "location": "bedroom_desk",
+            "accessible": true,
+            "toggle": "off",
+            "clean": null
+          },
+          {
+            "object_id": "Laptop_1",
+            "object_type": "Laptop",
+            "location": "bedroom_desk",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Chair_1",
+            "object_type": "Chair",
+            "location": "bedroom_desk",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Bed_1",
+            "object_type": "Bed",
+            "location": "bedroom_floor",
+            "accessible": false,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Pillow_1",
+            "object_type": "Pillow",
+            "location": "bedroom_bed",
+            "accessible": false,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Dresser_1",
+            "object_type": "Dresser",
+            "location": "bedroom_floor",
+            "accessible": false,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "BasketBall_1",
+            "object_type": "BasketBall",
+            "location": "bedroom_floor",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "AlarmClock_1",
+            "object_type": "AlarmClock",
+            "location": "bedroom_dresser",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Watch_1",
+            "object_type": "Watch",
+            "location": "bedroom_dresser",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "CellPhone_1",
+            "object_type": "CellPhone",
+            "location": "bedroom_dresser",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Boots_1",
+            "object_type": "Boots",
+            "location": "bedroom_floor",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "GarbageCan_1",
+            "object_type": "GarbageCan",
+            "location": "bedroom_floor",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          }
+        ],
+        "obs_scope": "I can observe the bedroom only.",
+        "reasoning": "a) The room light must be turned off, and the faucet must be turned on. b) The bedroom can contribute by ensuring the light is turned off. c) I can move around and interact with light objects, but I cannot toggle objects like lights or faucets. d) The priority is to have the room light turned off. e) I cannot directly turn off the light or turn on the faucet, so I need to ask for help."
+      },
+      "R2": {
+        "agent": "R2",
+        "capability": "I am mobile and can carry light objects up to 5 kg with one arm.",
+        "can_do": [
+          "PickupLightObject: lift small items",
+          "PassReceiveObject: exchange items with others"
+        ],
+        "cannot_do": [
+          "ToggleObject: cannot turn on/off lights or appliances"
+        ],
+        "has_items": [
+          "soap bottle (sink, image 1)",
+          "hand towel (towel rack, image 2)",
+          "toilet paper (shelf, image 2)"
+        ],
+        "need_from_others": [
+          "someone who can toggle the light"
+        ],
+        "intends": [
+          "turn on faucet"
+        ],
+        "see_items": [],
+        "other_robots_in_room": [
+          {
+            "id": "unknown_1",
+            "distance": "close"
+          }
+        ],
+        "env_state": [
+          {
+            "object_id": "SoapBottle_1",
+            "object_type": "SoapBottle",
+            "location": "bathroom_sink",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "HandTowel_1",
+            "object_type": "HandTowel",
+            "location": "bathroom_towel_rack",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "ToiletPaper_1",
+            "object_type": "ToiletPaper",
+            "location": "bathroom_shelf",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          }
+        ],
+        "obs_scope": "I can observe the bathroom only.",
+        "reasoning": "a) The room light must be off and the faucet must be on. b) The bathroom contains the faucet and light switch. c) I can turn on the faucet. d) Turning on the faucet is the priority since I cannot toggle the light. e) I cannot toggle the light, so I will focus on the faucet."
+      },
+      "R3": {
+        "agent": "R3",
+        "capability": "I am mobile and can carry light objects up to 5 kg with one arm.",
+        "can_do": [
+          "PickupLightObject: lift mugs, small items",
+          "PassReceiveObject: exchange objects with other robots"
+        ],
+        "cannot_do": [
+          "PickupHeavyObject: cannot lift furniture",
+          "PushFurniture: cannot move heavy items",
+          "SliceObject: no cutting tool",
+          "PourObject: cannot pour liquids"
+        ],
+        "has_items": [
+          "desk lamp (desk, image 1)",
+          "alarm clock (desk, image 1)",
+          "laptop (desk, image 1)",
+          "mug (desk, image 1)",
+          "pillow (bed, image 2)",
+          "bed (floor, image 2)",
+          "dresser (floor, image 2)"
+        ],
+        "need_from_others": [
+          "someone who can toggle the room light",
+          "someone who can turn on the faucet"
+        ],
+        "intends": [
+          "ensure the room light is turned off",
+          "ensure the faucet is turned on"
+        ],
+        "see_items": [],
+        "other_robots_in_room": [],
+        "env_state": [
+          {
+            "object_id": "DeskLamp_1",
+            "object_type": "DeskLamp",
+            "location": "bedroom_desk",
+            "accessible": true,
+            "toggle": "off",
+            "clean": null
+          },
+          {
+            "object_id": "AlarmClock_1",
+            "object_type": "AlarmClock",
+            "location": "bedroom_desk",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Laptop_1",
+            "object_type": "Laptop",
+            "location": "bedroom_desk",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Mug_1",
+            "object_type": "Mug",
+            "location": "bedroom_desk",
+            "accessible": true,
+            "toggle": null,
+            "clean": "clean"
+          },
+          {
+            "object_id": "Pillow_1",
+            "object_type": "Pillow",
+            "location": "bedroom_bed",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Bed_1",
+            "object_type": "Bed",
+            "location": "bedroom_floor",
+            "accessible": false,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Dresser_1",
+            "object_type": "Dresser",
+            "location": "bedroom_floor",
+            "accessible": false,
+            "toggle": null,
+            "clean": null
+          }
+        ],
+        "obs_scope": "I can observe the bedroom only.",
+        "reasoning": "a) The room light must be turned off and the faucet must be turned on. b) The bedroom does not have a visible room light or a faucet. c) I cannot directly control the room light or faucet as they are not visible in my room. d) I need to find a way to ensure these actions are completed, possibly by coordinating with another robot. e) I can pick up and move light objects but cannot toggle lights or faucets directly."
+      },
+      "R4": {
+        "agent": "R4",
+        "capability": "I am mobile and can carry light objects up to 5 kg with one arm.",
+        "can_do": [
+          "PickupLightObject: lift small items",
+          "PassReceiveObject: hand off or receive objects from others"
+        ],
+        "cannot_do": [
+          "PickupHeavyObject: cannot lift furniture or heavy items",
+          "PushFurniture: cannot move furniture",
+          "SliceObject: no cutting tool",
+          "PourObject: cannot pour liquids"
+        ],
+        "has_items": [
+          "faucet (sink, image 1)",
+          "shower curtain (bathtub, image 2)",
+          "shower head (bathtub, image 2)",
+          "soap bottle (sink, image 1)",
+          "hand towel (sink, image 1)",
+          "garbage can (floor, image 1)",
+          "plunger (floor, image 1)",
+          "toilet (floor, image 1)",
+          "toilet paper (floor, image 1)",
+          "towel (sink, image 1)",
+          "side table (floor, image 1)",
+          "soap bar (sink, image 1)",
+          "spray bottle (side table, image 1)",
+          "scrub brush (side table, image 1)",
+          "paper towel roll (side table, image 1)",
+          "candle (side table, image 1)",
+          "dish sponge (sink, image 1)"
+        ],
+        "need_from_others": [
+          "someone to turn off the room light"
+        ],
+        "intends": [
+          "faucet turned on in the bathroom"
+        ],
+        "see_items": [],
+        "other_robots_in_room": [],
+        "env_state": [
+          {
+            "object_id": "Faucet_1",
+            "object_type": "Faucet",
+            "location": "bathroom_sink",
+            "accessible": true,
+            "toggle": "off",
+            "clean": null
+          },
+          {
+            "object_id": "ShowerCurtain_1",
+            "object_type": "ShowerCurtain",
+            "location": "bathroom_bathtub",
+            "accessible": false,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "ShowerHead_1",
+            "object_type": "ShowerHead",
+            "location": "bathroom_bathtub",
+            "accessible": false,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "SoapBottle_1",
+            "object_type": "SoapBottle",
+            "location": "bathroom_sink",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "HandTowel_1",
+            "object_type": "HandTowel",
+            "location": "bathroom_sink",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "GarbageCan_1",
+            "object_type": "GarbageCan",
+            "location": "bathroom_floor",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Plunger_1",
+            "object_type": "Plunger",
+            "location": "bathroom_floor",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Toilet_1",
+            "object_type": "Toilet",
+            "location": "bathroom_floor",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "ToiletPaper_1",
+            "object_type": "ToiletPaper",
+            "location": "bathroom_floor",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Towel_1",
+            "object_type": "Towel",
+            "location": "bathroom_sink",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "SideTable_1",
+            "object_type": "SideTable",
+            "location": "bathroom_floor",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "SoapBar_1",
+            "object_type": "SoapBar",
+            "location": "bathroom_sink",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "SprayBottle_1",
+            "object_type": "SprayBottle",
+            "location": "bathroom_side_table",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "ScrubBrush_1",
+            "object_type": "ScrubBrush",
+            "location": "bathroom_side_table",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "PaperTowelRoll_1",
+            "object_type": "PaperTowelRoll",
+            "location": "bathroom_side_table",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "Candle_1",
+            "object_type": "Candle",
+            "location": "bathroom_side_table",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          },
+          {
+            "object_id": "DishSponge_1",
+            "object_type": "DishSponge",
+            "location": "bathroom_sink",
+            "accessible": true,
+            "toggle": null,
+            "clean": null
+          }
+        ],
+        "obs_scope": "I can observe the bathroom only.",
+        "reasoning": "a) The task requires the room light to be turned off and the faucet to be turned on. b) The bathroom contains the faucet, which I can toggle. c) I can toggle the faucet in the bathroom. d) The priority is to toggle the faucet, as I cannot toggle the room light. e) The task explicitly requires toggling the faucet, which I can do."
+      }
+    },
+    "local_plans": {
+      "R1": [],
+      "R2": [
+        {
+          "id": "r2_s1",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "current_location",
+            "to": "bathroom_sink",
+            "room": "bathroom"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "bathroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "turn on faucet",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        }
+      ],
+      "R3": [
+        {
+          "id": "r3_s1",
+          "agent": "R3",
+          "type": "ASK_HELP",
+          "action": {
+            "verb": "toggle",
+            "object": "room light",
+            "from": "bedroom",
+            "to": null
+          },
+          "item": null,
+          "target": null,
+          "condition": {
+            "mobile": true,
+            "can_do_keyword": "ToggleObject"
+          },
+          "uses": null,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": "r3_s3",
+          "serves": 0,
+          "serves_text": "ensure the room light is turned off",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r3_s2",
+          "agent": "R3",
+          "type": "ASK_HELP",
+          "action": {
+            "verb": "turn_on",
+            "object": "faucet",
+            "from": "bathroom_sink",
+            "to": null
+          },
+          "item": null,
+          "target": null,
+          "condition": {
+            "mobile": true,
+            "can_do_keyword": "ToggleObject"
+          },
+          "uses": null,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": "r3_s4",
+          "serves": 1,
+          "serves_text": "ensure the faucet is turned on",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r3_s3",
+          "agent": "R3",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "bedroom_desk",
+            "to": "bedroom_door",
+            "room": "bedroom"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "ensure the room light is turned off",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r3_s4",
+          "agent": "R3",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "bedroom_desk",
+            "to": "bedroom_door",
+            "room": "bedroom"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "ensure the faucet is turned on",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        }
+      ],
+      "R4": [
+        {
+          "id": "r4_s1",
+          "agent": "R4",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "bathroom_floor",
+            "to": "bathroom_sink",
+            "room": "bathroom"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "bathroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "faucet turned on in the bathroom",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r4_s2",
+          "agent": "R4",
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "Faucet_1",
+            "from": "bathroom_sink",
+            "to": null
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "bathroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "faucet turned on in the bathroom",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "Faucet_1",
+              "field": "toggle",
+              "value": "off"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "Faucet_1",
+              "field": "toggle",
+              "value": "on"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        }
+      ]
+    },
+    "answers": [
+      {
+        "agent": "R1",
+        "id": "r3_s1",
+        "answer": "NO",
+        "reason": "I cannot toggle objects like lights.",
+        "result": "no edge"
+      },
+      {
+        "agent": "R1",
+        "id": "r3_s2",
+        "answer": "NO",
+        "reason": "I cannot toggle objects like faucets.",
+        "result": "no edge"
+      },
+      {
+        "agent": "R2",
+        "id": "r3_s2",
+        "answer": "YES",
+        "reason": "I already plan to move to the bathroom sink to turn on the faucet.",
+        "result": "CANDIDATE",
+        "kappa": "provider-only",
+        "provider": "r2_s1",
+        "existing": true
+      },
+      {
+        "agent": "R4",
+        "id": "r3_s2",
+        "answer": "YES",
+        "reason": "I already plan to turn on the faucet in the bathroom.",
+        "result": "CANDIDATE",
+        "kappa": "provider-only",
+        "provider": "r4_s2",
+        "existing": true
+      }
+    ],
+    "graph": {
+      "nodes": [
+        {
+          "id": "r2_s1",
+          "agent": "R2",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "current_location",
+            "to": "bathroom_sink",
+            "room": "bathroom"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "bathroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "turn on faucet",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 0,
+          "t_end": 1
+        },
+        {
+          "id": "r3_s1",
+          "agent": "R3",
+          "type": "ASK_HELP",
+          "action": {
+            "verb": "toggle",
+            "object": "room light",
+            "from": "bedroom",
+            "to": null
+          },
+          "item": null,
+          "target": null,
+          "condition": {
+            "mobile": true,
+            "can_do_keyword": "ToggleObject"
+          },
+          "uses": null,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": "r3_s3",
+          "serves": 0,
+          "serves_text": "ensure the room light is turned off",
+          "replies": [
+            {
+              "agent": "R1",
+              "answer": "NO",
+              "reason": "I cannot toggle objects like lights."
+            }
+          ],
+          "preconditions": [],
+          "effects": [],
+          "status": "dropped",
+          "status_reason": "4.2 DROP: No robot can toggle the room light, and R3's request has no candidates.",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r3_s2",
+          "agent": "R3",
+          "type": "ASK_HELP",
+          "action": {
+            "verb": "turn_on",
+            "object": "faucet",
+            "from": "bathroom_sink",
+            "to": null
+          },
+          "item": null,
+          "target": null,
+          "condition": {
+            "mobile": true,
+            "can_do_keyword": "ToggleObject"
+          },
+          "uses": null,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": "r3_s4",
+          "serves": 1,
+          "serves_text": "ensure the faucet is turned on",
+          "replies": [
+            {
+              "agent": "R1",
+              "answer": "NO",
+              "reason": "I cannot toggle objects like faucets."
+            }
+          ],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": null,
+          "phase": 1,
+          "t_start": 0,
+          "t_end": 2
+        },
+        {
+          "id": "r3_s3",
+          "agent": "R3",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "bedroom_desk",
+            "to": "bedroom_door",
+            "room": "bedroom"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "ensure the room light is turned off",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "removed",
+          "status_reason": "needs r3_s1, which will not happen",
+          "size": null,
+          "phase": null,
+          "t_start": null,
+          "t_end": null
+        },
+        {
+          "id": "r3_s4",
+          "agent": "R3",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "bedroom_desk",
+            "to": "bedroom_door",
+            "room": "bedroom"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "bedroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 1,
+          "serves_text": "ensure the faucet is turned on",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 2,
+          "t_end": 3
+        },
+        {
+          "id": "r4_s1",
+          "agent": "R4",
+          "type": "LOCAL",
+          "action": {
+            "verb": "move_to",
+            "from": "bathroom_floor",
+            "to": "bathroom_sink",
+            "room": "bathroom"
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": null,
+          "location": "bathroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "faucet turned on in the bathroom",
+          "replies": [],
+          "preconditions": [],
+          "effects": [],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 0,
+          "t_end": 1
+        },
+        {
+          "id": "r4_s2",
+          "agent": "R4",
+          "type": "LOCAL",
+          "action": {
+            "verb": "turn_on",
+            "object": "Faucet_1",
+            "from": "bathroom_sink",
+            "to": null
+          },
+          "item": null,
+          "target": null,
+          "condition": null,
+          "uses": 0,
+          "location": "bathroom",
+          "origin": "local",
+          "answers": null,
+          "enables": null,
+          "serves": 0,
+          "serves_text": "faucet turned on in the bathroom",
+          "replies": [],
+          "preconditions": [
+            {
+              "object_id": "Faucet_1",
+              "field": "toggle",
+              "value": "off"
+            }
+          ],
+          "effects": [
+            {
+              "object_id": "Faucet_1",
+              "field": "toggle",
+              "value": "on"
+            }
+          ],
+          "status": "active",
+          "status_reason": "",
+          "size": "short",
+          "phase": 1,
+          "t_start": 1,
+          "t_end": 2
+        }
+      ],
+      "order": {
+        "R1": [],
+        "R2": [
+          "r2_s1"
+        ],
+        "R3": [
+          "r3_s1",
+          "r3_s2",
+          "r3_s3",
+          "r3_s4"
+        ],
+        "R4": [
+          "r4_s1",
+          "r4_s2"
+        ]
+      },
+      "edges": [
+        {
+          "src": "r3_s2",
+          "dst": "r3_s4",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r4_s1",
+          "dst": "r4_s2",
+          "kind": "SEQ",
+          "kappa": null,
+          "status": "CONFIRMED",
+          "source": "local",
+          "existing": false,
+          "decided_by": ""
+        },
+        {
+          "src": "r2_s1",
+          "dst": "r3_s2",
+          "kind": "HELP",
+          "kappa": "provider-only",
+          "status": "PROPOSED",
+          "source": "stage3",
+          "existing": true,
+          "decided_by": ""
+        },
+        {
+          "src": "r4_s2",
+          "dst": "r3_s2",
+          "kind": "HELP",
+          "kappa": "provider-only",
+          "status": "CONFIRMED",
+          "source": "stage3",
+          "existing": true,
+          "decided_by": "SELECT"
+        }
+      ],
+      "edit_log": [
+        {
+          "k": 0,
+          "edit": {
+            "op": "SELECT",
+            "provider": "r4_s2",
+            "request": "r3_s2",
+            "rationale": "R4 can turn on the faucet and has a clear intention to do so."
+          },
+          "applied": true,
+          "error": null,
+          "rationale": "R4 can turn on the faucet and has a clear intention to do so."
+        },
+        {
+          "k": 1,
+          "edit": {
+            "op": "DROP",
+            "node": "r3_s1",
+            "rationale": "No robot can toggle the room light, and R3's request has no candidates."
+          },
+          "applied": true,
+          "error": null,
+          "rationale": "No robot can toggle the room light, and R3's request has no candidates."
+        }
+      ],
+      "report": {
+        "goals": [
+          {
+            "robot": "R2",
+            "goal": 0,
+            "text": "turn on faucet",
+            "status": "partial",
+            "cause": [
+              "No volunteer"
+            ],
+            "evidence": [
+              "r2_s1"
+            ],
+            "note": "",
+            "llm_status": "partial",
+            "llm_cause": "No volunteer"
+          },
+          {
+            "robot": "R3",
+            "goal": 0,
+            "text": "ensure the room light is turned off",
+            "status": "uncovered",
+            "cause": [
+              "No volunteer"
+            ],
+            "evidence": [],
+            "note": "",
+            "llm_status": "uncovered",
+            "llm_cause": "No volunteer"
+          },
+          {
+            "robot": "R3",
+            "goal": 1,
+            "text": "ensure the faucet is turned on",
+            "status": "covered",
+            "cause": [],
+            "evidence": [
+              "r3_s2",
+              "r4_s2"
+            ],
+            "note": "",
+            "llm_status": "covered",
+            "llm_cause": null
+          },
+          {
+            "robot": "R4",
+            "goal": 0,
+            "text": "faucet turned on in the bathroom",
+            "status": "covered",
+            "cause": [],
+            "evidence": [
+              "r4_s1",
+              "r4_s2"
+            ],
+            "note": "",
+            "llm_status": "covered",
+            "llm_cause": null
+          }
+        ],
+        "unresolved_requests": [],
+        "rejected_edits": [],
+        "dropped": [
+          {
+            "node": "r3_s1",
+            "agent": "R3",
+            "type": "ASK_HELP",
+            "text": "toggle the room light from bedroom",
+            "rationale": "No robot can toggle the room light, and R3's request has no candidates."
+          }
+        ],
+        "removed_by_closure": [
+          {
+            "node": "r3_s3",
+            "agent": "R3",
+            "type": "LOCAL",
+            "text": "move_to from bedroom_desk to bedroom_door",
+            "reason": "needs r3_s1, which will not happen"
+          }
+        ],
+        "invariant_violations": [],
+        "deadline": {
+          "makespan_min": 5,
+          "deadline_min": 10,
+          "exceeded": false
+        }
+      }
+    },
+    "report": {
+      "goals": [
+        {
+          "robot": "R2",
+          "goal": 0,
+          "text": "turn on faucet",
+          "status": "partial",
+          "cause": [
+            "No volunteer"
+          ],
+          "evidence": [
+            "r2_s1"
+          ],
+          "note": "",
+          "llm_status": "partial",
+          "llm_cause": "No volunteer"
+        },
+        {
+          "robot": "R3",
+          "goal": 0,
+          "text": "ensure the room light is turned off",
+          "status": "uncovered",
+          "cause": [
+            "No volunteer"
+          ],
+          "evidence": [],
+          "note": "",
+          "llm_status": "uncovered",
+          "llm_cause": "No volunteer"
+        },
+        {
+          "robot": "R3",
+          "goal": 1,
+          "text": "ensure the faucet is turned on",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r3_s2",
+            "r4_s2"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        },
+        {
+          "robot": "R4",
+          "goal": 0,
+          "text": "faucet turned on in the bathroom",
+          "status": "covered",
+          "cause": [],
+          "evidence": [
+            "r4_s1",
+            "r4_s2"
+          ],
+          "note": "",
+          "llm_status": "covered",
+          "llm_cause": null
+        }
+      ],
+      "unresolved_requests": [],
+      "rejected_edits": [],
+      "dropped": [
+        {
+          "node": "r3_s1",
+          "agent": "R3",
+          "type": "ASK_HELP",
+          "text": "toggle the room light from bedroom",
+          "rationale": "No robot can toggle the room light, and R3's request has no candidates."
+        }
+      ],
+      "removed_by_closure": [
+        {
+          "node": "r3_s3",
+          "agent": "R3",
+          "type": "LOCAL",
+          "text": "move_to from bedroom_desk to bedroom_door",
+          "reason": "needs r3_s1, which will not happen"
+        }
+      ],
+      "invariant_violations": [],
+      "deadline": {
+        "makespan_min": 5,
+        "deadline_min": 10,
+        "exceeded": false
+      }
+    },
+    "metrics": {
+      "task_id": "task2_simple",
+      "n_steps_total": 7,
+      "n_steps_active": 5,
+      "n_requests": 2,
+      "n_requests_served": 1,
+      "n_requests_unresolved": 0,
+      "n_candidates_from_stage3": 2,
+      "n_collab_edges_final": 1,
+      "n_help_edges": 1,
+      "n_transfer_edges": 0,
+      "decided_by_select": 1,
+      "decided_by_merge": 0,
+      "decided_by_default": 0,
+      "kappa_final": {
+        "mutual": 0,
+        "provider-only": 1,
+        "merged": 0
+      },
+      "graph_edits_applied": 2,
+      "graph_edits_rejected": 0,
+      "n_dropped_by_graph": 1,
+      "n_removed_by_closure": 1,
+      "n_requests_moved_later": 0,
+      "n_invariant_violations": 0,
+      "goals_total": 4,
+      "goals_covered": 2,
+      "goals_partial": 1,
+      "goals_uncovered": 1,
+      "goal_causes": {
+        "No volunteer": 2,
+        "Capability gap": 0,
+        "Left unresolved": 0,
+        "Infeasible": 0,
+        "Deadline exceeded": 0
+      },
+      "plan_fix_rounds": {
+        "R1": 2,
+        "R2": 2,
+        "R3": 1,
+        "R4": 2
+      },
+      "n_steps_excluded_stage2": 4,
+      "makespan_min": 5,
+      "deadline": 10,
+      "deadline_ok": true,
+      "llm_calls": 19,
+      "prompt_tokens": 108448,
+      "completion_tokens": 5785,
+      "config": {
+        "use_edge_proposal": true,
+        "use_graph_llm": true
+      },
+      "wall_time_sec": 18.4
+    },
+    "config": {
+      "use_edge_proposal": true,
+      "use_graph_llm": true,
+      "max_graph_rounds": 2,
+      "deadline_min": 10,
+      "goal_check": false,
+      "goal_rounds": 1
+    }
+  },
+  "llm_judge": null
+}
