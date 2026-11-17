@@ -21,8 +21,8 @@ import re
 from .llm import BaseLLM
 from .log import EventLog
 from .prompts import PLAN_FIX, PLAN_USER, _j, indexed, plan_system
-from .schemas import (ASK_HELP, LOCAL, PASS, PLAN_TYPES, RECEIVE, REQUEST_TYPES, Node, Offer,
-                      TaskConfig, action_str, agent_num, match_item, norm)
+from .schemas import (ASK_HELP, CAPABILITY_TAGS, LOCAL, PASS, PLAN_TYPES, RECEIVE, REQUEST_TYPES,
+                      Node, Offer, TaskConfig, action_str, agent_num, match_item, norm)
 
 _PRE_EFF_FIELDS = {"location", "toggle", "clean"}
 
@@ -166,7 +166,8 @@ def validate(raw_steps: list, agent: str, offers: dict[str, Offer], cfg: TaskCon
                         held, held_step = obj, i
                 elif verb in ("put_down", "place", "drop"):
                     held, held_step = None, None
-            st["location"] = cur_room
+        st["location"] = cur_room    # the robot's current room, kept from the last move_to -- not just for
+                                      # LOCAL: PASS/RECEIVE/ASK_HELP happen wherever the robot now stands
         if t in (RECEIVE, PASS):
             st["uses"] = None
             if st["target"] not in others:
@@ -177,6 +178,15 @@ def validate(raw_steps: list, agent: str, offers: dict[str, Offer], cfg: TaskCon
                 e.append("ASK_HELP needs an action")
             if not st["condition"]:
                 e.append("ASK_HELP must have 'condition' dict, not 'target'")
+            else:
+                kw = st["condition"].get("can_do_keyword")
+                if kw:
+                    kw = str(kw).strip().upper()
+                    if kw not in CAPABILITY_TAGS:
+                        e.append(f"condition.can_do_keyword must be exactly one of {CAPABILITY_TAGS}, "
+                                 f"not '{s['condition'].get('can_do_keyword')}'")
+                    else:
+                        st["condition"]["can_do_keyword"] = kw
             en = st["enables"]
             if not (en is not None and i < en < len(raw_steps) and types[en] == LOCAL):
                 e.append(f"ASK_HELP needs 'enables' = index of one of YOUR later LOCAL steps (got {s.get('enables')})")

@@ -6,7 +6,7 @@ from __future__ import annotations
 from .llm import BaseLLM
 from .log import EventLog
 from .prompts import OFFER_SYSTEM, OFFER_USER, SEE_ITEMS_BLOCK
-from .schemas import AgentInput, Offer, ObjectState, TaskConfig
+from .schemas import AgentInput, CAPABILITY_TAGS, Offer, ObjectState, TaskConfig
 
 
 def _as_list(x) -> list[str]:
@@ -19,6 +19,15 @@ def _as_list(x) -> list[str]:
         if str(v).strip():
             out.append(str(v).strip())
     return out
+
+
+def _as_tags(raw) -> list[str]:
+    """Keep only entries that are actually in CAPABILITY_TAGS -- a robot naming anything else
+    (a typo, a free-text phrase) is silently dropped rather than polluting the shared vocabulary."""
+    if not raw:
+        return []
+    raw = [raw] if isinstance(raw, str) else raw
+    return [t for t in (str(x).strip().upper() for x in raw) if t in CAPABILITY_TAGS]
 
 
 def _as_robots(raw) -> list[dict]:
@@ -60,8 +69,9 @@ async def make_offer(cfg: TaskConfig, a: AgentInput, llm: BaseLLM, log: EventLog
                              embodiment=a.profile.embodiment,
                              see_items_block=(SEE_ITEMS_BLOCK if fixed else ""),
                              instruction=a.instruction or "(none)", n_img=len(a.images))
-    d = await llm.complete(OFFER_SYSTEM.format(agent=a.id, object_catalog=catalog), user,
-                           key=f"offer:{a.id}", images=a.images)
+    d = await llm.complete(OFFER_SYSTEM.format(agent=a.id, object_catalog=catalog,
+                                               capability_tags_list=", ".join(CAPABILITY_TAGS)),
+                           user, key=f"offer:{a.id}", images=a.images)
     offer = Offer(
         agent=a.id,
         capability=str(d.get("capability", a.profile.embodiment)),
@@ -73,6 +83,7 @@ async def make_offer(cfg: TaskConfig, a: AgentInput, llm: BaseLLM, log: EventLog
         see_items=_as_list(d.get("see_items")) if fixed else [],   # mobile robots: always empty
         other_robots_in_room=_as_robots(d.get("other_robots_in_room")),
         env_state=_parse_env_state(d.get("env_state")),
+        capability_tags=_as_tags(d.get("capability_tags")),
         obs_scope=str(d.get("obs_scope", "")),
         reasoning=str(d.get("reasoning", "")),
     )

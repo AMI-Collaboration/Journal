@@ -40,18 +40,20 @@ def _int(x):
 
 def meets_condition(agent_id: str, cfg: TaskConfig, offers: dict[str, Offer], condition: dict) -> bool:
     """ASK_HELP no longer names a robot; this checks whether `agent_id` has the capability the
-    requester's 'condition' describes (mobile / a can_do keyword). No numeric weight check: no
+    requester's 'condition' describes (mobile / a can_do_keyword). No numeric weight check: no
     object in this project has a real kg value, so a payload_kg comparison would just be two
-    made-up numbers compared against each other -- can_do_keyword (e.g. "PickupHeavyObject" vs
-    "PickupLightObject") is the only grounded signal we actually have for lift capacity.
-    mobile comes from the static profile; can_do lives on that robot's own Offer."""
+    made-up numbers compared against each other -- MANIPULATE_HEAVY vs MANIPULATE_LIGHT is the only
+    grounded signal we actually have for lift capacity. can_do_keyword is exact membership in
+    CAPABILITY_TAGS (a shared, fixed vocabulary), checked against that robot's own Offer.capability_tags
+    -- not a free-text can_do substring search, which only matched when two robots happened to phrase
+    the same ability identically. mobile comes from the static profile."""
     profile = cfg.agent(agent_id).profile
     if condition.get("mobile") is not None and profile.mobile != condition["mobile"]:
         return False
     if condition.get("can_do_keyword"):
-        keyword = str(condition["can_do_keyword"]).lower()
-        can_do = offers[agent_id].can_do if agent_id in offers else []
-        if not any(keyword in cd.lower() for cd in can_do):
+        keyword = str(condition["can_do_keyword"]).strip().upper()
+        tags = offers[agent_id].capability_tags if agent_id in offers else []
+        if keyword not in tags:
             return False
     return True
 

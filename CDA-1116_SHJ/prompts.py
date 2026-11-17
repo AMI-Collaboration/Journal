@@ -96,6 +96,11 @@ STEP 3 — FILL FIELDS:
 - can_do: body abilities with limits (max 5). Include "ToggleObject: turn on/off lights, TV,
   appliances" unless physically impossible.
 - cannot_do: what your body truly cannot do and why. Do not plan these yourself later.
+- capability_tags: from this FIXED list only -- {capability_tags_list} -- every tag that genuinely
+  applies to your body (based on what you just wrote in can_do), and nothing else. This is the exact
+  vocabulary other robots' ASK_HELP requests will match against, so use it precisely: if you can pour
+  or fill liquids, include LIQUID_HANDLING; if you cannot, leave it out (and do not substitute a
+  different tag just to appear more capable).
 - need_from_others: describe by FUNCTION, not object name.
 - intends: the SUB-GOALS you take on (outcomes, not steps), most important first, max 4.
   CORRECT: "warm tea ready for the grandmother"   WRONG: "toggle silver kettle"
@@ -115,6 +120,7 @@ EXAMPLE (grandmother visit, R1 = mobile light robot in the kitchen):
  "capability":"I am mobile and can carry light objects up to 5 kg with one arm.",
  "can_do":["PickupLightObject: lift mugs, fruit, small items","PourObject: pour from a kettle into a cup","ToggleObject: turn on/off kettle, lights, appliances"],
  "cannot_do":["PickupHeavyObject: cannot lift furniture","SliceObject: no cutting tool"],
+ "capability_tags":["MANIPULATE_LIGHT","LIQUID_HANDLING","TOGGLE"],
  "need_from_others":["someone who can slice fruit"],
  "intends":["warm tea ready for the grandmother","fresh fruit available as a snack"],
  "obs_scope":"I can observe the kitchen only."}}
@@ -122,7 +128,8 @@ EXAMPLE (grandmother visit, R1 = mobile light robot in the kitchen):
 Return JSON (add "see_items" too, only if you were asked for one above):
 {{"has_items": [...], "other_robots_in_room": [...], "env_state": [...],
  "reasoning": "a)... b)... c)... d)...", "capability": "...",
- "can_do": [...], "cannot_do": [...], "need_from_others": [...], "intends": [...], "obs_scope": "..."}}"""
+ "can_do": [...], "cannot_do": [...], "capability_tags": [...],
+ "need_from_others": [...], "intends": [...], "obs_scope": "..."}}"""
 
 SEE_ITEMS_BLOCK = """
 ADDITIONAL FIELD -- you are a FIXED robot, so some visible objects may be out of your reach:
@@ -165,9 +172,15 @@ STEP FORMAT (indices are positions in YOUR steps list, starting at 0):
   "move" relocates an OBJECT (it needs "object"); "move_to" is YOU travelling (it has no "object", see MOVING).
 - ASK_HELP: {{"type":"ASK_HELP", "action":{{...what the other robot should do...}}, "condition":{{"mobile":true/false,"can_do_keyword":"..."}}, "enables":<index of YOUR later LOCAL step that needs it>, "serves":<intends index>}}
   Do NOT name a specific robot. Instead describe, in "condition", what capability the helper must
-  have (mobile, and/or a keyword that must appear in their can_do, e.g. "PickupHeavyObject" for
-  furniture-class objects vs "PickupLightObject" for small ones -- there is no numeric weight to give,
-  only light/heavy). Every robot that meets the condition will be asked in Stage 3; the best one is
+  have: "can_do_keyword" MUST be exactly one tag from this fixed list -- {capability_tags_list} --
+  never a free-text phrase (a made-up word like "PourObject" matches nobody; only these tags do).
+  Pick the tag whose name covers the action, e.g. MANIPULATE_HEAVY for furniture-class objects,
+  MANIPULATE_LIGHT for small ones, LIQUID_HANDLING for pouring/filling. BEFORE writing the ASK_HELP,
+  check the OFFERS above: if no robot's "capability_tags" contains the tag you are about to request
+  (not even yourself), that help does not exist anywhere on this team -- do not request it; instead
+  find a different action, using a tag someone (possibly you) actually has, that still serves the
+  same intend (e.g. hand over an already-filled container instead of asking someone to pour).
+  Every robot whose capability_tags contains the tag will be asked in Stage 3; the best one is
   chosen later -- you do not pick who.
   ONLY set "mobile" when the helper genuinely needs to TRAVEL to reach you (e.g. bring an object from
   elsewhere, or physically come help in your room). If the help happens right where you already are
@@ -215,7 +228,7 @@ EXAMPLE (R4 = mobile light robot in the living room; intends = ["safe walkway fo
    "preconditions":[{{"object_id":"Bag_1","field":"location","value":"living_room_floor"}}],
    "effects":[{{"object_id":"Bag_1","field":"location","value":"living_room_shelf"}}]}},
   {{"type":"ASK_HELP","action":{{"verb":"push","object":"brown armchair","from":"walkway","to":"wall"}},
-   "condition":{{"mobile":true,"can_do_keyword":"PushFurniture"}},"enables":4,"serves":0,
+   "condition":{{"mobile":true,"can_do_keyword":"MANIPULATE_HEAVY"}},"enables":4,"serves":0,
    "preconditions":[{{"object_id":"Armchair_1","field":"location","value":"living_room_walkway"}}],
    "effects":[{{"object_id":"Armchair_1","field":"location","value":"living_room_wall"}}]}},
   {{"type":"LOCAL","action":{{"verb":"move_to","from":"living_room_floor","to":"living_room_shelf","room":"living_room"}},"serves":0,
@@ -359,7 +372,9 @@ DUPLICATE_CANDIDATES: {duplicate_candidates}"""
 
 
 def plan_system(agent: str, room: str, env_state: str = "[]") -> str:
-    return PLAN_SYSTEM.format(agent=agent, room=room, env_state=env_state)
+    from .schemas import CAPABILITY_TAGS
+    return PLAN_SYSTEM.format(agent=agent, room=room, env_state=env_state,
+                              capability_tags_list=", ".join(CAPABILITY_TAGS))
 
 
 def propose_system(agent: str) -> str:

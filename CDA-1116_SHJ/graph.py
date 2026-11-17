@@ -441,15 +441,20 @@ class PlanGraph:
         the pick_up that preceded it dangling with no release step at all."""
         obj_id = next((p["object_id"] for p in n.preconditions if p.get("field") == "location"), None)
         item = str(n.item or "").split("(")[0].strip() or "the item"
+        # the robot's CURRENT room when the offer died -- it may have moved (move_to) since the
+        # pick_up that preceded this offer, and it cannot be put down somewhere it no longer is
+        room = n.location or self.cfg.agent(n.agent).profile.room
         # prefer the real furniture this robot picked the item up from (its own LOCAL pick_up
-        # action's "from" field) over a generic room name
+        # action's "from" field), but only if that furniture is still in the robot's current room --
+        # otherwise it is no longer reachable without a return trip nothing in the plan takes
         dest = None
         for other in self.nodes.values():
             if other.agent != n.agent or other.id == n.id or not isinstance(other.action, dict):
                 continue
             act = other.action
             if str(act.get("verb", "")).lower() == "pick_up" and act.get("from") and \
-                    (norm(item) in norm(str(act.get("object", ""))) or norm(str(act.get("object", ""))) in norm(item)):
+                    (norm(item) in norm(str(act.get("object", ""))) or norm(str(act.get("object", ""))) in norm(item)) \
+                    and norm(other.location or "") == norm(room):
                 dest = act["from"]
         if dest is None and obj_id:
             for other in self.nodes.values():
@@ -457,9 +462,9 @@ class PlanGraph:
                     continue
                 for eff in other.effects:
                     if eff.get("object_id") == obj_id and eff.get("field") == "location" \
-                            and not str(eff.get("value", "")).startswith("robot_"):
+                            and not str(eff.get("value", "")).startswith("robot_") \
+                            and norm(room) in norm(str(eff.get("value", ""))):
                         dest = eff["value"]
-        room = self.cfg.agent(n.agent).profile.room
         dest = dest or room
         nums = [int(i.split("_s")[1]) for i in self.nodes if i.startswith(f"r{agent_num(n.agent)}_s")]
         nid = f"r{agent_num(n.agent)}_s{max(nums, default=0) + 1}"

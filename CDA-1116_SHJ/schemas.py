@@ -37,6 +37,12 @@ MUTUAL, PROVIDER_ONLY, MERGED = "mutual", "provider-only", "merged"   # consent 
 PHASE_MIN = 5              # the Joint Plan is scheduled in 5-minute slots (assigned in Stage 4)
 SIZE_MIN = {"short": 1, "medium": 2}   # default step length by type (minutes, coarse)
 
+# ASK_HELP condition.can_do_keyword and Offer.capability_tags are both drawn from this fixed set --
+# a shared vocabulary so "does anyone have X" is exact tag membership, not free-text guessing
+# (a robot phrasing its own can_do as "PourObject" is useless to a requester who wrote "PourLiquid").
+CAPABILITY_TAGS = ("MOBILITY", "MANIPULATE_LIGHT", "MANIPULATE_HEAVY", "PASS_RECEIVE",
+                   "LIQUID_HANDLING", "CLEANING", "TOGGLE", "CUTTING", "COOKING")
+
 
 def agent_num(agent: str) -> int:
     return int(agent.lstrip("Rr"))
@@ -173,6 +179,10 @@ class Offer:
     see_items: list[str] = field(default_factory=list)              # visible but not reachable/manipulable
     other_robots_in_room: list[dict] = field(default_factory=list)  # [{"id": "R2", "distance": "close"}]
     env_state: list[ObjectState] = field(default_factory=list)      # this robot's view of S0
+    capability_tags: list[str] = field(default_factory=list)  # subset of CAPABILITY_TAGS this robot
+                                                                # genuinely has -- the vocabulary an
+                                                                # ASK_HELP condition.can_do_keyword is
+                                                                # matched against (not free-text can_do)
     # private (never broadcast)
     obs_scope: str = ""
     reasoning: str = ""
@@ -182,7 +192,8 @@ class Offer:
                 "cannot_do": self.cannot_do, "has_items": self.has_items,
                 "need_from_others": self.need_from_others, "intends": self.intends,
                 "see_items": self.see_items, "other_robots_in_room": self.other_robots_in_room,
-                "env_state": [asdict(s) for s in self.env_state]}
+                "env_state": [asdict(s) for s in self.env_state],
+                "capability_tags": self.capability_tags}
 
     def to_dict(self) -> dict:
         return asdict(self)
