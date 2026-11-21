@@ -1,10 +1,13 @@
 from ai2thor.controller import Controller
 from PIL import Image
+import cv2
 import json
 import os
 import sys
 import tty
 import termios
+
+TOPDOWN_WINDOW = "topdown"
 
 
 def get_key():
@@ -31,9 +34,29 @@ def get_nearest(event, current_agent, attr):
     return min(visible_objs, key=dist)
 
 
-def interactive_capture(scene, agent_count, out_dir, prefix, robot_labels, robot_types=None, width=640, height=480, random_spawn=False, dirty_all=False):
+def _add_topdown_camera(controller):
+    event = controller.step(action="GetMapViewCameraProperties")
+    pose = event.metadata["actionReturn"].copy()
+    pose["orthographic"] = True
+    return controller.step(action="AddThirdPartyCamera", **pose)
+
+
+def _show_topdown(controller):
+    frames = controller.last_event.third_party_camera_frames
+    if not frames:
+        return
+    frame = cv2.cvtColor(frames[0], cv2.COLOR_RGB2BGR)
+    cv2.imshow(TOPDOWN_WINDOW, frame)
+    cv2.waitKey(1)
+
+
+def interactive_capture(scene, agent_count, out_dir, prefix, robot_labels, robot_types=None, width=640, height=480, random_spawn=False, dirty_all=False, topdown=True):
     os.makedirs(out_dir, exist_ok=True)
     controller = Controller(scene=scene, agentCount=agent_count, width=width, height=height)
+
+    if topdown:
+        _add_topdown_camera(controller)
+        _show_topdown(controller)
 
     if random_spawn:
         controller.step(action="InitialRandomSpawn", randomSeed=0, forceVisible=True, numPlacementAttempts=5)
@@ -182,6 +205,10 @@ def interactive_capture(scene, agent_count, out_dir, prefix, robot_labels, robot
         elif key == "\x03":
             break
 
+        if topdown:
+            _show_topdown(controller)
+
+    cv2.destroyAllWindows()
     controller.stop()
 
 ROBOT_NAME_BY_N = {0: "Gripper", 1: "Mobile_Light", 2: "Mobile_Heavy"}
@@ -289,6 +316,7 @@ if __name__ == "__main__":
     ap.add_argument("--task", required=True, help="task.json 안의 task_n (예: mat_compound_5, task2_abstract)")
     ap.add_argument("--n", type=int, help="abstract/simple: 로봇 수 구성 (예: 2)")
     ap.add_argument("--room", help="abstract/simple: 찍을 방 (예: FP304)")
+    ap.add_argument("--no-topdown", action="store_true", help="실시간 탑뷰 창을 띄우지 않음")
     args = ap.parse_args()
 
     if args.room:
@@ -306,4 +334,5 @@ if __name__ == "__main__":
         prefix=cfg["prefix"],
         robot_labels=cfg["robot_labels"],
         robot_types=cfg["robot_types"],
+        topdown=not args.no_topdown,
     )
