@@ -146,9 +146,10 @@ class Offer:
     """What a robot tells the team for THIS task. room / mobile / capability come from code, the rest
     from the LLM. Everything except `reasoning` is broadcast, so that in Stage 2 a robot can plan
     "I will get the apple from R2" (RECEIVE, from R2's has_items) or "someone who can carry it" (ASK_HELP).
-        can_do     : what I can do myself for the task (in my room, with my objects)
-        can_help   : work I can do for other robots (e.g. carrying; usually empty for a fixed robot)
-        need_from_others : what I may need from others (reference only, not matched)
+        can_do     : actions my body and room allow, broad menu of "verb object" strings (filtered later)
+        can_help   : work I can do for other robots (e.g. "bring food"; usually empty for a fixed robot)
+        need_from_others : what the task needs that I cannot do or get myself, "verb object" strings by object or
+                     action only (never a robot), verbs from the whole team's capability lists
         has_items  : movable objects in my room that matter for the task (no furniture / appliances)"""
     agent: str
     room: str
