@@ -102,14 +102,16 @@ def _next_shot_index(fp_number: str) -> int:
 
 
 def _add_topdown_camera(controller):
-    event = controller.step(action="GetMapViewCameraProperties")
+    event = controller.step(action="GetMapViewCameraProperties", agentId=0)
     pose = event.metadata["actionReturn"].copy()
     pose["orthographic"] = True
-    return controller.step(action="AddThirdPartyCamera", **pose)
+    controller.step(action="AddThirdPartyCamera", **pose)
+    controller.step(action="Pass", agentId=0)
 
 
 def _show_topdown(controller):
-    frames = controller.last_event.third_party_camera_frames
+    event = controller.last_event
+    frames = getattr(event, "events", [event])[0].third_party_camera_frames
     if not frames:
         return
     frame = cv2.cvtColor(frames[0], cv2.COLOR_RGB2BGR)
