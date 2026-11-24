@@ -152,10 +152,13 @@ def get_image_paths(task_n: str, robot_label: str, fp: str, mode: str = "multi_r
     task_type = parts[1]
     folder_n = f"n_{n_robots}"
 
+    # Experiments read the images in image/<IMAGE_SET>/ (default "downscale"). Set the environment
+    # variable IMAGE_SET (e.g. "upscale") to read another set.
+    image_root = os.path.join(EXPERIMENT_DIR, "image", os.environ.get("IMAGE_SET", "downscale"))
     if task_type == "simple":
-        folder = os.path.join(EXPERIMENT_DIR, "image", task_type, f"task{task_num}")
+        folder = os.path.join(image_root, task_type, f"task{task_num}")
     else:
-        folder = os.path.join(EXPERIMENT_DIR, "image", task_type, f"task{task_num}", folder_n)
+        folder = os.path.join(image_root, task_type, f"task{task_num}", folder_n)
     prefix = f"task{task_num}_{task_type}_{fp}_{robot_label}"
 
     return [
