@@ -234,8 +234,10 @@ def _build_agent(task_n, task, robot_label, robot_type, fp, fp_for_image, data, 
         f"{mobility_note}"
     )
 
-    # hidden_objects: rooms[fp]에서 가져오기
-    room_info = task["rooms"].get(fp, {})
+    # hidden_objects: scene/room.json의 방(floorplan)별 hidden_objects만 사용한다 (data["rooms"][fp]).
+    # 로봇이 이미지로 볼 수 없는 객체(닫힌 서랍/냉장고 안 등)를 알려주는 유일한 경로이며,
+    # task.json의 rooms[fp]["hidden_objects"]는 더 이상 읽지 않는다.
+    room_info = data["rooms"].get(fp, {})
     hidden_objects = room_info.get("hidden_objects", {})
     hidden_lines = []
     for container, obj_ids in hidden_objects.items():
@@ -246,9 +248,9 @@ def _build_agent(task_n, task, robot_label, robot_type, fp, fp_for_image, data, 
 
     # object_catalog: this room's real object list (ground truth), so Stage 1 can be told to
     # name has_items/see_items/env_state items only from this set -- the same list the external
-    # LLM judge already checks hallucination against (see aggregate_results_jabung.py). Unlike
-    # hidden_objects above (task-specific, from task.json), this comes from room.json's own
-    # per-floorplan object list (data["rooms"], not task["rooms"]).
+    # LLM judge already checks hallucination against (see aggregate_results_jabung.py). This is the
+    # room's FULL object list (room.json "object_n"), unlike hidden_objects above (only the objects
+    # a robot cannot see). Only CDA-1116_SHJ reads it; CDA_stage deliberately ignores it.
     object_catalog = sorted({data["objects"][oid]["object_name"]
                              for oid in data["rooms"].get(fp, {}).get("object_n", [])
                              if oid in data["objects"]})

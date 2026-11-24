@@ -75,8 +75,7 @@ class AgentInput:
     id: str                    # "R1"
     profile: Profile
     images: list[str] = field(default_factory=list)
-    instruction: str = ""      # hidden info: text about areas the robot cannot see
-    object_catalog: list[str] = field(default_factory=list)   # this room's object types (unchanged for now)
+    instruction: str = ""      # hidden info: ONLY objects the robot cannot see (e.g. inside a closed cabinet)
 
 
 @dataclass
@@ -94,15 +93,15 @@ class TaskConfig:
         for a in d["agents"]:
             imgs = [str((path.parent / p).resolve()) if not Path(p).is_absolute() else p
                     for p in a.get("images", [])]
-            agents.append(AgentInput(a["id"], Profile(**a["profile"]), imgs, a.get("instruction", ""),
-                                     list(a.get("object_catalog", []))))
+            agents.append(AgentInput(a["id"], Profile(**a["profile"]), imgs, a.get("instruction", "")))
         return cls(d["task_id"], d["task"], d["deadline_min"], agents)
 
     @classmethod
     def from_notebook(cls, task: str, agents: list[dict], deadline_min: int = 20,
                       task_id: str = "task") -> "TaskConfig":
-        """agents: [{"room", "mobile", "capability", "images", "hidden_info", "payload_kg"?,
-        "object_catalog"?}, ...]. Robots are named R1..Rn in the given order."""
+        """agents: [{"room", "mobile", "capability", "images", "hidden_info", "payload_kg"?}, ...].
+        Robots are named R1..Rn in the given order. A robot learns about objects only from its images
+        and from "hidden_info" (objects it cannot see); there is no full object list of the room."""
         out = []
         for i, a in enumerate(agents, start=1):
             hid = a.get("hidden_info", "")
@@ -110,7 +109,7 @@ class TaskConfig:
             out.append(AgentInput(f"R{i}", Profile(room=a["room"], mobile=bool(a["mobile"]),
                                                    payload_kg=(float(a["payload_kg"]) if a.get("payload_kg") else None),
                                                    embodiment=a["capability"]),
-                                  list(a.get("images", [])), hid, list(a.get("object_catalog", []))))
+                                  list(a.get("images", [])), hid))
         return cls(task_id, task, deadline_min, out)
 
     def agent(self, aid: str) -> AgentInput:

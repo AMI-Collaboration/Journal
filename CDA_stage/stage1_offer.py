@@ -26,8 +26,12 @@ YOUR BODY (fixed facts, do not change them):
 - {mobility}
 - capability: {capability}
 
-OBJECT TYPES THAT EXIST IN YOUR ROOM: {object_catalog}
-Name only objects you actually see in your images, and only types from this list.
+WHAT YOU KNOW ABOUT OBJECTS: only two sources.
+ 1) Your images: name only objects you actually see in them. Never guess or infer an object.
+ 2) "ABOUT AREAS YOU CANNOT SEE" (in the task message below): objects that exist in your room but are
+    hidden from your view (for example inside a closed cabinet or drawer). You may count on them as
+    objects you can reach, and name them like the ones you see.
+There is no other list of objects. If you neither see an object nor were told about it, leave it out.
 
 Fill these fields (short phrases, name the exact objects, all related to the task):
 - can_do: up to 3 things you can do YOURSELF for the task, with the objects you use
@@ -63,9 +67,8 @@ def mobility_text(mobile: bool) -> str:
 # ================================================================================================
 async def make_offer(cfg: TaskConfig, a: AgentInput, llm: BaseLLM, log: EventLog) -> Offer:
     p = a.profile
-    catalog = ", ".join(a.object_catalog) if a.object_catalog else "(not given: name only what you clearly see)"
     system = OFFER_SYSTEM.format(agent=a.id, room=p.room, mobility=mobility_text(p.mobile),
-                                 capability=p.embodiment, object_catalog=catalog)
+                                 capability=p.embodiment)
     user = OFFER_USER.format(task=cfg.task, deadline=cfg.deadline_min, instruction=a.instruction or "(none)",
                              n_img=len(a.images))
     d = await llm.complete(system, user, key=f"offer:{a.id}", images=a.images)
