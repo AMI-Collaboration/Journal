@@ -100,16 +100,24 @@ Use the offers as a team-wide assignment guide:
 A. Physical relocation or explicit placement of a movable object:
 - Use separate LOCAL steps with these meanings when the task truly requires handling and relocating
   or placing a named object:
-  1) "pick_up <object> [from <known source>]" = grasp/lift the object. It does not include travel
+  1) "approach <object> with the gripper" = bring your gripper within grasping range of the known
+     object so it can be picked up. This is an approach action only; it does NOT grasp or lift the
+     object. Do not output coordinates, poses, trajectories, or low-level motion details.
+  2) "pick_up <object> [from <known source>]" = grasp/lift the object. It does not include travel
      or final release.
-  2) "move <object> to <destination>" = navigate while holding the already picked-up object. Include
+  3) "move <object> to <destination>" = navigate while holding the already picked-up object. Include
      this only when the object must change location. A fixed robot cannot do this.
-  3) "put_down <object> at/on <destination>" = release/place the object at the required destination.
-- The order is pick_up -> move (only if needed) -> put_down. If the object is already in the correct
-  room/spot, omit move. Do not combine grasp, travel, and release into one vague action.
-- Do not repeat a pick_up if the object has just been handed to you through RECEIVE; the Stage 3 PASS
-  already includes the hand-off. After RECEIVE, add move only if you must transport it farther, and
-  put_down only if the task requires a final placement.
+  4) "put_down <object> at/on <destination>" = release/place the object at the required destination.
+- Whenever YOUR plan includes move for an object that YOU must pick up, add one approach step with
+  your gripper immediately before pick_up. Use this only when your offer/capabilities explicitly
+  establish that you have a gripper capable of grasping that object, and the object is not already
+  held by you. Do not invent gripper capability or an unknown object location/source.
+- The order is approach -> pick_up -> move (only if needed) -> put_down. If the object is already in
+  the correct room/spot, omit move. Do not combine approach, grasp, travel, and release into one vague
+  action.
+- Do not repeat approach or pick_up if the object has just been handed to you through RECEIVE; the
+  Stage 3 PASS already includes the hand-off. After RECEIVE, add move only if you must transport it
+  farther, and put_down only if the task requires a final placement.
 B. State-changing or service operations:
 - Operations such as preparing, slicing, pouring, wiping, opening, closing, switching, or cleaning
   should normally remain one meaningful LOCAL step when that is the actual task operation.
@@ -154,7 +162,9 @@ Before returning, check all of the following:
   work with the same object instance, operation/effect, and destination is duplicate work.
 - Every LOCAL step is physically executable by your robot and advances one of your goals.
 - Objects are available before use; requests precede the first step that depends on them; production
-  precedes handling; pick_up precedes move; move precedes put_down. A pick_up with no later use,
+  precedes handling; when you must pick up an object for a later move, approach with the gripper
+  precedes pick_up, pick_up precedes move, and move precedes put_down. Do not add approach or pick_up
+  after an object has already been handed to you through RECEIVE. A pick_up with no later use,
   transfer, placement, or explicit pickup goal is an incomplete orphan action and must be omitted.
 - No request and LOCAL step duplicate the same operation. No unsupported source, object, capability,
   state, or destination has been invented.
